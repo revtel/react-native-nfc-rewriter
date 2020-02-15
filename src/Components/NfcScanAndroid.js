@@ -30,6 +30,7 @@ class NfcScanAndroid extends React.Component {
         Animated.timing(this.animatedValue, {
           toValue: 1,
           duration,
+          useNativeDriver: true, 
         }).start();
       });
     };
@@ -38,6 +39,7 @@ class NfcScanAndroid extends React.Component {
       Animated.timing(this.animatedValue, {
         toValue: 0,
         duration,
+        useNativeDriver: true, 
       }).start(async () => {
         await delay(100);
 
@@ -45,6 +47,36 @@ class NfcScanAndroid extends React.Component {
 
         this.setState({open: false});
       });
+    };
+
+    this.backdropStyle = {
+      flex: 1, 
+      opacity: this.animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+      }), 
+      backgroundColor: 'rgba(0, 0, 0, 0.6)'
+    };
+
+    this.promptStyle = {
+      position: 'absolute',
+      left: 30,
+      bottom: -600, 
+      transform: [
+        {
+          translateY: this.animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, -600],
+          })
+        }
+      ],
+      width: Dimensions.get('window').width - 60,
+      height: 300,
+      padding: 20,
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'white',
     };
   }
 
@@ -64,24 +96,8 @@ class NfcScanAndroid extends React.Component {
     if (open) {
       return (
         <Modal transparent>
-          <View style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
-            <Animated.View
-              style={{
-                position: 'absolute',
-                left: 30,
-                bottom: this.animatedValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-600, 0],
-                }),
-                width: Dimensions.get('window').width - 60,
-                height: 300,
-                padding: 20,
-                borderRadius: 20,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-              }}>
-
+          <Animated.View style={this.backdropStyle}>
+            <Animated.View style={this.promptStyle}>
               <Text style={{fontSize: 24}}>Read to scan</Text>
 
               <Text style={{fontSize: 20, marginBottom: 10}}>
@@ -99,7 +115,7 @@ class NfcScanAndroid extends React.Component {
                 <Text style={{textAlign: 'center', fontSize: 20}}>Cancel</Text>
               </TouchableOpacity>
             </Animated.View>
-          </View>
+          </Animated.View>
         </Modal>
       );
     }
