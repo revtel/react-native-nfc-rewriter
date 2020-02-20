@@ -1,26 +1,17 @@
 import * as React from 'react';
-import { View, Image } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View } from 'react-native';
 import NfcProxy from '../NfcProxy';
+import styled from 'styled-components';
 
 function HomeScreen({navigation}) {
   return (
     <View style={{flex: 1, padding: 20}}>
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <Image
-          style={{
-            width: 200,
-            height: 200,
-            alignSelf: 'center',
-          }}
-          source={require('../../images/nfc-512.png')}
-        />
+        <LogoImage source={require('../../images/nfc-512.png')}/>
       </View>
 
-      <View style={{flex: 1}}>
-        <Button
-          title="Scan Tag"
-          style={{alignSelf: 'center', width: 240}}
+      <View style={{flex: 1, alignItems: 'center'}}>
+        <ActionBtn
           onPress={async () => {
             try {
               const tag = await NfcProxy.readTag();
@@ -30,18 +21,36 @@ function HomeScreen({navigation}) {
             }
             await NfcProxy.abort();
           }}
-        />
-
-        <Button
-          title="Write Tag"
-          style={{alignSelf: 'center', width: 240, marginTop: 15}}
-          onPress={async () => {
-          }}
-        />
+        >
+          <ActionBtnText>Scan NFC Tag</ActionBtnText>
+        </ActionBtn>
       </View>
 
     </View>
   );
 }
+
+const LogoImage = styled.Image`
+  width: 200px;
+  height: 200px;
+  alignSelf: center;
+`;
+
+const ActionBtn = styled.TouchableOpacity`
+  padding-vertical: 6px;
+  padding-horizontal: 10px;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: black;
+  min-width: 240px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+`;
+
+const ActionBtnText = styled.Text`
+  font-size: 22px;
+`;
 
 export default HomeScreen;
