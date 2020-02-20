@@ -2,14 +2,14 @@ import React from 'react';
 import {
   View, Text, Clipboard, Alert, TouchableOpacity, ScrollView,
 } from 'react-native';
-import TagItem from '../Components/TagItem'
+import TagBanner from '../Components/TagBanner'
 
 class TagDetailScreen extends React.Component {
   render() {
     const { tag } = this.props.route.params;
     return (
       <View style={{ flex: 1, paddingTop: 10, alignItems: 'center'}}>
-        <TagItem card={tag} />
+        <TagBanner tag={tag} />
 
         <ScrollView style={{marginTop: 10, flex: 1, alignSelf: 'stretch', padding: 10}}>
           <Text style={{fontSize: 20}}>Tag Detail</Text>
