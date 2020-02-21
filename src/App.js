@@ -6,6 +6,7 @@ import { ThemeProvider } from 'react-native-elements';
 import NfcScanAndroid from './Components/NfcScanAndroid';
 import HomeScreen from './Screens/HomeScreen';
 import TagDetailScreen from './Screens/TagDetailScreen';
+import NdefWriteScreen from './Screens/NdefWriteScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ function App() {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }}/>
           <Stack.Screen name="TagDetail" component={TagDetailScreen} options={{ title: 'Tag Info' }} />
+          <Stack.Screen name="NdefWrite" component={NdefWriteScreen} options={{ title: 'NDEF Write' }} />
         </Stack.Navigator>
       </NavigationContainer>
 

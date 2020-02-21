@@ -13,16 +13,21 @@ function HomeScreen({navigation}) {
       <View style={{flex: 1, alignItems: 'center'}}>
         <ActionBtn
           onPress={async () => {
-            try {
-              const tag = await NfcProxy.readTag();
+            const tag = await NfcProxy.readTag();
+            if (tag) {
               navigation.navigate('TagDetail', {tag});
-            } catch (ex) {
-              console.warn('readTag ex', ex);
             }
-            await NfcProxy.abort();
           }}
         >
           <ActionBtnText>Scan NFC Tag</ActionBtnText>
+        </ActionBtn>
+
+        <ActionBtn
+          onPress={async () => {
+            navigation.navigate('NdefWrite');
+          }}
+        >
+          <ActionBtnText>Write NFC Tag</ActionBtnText>
         </ActionBtn>
       </View>
 
@@ -47,6 +52,7 @@ const ActionBtn = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background-color: white;
+  margin-bottom: 10px;
 `;
 
 const ActionBtnText = styled.Text`

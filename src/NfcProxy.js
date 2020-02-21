@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import NfcManager, {NfcTech} from 'react-native-nfc-manager';
+import NfcManager, {NfcTech, Ndef} from 'react-native-nfc-manager';
 import {AppEvents, AppEventName} from './AppEvents';
 
 const NfcAndroidUI = AppEvents.get(AppEventName.NFC_SCAN_UI);
@@ -11,19 +11,57 @@ class NfcProxy {
   }
 
   readTag = async () => {
-    await this.setup();
-    return await NfcManager.getTag();
+    let tag = null;
+    try {
+      if (Platform.OS === 'ios') {
+        await NfcManager.requestTechnology([
+          NfcTech.MifareIOS, NfcTech.Iso15693IOS, NfcTech.IsoDep
+        ]);
+      } else {
+        NfcAndroidUI.emit('OPEN');
+        await NfcManager.requestTechnology([NfcTech.Ndef]);
+      }
+
+      tag = await NfcManager.getTag();
+    } catch (ex) {
+      console.warn(ex);
+    }
+
+    this.abort();
+    return tag;
   };
 
-  setup = async () => {
-    if (Platform.OS === 'ios') {
-      await NfcManager.requestTechnology(NfcTech.MifareIOS);
-    } else {
-      NfcAndroidUI.emit('OPEN');
-      await NfcManager.requestTechnology(NfcTech.NfcA);
-      await NfcManager.setTimeout(600);
+  writeNdef = async ({type, value}) => {
+    let result = false;
+    try {
+      if (Platform.OS === 'ios') {
+        await NfcManager.requestTechnology([
+          NfcTech.MifareIOS, NfcTech.Iso15693IOS, NfcTech.IsoDep
+        ]);
+      } else {
+        NfcAndroidUI.emit('OPEN');
+        await NfcManager.requestTechnology([NfcTech.Ndef]);
+      }
+
+      if (type === 'TEXT') {
+        let bytes = Ndef.encodeMessage([
+          Ndef.textRecord(value),
+        ]);
+        await NfcManager.writeNdefMessage(bytes);
+      } else if (type === 'URI') {
+        let bytes = Ndef.encodeMessage([
+          Ndef.uriRecord(value),
+        ]);
+        await NfcManager.writeNdefMessage(bytes);
+      }
+      result = true;
+    } catch (ex) {
+      console.warn(ex);
     }
-  };
+
+    this.abort();
+    return result;
+  }
 
   abort = async () => {
     NfcManager.cancelTechnologyRequest().catch(() => 0);
