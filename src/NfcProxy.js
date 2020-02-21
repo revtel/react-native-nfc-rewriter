@@ -14,6 +14,7 @@ class NfcProxy {
     let tag = null;
     try {
       if (Platform.OS === 'ios') {
+        // because we also want to read the id from it!
         await NfcManager.requestTechnology([
           NfcTech.MifareIOS, NfcTech.Iso15693IOS, NfcTech.IsoDep
         ]);
@@ -35,12 +36,10 @@ class NfcProxy {
     let result = false;
     try {
       if (Platform.OS === 'ios') {
-        await NfcManager.requestTechnology([
-          NfcTech.MifareIOS, NfcTech.Iso15693IOS, NfcTech.IsoDep
-        ]);
+        await NfcManager.requestTechnology(NfcTech.Ndef);
       } else {
         NfcAndroidUI.emit('OPEN');
-        await NfcManager.requestTechnology([NfcTech.Ndef]);
+        await NfcManager.requestTechnology(NfcTech.Ndef);
       }
 
       if (type === 'TEXT') {
