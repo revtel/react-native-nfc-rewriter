@@ -5,6 +5,8 @@ import {
   Dimensions,
 } from 'react-native';
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 class PopupModal extends React.Component {
   constructor(props) {
     super(props);
@@ -12,14 +14,15 @@ class PopupModal extends React.Component {
       open: false,
     };
 
-    const duration = 200;
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
     this.animatedValue = new Animated.Value(0);
 
     this.open = () => {
+      const {duration=200, startupDelay=100} = props.animControl || {};
+
       this.setState({open: true}, async () => {
-        await delay(100);
+        if (startupDelay) {
+          await delay(startupDelay);
+        }
 
         Animated.timing(this.animatedValue, {
           toValue: 1,
@@ -30,27 +33,66 @@ class PopupModal extends React.Component {
     };
 
     this.close = () => {
+      const {duration=200, startupDelay=100} = props.animControl || {};
+
       Animated.timing(this.animatedValue, {
         toValue: 0,
         duration,
         useNativeDriver: true, 
       }).start(async () => {
-        await delay(100);
+        if (startupDelay) {
+          await delay(startupDelay);
+        }
+
         this.setState({open: false});
       });
     };
 
+    this._updateStyleFromProps(props);
+  }
+
+  render() {
+    let {open} = this.state;
+
+    if (open) {
+      return (
+        <Modal transparent>
+          <Animated.View style={this.backdropStyle}>
+            <Animated.View style={this.popupStyle}>
+                {typeof this.props.children === 'function' ? (
+                  this.props.children({
+                    open: this.open,
+                    close: this.close,
+                  })
+                ) : this.props.children}
+            </Animated.View>
+          </Animated.View>
+        </Modal>
+      );
+    }
+
+    return null;
+  }
+
+  _updateStyleFromProps = props => {
+    const {backdropColor='rgba(0, 0, 0, 0.6)'} = props.backdropControl || {};
+
     this.backdropStyle = {
-      flex: 1, 
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height, 
       opacity: this.animatedValue.interpolate({
         inputRange: [0, 1],
         outputRange: [0, 1],
       }), 
-      backgroundColor: props.backdropColor || 'rgba(0, 0, 0, 0.6)'
+      backgroundColor: backdropColor
     };
 
-    let {left=30, height=300, padding=20, borderRadius=20, backgroundColor='white'} = props.promptStyle || {};
-    this.promptStyle = {
+    const {left=30, height=300, borderRadius=20, padding=20, backgroundColor='white'} = props.popupStyle || props.promptStyle || {};
+
+    this.popupStyle = {
       position: 'absolute',
       left,
       bottom: -(2 * height), 
@@ -65,27 +107,10 @@ class PopupModal extends React.Component {
       width: Dimensions.get('window').width - (2 * left),
       height,
       padding,
-      borderRadius,
+      borderTopLeftRadius: borderRadius,
+      borderTopRightRadius: borderRadius,
       backgroundColor,
     };
-  }
-
-  render() {
-    let {open} = this.state;
-
-    if (open) {
-      return (
-        <Modal transparent>
-          <Animated.View style={this.backdropStyle}>
-            <Animated.View style={this.promptStyle}>
-              {this.props.children}
-            </Animated.View>
-          </Animated.View>
-        </Modal>
-      );
-    }
-
-    return null;
   }
 }
 
