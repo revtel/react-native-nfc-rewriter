@@ -17,7 +17,7 @@ class PopupSelector extends React.Component {
     return (
       <PopupModal
         ref={this._onRef}
-        prompStyle={{height}}
+        popupStyle={{height}}
       >
         <View style={{height, alignItems: 'center', justifyContent: 'center', padding}}>
           {options.map((option, idx) => {
