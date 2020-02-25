@@ -6,7 +6,7 @@ class PopupHexEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hexStr: ''
+      hexStr: '',
     }
   }
 
@@ -20,6 +20,12 @@ class PopupHexEditor extends React.Component {
     };
 
     const height = gridSize * 10 + 30;
+    const hexDisplay = Array.from(hexStr).reduce((acc, ch, idx) => {
+      if (idx !== 0 && idx % 2 == 0) {
+        acc += ' ';
+      }
+      return acc + ch;
+    }, '');
     
     return (
       <PopupModal
@@ -31,7 +37,7 @@ class PopupHexEditor extends React.Component {
             flexDirection: 'row', height: gridSize * 2, width: 250,
             borderRadius: 4, borderWidth: 1, borderColor: '#ccc', padding: 5, marginBottom: 20
           }}>
-            <Text>{hexStr}</Text>
+            <Text>{hexDisplay}</Text>
           </View>
 
           <View style={styles.row}>
@@ -91,13 +97,27 @@ class PopupHexEditor extends React.Component {
               <Text style={{fontSize: 20, textAlign: 'center'}}>BACK</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.cell} >
+            <TouchableOpacity style={styles.cell} onPress={this._onSave}>
               <Text style={{fontSize: 20, textAlign: 'center', color: 'blue'}}>SAVE</Text>
             </TouchableOpacity>
           </View>
         </View>
       </PopupModal>
     )
+  }
+
+  // let client code to set
+  setValue = v => {
+    this.setState({
+      hexStr: v
+    });
+  }
+
+  _onSave = () => {
+    const {onResult} = this.props;
+    const {hexStr} = this.state;
+    onResult(hexStr);
+    this.ref.close();
   }
 
   _onCharPress = v => () => {

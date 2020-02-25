@@ -1,13 +1,19 @@
 import React from 'react';
 import {
-  View, Text, Clipboard, Alert, TouchableOpacity, ScrollView,
+  View, Text, Clipboard, Alert, TouchableOpacity, ScrollView, Platform,
 } from 'react-native';
 import TagBanner from '../Components/TagBanner'
 import NdefMessage from '../Components/NdefMessage'
 import styled from 'styled-components'
+import {getTechList} from '../Utils/getTechList';
+import { Button } from 'react-native-elements';
+import {NfcTech} from 'react-native-nfc-manager';
+
+const NFCA_OR_MIFARE_TECH = Platform.OS === 'android' ? 'NfcA' : 'mifare';
 
 class TagDetailScreen extends React.Component {
   render() {
+    const {navigation} = this.props;
     const { tag } = this.props.route.params;
 
     let ndef = null;
@@ -15,11 +21,29 @@ class TagDetailScreen extends React.Component {
       ndef = tag.ndefMessage[0];
     }
 
+    let techs = getTechList(tag);
+
     return (
       <View style={{ flex: 1, paddingTop: 10, alignItems: 'center'}}>
         <TagBanner tag={tag} />
 
         <ScrollView style={{marginTop: 10, flex: 1, alignSelf: 'stretch', padding: 10}}>
+          {techs.findIndex(tech => tech === NFCA_OR_MIFARE_TECH) > -1 && (
+            <Button
+              title='Custom NFCA / Mifare Command'
+              containerStyle={{marginBottom: 10}}
+              onPress={
+                () => navigation.navigate(
+                  'CustomPayload', 
+                  { 
+                    tag,
+                    techType: Platform.OS === 'android' ? NfcTech.NfcA : NfcTech.MifareIOS,
+                  }
+                )
+              }
+            />
+          )}
+
           <SectionLabel>
             <SectionLabelText>NDEF</SectionLabelText>
           </SectionLabel>
@@ -56,7 +80,7 @@ const SectionLabel = styled.View`
   padding: 6px;
   flex-direction: row;
   align-items: center;
-  margin-vertical: 5px;
+  margin-vertical: 10px;
 `;
 
 const SectionLabelText = styled.Text`

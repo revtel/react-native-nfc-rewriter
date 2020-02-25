@@ -7,6 +7,10 @@ import NfcScanAndroid from './Components/NfcScanAndroid';
 import HomeScreen from './Screens/HomeScreen';
 import TagDetailScreen from './Screens/TagDetailScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
+import CustomPayloadScreen from './Screens/CustomPayloadScreen';
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
+Icon.loadFont();
 
 const Stack = createStackNavigator();
 
@@ -18,6 +22,7 @@ function App() {
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }}/>
           <Stack.Screen name="TagDetail" component={TagDetailScreen} options={{ title: 'Tag Info' }} />
           <Stack.Screen name="NdefWrite" component={NdefWriteScreen} options={{ title: 'NDEF Write' }} />
+          <Stack.Screen name="CustomPayload" component={CustomPayloadScreen} options={{ title: 'Custom Payload' }} />
         </Stack.Navigator>
       </NavigationContainer>
 

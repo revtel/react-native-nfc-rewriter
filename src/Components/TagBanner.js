@@ -2,12 +2,13 @@ import React from 'react';
 import {TouchableOpacity, View, Dimensions, Platform} from 'react-native';
 import styled from 'styled-components';
 import LinearGradient from 'react-native-linear-gradient';
+import {getTechList} from '../Utils/getTechList';
 
 class TagBanner extends React.Component {
   render() {
     let {tag, onPress} = this.props;
     let width = Dimensions.get('window').width;
-    let techs = this._getTechList(tag);
+    let techs = getTechList(tag);
 
     return (
       <TouchableOpacity onPress={onPress} disabled={!onPress}>
@@ -59,16 +60,6 @@ class TagBanner extends React.Component {
         </View>
       </TouchableOpacity>
     );
-  }
-
-  _getTechList = tag => {
-    let techs = [];
-    if (Platform.OS === 'ios') {
-      techs.push(tag.tech);
-    } else {
-      techs = tag.techTypes;
-    }
-    return techs.map(tech => tech.replace(/android\.nfc\.tech\./, ''));
   }
 }
 
