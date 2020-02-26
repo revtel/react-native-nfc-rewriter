@@ -1,23 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
 import PopupHexEditor from '../Components/PopupHexEditor';
-import {Button, Alert} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { Alert } from 'react-native';
 import NfcProxy from '../NfcProxy';
+import {Alert} from 'react-native';
+
+const toHex = num => {
+  return ('00' + num.toString(16)).slice(-2);
+};
+
+const arrToHex = arr => {
+  let hex = '';
+  for (let byte of arr) {
+    hex += toHex(byte);
+  }
+  return hex;
+};
 
 class CustomPayloadScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       payloads: [],
+      resps: [],
       currEditIdx: 0,
     }
   }
 
   render() {
-    const { tag, techType } = this.props.route.params;
-    const { payloads } = this.state;
+    const { techType } = this.props.route.params;
+    const { payloads, resps } = this.state;
+    const payloadAndRespArr = payloads.map((payload, idx) => ({
+      payload, resp: resps[idx] 
+    }));
 
     return (
       <Wrapper>
@@ -28,32 +44,41 @@ class CustomPayloadScreen extends React.Component {
               {"No payloads.\n Please click \"Add payload\" to start."}
             </EmptyHint>
           )}
-          {payloads.map((payload, idx) => (
-            <Payload key={idx}>
-              <PayloadIdx>{idx}</PayloadIdx>
-              <PayloadText>{payload}</PayloadText>
-              <BtnSmall onPress={this._openEditor({idx, payload})}>
-                <Icon name='edit' size={22} />
-              </BtnSmall>
-              <BtnSmall onPress={
-                () => {
-                  Alert.alert('Confirm', 'Are you sure?', [
-                    {
-                      text: 'Yes', 
-                      onPress: () => {
-                        let nextPayloads = [...payloads]
-                        nextPayloads.splice(idx, 1);
-                        this.setState({payloads: nextPayloads});
-                      }
-                    },
-                    {text: 'No', onPress: () => 0}
-                  ])
-                }
-              }>
-                <Icon name='delete' size={22} />
-              </BtnSmall>
-            </Payload>
-          ))}
+          {payloadAndRespArr.map(({payload, resp}, idx) => {
+            return (
+            <PayloadAndResp key={`${idx}-${payload}`}>
+              <Payload>
+                <PayloadText>{payload}</PayloadText>
+                <BtnSmall onPress={this._openEditor({idx, payload})}>
+                  <Icon name='edit' size={22} />
+                </BtnSmall>
+                <BtnSmall onPress={
+                  () => {
+                    Alert.alert('Confirm', 'Are you sure?', [
+                      {
+                        text: 'Yes', 
+                        onPress: () => {
+                          let nextPayloads = [...payloads]
+                          nextPayloads.splice(idx, 1);
+                          this.setState({payloads: nextPayloads});
+                        }
+                      },
+                      {text: 'No', onPress: () => 0}
+                    ])
+                  }
+                }>
+                  <Icon name='delete' size={22} />
+                </BtnSmall>
+              </Payload>
+
+              { resp && (
+                <RespText>
+                  {`RESP: ${arrToHex(resps[idx])}`}
+                </RespText>
+              )}
+            </PayloadAndResp>
+          )
+          })}
         </Content>
 
         <Button 
@@ -76,7 +101,7 @@ class CustomPayloadScreen extends React.Component {
     )
   }
 
-  _execute = () => {
+  _execute = async () => {
     let {payloads} = this.state;
 
     if (payloads.length === 0) {
@@ -84,10 +109,13 @@ class CustomPayloadScreen extends React.Component {
     }
 
     payloads = this._payloadsToBytesArr(payloads);
-    let [result, respones] = await NfcProxy.customTransceiveNfcA(payloads);
+    let [err, resps] = await NfcProxy.customTransceiveNfcA(payloads);
 
-    console.warn('result', result);
-    console.warn('responses', respones);
+    this.setState({resps});
+
+    if (err) {
+      Alert.alert('Transceive error!');
+    }
   }
 
   _openEditor = ({idx, payload}) => () => {
@@ -161,17 +189,19 @@ const Payload = styled.View`
   flex-direction: row;
   align-items: center;
   padding-left: 6px;
-  border-left-color: #ccc;
+  border-left-color: #aaa;
   border-left-width: 5px;
 `
 
-const PayloadIdx = styled.Text`
-  color: gray;
-`;
+const PayloadAndResp = styled.View``;
 
 const PayloadText = styled.Text`
   margin-horizontal: 10px;
   flex: 1;
+`;
+
+const RespText = styled.Text`
+  color: grey;
 `;
 
 const BtnSmall = styled.TouchableOpacity`

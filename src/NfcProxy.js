@@ -84,6 +84,7 @@ class NfcProxy {
           resp = await NfcManager.transceive(payloads);
         }
         responses.push(resp); 
+        await delay(100);
       }
     } catch (ex) {
       console.warn(ex);
@@ -191,3 +192,6 @@ const hexToBytes = hex => {
 };
 
 export default new NfcProxy();
+export {
+  ErrSuccess
+}

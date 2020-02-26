@@ -54,24 +54,23 @@ class PopupModal extends React.Component {
   render() {
     let {open} = this.state;
 
-    if (open) {
-      return (
-        <Modal transparent>
-          <Animated.View style={this.backdropStyle}>
-            <Animated.View style={this.popupStyle}>
-                {typeof this.props.children === 'function' ? (
-                  this.props.children({
-                    open: this.open,
-                    close: this.close,
-                  })
-                ) : this.props.children}
-            </Animated.View>
+    return (
+      <Modal 
+        transparent
+        visible={open}
+      >
+        <Animated.View style={this.backdropStyle}>
+          <Animated.View style={this.popupStyle}>
+              {typeof this.props.children === 'function' ? (
+                this.props.children({
+                  open: this.open,
+                  close: this.close,
+                })
+              ) : this.props.children}
           </Animated.View>
-        </Modal>
-      );
-    }
-
-    return null;
+        </Animated.View>
+      </Modal>
+    );
   }
 
   _updateStyleFromProps = props => {
@@ -95,12 +94,12 @@ class PopupModal extends React.Component {
     this.popupStyle = {
       position: 'absolute',
       left,
-      bottom: -(2 * height), 
+      bottom: -height, 
       transform: [
         {
           translateY: this.animatedValue.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, -(2 * height)],
+            outputRange: [0, -height],
           })
         }
       ],

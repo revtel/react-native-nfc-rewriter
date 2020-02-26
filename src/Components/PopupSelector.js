@@ -5,7 +5,7 @@ import PopupModal from '../Components/PopupModal';
 class PopupSelector extends React.Component {
   render() {
     const {options, onSelect, itemWidth=200, itemHeight=40, padding=10, fontSize=18} = this.props;
-    const height = itemHeight * (options.length + 1) + 2 * padding;
+    const height = itemHeight * (options.length + 1) + 2 * padding + 100;
     const baseItemStyle = {
       width: itemWidth,
       height: itemHeight,

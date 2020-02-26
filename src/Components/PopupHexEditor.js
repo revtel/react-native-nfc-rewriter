@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, Clipboard, Alert } from 'react-native';
 import PopupModal from '../Components/PopupModal';
 
 class PopupHexEditor extends React.Component {
@@ -19,7 +19,7 @@ class PopupHexEditor extends React.Component {
       cellText: { fontSize: 24, textAlign: 'center', alignItems: 'center' }
     };
 
-    const height = gridSize * 10 + 30;
+    const height = gridSize * 11 + 30;
     const hexDisplay = Array.from(hexStr).reduce((acc, ch, idx) => {
       if (idx !== 0 && idx % 2 == 0) {
         acc += ' ';
@@ -89,6 +89,20 @@ class PopupHexEditor extends React.Component {
           </View>
 
           <View style={styles.row}>
+            <TouchableOpacity style={styles.cell} onPress={this._onCopy}>
+              <Text style={{fontSize: 20, textAlign: 'center', color: 'red'}}>COPY</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.cell} onPress={this._onPaste}>
+              <Text style={{fontSize: 20, textAlign: 'center'}}>PASTE</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.cell} onPress={this._onClear}>
+              <Text style={{fontSize: 20, textAlign: 'center', color: 'blue'}}>CLEAR</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
             <TouchableOpacity style={styles.cell} onPress={() => this.ref && this.ref.close()}>
               <Text style={{fontSize: 20, textAlign: 'center', color: 'red'}}>CLOSE</Text>
             </TouchableOpacity>
@@ -111,6 +125,35 @@ class PopupHexEditor extends React.Component {
     this.setState({
       hexStr: v
     });
+  }
+
+  _onCopy = () => {
+    const {hexStr} = this.state;
+    Clipboard.setString(hexStr);
+    Alert.alert('Content copied!');
+  }
+
+  _onPaste = async () => {
+    let hexStr = await Clipboard.getString(hexStr);
+    hexStr = hexStr.toUpperCase();
+    for (let i = 0; i < hexStr.length; i++) {
+      const code = hexStr.charCodeAt(i);    
+      if (!(
+        (48 <= code && code <= 57) || 
+        (65 <= code && code <= 70)
+      )) {
+        Alert.alert('Invalid HEX format');
+        return;
+      }
+    }
+
+    this.setState({
+      hexStr
+    });
+  }
+
+  _onClear = () => {
+    this.setState({hexStr: ''});
   }
 
   _onSave = () => {
