@@ -5,6 +5,8 @@ import {AppEvents, AppEventName} from './AppEvents';
 const NfcAndroidUI = AppEvents.get(AppEventName.NFC_SCAN_UI);
 const LogRecord = AppEvents.get(AppEventName.LOG_RECORD);
 
+class ErrSuccess extends Error {}
+
 class NfcProxy {
   constructor() {
     NfcManager.start();
@@ -60,6 +62,41 @@ class NfcProxy {
 
     this.abort();
     return result;
+  }
+
+  customTransceiveNfcA = async (payloads) => {
+    let err = new ErrSuccess();
+    let responses = [];
+
+    try {
+      if (Platform.OS === 'ios') {
+        await NfcManager.requestTechnology([NfcTech.MifareIOS]);
+      } else {
+        NfcAndroidUI.emit('OPEN');
+        await NfcManager.requestTechnology([NfcTech.Ndef]);
+      }
+
+      for (const payload of payloads) {
+        let resp;
+        if (Platform.OS === 'ios') {
+          resp = await NfcManager.sendMifareCommandIOS(payload);
+        } else {
+          resp = await NfcManager.transceive(payloads);
+        }
+        responses.push(resp); 
+      }
+    } catch (ex) {
+      console.warn(ex);
+      err = ex;
+    }
+
+    this.abort();
+
+    if (err instanceof ErrSuccess) {
+      return [null, responses];
+    }
+
+    return [err, responses];
   }
 
   abort = async () => {

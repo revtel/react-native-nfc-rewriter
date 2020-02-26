@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import PopupHexEditor from '../Components/PopupHexEditor';
-import {Button} from 'react-native-elements';
+import {Button, Alert} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Alert } from 'react-native';
+import NfcProxy from '../NfcProxy';
 
 class CustomPayloadScreen extends React.Component {
   constructor(props) {
@@ -64,6 +65,7 @@ class CustomPayloadScreen extends React.Component {
         <Button 
           title='Execute' 
           containerStyle={{marginBottom: 10}}
+          onPress={this._execute}
         />
 
         <PopupHexEditor 
@@ -72,6 +74,20 @@ class CustomPayloadScreen extends React.Component {
         />
       </Wrapper>
     )
+  }
+
+  _execute = () => {
+    let {payloads} = this.state;
+
+    if (payloads.length === 0) {
+      return;
+    }
+
+    payloads = this._payloadsToBytesArr(payloads);
+    let [result, respones] = await NfcProxy.customTransceiveNfcA(payloads);
+
+    console.warn('result', result);
+    console.warn('responses', respones);
   }
 
   _openEditor = ({idx, payload}) => () => {
@@ -84,6 +100,11 @@ class CustomPayloadScreen extends React.Component {
   }
 
   _onEditResult = payload => {
+    if (payload.length % 2 !== 0) {
+      Alert.alert('Hex payload length should be even');
+      return;
+    }
+
     let {currEditIdx, payloads} = this.state;
     if (payloads.length === currEditIdx) { // create new one
       this.setState({
@@ -94,6 +115,18 @@ class CustomPayloadScreen extends React.Component {
       nextPayloads[currEditIdx] = payload;
       this.setState({ payloads: nextPayloads });
     }
+  }
+
+  _payloadsToBytesArr = payloads => {
+    let bytesArr = [];
+    for (const hex of payloads) {
+        let bytes = [];
+        for (let i = 0; i < hex.length; i = i + 2) {
+          bytes.push(parseInt(hex.slice(i, i + 2), 16));
+        }
+        bytesArr.push(bytes);
+    }
+    return bytesArr;
   }
 
   _onRef = ref => {
