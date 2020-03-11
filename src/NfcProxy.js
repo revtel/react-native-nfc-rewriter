@@ -54,6 +54,11 @@ class NfcProxy {
           Ndef.uriRecord(value),
         ]);
         await NfcManager.writeNdefMessage(bytes);
+      } else if (type === 'WIFI_SIMPLE') {
+        let bytes = Ndef.encodeMessage([
+          Ndef.wifiSimpleRecord(value),
+        ]);
+        await NfcManager.writeNdefMessage(bytes);
       }
       result = true;
     } catch (ex) {

@@ -67,6 +67,13 @@ class NdefMessage extends React.Component {
       } else if (rtdName === 'TEXT') {
         return <RtdTextPayload ndef={ndef} />;
       }
+    } else if (ndef.ntf === Ndef.MIME_MEDIA) {
+      const mimeTypeStr = String.fromCharCode(...ndef.type);
+      if (mimeTypeStr === Ndef.MIME_WFA_WSC) {
+        return <WifiSimplePayload ndef={ndef} />; 
+      } else {
+        return <Text>{mimeTypeStr}</Text>
+      }
     }
     return null;
   }
@@ -100,6 +107,26 @@ class RtdUriPayload extends React.Component {
       console.warn(ex);
       Alert.alert(`Cannot open uri`);
     }
+  }
+}
+
+class WifiSimplePayload extends React.Component {
+  render() {
+    let {ndef} = this.props;
+    let credentials = Ndef.wifiSimple.decodePayload(ndef.payload);
+    return (
+      <View style={{marginTop: 10}}>
+        <Text style={{marginBottom: 5}}>WIFI_SIMPLE</Text>
+        <View style={{flexDirection: 'row', marginBottom: 5}}>
+          <Text style={{color: 'grey', marginRight: 5}}>SSID:</Text>
+          <Text style={{fontSize: 16, flex: 1}}>{credentials.ssid || '---'}</Text>
+        </View>
+        <View style={{flexDirection: 'row', marginBottom: 5}}>
+          <Text style={{color: 'grey', marginRight: 5}}>Network Key:</Text>
+          <Text style={{fontSize: 16, flex: 1}}>{credentials.networkKey || '---'}</Text>
+        </View>
+      </View>
+    )
   }
 }
 

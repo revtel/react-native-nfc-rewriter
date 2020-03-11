@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import PopupSelector from '../Components/PopupSelector';
 import NfcProxy from '../NfcProxy';
@@ -30,7 +30,7 @@ class NdefWriteScreen extends React.Component {
         </View>
 
         <PopupSelector
-          options={['TEXT', 'URI']}
+          options={['TEXT', 'URI', 'WIFI_SIMPLE']}
           onSelect={
             ndefType => {
               this.ref.close();
@@ -49,6 +49,8 @@ class NdefWriteScreen extends React.Component {
       return <RtdTextWriter />;
     } else if (ndefType === 'URI') {
       return <RtdUriWriter />;
+    } else if (ndefType === 'WIFI_SIMPLE') {
+      return <WifiSimpleWriter />;
     }
     return null;
   }
@@ -71,9 +73,10 @@ class RtdTextWriter extends React.Component {
           ref={ref => (this.inputRef = ref)}
           style={{
             padding: 8, borderRadius: 6, borderColor: 'grey', borderWidth: 1, 
-            marginBottom: 20, height: 150
+            marginBottom: 20, height: 150, backgroundColor: 'white', color: 'black',
           }}
           value={value}
+          autoCapitalize={false}
           onChangeText={value => this.setState({value})}
         />
 
@@ -102,7 +105,79 @@ class RtdUriWriter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ''
+      value: '',
+      prefix: 'https://',
+    }
+  }
+
+  render() {
+    let {value, prefix} = this.state;
+
+    return (
+      <View style={{width: 300}}>
+        <View style={{flexDirection: 'row', marginBottom: 20}}>
+          <TouchableOpacity 
+            style={{paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, backgroundColor: 'grey', alignSelf: 'flex-start', marginRight: 10}}
+            onPress={() => this.ref.open()}
+          >
+            <Text style={{color: 'white'}}>{prefix}</Text>
+          </TouchableOpacity>
+
+          <TextInput 
+            style={{
+              flex: 1, padding: 8, borderRadius: 6, borderColor: 'grey', borderWidth: 1, height: 150,
+              backgroundColor: 'white', color: 'black'
+            }}
+            autoCapitalize={false}
+            value={value}
+            onChangeText={value => this.setState({value})}
+          />
+        </View>
+
+        <ActionBtn onPress={this._writeNdef}>
+          <ActionBtnText>Write URI</ActionBtnText>
+        </ActionBtn>
+
+        <PopupSelector
+          options={['https://', 'http://', '---']}
+          onSelect={
+            prefix => {
+              this.ref.close();
+              this.setState({prefix});
+            }
+          }
+          ref={ref => (this.ref = ref)}
+        />
+      </View>
+    )
+  }
+
+  _writeNdef = async () => {
+    this.inputRef && this.inputRef.blur();
+
+    let {value, prefix} = this.state;
+
+    if (!value) {
+      return;
+    }
+
+    if (prefix !== '---') {
+      value = prefix + value;
+    }
+
+    let result = await NfcProxy.writeNdef({type: 'URI', value});
+    Alert.alert(result ? 'Success' : 'Fail to write NDEF');
+  }
+}
+
+class WifiSimpleWriter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: {
+        ssid: '',
+        networkKey: '',
+      } 
     }
   }
 
@@ -111,17 +186,32 @@ class RtdUriWriter extends React.Component {
 
     return (
       <View style={{width: 300}}>
-        <TextInput 
-          style={{
-            padding: 8, borderRadius: 6, borderColor: 'grey', borderWidth: 1, 
-            marginBottom: 20, height: 150
-          }}
-          value={value}
-          onChangeText={value => this.setState({value})}
-        />
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{marginRight: 10}}>SSID</Text>
+          <TextInput 
+            style={{
+              padding: 8, borderRadius: 6, borderColor: 'grey', borderWidth: 1, 
+              marginBottom: 20, flex: 1, backgroundColor: 'white', color: 'black',
+            }}
+            value={value.ssid}
+            onChangeText={v => this.setState({value: {...value, ssid: v}})}
+          />
+        </View>
+
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{marginRight: 10}}>Network Key</Text>
+          <TextInput 
+            style={{
+              padding: 8, borderRadius: 6, borderColor: 'grey', borderWidth: 1, 
+              marginBottom: 20, flex: 1, backgroundColor: 'white', color: 'black',
+            }}
+            value={value.networkKey}
+            onChangeText={v => this.setState({value: {...value, networkKey: v}})}
+          />
+        </View>
 
         <ActionBtn onPress={this._writeNdef}>
-          <ActionBtnText>Write URI</ActionBtnText>
+          <ActionBtnText>Write Wifi Simple</ActionBtnText>
         </ActionBtn>
       </View>
     )
@@ -136,7 +226,7 @@ class RtdUriWriter extends React.Component {
       return;
     }
 
-    let result = await NfcProxy.writeNdef({type: 'URI', value});
+    let result = await NfcProxy.writeNdef({type: 'WIFI_SIMPLE', value});
     Alert.alert(result ? 'Success' : 'Fail to write NDEF');
   }
 }
