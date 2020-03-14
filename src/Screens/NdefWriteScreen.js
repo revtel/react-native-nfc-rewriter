@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import PopupSelector from '../Components/PopupSelector';
+import * as Widget from '../Components/Widget';
 import NfcProxy from '../NfcProxy';
 
 class NdefWriteScreen extends React.Component {
@@ -18,12 +19,16 @@ class NdefWriteScreen extends React.Component {
 
     return (
       <View style={{flex: 1, padding: 20}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
-          <Text style={{fontSize: 22, marginRight: 10}}>Type</Text>
-          <ActionBtn onPress={() =>  this.ref && this.ref.open()}>
-            <ActionBtnText>{ndefType}</ActionBtnText>
-          </ActionBtn>
+        <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: 16, marginRight: 10}}>Type</Text>
+          <Widget.ActionBtn 
+            onPress={() =>  this.ref && this.ref.open()}
+            css={`margin-bottom: 0px; width: 150px;`}
+          >
+            <Widget.ActionBtnText>{ndefType}</Widget.ActionBtnText>
+          </Widget.ActionBtn>
         </View>
+          
 
         <View style={{alignSelf: 'center', marginTop: 20}}>
           {this._renderNdefWriter()}
@@ -80,9 +85,9 @@ class RtdTextWriter extends React.Component {
           onChangeText={value => this.setState({value})}
         />
 
-        <ActionBtn onPress={this._writeNdef}>
-          <ActionBtnText>Write TEXT</ActionBtnText>
-        </ActionBtn>
+        <Widget.PrimaryBtn onPress={this._writeNdef} css='width: 300px;'>
+          <Widget.PrimaryBtnText>Write TEXT</Widget.PrimaryBtnText>
+        </Widget.PrimaryBtn>
       </View>
     )
   }
@@ -134,9 +139,9 @@ class RtdUriWriter extends React.Component {
           />
         </View>
 
-        <ActionBtn onPress={this._writeNdef}>
-          <ActionBtnText>Write URI</ActionBtnText>
-        </ActionBtn>
+        <Widget.PrimaryBtn onPress={this._writeNdef}>
+          <Widget.PrimaryBtnText>Write URI</Widget.PrimaryBtnText>
+        </Widget.PrimaryBtn>
 
         <PopupSelector
           options={['https://', 'http://', '---']}
@@ -210,9 +215,9 @@ class WifiSimpleWriter extends React.Component {
           />
         </View>
 
-        <ActionBtn onPress={this._writeNdef}>
-          <ActionBtnText>Write Wifi Simple</ActionBtnText>
-        </ActionBtn>
+        <Widget.PrimaryBtn onPress={this._writeNdef}>
+          <Widget.PrimaryBtnText>Write Wifi Simple</Widget.PrimaryBtnText>
+        </Widget.PrimaryBtn>
       </View>
     )
   }
@@ -230,22 +235,5 @@ class WifiSimpleWriter extends React.Component {
     Alert.alert(result ? 'Success' : 'Fail to write NDEF');
   }
 }
-
-const ActionBtn = styled.TouchableOpacity`
-  padding-vertical: 6px;
-  padding-horizontal: 10px;
-  border-radius: 20px;
-  border-width: 1px;
-  border-color: black;
-  min-width: 240px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
-
-const ActionBtnText = styled.Text`
-  font-size: 20px;
-`;
 
 export default NdefWriteScreen;

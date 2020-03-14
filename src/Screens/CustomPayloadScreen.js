@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import PopupHexEditor from '../Components/PopupHexEditor';
-import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import NfcProxy from '../NfcProxy';
 import {Alert} from 'react-native';
+import * as Widget from '../Components/Widget';
 
 const toHex = num => {
   return ('00' + num.toString(16)).slice(-2);
@@ -81,17 +81,17 @@ class CustomPayloadScreen extends React.Component {
           })}
         </Content>
 
-        <Button 
-          title='Add payload' 
-          containerStyle={{marginBottom: 10}}
+        <Widget.PrimaryBtn
           onPress={this._openEditor({idx: payloads.length, payload: ''})}
-        />
+        >
+          <Widget.PrimaryBtnText>Add payload</Widget.PrimaryBtnText>
+        </Widget.PrimaryBtn>
 
-        <Button 
-          title='Execute' 
-          containerStyle={{marginBottom: 10}}
+        <Widget.PrimaryBtn
           onPress={this._execute}
-        />
+        >
+          <Widget.PrimaryBtnText>Execute</Widget.PrimaryBtnText>
+        </Widget.PrimaryBtn>
 
         <PopupHexEditor 
           ref={this._onRef}

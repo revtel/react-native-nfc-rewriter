@@ -2,61 +2,71 @@ import * as React from 'react';
 import { View } from 'react-native';
 import NfcProxy from '../NfcProxy';
 import styled from 'styled-components';
+import * as Widget from '../Components/Widget';
+import Popup from '../Components/PopupHexEditor';
 
-function HomeScreen({navigation}) {
-  return (
-    <View style={{flex: 1, padding: 20}}>
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <LogoImage source={require('../../images/nfc-512.png')}/>
+class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openModal: false
+    }
+  }
+
+  render() {
+    let {openModal} = this.state;
+    let {navigation} = this.props;
+
+    return (
+      <View style={{flex: 1, padding: 20}}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <LogoImage source={require('../../images/nfc-512.png')}/>
+        </View>
+
+        <View style={{flex: 1, alignItems: 'center'}}>
+          <Widget.ActionBtn
+            css='width: 250px;'
+            onPress={async () => {
+              const tag = await NfcProxy.readTag();
+              if (tag) {
+                navigation.navigate('TagDetail', {tag});
+              }
+            }}
+          >
+            <Widget.ActionBtnText>Scan NFC Tag</Widget.ActionBtnText>
+          </Widget.ActionBtn>
+
+
+          <Widget.ActionBtn
+            css='width: 250px;'
+            onPress={async () => {
+              // this.setState({openModal: true})
+              this.ref.open();
+            }}
+          >
+            <Widget.ActionBtnText>Scan NFC Tag</Widget.ActionBtnText>
+          </Widget.ActionBtn>
+
+          <Widget.ActionBtn
+            css='width: 250px;'
+            onPress={async () => {
+              navigation.navigate('NdefWrite');
+            }}
+          >
+            <Widget.ActionBtnText>Write NFC Tag</Widget.ActionBtnText>
+          </Widget.ActionBtn>
+        </View>
+
+        <Popup ref={ref => (this.ref = ref)}/>
       </View>
-
-      <View style={{flex: 1, alignItems: 'center'}}>
-        <ActionBtn
-          onPress={async () => {
-            const tag = await NfcProxy.readTag();
-            if (tag) {
-              navigation.navigate('TagDetail', {tag});
-            }
-          }}
-        >
-          <ActionBtnText>Scan NFC Tag</ActionBtnText>
-        </ActionBtn>
-
-        <ActionBtn
-          onPress={async () => {
-            navigation.navigate('NdefWrite');
-          }}
-        >
-          <ActionBtnText>Write NFC Tag</ActionBtnText>
-        </ActionBtn>
-      </View>
-
-    </View>
-  );
+    );
+  }
 }
 
 const LogoImage = styled.Image`
   width: 200px;
   height: 200px;
   alignSelf: center;
-`;
-
-const ActionBtn = styled.TouchableOpacity`
-  padding-vertical: 6px;
-  padding-horizontal: 10px;
-  border-radius: 20px;
-  border-width: 1px;
-  border-color: black;
-  min-width: 240px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  margin-bottom: 10px;
-`;
-
-const ActionBtnText = styled.Text`
-  font-size: 22px;
 `;
 
 export default HomeScreen;

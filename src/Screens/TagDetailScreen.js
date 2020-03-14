@@ -6,7 +6,7 @@ import TagBanner from '../Components/TagBanner'
 import NdefMessage from '../Components/NdefMessage'
 import styled from 'styled-components'
 import {getTechList} from '../Utils/getTechList';
-import { Button } from 'react-native-elements';
+import * as Widget from '../Components/Widget';
 import {NfcTech} from 'react-native-nfc-manager';
 
 const NFCA_OR_MIFARE_TECH = Platform.OS === 'android' ? 'NfcA' : 'mifare';
@@ -29,20 +29,18 @@ class TagDetailScreen extends React.Component {
 
         <ScrollView style={{marginTop: 10, flex: 1, alignSelf: 'stretch', padding: 10}}>
           {techs.findIndex(tech => tech === NFCA_OR_MIFARE_TECH) > -1 && (
-            <Button
-              title='Custom NFCA / Mifare Command'
-              containerStyle={{marginBottom: 10}}
-              onPress={
-                () => navigation.navigate(
-                  'CustomPayload', 
-                  { 
-                    tag,
-                    techType: Platform.OS === 'android' ? NfcTech.NfcA : NfcTech.MifareIOS,
-                  }
-                )
-              }
-            />
-          )}
+            <Widget.ActionBtn
+              onPress={() => navigation.navigate(
+                'CustomPayload', 
+                { 
+                  tag,
+                  techType: Platform.OS === 'android' ? NfcTech.NfcA : NfcTech.MifareIOS,
+                }
+              )}
+            >
+              <Widget.ActionBtnText>Custom NFCA / Mifare Command</Widget.ActionBtnText>
+            </Widget.ActionBtn>
+          ) || null}
 
           <SectionLabel>
             <SectionLabelText>NDEF</SectionLabelText>
