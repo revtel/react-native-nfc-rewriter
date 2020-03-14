@@ -29,7 +29,7 @@ class NfcScanAndroid extends React.Component {
     return (
       <PopupModal 
         ref={ref => (this._popup = ref)}
-        promptStyle={{height: 300}}
+        popupStyle={{height: 300}}
       >
         <View style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
           <Logo source={require('../../images/nfc-512.png')} />
