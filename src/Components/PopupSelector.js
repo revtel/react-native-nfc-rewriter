@@ -4,14 +4,13 @@ import PopupModal from '../Components/PopupModal';
 
 class PopupSelector extends React.Component {
   render() {
-    const {options, onSelect, itemWidth=200, itemHeight=40, padding=10, fontSize=18} = this.props;
-    const height = itemHeight * (options.length + 1) + 2 * padding + 100;
+    const {options, onSelect, itemWidth=200, itemHeight=60, fontSize=18} = this.props;
+    const height = itemHeight * (options.length + 1); // the extra 1 for cancel
     const baseItemStyle = {
       width: itemWidth,
       height: itemHeight,
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 6,
     };
     
     return (
@@ -19,7 +18,7 @@ class PopupSelector extends React.Component {
         ref={this._onRef}
         popupStyle={{height}}
       >
-        <View style={{height, alignItems: 'center', justifyContent: 'center', padding}}>
+        <View style={{alignItems: 'center'}}>
           {options.map((option, idx) => {
             let display = '---';
             if (option.label) {

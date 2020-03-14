@@ -3,18 +3,9 @@ import { View } from 'react-native';
 import NfcProxy from '../NfcProxy';
 import styled from 'styled-components';
 import * as Widget from '../Components/Widget';
-import Popup from '../Components/PopupHexEditor';
 
 class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openModal: false
-    }
-  }
-
   render() {
-    let {openModal} = this.state;
     let {navigation} = this.props;
 
     return (
@@ -36,17 +27,6 @@ class HomeScreen extends React.Component {
             <Widget.ActionBtnText>Scan NFC Tag</Widget.ActionBtnText>
           </Widget.ActionBtn>
 
-
-          <Widget.ActionBtn
-            css='width: 250px;'
-            onPress={async () => {
-              // this.setState({openModal: true})
-              this.ref.open();
-            }}
-          >
-            <Widget.ActionBtnText>Scan NFC Tag</Widget.ActionBtnText>
-          </Widget.ActionBtn>
-
           <Widget.ActionBtn
             css='width: 250px;'
             onPress={async () => {
@@ -56,8 +36,6 @@ class HomeScreen extends React.Component {
             <Widget.ActionBtnText>Write NFC Tag</Widget.ActionBtnText>
           </Widget.ActionBtn>
         </View>
-
-        <Popup ref={ref => (this.ref = ref)}/>
       </View>
     );
   }
