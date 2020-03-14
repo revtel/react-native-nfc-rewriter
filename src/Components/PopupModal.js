@@ -70,22 +70,23 @@ class PopupModal extends React.Component {
 
   _updatePopupStyle = props => {
     const mergedStyle = {...defaultStyle.popup, ...props.popupStyle,};
+    const height = mergedStyle.height + 2 * mergedStyle.padding;
 
     this.popupStyle = {
       ...mergedStyle,
       position: 'absolute',
       left: mergedStyle.left,
-      bottom: -mergedStyle.height, 
+      bottom: -height, 
       transform: [
         {
           translateY: this.animatedValue.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, -mergedStyle.height],
+            outputRange: [0, -height],
           })
         }
       ],
       width: Dimensions.get('window').width - (2 * mergedStyle.left),
-      height: mergedStyle.height,
+      height,
     };
   }
 
