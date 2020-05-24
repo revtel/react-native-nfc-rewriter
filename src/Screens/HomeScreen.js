@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import NfcProxy from '../NfcProxy';
 import styled from 'styled-components';
 import * as Widget from '../Components/Widget';
@@ -15,6 +15,21 @@ class HomeScreen extends React.Component {
         </View>
 
         <View style={{flex: 1, alignItems: 'center'}}>
+          {Platform.OS === 'ios' && (
+            <Widget.ActionBtn
+              css='width: 250px;'
+              onPress={async () => {
+                const ndefTag = await NfcProxy.readNdefOnce();
+                console.warn('ndefTag', ndefTag);
+                if (ndefTag) {
+                  navigation.navigate('TagDetail', {tag: ndefTag});
+                }
+              }}
+            >
+              <Widget.ActionBtnText>Scan NDEF Only</Widget.ActionBtnText>
+            </Widget.ActionBtn>
+          )}
+
           <Widget.ActionBtn
             css='width: 250px;'
             onPress={async () => {

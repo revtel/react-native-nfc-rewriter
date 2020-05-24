@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import NfcManager, {NfcTech, Ndef} from 'react-native-nfc-manager';
+import NfcManager, {NfcTech, Ndef, NfcEvents} from 'react-native-nfc-manager';
 import {AppEvents, AppEventName} from './AppEvents';
 
 const NfcAndroidUI = AppEvents.get(AppEventName.NFC_SCAN_UI);
@@ -11,6 +11,33 @@ class NfcProxy {
   constructor() {
     NfcManager.start();
   }
+
+  readNdefOnce = () => {
+    const cleanUp = () => {
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
+      NfcManager.setEventListener(NfcEvents.SessionClosed, null);
+    }
+
+    return new Promise((resolve) => {
+      let tagFound = null;
+
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+        tagFound = tag;
+        resolve(tagFound);
+        NfcManager.setAlertMessageIOS('NDEF tag found');
+        NfcManager.unregisterTagEvent().catch(() => 0);
+      });
+
+      NfcManager.setEventListener(NfcEvents.SessionClosed, () => {
+        cleanUp();
+        if (!tagFound) {
+          resolve();
+        }
+      });
+
+      NfcManager.registerTagEvent();
+    });
+  };
 
   readTag = async () => {
     let tag = null;
