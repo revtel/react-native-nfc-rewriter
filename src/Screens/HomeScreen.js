@@ -1,65 +1,87 @@
 import * as React from 'react';
-import { View, Platform } from 'react-native';
+import {View, Image, Platform, Dimensions, StatusBar} from 'react-native';
 import NfcProxy from '../NfcProxy';
-import styled from 'styled-components';
-import * as Widget from '../Components/Widget';
+import {Button} from 'react-native-paper';
 
 class HomeScreen extends React.Component {
   render() {
     let {navigation} = this.props;
+    const padding = 40;
+    const width = Dimensions.get('window').width - 2 * padding;
 
     return (
-      <View style={{flex: 1, padding: 20}}>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <LogoImage source={require('../../images/nfc-512.png')}/>
-        </View>
+      <>
+        <StatusBar barStyle="dark-content" />
+        <View style={{flex: 1, padding}}>
+          <View
+            style={{
+              flex: 3,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={require('../../images/nfc-512.png')}
+              style={{width, height: width}}
+              resizeMode="contain"
+            />
+          </View>
 
-        <View style={{flex: 1, alignItems: 'center'}}>
-          {Platform.OS === 'ios' && (
-            <Widget.ActionBtn
-              css='width: 250px;'
+          <View
+            style={{
+              flex: 2,
+              alignItems: 'stretch',
+              alignSelf: 'center',
+              width,
+            }}>
+            {Platform.OS === 'ios' && (
+              <ActionButton
+                outlined
+                onPress={async () => {
+                  const ndefTag = await NfcProxy.readNdefOnce();
+                  console.warn('ndefTag', ndefTag);
+                  if (ndefTag) {
+                    navigation.navigate('TagDetail', {tag: ndefTag});
+                  }
+                }}>
+                READ NDEF
+              </ActionButton>
+            )}
+
+            <ActionButton
+              outlined
               onPress={async () => {
-                const ndefTag = await NfcProxy.readNdefOnce();
-                console.warn('ndefTag', ndefTag);
-                if (ndefTag) {
-                  navigation.navigate('TagDetail', {tag: ndefTag});
+                navigation.navigate('NdefWrite');
+              }}>
+              WRITE NDEF
+            </ActionButton>
+
+            <ActionButton
+              onPress={async () => {
+                const tag = await NfcProxy.readTag();
+                if (tag) {
+                  navigation.navigate('TagDetail', {tag});
                 }
-              }}
-            >
-              <Widget.ActionBtnText>Scan NDEF Only</Widget.ActionBtnText>
-            </Widget.ActionBtn>
-          )}
-
-          <Widget.ActionBtn
-            css='width: 250px;'
-            onPress={async () => {
-              const tag = await NfcProxy.readTag();
-              if (tag) {
-                navigation.navigate('TagDetail', {tag});
-              }
-            }}
-          >
-            <Widget.ActionBtnText>Scan NFC Tag</Widget.ActionBtnText>
-          </Widget.ActionBtn>
-
-          <Widget.ActionBtn
-            css='width: 250px;'
-            onPress={async () => {
-              navigation.navigate('NdefWrite');
-            }}
-          >
-            <Widget.ActionBtnText>Write NFC Tag</Widget.ActionBtnText>
-          </Widget.ActionBtn>
+              }}>
+              SCAN NFC TAG
+            </ActionButton>
+          </View>
         </View>
-      </View>
+      </>
     );
   }
 }
 
-const LogoImage = styled.Image`
-  width: 200px;
-  height: 200px;
-  alignSelf: center;
-`;
+function ActionButton(props) {
+  const {outlined, ...extraProps} = props;
+  return (
+    <Button
+      mode={outlined ? 'outlined' : 'contained'}
+      style={{borderRadius: 8, marginBottom: 10}}
+      labelStyle={[{fontSize: 22}, outlined ? {} : {color: 'white'}]}
+      {...extraProps}>
+      {props.children}
+    </Button>
+  );
+}
 
 export default HomeScreen;

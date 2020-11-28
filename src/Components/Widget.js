@@ -1,4 +1,3 @@
-import * as RNElements from 'react-native-elements';
 import styled from 'styled-components';
 
 const ActionBtn = styled.TouchableOpacity`
@@ -12,12 +11,12 @@ const ActionBtn = styled.TouchableOpacity`
   justify-content: center;
   background-color: white;
   margin-bottom: 10px;
-  ${props => props.css}
+  ${(props) => props.css}
 `;
 
 const ActionBtnText = styled.Text`
   font-size: 18px;
-  ${props => props.css}
+  ${(props) => props.css}
 `;
 
 const PrimaryBtn = styled.TouchableOpacity`
@@ -31,19 +30,13 @@ const PrimaryBtn = styled.TouchableOpacity`
   justify-content: center;
   background-color: teal;
   margin-bottom: 10px;
-  ${props => props.css}
+  ${(props) => props.css}
 `;
 
 const PrimaryBtnText = styled.Text`
   font-size: 20px;
   color: white;
-  ${props => props.css}
+  ${(props) => props.css}
 `;
 
-
-export {
-  ActionBtn,
-  ActionBtnText,
-  PrimaryBtn,
-  PrimaryBtnText,
-}
+export {ActionBtn, ActionBtnText, PrimaryBtn, PrimaryBtnText};

@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  View, Text, Clipboard, Alert, TouchableOpacity, ScrollView, Platform,
+  View, Text, Clipboard, Alert, ScrollView, Platform, Dimensions,
 } from 'react-native';
+import {Button} from 'react-native-paper';
 import TagBanner from '../Components/TagBanner'
 import NdefMessage from '../Components/NdefMessage'
 import styled from 'styled-components'
@@ -23,13 +24,18 @@ class TagDetailScreen extends React.Component {
 
     let techs = getTechList(tag);
 
-    return (
-      <View style={{ flex: 1, paddingTop: 10, alignItems: 'center'}}>
-        <TagBanner tag={tag} />
+    const padding = 20;
+    let bannerWidth = Dimensions.get('window').width - 2 * padding;
 
-        <ScrollView style={{marginTop: 10, flex: 1, alignSelf: 'stretch', padding: 10}}>
+    return (
+      <View style={{ flex: 1, padding, alignItems: 'center', backgroundColor: 'white'}}>
+        <TagBanner tag={tag} width={bannerWidth} />
+
+        <ScrollView style={{marginTop: 10, flex: 1, alignSelf: 'stretch', paddingTop: 10}}>
           {techs.findIndex(tech => tech === NFCA_OR_MIFARE_TECH) > -1 && (
-            <Widget.ActionBtn
+            <Button
+              mode='outlined'
+              labelStyle={{color: '#666'}}
               onPress={() => navigation.navigate(
                 'CustomPayload', 
                 { 
@@ -38,8 +44,8 @@ class TagDetailScreen extends React.Component {
                 }
               )}
             >
-              <Widget.ActionBtnText>Custom NFCA / Mifare Command</Widget.ActionBtnText>
-            </Widget.ActionBtn>
+              NFCA / Mifare COMMAND
+            </Button>
           ) || null}
 
           <SectionLabel>
@@ -53,7 +59,7 @@ class TagDetailScreen extends React.Component {
           )}
 
           <SectionLabel>
-            <SectionLabelText>Tag Detail</SectionLabelText>
+            <SectionLabelText>TAG INFO</SectionLabelText>
             <ClickToCopyBtn onPress={this._copyTagInfo}>
               <Text style={{fontSize: 14, color: 'grey'}}>Copy to clipboard</Text>
             </ClickToCopyBtn>
@@ -73,15 +79,17 @@ class TagDetailScreen extends React.Component {
 }
 
 const SectionLabel = styled.View`
-  border-left-width: 10px;
-  border-left-color: grey;
-  padding: 6px;
+  border-bottom-width: 2px;
+  border-bottom-color: gray;
+  color: grey;
+  padding: 8px;
   flex-direction: row;
   align-items: center;
-  margin-vertical: 10px;
+  margin-vertical: 20px;
 `;
 
 const SectionLabelText = styled.Text`
+  color: gray;
   font-size: 20px;
 `;
 

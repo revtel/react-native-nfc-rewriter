@@ -13,8 +13,7 @@ const CustomDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'pink',
-    customColor: '#BADA55',
+    primary: '#3985cb',
   },
   fonts: {
     ...DefaultTheme.fonts,

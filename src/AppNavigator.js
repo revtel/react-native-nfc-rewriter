@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Appbar} from 'react-native-paper';
 import LandingScreen from './Screens/LandingScreen';
 import HomeScreen from './Screens/HomeScreen';
 import TagDetailScreen from './Screens/TagDetailScreen';
@@ -11,29 +12,52 @@ const MainStack = createStackNavigator();
 
 function Main(props) {
   return (
-    <MainStack.Navigator>
+    <MainStack.Navigator
+      headerMode="screen"
+      screenOptions={{
+        header: ({navigation, scene, previous}) => {
+          const excludedScreens = ['Home'];
+
+          if (
+            excludedScreens.findIndex((name) => name === scene?.route?.name) >
+            -1
+          ) {
+            return null;
+          }
+
+          return (
+            <Appbar.Header style={{backgroundColor: 'white'}}>
+              {previous && (
+                <Appbar.BackAction onPress={() => navigation.goBack()} />
+              )}
+              <Appbar.Content
+                title={scene.descriptor.options.title || ''}
+              />
+            </Appbar.Header>
+          );
+        },
+      }}>
       <MainStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{title: 'Home'}}
+        options={{title: 'HOME'}}
       />
       <MainStack.Screen
         name="TagDetail"
         component={TagDetailScreen}
-        options={{title: 'Tag Info'}}
       />
       <MainStack.Screen
         name="NdefWrite"
         component={NdefWriteScreen}
-        options={{title: 'NDEF Write'}}
+        options={{title: 'WRITE NDEF'}}
       />
       <MainStack.Screen
         name="CustomPayload"
         component={CustomPayloadScreen}
-        options={{title: 'Custom Payload'}}
+        options={{title: 'CUSTOM PAYLOAD'}}
       />
     </MainStack.Navigator>
-  )
+  );
 }
 
 const RootStack = createStackNavigator();

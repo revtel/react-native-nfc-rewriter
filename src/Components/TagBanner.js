@@ -6,16 +6,15 @@ import {getTechList} from '../Utils/getTechList';
 
 class TagBanner extends React.Component {
   render() {
-    let {tag, onPress} = this.props;
-    let width = Dimensions.get('window').width;
+    let {tag, width, onPress} = this.props;
     let techs = getTechList(tag);
 
     return (
       <TouchableOpacity onPress={onPress} disabled={!onPress}>
         <View
           style={{
-            width: width - 20,
-            height: (width - 20) * (9 / 16),
+            width,
+            height: width * (9 / 16),
             borderRadius: 10,
             overflow: 'hidden',
             alignItems: 'stretch',
