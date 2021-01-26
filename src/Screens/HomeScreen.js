@@ -50,7 +50,7 @@ class HomeScreen extends React.Component {
             <ActionButton
               outlined
               onPress={async () => {
-                navigation.navigate('NdefWrite');
+                navigation.navigate('NdefTypeList');
               }}>
               WRITE NDEF
             </ActionButton>

@@ -5,6 +5,7 @@ import {Appbar} from 'react-native-paper';
 import LandingScreen from './Screens/LandingScreen';
 import HomeScreen from './Screens/HomeScreen';
 import TagDetailScreen from './Screens/TagDetailScreen';
+import NdefTypeListScreen from './Screens/NdefTypeListScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
 import CustomPayloadScreen from './Screens/CustomPayloadScreen';
 
@@ -30,9 +31,7 @@ function Main(props) {
               {previous && (
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
               )}
-              <Appbar.Content
-                title={scene.descriptor.options.title || ''}
-              />
+              <Appbar.Content title={scene.descriptor.options.title || ''} />
             </Appbar.Header>
           );
         },
@@ -42,9 +41,11 @@ function Main(props) {
         component={HomeScreen}
         options={{title: 'HOME'}}
       />
+      <MainStack.Screen name="TagDetail" component={TagDetailScreen} />
       <MainStack.Screen
-        name="TagDetail"
-        component={TagDetailScreen}
+        name="NdefTypeList"
+        component={NdefTypeListScreen}
+        options={{title: 'CHOOSE NDEF TYPE'}}
       />
       <MainStack.Screen
         name="NdefWrite"
