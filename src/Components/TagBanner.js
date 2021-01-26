@@ -38,17 +38,16 @@ class TagBanner extends React.Component {
               width: '100%',
               height: '100%',
               backgroundColor: 'white',
-            }}
-          >
+            }}>
             <NfcTagText>NFC Tag</NfcTagText>
 
             <UidText>{`ID ${tag.id || '---'}`}</UidText>
 
-            <LogoImage source={require('../../images/nfc-512.png')}/>
+            <LogoImage source={require('../../images/nfc-512.png')} />
 
             <LeftBottomArea>
               <TechList>
-                {techs.map(tech => (
+                {techs.map((tech) => (
                   <TechItem key={tech}>
                     <TechItemText>{tech}</TechItemText>
                   </TechItem>
@@ -63,16 +62,14 @@ class TagBanner extends React.Component {
 }
 
 const NfcTagText = styled.Text`
-  color: #001A5C;
+  color: #001a5c;
   font-size: 16px;
-  font-weight: bold; 
-  letter-spacing: 1;
+  font-weight: bold;
 `;
 
 const UidText = styled.Text`
-  color: #001A5C;
+  color: #001a5c;
   font-size: 16px;
-  letter-spacing: 1;
 `;
 
 const LeftBottomArea = styled.View`
@@ -92,13 +89,13 @@ const TechItem = styled.View`
   padding-horizontal: 8px;
   border-radius: 12px;
   border-width: 1px;
-  border-color: #001A5C;
+  border-color: #001a5c;
   margin-right: 10px;
   margin-top: 5px;
-`
+`;
 
 const TechItemText = styled.Text`
-  color: #001A5C;
+  color: #001a5c;
 `;
 
 const LogoImage = styled.Image`
