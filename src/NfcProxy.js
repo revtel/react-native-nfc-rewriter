@@ -48,6 +48,7 @@ class NfcProxy {
           NfcTech.MifareIOS,
           NfcTech.Iso15693IOS,
           NfcTech.IsoDep,
+          NfcTech.Ndef,
         ]);
       } else {
         NfcAndroidUI.emit('OPEN');
@@ -55,6 +56,7 @@ class NfcProxy {
       }
 
       tag = await NfcManager.getTag();
+      tag.ndefStatus = await NfcManager.getNdefHandler().getNdefStatus();
     } catch (ex) {
       console.warn(ex);
     }
