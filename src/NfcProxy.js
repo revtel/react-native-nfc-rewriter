@@ -106,7 +106,7 @@ class NfcProxy {
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
       for (const payload of payloads) {
-        const resp = await NfcManager.nfcAHandler.transceive(payloads);
+        const resp = await NfcManager.nfcAHandler.transceive(payload);
         responses.push(resp);
         await delay(100);
       }
