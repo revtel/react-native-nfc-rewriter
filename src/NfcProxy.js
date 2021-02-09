@@ -16,12 +16,12 @@ class NfcProxy {
     const cleanUp = () => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
       NfcManager.setEventListener(NfcEvents.SessionClosed, null);
-    }
+    };
 
     return new Promise((resolve) => {
       let tagFound = null;
 
-      NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
         tagFound = tag;
         resolve(tagFound);
         NfcManager.setAlertMessageIOS('NDEF tag found');
@@ -45,7 +45,9 @@ class NfcProxy {
       if (Platform.OS === 'ios') {
         // because we also want to read the id from it!
         await NfcManager.requestTechnology([
-          NfcTech.MifareIOS, NfcTech.Iso15693IOS, NfcTech.IsoDep
+          NfcTech.MifareIOS,
+          NfcTech.Iso15693IOS,
+          NfcTech.IsoDep,
         ]);
       } else {
         NfcAndroidUI.emit('OPEN');
@@ -61,6 +63,36 @@ class NfcProxy {
     return tag;
   };
 
+  writeNdefTwice = async () => {
+    let result = false;
+    try {
+      if (Platform.OS === 'ios') {
+        await NfcManager.requestTechnology(NfcTech.Ndef);
+      } else {
+        NfcAndroidUI.emit('OPEN');
+        await NfcManager.requestTechnology(NfcTech.Ndef);
+      }
+
+      let bytes;
+
+      bytes = Ndef.encodeMessage([Ndef.textRecord('hello')]);
+      await NfcManager.writeNdefMessage(bytes);
+
+      const tag = await NfcManager.getTag();
+      console.warn('tag', tag);
+
+      bytes = Ndef.encodeMessage([Ndef.textRecord('hello again')]);
+      await NfcManager.writeNdefMessage(bytes);
+
+      result = true;
+    } catch (ex) {
+      console.warn(ex);
+    }
+
+    this.abort();
+    return result;
+  };
+
   writeNdef = async ({type, value}) => {
     let result = false;
     try {
@@ -72,19 +104,13 @@ class NfcProxy {
       }
 
       if (type === 'TEXT') {
-        let bytes = Ndef.encodeMessage([
-          Ndef.textRecord(value),
-        ]);
+        let bytes = Ndef.encodeMessage([Ndef.textRecord(value)]);
         await NfcManager.writeNdefMessage(bytes);
       } else if (type === 'URI') {
-        let bytes = Ndef.encodeMessage([
-          Ndef.uriRecord(value),
-        ]);
+        let bytes = Ndef.encodeMessage([Ndef.uriRecord(value)]);
         await NfcManager.writeNdefMessage(bytes);
       } else if (type === 'WIFI_SIMPLE') {
-        let bytes = Ndef.encodeMessage([
-          Ndef.wifiSimpleRecord(value),
-        ]);
+        let bytes = Ndef.encodeMessage([Ndef.wifiSimpleRecord(value)]);
         await NfcManager.writeNdefMessage(bytes);
       }
       result = true;
@@ -94,7 +120,7 @@ class NfcProxy {
 
     this.abort();
     return result;
-  }
+  };
 
   customTransceiveNfcA = async (payloads) => {
     let err = new ErrSuccess();
@@ -115,7 +141,7 @@ class NfcProxy {
         } else {
           resp = await NfcManager.transceive(payloads);
         }
-        responses.push(resp); 
+        responses.push(resp);
         await delay(100);
       }
     } catch (ex) {
@@ -130,7 +156,7 @@ class NfcProxy {
     }
 
     return [err, responses];
-  }
+  };
 
   abort = async () => {
     NfcManager.cancelTechnologyRequest().catch(() => 0);
@@ -164,7 +190,7 @@ class NfcProxy {
     LogRecord.emit({message: msg, type, data: dataStr, created: new Date()});
   };
 
-  calcChecksum = bytes => {
+  calcChecksum = (bytes) => {
     let result = 0;
     for (let byte of bytes) {
       result = result ^ byte;
@@ -177,15 +203,15 @@ class NfcProxy {
 // ------------------------
 //  Utils
 // ------------------------
-const delay = ms => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const toHex = num => {
+const toHex = (num) => {
   return ('00' + num.toString(16)).slice(-2);
 };
 
-const arrToHex = arr => {
+const arrToHex = (arr) => {
   let hex = '';
   for (let byte of arr) {
     hex += toHex(byte);
@@ -193,7 +219,7 @@ const arrToHex = arr => {
   return hex;
 };
 
-const uidToBytes = uidStr => {
+const uidToBytes = (uidStr) => {
   if (uidStr.length !== 14) {
     throw new Error('incorrect uid length');
   }
@@ -205,7 +231,7 @@ const uidToBytes = uidStr => {
   return bytes;
 };
 
-const pinToBytes = pinStr => {
+const pinToBytes = (pinStr) => {
   pinStr = ('000000' + parseInt(pinStr).toString(16)).slice(-6);
 
   let bytes = [];
@@ -215,7 +241,7 @@ const pinToBytes = pinStr => {
   return bytes;
 };
 
-const hexToBytes = hex => {
+const hexToBytes = (hex) => {
   let bytes = [];
   for (let i = 0; i < hex.length; i = i + 2) {
     bytes.push(parseInt(hex.slice(i, i + 2), 16));
@@ -224,6 +250,4 @@ const hexToBytes = hex => {
 };
 
 export default new NfcProxy();
-export {
-  ErrSuccess
-}
+export {ErrSuccess};

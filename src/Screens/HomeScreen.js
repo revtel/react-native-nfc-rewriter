@@ -64,6 +64,14 @@ class HomeScreen extends React.Component {
               }}>
               SCAN NFC TAG
             </ActionButton>
+
+            <ActionButton
+              outlined
+              onPress={async () => {
+                await NfcProxy.writeNdefTwice();
+              }}>
+              WRITE NDEF TWICE
+            </ActionButton>
           </View>
         </View>
       </>
