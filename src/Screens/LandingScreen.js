@@ -27,9 +27,10 @@ function LandingScreen(props) {
       <ImageBackground
         source={require('../../images/nfc-512.png')}
         resizeMode="contain"
-        style={styles.image}></ImageBackground>
+        style={styles.image}
+      />
 
-      <ActivityIndicator size='large' style={{marginTop: 50}} />
+      <ActivityIndicator size="large" style={{marginTop: 50}} />
     </View>
   );
 }

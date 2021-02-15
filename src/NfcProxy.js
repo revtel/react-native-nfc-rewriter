@@ -99,7 +99,7 @@ class NfcProxy {
     let responses = [];
 
     try {
-      if (Platform.OS == 'android') {
+      if (Platform.OS === 'android') {
         NfcAndroidUI.emit('OPEN');
       }
 

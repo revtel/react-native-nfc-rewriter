@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import PopupHexEditor from '../Components/PopupHexEditor';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import NfcProxy from '../NfcProxy';
 import {Alert} from 'react-native';
 import * as Widget from '../Components/Widget';
 
-const toHex = num => {
+const toHex = (num) => {
   return ('00' + num.toString(16)).slice(-2);
 };
 
-const arrToHex = arr => {
+const arrToHex = (arr) => {
   let hex = '';
   for (let byte of arr) {
     hex += toHex(byte);
@@ -25,14 +25,15 @@ class CustomPayloadScreen extends React.Component {
       payloads: [],
       resps: [],
       currEditIdx: 0,
-    }
+    };
   }
 
   render() {
-    const { techType } = this.props.route.params;
-    const { payloads, resps } = this.state;
+    const {techType} = this.props.route.params;
+    const {payloads, resps} = this.state;
     const payloadAndRespArr = payloads.map((payload, idx) => ({
-      payload, resp: resps[idx] 
+      payload,
+      resp: resps[idx],
     }));
 
     return (
@@ -41,64 +42,53 @@ class CustomPayloadScreen extends React.Component {
         <Content contentContainerStyle={{}}>
           {payloads.length === 0 && (
             <EmptyHint>
-              {"No payloads.\n Please click \"Add payload\" to start."}
+              {'No payloads.\n Please click "Add payload" to start.'}
             </EmptyHint>
           )}
           {payloadAndRespArr.map(({payload, resp}, idx) => {
             return (
-            <PayloadAndResp key={`${idx}-${payload}`}>
-              <Payload>
-                <PayloadText>{payload}</PayloadText>
-                <BtnSmall onPress={this._openEditor({idx, payload})}>
-                  <Icon name='edit' size={22} />
-                </BtnSmall>
-                <BtnSmall onPress={
-                  () => {
-                    Alert.alert('Confirm', 'Are you sure?', [
-                      {
-                        text: 'Yes', 
-                        onPress: () => {
-                          let nextPayloads = [...payloads]
-                          nextPayloads.splice(idx, 1);
-                          this.setState({payloads: nextPayloads});
-                        }
-                      },
-                      {text: 'No', onPress: () => 0}
-                    ])
-                  }
-                }>
-                  <Icon name='delete' size={22} />
-                </BtnSmall>
-              </Payload>
+              <PayloadAndResp key={`${idx}-${payload}`}>
+                <Payload>
+                  <PayloadText>{payload}</PayloadText>
+                  <BtnSmall onPress={this._openEditor({idx, payload})}>
+                    <Icon name="edit" size={22} />
+                  </BtnSmall>
+                  <BtnSmall
+                    onPress={() => {
+                      Alert.alert('Confirm', 'Are you sure?', [
+                        {
+                          text: 'Yes',
+                          onPress: () => {
+                            let nextPayloads = [...payloads];
+                            nextPayloads.splice(idx, 1);
+                            this.setState({payloads: nextPayloads});
+                          },
+                        },
+                        {text: 'No', onPress: () => 0},
+                      ]);
+                    }}>
+                    <Icon name="delete" size={22} />
+                  </BtnSmall>
+                </Payload>
 
-              { resp && (
-                <RespText>
-                  {`RESP: ${arrToHex(resps[idx])}`}
-                </RespText>
-              )}
-            </PayloadAndResp>
-          )
+                {resp && <RespText>{`RESP: ${arrToHex(resps[idx])}`}</RespText>}
+              </PayloadAndResp>
+            );
           })}
         </Content>
 
         <Widget.PrimaryBtn
-          onPress={this._openEditor({idx: payloads.length, payload: ''})}
-        >
+          onPress={this._openEditor({idx: payloads.length, payload: ''})}>
           <Widget.PrimaryBtnText>Add payload</Widget.PrimaryBtnText>
         </Widget.PrimaryBtn>
 
-        <Widget.PrimaryBtn
-          onPress={this._execute}
-        >
+        <Widget.PrimaryBtn onPress={this._execute}>
           <Widget.PrimaryBtnText>Execute</Widget.PrimaryBtnText>
         </Widget.PrimaryBtn>
 
-        <PopupHexEditor 
-          ref={this._onRef}
-          onResult={this._onEditResult}
-        />
+        <PopupHexEditor ref={this._onRef} onResult={this._onEditResult} />
       </Wrapper>
-    )
+    );
   }
 
   _execute = async () => {
@@ -116,50 +106,52 @@ class CustomPayloadScreen extends React.Component {
     if (err) {
       Alert.alert('Transceive error!');
     }
-  }
+  };
 
   _openEditor = ({idx, payload}) => () => {
     if (this.ref) {
       this.setState({currEditIdx: idx}, () => {
         this.ref.setValue(payload);
         this.ref.open();
-      })
+      });
     }
-  }
+  };
 
-  _onEditResult = payload => {
+  _onEditResult = (payload) => {
     if (payload.length % 2 !== 0) {
       Alert.alert('Hex payload length should be even');
       return;
     }
 
     let {currEditIdx, payloads} = this.state;
-    if (payloads.length === currEditIdx) { // create new one
+    if (payloads.length === currEditIdx) {
+      // create new one
       this.setState({
-        payloads: [...payloads, payload]
-      })
-    } else { // edit existing one
+        payloads: [...payloads, payload],
+      });
+    } else {
+      // edit existing one
       let nextPayloads = [...payloads];
       nextPayloads[currEditIdx] = payload;
-      this.setState({ payloads: nextPayloads });
+      this.setState({payloads: nextPayloads});
     }
-  }
+  };
 
-  _payloadsToBytesArr = payloads => {
+  _payloadsToBytesArr = (payloads) => {
     let bytesArr = [];
     for (const hex of payloads) {
-        let bytes = [];
-        for (let i = 0; i < hex.length; i = i + 2) {
-          bytes.push(parseInt(hex.slice(i, i + 2), 16));
-        }
-        bytesArr.push(bytes);
+      let bytes = [];
+      for (let i = 0; i < hex.length; i = i + 2) {
+        bytes.push(parseInt(hex.slice(i, i + 2), 16));
+      }
+      bytesArr.push(bytes);
     }
     return bytesArr;
-  }
+  };
 
-  _onRef = ref => {
+  _onRef = (ref) => {
     this.ref = ref;
-  }
+  };
 }
 
 const Wrapper = styled.View`
@@ -191,7 +183,7 @@ const Payload = styled.View`
   padding-left: 6px;
   border-left-color: #aaa;
   border-left-width: 5px;
-`
+`;
 
 const PayloadAndResp = styled.View``;
 
@@ -207,6 +199,5 @@ const RespText = styled.Text`
 const BtnSmall = styled.TouchableOpacity`
   padding: 5px;
 `;
-
 
 export default CustomPayloadScreen;

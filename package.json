@@ -36,10 +36,23 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "babel-jest": "^26.3.0",
     "eslint": "^7.9.0",
+    "husky": "^5.0.9",
     "jest": "^26.4.2",
+    "lint-staged": "^10.5.4",
     "metro-react-native-babel-preset": "^0.63.0",
     "patch-package": "^6.2.2",
     "react-test-renderer": "16.11.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "jest": {
     "preset": "react-native"

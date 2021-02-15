@@ -6,7 +6,7 @@ const AppEventName = {
 };
 
 const AppEvents = new AppEventRegistry(
-  Object.keys(AppEventName).map(key => AppEventName[key]),
+  Object.keys(AppEventName).map((key) => AppEventName[key]),
 );
 
 export {AppEventName, AppEvents};

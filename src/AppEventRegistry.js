@@ -1,4 +1,4 @@
-const EventEmitter = require("eventemitter3");
+const EventEmitter = require('eventemitter3');
 
 class AppEvent {
   constructor(name, emitter) {
@@ -8,25 +8,25 @@ class AppEvent {
 
   getName = () => this._name;
 
-  emit = data => {
+  emit = (data) => {
     this._emitter.emit(this._name, data);
   };
 
-  once = callbackOnce => {
+  once = (callbackOnce) => {
     this._emitter.once(this._name, callbackOnce);
     return {
       unsubscribe: () => {
         this._emitter.off(this._name, callbackOnce);
-      }
+      },
     };
   };
 
-  subscribe = callback => {
+  subscribe = (callback) => {
     this._emitter.on(this._name, callback);
     return {
       unsubscribe: () => {
         this._emitter.off(this._name, callback);
-      }
+      },
     };
   };
 }

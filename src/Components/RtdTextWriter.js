@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, TextInput, Alert, } from 'react-native';
+import {View, TextInput, Alert} from 'react-native';
 import {Button} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
@@ -37,10 +37,7 @@ function RtdTextWriter() {
         onChangeText={setValue}
       />
 
-      <Button
-        mode="contained"
-        labelStyle={{fontSize: 20}}
-        onPress={writeNdef}>
+      <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
         WRITE
       </Button>
     </View>

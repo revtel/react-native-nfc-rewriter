@@ -1,8 +1,6 @@
 import React from 'react';
-import {
-  View, Text, Alert, TouchableOpacity, Linking,
-} from 'react-native';
-import {Ndef} from 'react-native-nfc-manager'
+import {View, Text, Alert, TouchableOpacity, Linking} from 'react-native';
+import {Ndef} from 'react-native-nfc-manager';
 
 const TNF_MAP = {
   EMPTY: 0x0,
@@ -35,7 +33,7 @@ function tnfValueToName(value) {
 }
 
 function rtdValueToName(value) {
-  value = value.reduce((acc, byte) => acc + String.fromCharCode(byte), '')
+  value = value.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
   for (let name in RTD_MAP) {
     if (value === RTD_MAP[name]) {
       return name;
@@ -55,9 +53,9 @@ class NdefMessage extends React.Component {
         {tnfName && <Text>{`TNF: ${tnfName}`}</Text>}
         {rtdName && <Text>{`RTD: ${rtdName}`}</Text>}
 
-        {this._renderPayload({ ndef, rtdName })}
+        {this._renderPayload({ndef, rtdName})}
       </View>
-    )
+    );
   }
 
   _renderPayload = ({ndef, rtdName}) => {
@@ -70,22 +68,20 @@ class NdefMessage extends React.Component {
     } else if (ndef.ntf === Ndef.MIME_MEDIA) {
       const mimeTypeStr = String.fromCharCode(...ndef.type);
       if (mimeTypeStr === Ndef.MIME_WFA_WSC) {
-        return <WifiSimplePayload ndef={ndef} />; 
+        return <WifiSimplePayload ndef={ndef} />;
       } else {
-        return <Text>{mimeTypeStr}</Text>
+        return <Text>{mimeTypeStr}</Text>;
       }
     }
     return null;
-  }
+  };
 }
 
 class RtdTextPayload extends React.Component {
   render() {
     let {ndef} = this.props;
     let text = Ndef.text.decodePayload(ndef.payload);
-    return (
-      <Text style={{fontSize: 18}}>{text}</Text>
-    )
+    return <Text style={{fontSize: 18}}>{text}</Text>;
   }
 }
 
@@ -95,9 +91,11 @@ class RtdUriPayload extends React.Component {
     let uri = Ndef.uri.decodePayload(ndef.payload);
     return (
       <TouchableOpacity onPress={() => this._goToUri(uri)}>
-        <Text style={{fontSize: 18, textDecorationLine: 'underline'}}>{uri}</Text>
+        <Text style={{fontSize: 18, textDecorationLine: 'underline'}}>
+          {uri}
+        </Text>
       </TouchableOpacity>
-    )
+    );
   }
 
   _goToUri = async (uri) => {
@@ -105,9 +103,9 @@ class RtdUriPayload extends React.Component {
       await Linking.openURL(uri);
     } catch (ex) {
       console.warn(ex);
-      Alert.alert(`Cannot open uri`);
+      Alert.alert('Cannot open uri');
     }
-  }
+  };
 }
 
 class WifiSimplePayload extends React.Component {
@@ -119,14 +117,18 @@ class WifiSimplePayload extends React.Component {
         <Text style={{marginBottom: 5}}>WIFI_SIMPLE</Text>
         <View style={{flexDirection: 'row', marginBottom: 5}}>
           <Text style={{color: 'grey', marginRight: 5}}>SSID:</Text>
-          <Text style={{fontSize: 16, flex: 1}}>{credentials.ssid || '---'}</Text>
+          <Text style={{fontSize: 16, flex: 1}}>
+            {credentials.ssid || '---'}
+          </Text>
         </View>
         <View style={{flexDirection: 'row', marginBottom: 5}}>
           <Text style={{color: 'grey', marginRight: 5}}>Network Key:</Text>
-          <Text style={{fontSize: 16, flex: 1}}>{credentials.networkKey || '---'}</Text>
+          <Text style={{fontSize: 16, flex: 1}}>
+            {credentials.networkKey || '---'}
+          </Text>
         </View>
       </View>
-    )
+    );
   }
 }
 
