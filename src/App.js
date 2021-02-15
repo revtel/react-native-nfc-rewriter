@@ -1,12 +1,8 @@
 import * as React from 'react';
 import {Platform, UIManager} from 'react-native';
-import {ThemeProvider} from 'react-native-elements';
 import NfcScanAndroid from './Components/NfcScanAndroid';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {
-  Provider as PaperProvider,
-  DefaultTheme,
-} from 'react-native-paper';
+import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 import AppNavigator from './AppNavigator';
 
 const CustomDefaultTheme = {
@@ -44,10 +40,8 @@ class App extends React.Component {
   render() {
     return (
       <PaperProvider theme={CustomDefaultTheme}>
-        <ThemeProvider>
-          {Platform.OS === 'android' && <NfcScanAndroid />}
-          <AppNavigator />
-        </ThemeProvider>
+        {Platform.OS === 'android' && <NfcScanAndroid />}
+        <AppNavigator />
       </PaperProvider>
     );
   }
