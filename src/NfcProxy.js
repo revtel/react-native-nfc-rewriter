@@ -1,8 +1,6 @@
 import {Platform} from 'react-native';
 import NfcManager, {NfcTech, Ndef, NfcEvents} from 'react-native-nfc-manager';
-import {AppEvents, AppEventName} from './AppEvents';
-
-const NfcAndroidUI = AppEvents.get(AppEventName.NFC_SCAN_UI);
+import * as AppContext from './AppContext';
 
 class ErrSuccess extends Error {}
 
@@ -42,7 +40,7 @@ class NfcProxy {
     let tag = null;
     try {
       if (Platform.OS === 'android') {
-        NfcAndroidUI.emit('OPEN');
+        AppContext.Actions.setShowNfcPrompt(true);
       }
 
       await NfcManager.requestTechnology([NfcTech.Ndef]);
@@ -61,7 +59,7 @@ class NfcProxy {
     let result = false;
     try {
       if (Platform.OS === 'android') {
-        NfcAndroidUI.emit('OPEN');
+        AppContext.Actions.setShowNfcPrompt(true);
       }
 
       await NfcManager.requestTechnology(NfcTech.Ndef, {
@@ -100,7 +98,7 @@ class NfcProxy {
 
     try {
       if (Platform.OS === 'android') {
-        NfcAndroidUI.emit('OPEN');
+        AppContext.Actions.setShowNfcPrompt(true);
       }
 
       await NfcManager.requestTechnology([NfcTech.NfcA]);
@@ -126,7 +124,6 @@ class NfcProxy {
 
   abort = async () => {
     NfcManager.cancelTechnologyRequest().catch(() => 0);
-    NfcAndroidUI.emit('CLOSE');
   };
 }
 

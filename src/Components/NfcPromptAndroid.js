@@ -1,17 +1,21 @@
 import React from 'react';
 import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
+import * as AppContext from '../AppContext';
+import NfcProxy from '../NfcProxy';
 
 function NfcPromptAndroid(props) {
-  const {visible: _visible, setVisible: _setVisible} = props;
   const [visible, setVisible] = React.useState(false);
   const animValue = React.useRef(new Animated.Value(0)).current;
+  const app = React.useContext(AppContext.Context);
+  const _visible = app.state.showNfcPrompt;
+  const _setVisible = app.actions.setShowNfcPrompt;
 
   React.useEffect(() => {
     if (_visible) {
       setVisible(true);
       Animated.timing(animValue, {
-        duration: 200,
+        duration: 300,
         toValue: 1,
         useNativeDriver: true,
       }).start();
@@ -25,6 +29,11 @@ function NfcPromptAndroid(props) {
       });
     }
   }, [_visible, animValue]);
+
+  function cancelNfcScan() {
+    NfcProxy.abort();
+    _setVisible(false);
+  }
 
   const bgAnimStyle = {
     backgroundColor: 'rgba(0,0,0,0.3)',
@@ -48,7 +57,8 @@ function NfcPromptAndroid(props) {
         <View style={{flex: 1}} />
 
         <Animated.View style={[styles.prompt, promptAnimStyle]}>
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text>Scan NFC Tags</Text>
 
             <Image
@@ -60,7 +70,7 @@ function NfcPromptAndroid(props) {
             <Text>Hint text...</Text>
           </View>
 
-          <Button mode="contained" onPress={() => _setVisible(false)}>
+          <Button mode="contained" onPress={cancelNfcScan}>
             CANCEL
           </Button>
         </Animated.View>

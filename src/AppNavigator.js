@@ -8,6 +8,7 @@ import TagDetailScreen from './Screens/TagDetailScreen';
 import NdefTypeListScreen from './Screens/NdefTypeListScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
 import CustomPayloadScreen from './Screens/CustomPayloadScreen';
+import NfcPromptAndroid from './Components/NfcPromptAndroid';
 
 const MainStack = createStackNavigator();
 
@@ -80,6 +81,7 @@ function AppNavigator(props) {
   return (
     <NavigationContainer>
       <Root />
+      <NfcPromptAndroid />
     </NavigationContainer>
   );
 }
