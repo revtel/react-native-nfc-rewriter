@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.nfcopenreader"
+        applicationId "com.revteltech.nfcopenrewriter"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

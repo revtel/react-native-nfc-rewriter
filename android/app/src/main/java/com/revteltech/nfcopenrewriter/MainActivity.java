@@ -1,4 +1,4 @@
-package com.nfcopenreader;
+package com.revteltech.nfcopenrewriter;
 
 import com.facebook.react.ReactActivity;
 

@@ -1,4 +1,4 @@
-package com.nfcopenreader;
+package com.revteltech.nfcopenrewriter;
 
 import android.app.Application;
 import android.content.Context;
