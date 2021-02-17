@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {View, Text, TextInput, Alert} from 'react-native';
-import {Button} from 'react-native-paper';
+import {View, Alert} from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
 function WifiSimpleWriter() {
@@ -21,41 +21,21 @@ function WifiSimpleWriter() {
 
   return (
     <View>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={{marginRight: 10}}>SSID</Text>
-        <TextInput
-          style={{
-            padding: 8,
-            borderRadius: 6,
-            borderColor: 'grey',
-            borderWidth: 1,
-            marginBottom: 20,
-            flex: 1,
-            backgroundColor: 'white',
-            color: 'black',
-          }}
-          value={ssid}
-          onChangeText={setSsid}
-        />
-      </View>
+      <TextInput
+        mode="outlined"
+        label="SSID"
+        value={ssid}
+        onChangeText={setSsid}
+        style={{marginBottom: 10}}
+      />
 
-      <View style={{flexDirection: 'row'}}>
-        <Text style={{marginRight: 10}}>NETWORK KEY</Text>
-        <TextInput
-          style={{
-            padding: 8,
-            borderRadius: 6,
-            borderColor: 'grey',
-            borderWidth: 1,
-            marginBottom: 20,
-            flex: 1,
-            backgroundColor: 'white',
-            color: 'black',
-          }}
-          value={networkKey}
-          onChangeText={setNetworkKey}
-        />
-      </View>
+      <TextInput
+        mode="outlined"
+        label="Network Key"
+        value={networkKey}
+        onChangeText={setNetworkKey}
+        style={{marginBottom: 20}}
+      />
 
       <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
         WRITE

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {View, TextInput, Alert} from 'react-native';
-import {Button} from 'react-native-paper';
+import {View, Alert} from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
 function RtdTextWriter() {
@@ -22,19 +22,14 @@ function RtdTextWriter() {
     <View>
       <TextInput
         ref={inputRef}
-        style={{
-          padding: 8,
-          borderRadius: 6,
-          borderColor: 'grey',
-          borderWidth: 1,
-          marginBottom: 20,
-          height: 150,
-          backgroundColor: 'white',
-          color: 'black',
-        }}
+        mode="outlined"
+        label="Text"
+        multiline={true}
         value={value}
         autoCapitalize={false}
         onChangeText={setValue}
+        style={{marginBottom: 10}}
+        autoFocus={true}
       />
 
       <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>

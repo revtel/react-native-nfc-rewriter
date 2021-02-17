@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {View, TextInput, Alert} from 'react-native';
-import {Menu, Button} from 'react-native-paper';
+import {View, Alert} from 'react-native';
+import {Menu, TextInput, Button} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
 function RtdUriWriter() {
@@ -27,7 +27,7 @@ function RtdUriWriter() {
 
   return (
     <View>
-      <View style={{flexDirection: 'row', marginBottom: 20}}>
+      <View style={{flexDirection: 'row', marginBottom: 10}}>
         <Menu
           visible={showMenu}
           onDismiss={() => setShowMenu(false)}
@@ -47,25 +47,19 @@ function RtdUriWriter() {
             />
           ))}
         </Menu>
-
-        <TextInput
-          ref={inputRef}
-          style={{
-            flex: 1,
-            padding: 8,
-            borderRadius: 6,
-            borderColor: 'grey',
-            borderWidth: 1,
-            height: 150,
-            backgroundColor: 'white',
-            color: 'black',
-            marginLeft: 10,
-          }}
-          autoCapitalize={false}
-          value={value}
-          onChangeText={setValue}
-        />
+        <View style={{flex: 1}} />
       </View>
+
+      <TextInput
+        ref={inputRef}
+        mode="outlined"
+        label="URI"
+        multiline={true}
+        value={value}
+        autoCapitalize={false}
+        onChangeText={setValue}
+        style={{marginBottom: 20}}
+      />
 
       <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
         WRITE
