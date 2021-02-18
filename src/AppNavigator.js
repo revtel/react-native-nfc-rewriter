@@ -9,6 +9,7 @@ import NdefTypeListScreen from './Screens/NdefTypeListScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
 import CustomPayloadScreen from './Screens/CustomPayloadScreen';
 import ToolKitScreen from './Screens/ToolKitScreen';
+import CustomTransceiveScreen from './Screens/CustomTransceive';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
 
 const MainStack = createStackNavigator();
@@ -63,6 +64,11 @@ function Main(props) {
         name="ToolKit"
         component={ToolKitScreen}
         options={{title: 'NFC TOOL KIT'}}
+      />
+      <MainStack.Screen
+        name="CustomTransceive"
+        component={CustomTransceiveScreen}
+        options={{title: 'CUSTOM TRANSCEIVE'}}
       />
     </MainStack.Navigator>
   );

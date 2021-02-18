@@ -20,6 +20,16 @@ function ToolKitScreen(props) {
       <List.Section>
         <List.Subheader>NfcA</List.Subheader>
         <List.Item
+          title="Custom Transceive"
+          description="Send custom NfcA command into your tag"
+          left={NfcLogo}
+          onPress={() =>
+            navigation.navigate('CustomTransceive', {
+              nfcTech: 'NfcA',
+            })
+          }
+        />
+        <List.Item
           title="Erase"
           description="Write all memory to 0"
           left={NfcLogo}
