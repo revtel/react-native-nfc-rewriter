@@ -4,12 +4,32 @@ import * as AppContext from './AppContext';
 
 class ErrSuccess extends Error {}
 
+const withAndroidPrompt = (fn) => {
+  async function wrapper() {
+    try {
+      if (Platform.OS === 'android') {
+        AppContext.Actions.setShowNfcPrompt(true);
+      }
+
+      return await fn.apply(null, arguments);
+    } catch (ex) {
+      throw ex;
+    } finally {
+      if (Platform.OS === 'android') {
+        AppContext.Actions.setShowNfcPrompt(false);
+      }
+    }
+  }
+
+  return wrapper;
+};
+
 class NfcProxy {
   constructor() {
     NfcManager.start();
   }
 
-  readNdefOnce = () => {
+  readNdefOnce = withAndroidPrompt(() => {
     const cleanUp = () => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
       NfcManager.setEventListener(NfcEvents.SessionClosed, null);
@@ -21,7 +41,11 @@ class NfcProxy {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
         tagFound = tag;
         resolve(tagFound);
-        NfcManager.setAlertMessageIOS('NDEF tag found');
+
+        if (Platform.OS === 'ios') {
+          NfcManager.setAlertMessageIOS('NDEF tag found');
+        }
+
         NfcManager.unregisterTagEvent().catch(() => 0);
       });
 
@@ -34,15 +58,11 @@ class NfcProxy {
 
       NfcManager.registerTagEvent();
     });
-  };
+  });
 
-  readTag = async () => {
+  readTag = withAndroidPrompt(async () => {
     let tag = null;
     try {
-      if (Platform.OS === 'android') {
-        AppContext.Actions.setShowNfcPrompt(true);
-      }
-
       await NfcManager.requestTechnology([NfcTech.Ndef]);
 
       tag = await NfcManager.getTag();
@@ -51,23 +71,20 @@ class NfcProxy {
       console.warn(ex);
     }
 
-    this.abort();
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
     return tag;
-  };
+  });
 
-  writeNdef = async ({type, value}) => {
+  writeNdef = withAndroidPrompt(async ({type, value}) => {
     let result = false;
     try {
-      if (Platform.OS === 'android') {
-        AppContext.Actions.setShowNfcPrompt(true);
-      }
-
       await NfcManager.requestTechnology(NfcTech.Ndef, {
         alertMessage: 'Ready to write some NDEF',
       });
 
       let bytes = null;
       if (type === 'TEXT') {
+        console.warn(type, value);
         bytes = Ndef.encodeMessage([Ndef.textRecord(value)]);
       } else if (type === 'URI') {
         bytes = Ndef.encodeMessage([Ndef.uriRecord(value)]);
@@ -88,19 +105,15 @@ class NfcProxy {
       console.warn(ex);
     }
 
-    this.abort();
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
     return result;
-  };
+  });
 
-  customTransceiveNfcA = async (payloads) => {
+  customTransceiveNfcA = withAndroidPrompt(async (payloads) => {
     let err = new ErrSuccess();
     let responses = [];
 
     try {
-      if (Platform.OS === 'android') {
-        AppContext.Actions.setShowNfcPrompt(true);
-      }
-
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
       for (const payload of payloads) {
@@ -113,18 +126,14 @@ class NfcProxy {
       err = ex;
     }
 
-    this.abort();
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
 
     if (err instanceof ErrSuccess) {
       return [null, responses];
     }
 
     return [err, responses];
-  };
-
-  abort = async () => {
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
-  };
+  });
 }
 
 // ------------------------
