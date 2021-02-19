@@ -7,7 +7,6 @@ import HomeScreen from './Screens/HomeScreen';
 import TagDetailScreen from './Screens/TagDetail';
 import NdefTypeListScreen from './Screens/NdefTypeListScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
-import CustomPayloadScreen from './Screens/CustomPayloadScreen';
 import ToolKitScreen from './Screens/ToolKitScreen';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
@@ -58,11 +57,6 @@ function Main(props) {
         name="NdefWrite"
         component={NdefWriteScreen}
         options={{title: 'WRITE NDEF'}}
-      />
-      <MainStack.Screen
-        name="CustomPayload"
-        component={CustomPayloadScreen}
-        options={{title: 'CUSTOM PAYLOAD'}}
       />
       <MainStack.Screen
         name="ToolKit"
