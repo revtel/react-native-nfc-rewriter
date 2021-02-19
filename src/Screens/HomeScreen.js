@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Image, Platform, Dimensions, StatusBar} from 'react-native';
+import {View, Image, Dimensions, StatusBar} from 'react-native';
 import NfcProxy from '../NfcProxy';
 import {Button} from 'react-native-paper';
 
@@ -32,20 +32,17 @@ function HomeScreen(props) {
             alignSelf: 'center',
             width,
           }}>
-          {Platform.OS === 'ios' && (
-            <Button
-              mode="contained"
-              onPress={async () => {
-                const ndefTag = await NfcProxy.readNdefOnce();
-                console.warn('ndefTag', ndefTag);
-                if (ndefTag) {
-                  navigation.navigate('TagDetail', {tag: ndefTag});
-                }
-              }}
-              style={{marginBottom: 10}}>
-              READ NDEF
-            </Button>
-          )}
+          <Button
+            mode="contained"
+            onPress={async () => {
+              const tag = await NfcProxy.readTag();
+              if (tag) {
+                navigation.navigate('TagDetail', {tag});
+              }
+            }}
+            style={{marginBottom: 10}}>
+            READ TAGs
+          </Button>
 
           <Button
             mode="contained"
@@ -57,41 +54,16 @@ function HomeScreen(props) {
           </Button>
 
           <Button
-            mode="contained"
-            onPress={async () => {
-              const tag = await NfcProxy.readTag();
-              if (tag) {
-                navigation.navigate('TagDetail', {tag});
-              }
-            }}
-            style={{marginBottom: 10}}>
-            SCAN NFC TAG
-          </Button>
-
-          <Button
             mode="outlined"
             onPress={async () => {
               navigation.navigate('ToolKit');
             }}
             style={{marginBottom: 10}}>
-            NFC Tool Kit
+            ToolKit
           </Button>
         </View>
       </View>
     </>
-  );
-}
-
-function ActionButton(props) {
-  const {outlined, ...extraProps} = props;
-  return (
-    <Button
-      mode={outlined ? 'outlined' : 'contained'}
-      style={{borderRadius: 8, marginBottom: 10}}
-      labelStyle={[{fontSize: 22}, outlined ? {} : {color: 'white'}]}
-      {...extraProps}>
-      {props.children}
-    </Button>
   );
 }
 

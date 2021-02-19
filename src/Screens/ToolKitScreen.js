@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {ScrollView, Image, Alert} from 'react-native';
 import {List} from 'react-native-paper';
+import NfcProxy from '../NfcProxy';
 
 function NfcLogo() {
   return (
@@ -38,6 +39,21 @@ function ToolKitScreen(props) {
           title="NDEF Format"
           description="NDEF Format"
           left={NfcLogo}
+        />
+      </List.Section>
+
+      <List.Section>
+        <List.Subheader>Misc</List.Subheader>
+        <List.Item
+          title="Test registerTagEvent API"
+          description="registerTagEvent use NDEF-only scan for iOS"
+          left={NfcLogo}
+          onPress={async () => {
+            const ndefTag = await NfcProxy.readNdefOnce();
+            if (ndefTag) {
+              navigation.navigate('TagDetail', {tag: ndefTag});
+            }
+          }}
         />
       </List.Section>
     </ScrollView>

@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
 import * as AppContext from '../AppContext';
-import NfcProxy from '../NfcProxy';
+import NfcManager from 'react-native-nfc-manager';
 
 function NfcPromptAndroid(props) {
   const [visible, setVisible] = React.useState(false);
@@ -31,7 +31,7 @@ function NfcPromptAndroid(props) {
   }, [_visible, animValue]);
 
   function cancelNfcScan() {
-    NfcProxy.abort();
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
     _setVisible(false);
   }
 
@@ -59,15 +59,13 @@ function NfcPromptAndroid(props) {
         <Animated.View style={[styles.prompt, promptAnimStyle]}>
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Scan NFC Tags</Text>
-
             <Image
               source={require('../../images/nfc-512.png')}
               style={{width: 120, height: 120, padding: 20}}
               resizeMode="contain"
             />
 
-            <Text>Hint text...</Text>
+            <Text>Please tap your NFC tag</Text>
           </View>
 
           <Button mode="contained" onPress={cancelNfcScan}>

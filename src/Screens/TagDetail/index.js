@@ -7,14 +7,11 @@ import {getTechList} from '../../Utils/getTechList';
 function TagDetailScreen(props) {
   const {tag} = props.route.params;
 
-  let ndef = null;
-  if (Array.isArray(tag.ndefMessage) && tag.ndefMessage.length > 0) {
-    ndef = tag.ndefMessage[0];
-  }
-  console.warn(ndef);
-
-  let techs = getTechList(tag);
-  console.warn(techs);
+  const techs = getTechList(tag);
+  const ndef =
+    Array.isArray(tag.ndefMessage) && tag.ndefMessage.length > 0
+      ? tag.ndefMessage[0]
+      : null;
 
   return (
     <ScrollView style={[styles.wrapper, {padding: 10}]}>
