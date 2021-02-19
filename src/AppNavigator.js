@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Appbar} from 'react-native-paper';
 import LandingScreen from './Screens/LandingScreen';
 import HomeScreen from './Screens/HomeScreen';
-import TagDetailScreen from './Screens/TagDetailScreen';
+import TagDetailScreen from './Screens/TagDetail';
 import NdefTypeListScreen from './Screens/NdefTypeListScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
 import CustomPayloadScreen from './Screens/CustomPayloadScreen';
@@ -44,7 +44,11 @@ function Main(props) {
         component={HomeScreen}
         options={{title: 'HOME'}}
       />
-      <MainStack.Screen name="TagDetail" component={TagDetailScreen} />
+      <MainStack.Screen
+        name="TagDetail"
+        options={{title: 'TAG DETAIL'}}
+        component={TagDetailScreen}
+      />
       <MainStack.Screen
         name="NdefTypeList"
         component={NdefTypeListScreen}
