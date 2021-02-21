@@ -34,11 +34,31 @@ function ToolKitScreen(props) {
           title="Erase"
           description="Write all memory to 0"
           left={NfcLogo}
+          onPress={async () => {
+            try {
+              await NfcProxy.eraseNfcA();
+              Alert.alert('Success', '', [{text: 'OK', onPress: () => 0}]);
+            } catch (ex) {
+              Alert.alert('Err', JSON.stringify(ex, null, 2), [
+                {text: 'OK', onPress: () => 0},
+              ]);
+            }
+          }}
         />
         <List.Item
           title="NDEF Format"
           description="NDEF Format"
           left={NfcLogo}
+          onPress={async () => {
+            try {
+              await NfcProxy.ndefFormatNfcA();
+              Alert.alert('Success', '', [{text: 'OK', onPress: () => 0}]);
+            } catch (ex) {
+              Alert.alert('Err', JSON.stringify(ex, null, 2), [
+                {text: 'OK', onPress: () => 0},
+              ]);
+            }
+          }}
         />
       </List.Section>
 

@@ -134,6 +134,42 @@ class NfcProxy {
 
     return [err, responses];
   });
+
+  eraseNfcA = withAndroidPrompt(async () => {
+    try {
+      await NfcManager.requestTechnology([NfcTech.NfcA]);
+
+      const cmdReadCC = [0x30, 0x03];
+      const [e1, ver, size, access] = await NfcManager.nfcAHandler.transceive(
+        cmdReadCC,
+      );
+
+      const blocks = (size * 8) / 4;
+
+      for (let i = 0; i < blocks; i++) {
+        const blockNo = i + 0x04; // user block starts from 0x04
+        const cmdWriteZero = [0xa2, blockNo, 0x0, 0x0, 0x0, 0x0];
+        await NfcManager.nfcAHandler.transceive(cmdWriteZero);
+      }
+    } catch (ex) {
+      console.warn(ex);
+    }
+
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
+  });
+
+  ndefFormatNfcA = withAndroidPrompt(async () => {
+    try {
+      await NfcManager.requestTechnology([NfcTech.NfcA]);
+
+      const cmdNdefFormat = [0xa2, 0x04, 0x03, 0x00, 0xfe, 0x00];
+      await NfcManager.nfcAHandler.transceive(cmdNdefFormat);
+    } catch (ex) {
+      console.warn(ex);
+    }
+
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
+  });
 }
 
 // ------------------------
