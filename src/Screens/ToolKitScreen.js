@@ -32,7 +32,7 @@ function ToolKitScreen(props) {
         />
         <List.Item
           title="Erase"
-          description="Write all memory to 0"
+          description="Write all blocks to zero"
           left={NfcLogo}
           onPress={async () => {
             try {
@@ -47,11 +47,11 @@ function ToolKitScreen(props) {
         />
         <List.Item
           title="NDEF Format"
-          description="NDEF Format"
+          description="Erase and NDEF format"
           left={NfcLogo}
           onPress={async () => {
             try {
-              await NfcProxy.ndefFormatNfcA();
+              await NfcProxy.eraseNfcA({format: true});
               Alert.alert('Success', '', [{text: 'OK', onPress: () => 0}]);
             } catch (ex) {
               Alert.alert('Err', JSON.stringify(ex, null, 2), [

@@ -109,33 +109,31 @@ class NfcProxy {
     return result;
   });
 
-  customTransceiveNfcA = withAndroidPrompt(async (payloads) => {
-    let err = new ErrSuccess();
-    let responses = [];
+  customTransceiveNfcA = withAndroidPrompt(async (commands) => {
+    const responses = [];
 
     try {
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
-      for (const payload of payloads) {
-        const resp = await NfcManager.nfcAHandler.transceive(payload);
+      for (const {type, payload} of commands) {
+        let resp = null;
+        if (type === 'command') {
+          resp = await NfcManager.nfcAHandler.transceive(payload);
+        } else if (type === 'delay') {
+          await delay(payload);
+        }
         responses.push(resp);
-        await delay(100);
       }
     } catch (ex) {
       console.warn(ex);
-      err = ex;
     }
 
     NfcManager.cancelTechnologyRequest().catch(() => 0);
 
-    if (err instanceof ErrSuccess) {
-      return [null, responses];
-    }
-
-    return [err, responses];
+    return responses;
   });
 
-  eraseNfcA = withAndroidPrompt(async () => {
+  eraseNfcA = withAndroidPrompt(async ({format = false}={}) => {
     try {
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
@@ -151,19 +149,11 @@ class NfcProxy {
         const cmdWriteZero = [0xa2, blockNo, 0x0, 0x0, 0x0, 0x0];
         await NfcManager.nfcAHandler.transceive(cmdWriteZero);
       }
-    } catch (ex) {
-      console.warn(ex);
-    }
 
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
-  });
-
-  ndefFormatNfcA = withAndroidPrompt(async () => {
-    try {
-      await NfcManager.requestTechnology([NfcTech.NfcA]);
-
-      const cmdNdefFormat = [0xa2, 0x04, 0x03, 0x00, 0xfe, 0x00];
-      await NfcManager.nfcAHandler.transceive(cmdNdefFormat);
+      if (format) {
+        const cmdNdefFormat = [0xa2, 0x04, 0x03, 0x00, 0xfe, 0x00];
+        await NfcManager.nfcAHandler.transceive(cmdNdefFormat);
+      }
     } catch (ex) {
       console.warn(ex);
     }

@@ -37,6 +37,7 @@ function HexPads(props) {
             const c = hex.toString(16).toUpperCase();
             return (
               <Button
+                key={c}
                 mode={value === c ? 'outlined' : 'text'}
                 onPress={() => addHexChar(c)}>
                 {c}
