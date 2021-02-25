@@ -53,7 +53,7 @@ function CommandItem(props) {
     <View style={[wrapperStyle, {flexDirection: 'row', alignItems: 'center'}]}>
       {innerElem}
 
-      <IconButton icon="close" onPress={onDelete} />
+      <IconButton icon="delete" onPress={onDelete} />
     </View>
   );
 }
