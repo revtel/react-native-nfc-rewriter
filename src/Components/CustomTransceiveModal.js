@@ -135,6 +135,7 @@ function CustomTransceiveModal(props) {
             <Text style={{marginRight: 10}}>Type: </Text>
             {Object.values(CmdType).map((type) => (
               <Button
+                key={type}
                 mode={type === cmdType ? 'outlined' : 'text'}
                 onPress={() => setCmdType(type)}
                 style={{flex: 1}}>
@@ -171,6 +172,7 @@ function CustomTransceiveModal(props) {
               style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
               {[100, 200, 300, 400, 500, 600].map((ms) => (
                 <Button
+                  key={ms}
                   mode={ms === delayMs ? 'outlined' : 'text'}
                   onPress={() => setDelayMs(ms)}
                   style={{margin: 5}}>

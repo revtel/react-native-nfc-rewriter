@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Button, Menu} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
-import CommandItem from './CommandItem';
+import CommandItem from '../../Components/CustomCommandItem';
 import NfcProxy from '../../NfcProxy';
 
 function CustomTransceiveScreen(props) {
@@ -32,7 +32,11 @@ function CustomTransceiveScreen(props) {
 
   async function executeCommands() {
     try {
-      setResponses(await NfcProxy.customTransceiveNfcA(commands));
+      if (nfcTech === 'NfcA') {
+        setResponses(await NfcProxy.customTransceiveNfcA(commands));
+      } else if (nfcTech === 'IsoDep') {
+        setResponses(await NfcProxy.customTransceiveIsoDep(commands));
+      }
       Alert.alert('Commands Finished', '', [{text: 'OK', onPress: () => 0}]);
     } catch (ex) {
       Alert.alert('Not Finished', JSON.stringify(ex, null, 2), [

@@ -9,6 +9,7 @@ import NdefTypeListScreen from './Screens/NdefTypeListScreen';
 import NdefWriteScreen from './Screens/NdefWriteScreen';
 import ToolKitScreen from './Screens/ToolKitScreen';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
+import SettingsScreen from './Screens/Settings';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
 
 const MainStack = createStackNavigator();
@@ -72,12 +73,41 @@ function Main(props) {
   );
 }
 
+const SettingsStack = createStackNavigator();
+
+function Settings(props) {
+  return (
+    <SettingsStack.Navigator
+      mode="modal"
+      headerMode="screen"
+      screenOptions={{
+        header: ({navigation, scene, previous}) => {
+          return (
+            <Appbar.Header style={{backgroundColor: 'white'}}>
+              {previous && (
+                <Appbar.BackAction onPress={() => navigation.goBack()} />
+              )}
+              <Appbar.Content title={scene.descriptor.options.title || ''} />
+            </Appbar.Header>
+          );
+        },
+      }}>
+      <SettingsStack.Screen
+        name="Settings"
+        options={{title: 'Settings'}}
+        component={SettingsScreen}
+      />
+    </SettingsStack.Navigator>
+  );
+}
+
 const RootStack = createStackNavigator();
 
 function Root(props) {
   return (
     <RootStack.Navigator headerMode="none" mode="modal">
       <RootStack.Screen name="Landing" component={LandingScreen} />
+      <RootStack.Screen name="Settings" component={Settings} />
       <RootStack.Screen
         name="Main"
         component={Main}

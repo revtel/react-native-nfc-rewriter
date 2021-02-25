@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {View, Image, Dimensions, StatusBar} from 'react-native';
+import {View, Image, Dimensions, StatusBar, StyleSheet} from 'react-native';
 import NfcProxy from '../NfcProxy';
-import {Button} from 'react-native-paper';
+import {Button, IconButton} from 'react-native-paper';
 
 function HomeScreen(props) {
   let {navigation} = props;
@@ -54,17 +54,35 @@ function HomeScreen(props) {
           </Button>
 
           <Button
-            mode="outlined"
+            mode="contained"
             onPress={async () => {
               navigation.navigate('ToolKit');
             }}
             style={{marginBottom: 10}}>
             ToolKit
           </Button>
+
+          <Button mode="outlined">MY RECORDS</Button>
         </View>
+
+        <IconButton
+          icon="cog"
+          style={styles.settingIcon}
+          onPress={() => {
+            navigation.navigate('Settings');
+          }}
+        />
       </View>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  settingIcon: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+});
 
 export default HomeScreen;

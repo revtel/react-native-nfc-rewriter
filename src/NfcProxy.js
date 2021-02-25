@@ -133,7 +133,7 @@ class NfcProxy {
     return responses;
   });
 
-  eraseNfcA = withAndroidPrompt(async ({format = false}={}) => {
+  eraseNfcA = withAndroidPrompt(async ({format = false} = {}) => {
     try {
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
@@ -159,6 +159,30 @@ class NfcProxy {
     }
 
     NfcManager.cancelTechnologyRequest().catch(() => 0);
+  });
+
+  customTransceiveIsoDep = withAndroidPrompt(async (commands) => {
+    const responses = [];
+
+    try {
+      await NfcManager.requestTechnology([NfcTech.IsoDep]);
+
+      for (const {type, payload} of commands) {
+        let resp = null;
+        if (type === 'command') {
+          resp = await NfcManager.isoDepHandler.transceive(payload);
+        } else if (type === 'delay') {
+          await delay(payload);
+        }
+        responses.push(resp);
+      }
+    } catch (ex) {
+      console.warn(ex);
+    }
+
+    NfcManager.cancelTechnologyRequest().catch(() => 0);
+
+    return responses;
   });
 }
 
