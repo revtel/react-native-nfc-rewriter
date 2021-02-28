@@ -32,7 +32,7 @@ function HexPads(props) {
   return (
     <View>
       {rows.map((row, idx) => (
-        <View style={{flexDirection: 'row', padding: 10}}>
+        <View key={idx} style={{flexDirection: 'row', padding: 10}}>
           {row.map((hex) => {
             const c = hex.toString(16).toUpperCase();
             return (

@@ -1,7 +1,15 @@
 import * as React from 'react';
-import {View, Image, Dimensions, StatusBar, StyleSheet} from 'react-native';
+import {
+  View,
+  Image,
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  SafeAreaView,
+} from 'react-native';
 import NfcProxy from '../NfcProxy';
 import {Button, IconButton} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function HomeScreen(props) {
   let {navigation} = props;
@@ -11,6 +19,7 @@ function HomeScreen(props) {
   return (
     <>
       <StatusBar barStyle="dark-content" />
+      <SafeAreaView />
       <View style={{flex: 1, padding}}>
         <View
           style={{
@@ -66,7 +75,7 @@ function HomeScreen(props) {
         </View>
 
         <IconButton
-          icon="cog"
+          icon={() => <Icon name="settings" size={32} />}
           style={styles.settingIcon}
           onPress={() => {
             navigation.navigate('Settings');
@@ -80,7 +89,6 @@ function HomeScreen(props) {
 const styles = StyleSheet.create({
   settingIcon: {
     position: 'absolute',
-    top: 20,
     right: 20,
   },
 });

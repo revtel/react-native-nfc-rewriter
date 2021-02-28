@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {IconButton} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function CommandItem(props) {
   const {cmd, resp, onDelete} = props;
@@ -53,7 +54,10 @@ function CommandItem(props) {
     <View style={[wrapperStyle, {flexDirection: 'row', alignItems: 'center'}]}>
       {innerElem}
 
-      <IconButton icon="delete" onPress={onDelete} />
+      <IconButton
+        icon={() => <Icon name="delete" size={22} />}
+        onPress={onDelete}
+      />
     </View>
   );
 }
