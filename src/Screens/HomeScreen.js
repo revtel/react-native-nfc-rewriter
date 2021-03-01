@@ -71,7 +71,13 @@ function HomeScreen(props) {
             ToolKit
           </Button>
 
-          <Button mode="outlined">MY RECORDS</Button>
+          <Button
+            mode="outlined"
+            onPress={async () => {
+              navigation.navigate('SavedRecord');
+            }}>
+            MY RECORDS
+          </Button>
         </View>
 
         <IconButton

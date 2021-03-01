@@ -10,6 +10,7 @@ import NdefWriteScreen from './Screens/NdefWriteScreen';
 import ToolKitScreen from './Screens/ToolKitScreen';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
 import SettingsScreen from './Screens/Settings';
+import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
 
 const MainStack = createStackNavigator();
@@ -20,7 +21,7 @@ function Main(props) {
       headerMode="screen"
       screenOptions={{
         header: ({navigation, scene, previous}) => {
-          const excludedScreens = ['Home'];
+          const excludedScreens = ['Home', 'NdefWrite'];
 
           if (
             excludedScreens.findIndex((name) => name === scene?.route?.name) >
@@ -68,6 +69,11 @@ function Main(props) {
         name="CustomTransceive"
         component={CustomTransceiveScreen}
         options={{title: 'CUSTOM TRANSCEIVE'}}
+      />
+      <MainStack.Screen
+        name="SavedRecord"
+        component={SavedRecordScreen}
+        options={{title: 'MY SAVED RECORDS'}}
       />
     </MainStack.Navigator>
   );

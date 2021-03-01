@@ -1,11 +1,17 @@
-import * as React from 'react';
+import React from 'react';
 import {View, Alert} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
-function RtdTextWriter() {
+function RtdTextWriter(props, ref) {
   const inputRef = React.useRef();
   const [value, setValue] = React.useState('');
+
+  if (ref) {
+    ref.current = {
+      getValue: () => value,
+    };
+  }
 
   const writeNdef = async () => {
     inputRef.current && inputRef.current.blur();
@@ -39,4 +45,4 @@ function RtdTextWriter() {
   );
 }
 
-export default RtdTextWriter;
+export default React.forwardRef(RtdTextWriter);
