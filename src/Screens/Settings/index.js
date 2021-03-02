@@ -45,7 +45,7 @@ function SettingsScreen(props) {
           title="Washow 萬象創造"
           left={() => (
             <Image
-              source={require('../../../images/revicon_512.png')}
+              source={require('../../../images/washow_icon.png')}
               style={styles.maintainerIcon}
               resizeMode="contain"
             />
@@ -73,6 +73,8 @@ const styles = StyleSheet.create({
   maintainerIcon: {
     width: 54,
     height: 54,
+    overflow: 'hidden',
+    borderRadius: 4,
   },
 });
 
