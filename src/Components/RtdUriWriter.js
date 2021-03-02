@@ -3,11 +3,17 @@ import {View, Alert} from 'react-native';
 import {Menu, TextInput, Button} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
-function RtdUriWriter() {
-  const [value, setValue] = React.useState('');
-  const [prefix, setPrefix] = React.useState('https://');
+function RtdUriWriter(props, ref) {
+  const [value, setValue] = React.useState(props.value?.value || '');
+  const [prefix, setPrefix] = React.useState(props.value?.prefix || 'https://');
   const [showMenu, setShowMenu] = React.useState(false);
   const inputRef = React.useRef();
+
+  if (ref) {
+    ref.current = {
+      getValue: () => ({value, prefix}),
+    };
+  }
 
   const writeNdef = async () => {
     inputRef.current && inputRef.current.blur();
@@ -68,4 +74,4 @@ function RtdUriWriter() {
   );
 }
 
-export default RtdUriWriter;
+export default React.forwardRef(RtdUriWriter);

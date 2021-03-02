@@ -3,9 +3,17 @@ import {View, Alert} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcProxy from '../NfcProxy';
 
-function WifiSimpleWriter() {
-  const [ssid, setSsid] = React.useState('');
-  const [networkKey, setNetworkKey] = React.useState('');
+function WifiSimpleWriter(props, ref) {
+  const [ssid, setSsid] = React.useState(props.value?.ssid || '');
+  const [networkKey, setNetworkKey] = React.useState(
+    props.value?.networkKey || '',
+  );
+
+  if (ref) {
+    ref.current = {
+      getValue: () => ({ssid, networkKey}),
+    };
+  }
 
   const writeNdef = async () => {
     if (!ssid || !networkKey) {
@@ -44,4 +52,4 @@ function WifiSimpleWriter() {
   );
 }
 
-export default WifiSimpleWriter;
+export default React.forwardRef(WifiSimpleWriter);

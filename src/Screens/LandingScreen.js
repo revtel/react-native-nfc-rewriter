@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, ActivityIndicator, Animated} from 'react-native';
+import * as AppContext from '../AppContext';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -20,17 +21,19 @@ function LandingScreen(props) {
       Animated.parallel([
         Animated.timing(opacityAnimValue, {
           duration: 800,
-          toValue: 0.2,
+          toValue: 0,
           useNativeDriver: true,
         }),
         Animated.timing(scaleAnimValue, {
           duration: 800,
-          toValue: 4,
+          toValue: 5,
           useNativeDriver: true,
         }),
       ]).start();
 
       await delay(600);
+
+      await AppContext.Actions.initStorage();
 
       props.navigation.reset({
         index: 0,

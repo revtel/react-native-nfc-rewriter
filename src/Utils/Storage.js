@@ -36,6 +36,4 @@ function createStorage(key) {
   };
 }
 
-const recordListHandler = createStorage('recordList');
-
-export {recordListHandler};
+export {createStorage};

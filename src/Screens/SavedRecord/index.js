@@ -1,28 +1,21 @@
 import * as React from 'react';
-import {ScrollView, Alert, View} from 'react-native';
+import {SafeAreaView, ScrollView, Alert, View} from 'react-native';
 import {List, Button, IconButton} from 'react-native-paper';
-import {recordListHandler} from '../../Utils/Storage';
 import {NfcTech} from 'react-native-nfc-manager';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import * as AppContext from '../../AppContext';
 
 function SavedRecordScreen(props) {
   const {navigation} = props;
-  const [recordList, setRecordList] = React.useState([]);
-
-  React.useState(() => {
-    async function loadData() {
-      setRecordList(await recordListHandler.get());
-    }
-
-    loadData();
-  });
+  const app = React.useContext(AppContext.Context);
+  const recordList = app.state.storageCache;
 
   async function clearAll() {
     Alert.alert('CONFIRM', 'Are you sure?', [
       {
         text: 'DO IT',
         onPress: async () => {
-          await recordListHandler.set([]);
+          await app.actions.setStorage([]);
         },
       },
       {
@@ -30,7 +23,31 @@ function SavedRecordScreen(props) {
         onPress: () => 0,
       },
     ]);
-    await recordListHandler.set([]);
+  }
+
+  async function removeIdx(idx) {
+    Alert.alert('CONFIRM', 'Are you sure?', [
+      {
+        text: 'DO IT',
+        onPress: async () => {
+          const nextRecordList = [...recordList];
+          nextRecordList.splice(idx, 1);
+          await app.actions.setStorage(nextRecordList);
+        },
+      },
+      {
+        text: 'CANCEL',
+        onPress: () => 0,
+      },
+    ]);
+  }
+
+  function goToHandler(savedRecord) {
+    if (savedRecord.payload?.tech === NfcTech.Ndef) {
+      navigation.navigate('NdefWrite', {
+        savedRecord,
+      });
+    }
   }
 
   const ndefRecords = recordList.filter(
@@ -42,8 +59,9 @@ function SavedRecordScreen(props) {
       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <List.Section>
           <List.Subheader>NDEF ({ndefRecords.length})</List.Subheader>
-          {ndefRecords.map((record) => (
+          {ndefRecords.map((record, idx) => (
             <List.Item
+              key={idx}
               title={record.name}
               right={() => (
                 <View
@@ -60,7 +78,7 @@ function SavedRecordScreen(props) {
                         style={{alignSelf: 'center'}}
                       />
                     )}
-                    onPress={() => console.warn('delete')}
+                    onPress={() => removeIdx(idx)}
                   />
                   <IconButton
                     icon={() => (
@@ -70,7 +88,7 @@ function SavedRecordScreen(props) {
                         style={{alignSelf: 'center'}}
                       />
                     )}
-                    onPress={() => console.warn('go')}
+                    onPress={() => goToHandler(record)}
                   />
                 </View>
               )}
@@ -79,6 +97,7 @@ function SavedRecordScreen(props) {
         </List.Section>
       </ScrollView>
       <Button onPress={clearAll}>CLEAR ALL</Button>
+      <SafeAreaView />
     </>
   );
 }

@@ -5,7 +5,7 @@ import NfcProxy from '../NfcProxy';
 
 function RtdTextWriter(props, ref) {
   const inputRef = React.useRef();
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(props.value || '');
 
   if (ref) {
     ref.current = {

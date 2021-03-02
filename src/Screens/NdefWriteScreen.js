@@ -4,81 +4,70 @@ import {NfcTech, Ndef} from 'react-native-nfc-manager';
 import RtdTextWriter from '../Components/RtdTextWriter';
 import RtdUriWriter from '../Components/RtdUriWriter';
 import WifiSimpleWriter from '../Components/WifiSimpleWriter';
-import {Appbar} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import SaveRecordModal from '../Components/SaveRecordModal';
-import {recordListHandler} from '../Utils/Storage';
-
-function ScreenHeader(props) {
-  const {navigation, title, getRecordPayload} = props;
-  const [visible, setVisible] = React.useState(false);
-
-  async function onPersistRecord(name) {
-    const payload = getRecordPayload();
-    const nextList = await recordListHandler.get();
-    nextList.push({
-      name,
-      payload,
-    });
-    recordListHandler.set(nextList);
-  }
-
-  return (
-    <>
-      <Appbar.Header style={{backgroundColor: 'white'}}>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title={title} />
-        <Appbar.Action
-          icon={() => <Icon name="save" size={22} />}
-          onPress={() => setVisible(true)}
-        />
-      </Appbar.Header>
-
-      <SaveRecordModal
-        visible={visible}
-        onClose={() => setVisible(false)}
-        onPersistRecord={onPersistRecord}
-      />
-    </>
-  );
-}
+import ScreenHeader from '../Components/ScreenHeader';
 
 function NdefWriteScreen(props) {
-  const {ndefType} = props.route.params;
+  const {params} = props.route;
   const handlerRef = React.useRef();
+
+  function getNdefType() {
+    const payload = params.savedRecord?.payload;
+    if (payload && payload.tech === NfcTech.Ndef) {
+      if (payload.tnf === Ndef.TNF_WELL_KNOWN) {
+        if (payload.rtd === Ndef.RTD_TEXT) {
+          return 'TEXT';
+        } else if (payload.rtd === Ndef.RTD_URI) {
+          return 'URI';
+        }
+      } else if (payload.tnf === Ndef.TNF_MIME_MEDIA) {
+        if (payload.mimeType === Ndef.MIME_WFA_WSC) {
+          return 'WIFI_SIMPLE';
+        }
+      }
+    }
+
+    return params.ndefType;
+  }
+
+  function getSavedValue() {
+    return params.savedRecord?.payload?.value;
+  }
+
+  const ndefType = getNdefType();
 
   function getRecordPayload() {
     if (handlerRef.current?.getValue) {
-      const record = {
+      const payload = {
         tech: NfcTech.Ndef,
         tnf: Ndef.TNF_WELL_KNOWN,
         value: handlerRef.current.getValue(),
       };
 
       if (ndefType === 'TEXT') {
-        record.rtd = Ndef.RTD_TEXT;
+        payload.rtd = Ndef.RTD_TEXT;
       } else if (ndefType === 'URI') {
-        record.rtd = Ndef.RTD_URI;
+        payload.rtd = Ndef.RTD_URI;
       } else if (ndefType === 'WIFI_SIMPLE') {
-        record.tnf = Ndef.TNF_MIME_MEDIA;
-        record.mimeType = Ndef.MIME_WFA_WSC;
+        payload.tnf = Ndef.TNF_MIME_MEDIA;
+        payload.mimeType = Ndef.MIME_WFA_WSC;
       } else {
-        throw new Error('NdefWriteScreen: cannot persist this record');
+        throw new Error('NdefWriteScreen: cannot persist this payload');
       }
 
-      return record;
+      return payload;
     }
 
     return null;
   }
 
   const _renderNdefWriter = () => {
+    const value = getSavedValue();
     if (ndefType === 'TEXT') {
-      return <RtdTextWriter ref={handlerRef} />;
+      return <RtdTextWriter ref={handlerRef} value={value} />;
     } else if (ndefType === 'URI') {
-      return <RtdUriWriter />;
+      return <RtdUriWriter ref={handlerRef} value={value} />;
     } else if (ndefType === 'WIFI_SIMPLE') {
-      return <WifiSimpleWriter />;
+      return <WifiSimpleWriter ref={handlerRef} value={value} />;
     }
     return null;
   };
@@ -86,8 +75,8 @@ function NdefWriteScreen(props) {
   return (
     <>
       <ScreenHeader
-        navigation={props.navigation}
         title="WRITE NDEF"
+        navigation={props.navigation}
         getRecordPayload={getRecordPayload}
       />
       <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
