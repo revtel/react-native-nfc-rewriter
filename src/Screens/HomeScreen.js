@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import NfcProxy from '../NfcProxy';
 import {Button, IconButton} from 'react-native-paper';
@@ -95,6 +96,7 @@ function HomeScreen(props) {
 const styles = StyleSheet.create({
   settingIcon: {
     position: 'absolute',
+    top: Platform.OS === 'android' ? 20 : 0,
     right: 20,
   },
 });
