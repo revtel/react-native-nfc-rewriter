@@ -11,11 +11,16 @@ import {Button, Menu} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import CommandItem from '../../Components/CustomCommandItem';
 import NfcProxy from '../../NfcProxy';
+import ScreenHeader from '../../Components/ScreenHeader';
+import {NfcTech} from 'react-native-nfc-manager';
 
 function CustomTransceiveScreen(props) {
-  const {nfcTech} = props.route.params;
+  const {params} = props.route;
+  const nfcTech = params.savedRecord?.payload.tech || params.nfcTech;
   const [showCommandModal, setShowCommandModal] = React.useState(false);
-  const [commands, setCommands] = React.useState([]);
+  const [commands, setCommands] = React.useState(
+    params.savedRecord?.payload.value || [],
+  );
   const [responses, setResponses] = React.useState([]);
 
   function addCommand(cmd) {
@@ -32,9 +37,9 @@ function CustomTransceiveScreen(props) {
 
   async function executeCommands() {
     try {
-      if (nfcTech === 'NfcA') {
+      if (nfcTech === NfcTech.NfcA) {
         setResponses(await NfcProxy.customTransceiveNfcA(commands));
-      } else if (nfcTech === 'IsoDep') {
+      } else if (nfcTech === NfcTech.IsoDep) {
         setResponses(await NfcProxy.customTransceiveIsoDep(commands));
       }
       Alert.alert('Commands Finished', '', [{text: 'OK', onPress: () => 0}]);
@@ -45,8 +50,20 @@ function CustomTransceiveScreen(props) {
     }
   }
 
+  function getRecordPayload() {
+    return {
+      tech: nfcTech,
+      value: commands,
+    };
+  }
+
   return (
     <>
+      <ScreenHeader
+        title="CUSTOM TRANSCEIVE"
+        navigation={props.navigation}
+        getRecordPayload={getRecordPayload}
+      />
       <View style={styles.wrapper}>
         <Text style={{padding: 10}}>Tech / {nfcTech}</Text>
         <ScrollView style={[styles.wrapper, {padding: 10}]}>

@@ -1,9 +1,30 @@
 import * as React from 'react';
-import {SafeAreaView, ScrollView, Alert, View} from 'react-native';
-import {List, Button, IconButton} from 'react-native-paper';
+import {SafeAreaView, ScrollView, Alert} from 'react-native';
+import {List, Button} from 'react-native-paper';
 import {NfcTech} from 'react-native-nfc-manager';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as AppContext from '../../AppContext';
+import RecordItem from './RecordItem';
+
+function groupRecordByTech(records) {
+  const ndefRecords = [];
+  const nfcARecords = [];
+  const isoDepRecords = [];
+  for (let idx = 0; idx < records.length; idx++) {
+    const record = records[idx];
+    if (record.payload.tech === NfcTech.Ndef) {
+      ndefRecords.push({record, idx});
+    } else if (record.payload.tech === NfcTech.NfcA) {
+      nfcARecords.push({record, idx});
+    } else if (record.payload.tech === NfcTech.IsoDep) {
+      isoDepRecords.push({record, idx});
+    }
+  }
+  return {
+    ndefRecords,
+    nfcARecords,
+    isoDepRecords,
+  };
+}
 
 function SavedRecordScreen(props) {
   const {navigation} = props;
@@ -47,11 +68,19 @@ function SavedRecordScreen(props) {
       navigation.navigate('NdefWrite', {
         savedRecord,
       });
+    } else if (savedRecord.payload?.tech === NfcTech.NfcA) {
+      navigation.navigate('CustomTransceive', {
+        savedRecord,
+      });
+    } else if (savedRecord.payload?.tech === NfcTech.IsoDep) {
+      navigation.navigate('CustomTransceive', {
+        savedRecord,
+      });
     }
   }
 
-  const ndefRecords = recordList.filter(
-    (record) => record.payload?.tech === NfcTech.Ndef,
+  const {ndefRecords, nfcARecords, isoDepRecords} = groupRecordByTech(
+    recordList,
   );
 
   return (
@@ -59,39 +88,39 @@ function SavedRecordScreen(props) {
       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <List.Section>
           <List.Subheader>NDEF ({ndefRecords.length})</List.Subheader>
-          {ndefRecords.map((record, idx) => (
-            <List.Item
+          {ndefRecords.map(({record, idx}) => (
+            <RecordItem
               key={idx}
-              title={record.name}
-              right={() => (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                  }}>
-                  <IconButton
-                    icon={() => (
-                      <Icon
-                        name="delete"
-                        size={22}
-                        style={{alignSelf: 'center'}}
-                      />
-                    )}
-                    onPress={() => removeIdx(idx)}
-                  />
-                  <IconButton
-                    icon={() => (
-                      <Icon
-                        name="arrow-forward"
-                        size={22}
-                        style={{alignSelf: 'center'}}
-                      />
-                    )}
-                    onPress={() => goToHandler(record)}
-                  />
-                </View>
-              )}
+              record={record}
+              idx={idx}
+              removeIdx={removeIdx}
+              goToHandler={goToHandler}
+            />
+          ))}
+        </List.Section>
+
+        <List.Section>
+          <List.Subheader>NfcA ({nfcARecords.length})</List.Subheader>
+          {nfcARecords.map(({record, idx}) => (
+            <RecordItem
+              key={idx}
+              record={record}
+              idx={idx}
+              removeIdx={removeIdx}
+              goToHandler={goToHandler}
+            />
+          ))}
+        </List.Section>
+
+        <List.Section>
+          <List.Subheader>IsoDep ({isoDepRecords.length})</List.Subheader>
+          {isoDepRecords.map(({record, idx}) => (
+            <RecordItem
+              key={idx}
+              record={record}
+              idx={idx}
+              removeIdx={removeIdx}
+              goToHandler={goToHandler}
             />
           ))}
         </List.Section>

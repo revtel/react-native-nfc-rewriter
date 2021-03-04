@@ -21,7 +21,7 @@ function Main(props) {
       headerMode="screen"
       screenOptions={{
         header: ({navigation, scene, previous}) => {
-          const excludedScreens = ['Home', 'NdefWrite'];
+          const excludedScreens = ['Home', 'NdefWrite', 'CustomTransceive'];
 
           if (
             excludedScreens.findIndex((name) => name === scene?.route?.name) >
