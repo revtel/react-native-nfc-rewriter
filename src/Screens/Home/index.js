@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import NfcProxy from '../NfcProxy';
+import NfcProxy from '../../NfcProxy';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -29,7 +29,7 @@ function HomeScreen(props) {
             alignItems: 'center',
           }}>
           <Image
-            source={require('../../images/nfc-512.png')}
+            source={require('../../../images/nfc-512.png')}
             style={{width: 250, height: 250}}
             resizeMode="contain"
           />

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {ScrollView, Image, Alert} from 'react-native';
 import {List} from 'react-native-paper';
-import NfcProxy from '../NfcProxy';
+import NfcProxy from '../../NfcProxy';
 
 function NfcLogo() {
   return (
     <Image
-      source={require('../../images/nfc-512.png')}
+      source={require('../../../images/nfc-512.png')}
       style={{width: 44, height: 44}}
       resizeMode="contain"
     />

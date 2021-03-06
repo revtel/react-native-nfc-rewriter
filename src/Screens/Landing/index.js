@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, ActivityIndicator, Animated} from 'react-native';
-import * as AppContext from '../AppContext';
+import * as AppContext from '../../AppContext';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -47,7 +47,7 @@ function LandingScreen(props) {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require('../../images/nfc-512.png')}
+        source={require('../../../images/nfc-512.png')}
         resizeMode="contain"
         style={[
           styles.image,

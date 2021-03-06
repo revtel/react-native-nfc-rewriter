@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {NfcTech, Ndef} from 'react-native-nfc-manager';
-import RtdTextWriter from '../Components/RtdTextWriter';
-import RtdUriWriter from '../Components/RtdUriWriter';
-import WifiSimpleWriter from '../Components/WifiSimpleWriter';
-import ScreenHeader from '../Components/ScreenHeader';
+import RtdTextWriter from '../../Components/RtdTextWriter';
+import RtdUriWriter from '../../Components/RtdUriWriter';
+import WifiSimpleWriter from '../../Components/WifiSimpleWriter';
+import ScreenHeader from '../../Components/ScreenHeader';
 
 function NdefWriteScreen(props) {
   const {params} = props.route;

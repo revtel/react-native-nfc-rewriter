@@ -5,7 +5,7 @@ import {List} from 'react-native-paper';
 function NfcLogo() {
   return (
     <Image
-      source={require('../../images/nfc-512.png')}
+      source={require('../../../images/nfc-512.png')}
       style={{width: 44, height: 44}}
       resizeMode="contain"
     />
