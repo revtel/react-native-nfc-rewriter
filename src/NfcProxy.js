@@ -25,8 +25,20 @@ const withAndroidPrompt = (fn) => {
 };
 
 class NfcProxy {
-  constructor() {
-    NfcManager.start();
+  async init() {
+    const supported = await NfcManager.isSupported();
+    if (supported) {
+      await NfcManager.start();
+    }
+    return supported;
+  }
+
+  async isEnabled() {
+    return NfcManager.isEnabled();
+  }
+
+  async goToNfcSetting() {
+    return NfcManager.goToNfcSetting();
   }
 
   readNdefOnce = withAndroidPrompt(() => {
