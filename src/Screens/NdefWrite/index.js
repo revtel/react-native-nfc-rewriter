@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {NfcTech, Ndef} from 'react-native-nfc-manager';
 import RtdTextWriter from '../../Components/RtdTextWriter';
 import RtdUriWriter from '../../Components/RtdUriWriter';
+import RtdUriShortcutWriter from '../../Components/RtdUriShortcutWriter';
 import WifiSimpleWriter from '../../Components/WifiSimpleWriter';
 import ScreenHeader from '../../Components/ScreenHeader';
 
@@ -65,6 +66,16 @@ function NdefWriteScreen(props) {
     if (ndefType === 'TEXT') {
       return <RtdTextWriter ref={handlerRef} value={value} />;
     } else if (ndefType === 'URI') {
+      const scheme = value?.scheme || params.scheme;
+      if (scheme) {
+        return (
+          <RtdUriShortcutWriter
+            ref={handlerRef}
+            value={value}
+            scheme={scheme}
+          />
+        );
+      }
       return <RtdUriWriter ref={handlerRef} value={value} />;
     } else if (ndefType === 'WIFI_SIMPLE') {
       return <WifiSimpleWriter ref={handlerRef} value={value} />;

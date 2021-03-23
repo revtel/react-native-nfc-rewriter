@@ -20,7 +20,7 @@ function NdefTypeListScreen(props) {
       <List.Section>
         <List.Subheader>Well Known</List.Subheader>
         <List.Item
-          title="Text"
+          title="TEXT"
           description="Text description"
           left={NfcLogo}
           onPress={() => navigation.navigate('NdefWrite', {ndefType: 'TEXT'})}
@@ -31,6 +31,37 @@ function NdefTypeListScreen(props) {
           left={NfcLogo}
           onPress={() => navigation.navigate('NdefWrite', {ndefType: 'URI'})}
         />
+
+        <List.Item
+          title="TEL"
+          description="Let you call someone"
+          left={NfcLogo}
+          onPress={() =>
+            navigation.navigate('NdefWrite', {ndefType: 'URI', scheme: 'tel:'})
+          }
+        />
+
+        <List.Item
+          title="SMS"
+          description="Let you sms someone"
+          left={NfcLogo}
+          onPress={() =>
+            navigation.navigate('NdefWrite', {ndefType: 'URI', scheme: 'sms:'})
+          }
+        />
+
+        <List.Item
+          title="EMAIL"
+          description="Let you email someone"
+          left={NfcLogo}
+          onPress={() =>
+            navigation.navigate('NdefWrite', {
+              ndefType: 'URI',
+              scheme: 'mailto:',
+            })
+          }
+        />
+
         <List.Subheader>Utility</List.Subheader>
         <List.Item
           title="WiFi Simple Record"
