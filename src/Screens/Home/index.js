@@ -128,7 +128,7 @@ function HomeScreen(props) {
             alignItems: 'center',
           }}>
           <Image
-            source={require('../../../images/nfc-512.png')}
+            source={require('../../../images/nfc-rewriter-icon.png')}
             style={{width: 250, height: 250}}
             resizeMode="contain"
           />

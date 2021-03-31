@@ -20,18 +20,18 @@ function LandingScreen(props) {
 
       Animated.parallel([
         Animated.timing(opacityAnimValue, {
-          duration: 800,
+          duration: 350,
           toValue: 0,
           useNativeDriver: true,
         }),
         Animated.timing(scaleAnimValue, {
-          duration: 800,
-          toValue: 5,
+          duration: 350,
+          toValue: 6,
           useNativeDriver: true,
         }),
       ]).start();
 
-      await delay(600);
+      await delay(500);
 
       await AppContext.Actions.initStorage();
 
@@ -47,7 +47,7 @@ function LandingScreen(props) {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require('../../../images/nfc-512.png')}
+        source={require('../../../images/nfc-rewriter-icon.png')}
         resizeMode="contain"
         style={[
           styles.image,

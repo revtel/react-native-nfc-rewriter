@@ -1,17 +1,8 @@
 import * as React from 'react';
-import {ScrollView, Image, Alert} from 'react-native';
+import {ScrollView, Alert} from 'react-native';
 import {List} from 'react-native-paper';
 import NfcProxy from '../../NfcProxy';
-
-function NfcLogo() {
-  return (
-    <Image
-      source={require('../../../images/nfc-512.png')}
-      style={{width: 44, height: 44}}
-      resizeMode="contain"
-    />
-  );
-}
+import * as NfcIcons from '../../Components/NfcIcons';
 
 function ToolKitScreen(props) {
   const {navigation} = props;
@@ -23,7 +14,7 @@ function ToolKitScreen(props) {
         <List.Item
           title="Custom Transceive"
           description="Send custom NfcA command into your tag"
-          left={NfcLogo}
+          left={NfcIcons.TransceiveIcon}
           onPress={() =>
             navigation.navigate('CustomTransceive', {
               nfcTech: 'NfcA',
@@ -33,7 +24,7 @@ function ToolKitScreen(props) {
         <List.Item
           title="Erase"
           description="Write all blocks to zero"
-          left={NfcLogo}
+          left={NfcIcons.EraseIcon}
           onPress={async () => {
             try {
               await NfcProxy.eraseNfcA();
@@ -48,7 +39,7 @@ function ToolKitScreen(props) {
         <List.Item
           title="NDEF Format"
           description="Erase and NDEF format"
-          left={NfcLogo}
+          left={NfcIcons.EraseIcon}
           onPress={async () => {
             try {
               await NfcProxy.eraseNfcA({format: true});
@@ -67,7 +58,7 @@ function ToolKitScreen(props) {
         <List.Item
           title="Custom Transceive"
           description="Send custom APDU command into your tag"
-          left={NfcLogo}
+          left={NfcIcons.TransceiveIcon}
           onPress={() =>
             navigation.navigate('CustomTransceive', {
               nfcTech: 'IsoDep',
@@ -81,7 +72,7 @@ function ToolKitScreen(props) {
         <List.Item
           title="Test registerTagEvent API"
           description="registerTagEvent use NDEF-only scan for iOS"
-          left={NfcLogo}
+          left={NfcIcons.NfcIcon}
           onPress={async () => {
             const ndefTag = await NfcProxy.readNdefOnce();
             if (ndefTag) {

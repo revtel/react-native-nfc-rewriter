@@ -1,16 +1,7 @@
 import * as React from 'react';
-import {ScrollView, Image} from 'react-native';
+import {ScrollView} from 'react-native';
 import {List} from 'react-native-paper';
-
-function NfcLogo() {
-  return (
-    <Image
-      source={require('../../../images/nfc-512.png')}
-      style={{width: 44, height: 44}}
-      resizeMode="contain"
-    />
-  );
-}
+import * as NfcIcons from '../../Components/NfcIcons';
 
 function NdefTypeListScreen(props) {
   const {navigation} = props;
@@ -21,21 +12,21 @@ function NdefTypeListScreen(props) {
         <List.Subheader>Well Known</List.Subheader>
         <List.Item
           title="TEXT"
-          description="Text description"
-          left={NfcLogo}
+          description="Write text into NFC tags"
+          left={NfcIcons.TxtIcon}
           onPress={() => navigation.navigate('NdefWrite', {ndefType: 'TEXT'})}
         />
         <List.Item
-          title="URI"
-          description="URI description"
-          left={NfcLogo}
+          title="Link"
+          description="Write web link or uri into NFC tags"
+          left={NfcIcons.UriIcon}
           onPress={() => navigation.navigate('NdefWrite', {ndefType: 'URI'})}
         />
 
         <List.Item
           title="TEL"
-          description="Let you call someone"
-          left={NfcLogo}
+          description="Write number into NFC tags to make phone call"
+          left={NfcIcons.TelIcon}
           onPress={() =>
             navigation.navigate('NdefWrite', {ndefType: 'URI', scheme: 'tel:'})
           }
@@ -43,8 +34,8 @@ function NdefTypeListScreen(props) {
 
         <List.Item
           title="SMS"
-          description="Let you sms someone"
-          left={NfcLogo}
+          description="Write number into NFC tags to send SMS"
+          left={NfcIcons.SmsIcon}
           onPress={() =>
             navigation.navigate('NdefWrite', {ndefType: 'URI', scheme: 'sms:'})
           }
@@ -52,8 +43,8 @@ function NdefTypeListScreen(props) {
 
         <List.Item
           title="EMAIL"
-          description="Let you email someone"
-          left={NfcLogo}
+          description="Write email into NFC tags"
+          left={NfcIcons.EmailIcon}
           onPress={() =>
             navigation.navigate('NdefWrite', {
               ndefType: 'URI',
@@ -66,7 +57,7 @@ function NdefTypeListScreen(props) {
         <List.Item
           title="WiFi Simple Record"
           description="WiFi Simple description"
-          left={NfcLogo}
+          left={NfcIcons.WifiIcon}
           onPress={() =>
             navigation.navigate('NdefWrite', {ndefType: 'WIFI_SIMPLE'})
           }
