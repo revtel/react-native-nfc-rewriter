@@ -1,5 +1,10 @@
 import {Platform} from 'react-native';
-import NfcManager, {NfcTech, Ndef, NfcEvents} from 'react-native-nfc-manager';
+import NfcManager, {
+  NfcTech,
+  Ndef,
+  NfcEvents,
+  NfcErrorIOS,
+} from 'react-native-nfc-manager';
 import * as AppContext from './AppContext';
 
 class ErrSuccess extends Error {}
@@ -79,11 +84,14 @@ class NfcProxy {
 
       tag = await NfcManager.getTag();
       tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
+
+      await NfcManager.cancelTechnologyRequest();
     } catch (ex) {
-      console.warn(ex);
+      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+        console.warn(ex);
+      }
     }
 
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
     return tag;
   });
 
@@ -113,11 +121,14 @@ class NfcProxy {
       }
 
       result = true;
+
+      await NfcManager.cancelTechnologyRequest();
     } catch (ex) {
-      console.warn(ex);
+      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+        console.warn(ex);
+      }
     }
 
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
     return result;
   });
 
@@ -136,11 +147,13 @@ class NfcProxy {
         }
         responses.push(resp);
       }
-    } catch (ex) {
-      console.warn(ex);
-    }
 
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
+      await NfcManager.cancelTechnologyRequest();
+    } catch (ex) {
+      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+        console.warn(ex);
+      }
+    }
 
     return responses;
   });
@@ -166,11 +179,13 @@ class NfcProxy {
         const cmdNdefFormat = [0xa2, 0x04, 0x03, 0x00, 0xfe, 0x00];
         await NfcManager.nfcAHandler.transceive(cmdNdefFormat);
       }
-    } catch (ex) {
-      console.warn(ex);
-    }
 
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
+      await NfcManager.cancelTechnologyRequest();
+    } catch (ex) {
+      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+        console.warn(ex);
+      }
+    }
   });
 
   customTransceiveIsoDep = withAndroidPrompt(async (commands) => {
@@ -188,11 +203,13 @@ class NfcProxy {
         }
         responses.push(resp);
       }
-    } catch (ex) {
-      console.warn(ex);
-    }
 
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
+      await NfcManager.cancelTechnologyRequest();
+    } catch (ex) {
+      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+        console.warn(ex);
+      }
+    }
 
     return responses;
   });
