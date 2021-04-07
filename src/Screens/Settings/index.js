@@ -36,9 +36,9 @@ function SettingsScreen(props) {
               resizeMode="contain"
             />
           )}
-          description="https://www.revtel.tech"
+          description="https://www.revtel.tech/en"
           onPress={() => {
-            Linking.openURL('https://www.revtel.tech');
+            Linking.openURL('https://www.revtel.tech/en');
           }}
         />
         <List.Item
