@@ -20,11 +20,10 @@ function WifiSimpleWriter(props, ref) {
       return;
     }
 
-    let result = await NfcProxy.writeNdef({
+    await NfcProxy.writeNdef({
       type: 'WIFI_SIMPLE',
       value: {ssid, networkKey},
     });
-    Alert.alert(result ? 'Success' : 'Fail to write NDEF');
   };
 
   return (

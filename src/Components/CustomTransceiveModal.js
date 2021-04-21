@@ -38,7 +38,7 @@ function HexPads(props) {
             return (
               <Button
                 key={c}
-                mode={value === c ? 'outlined' : 'text'}
+                mode={value === c ? 'contained' : 'text'}
                 onPress={() => addHexChar(c)}>
                 {c}
               </Button>

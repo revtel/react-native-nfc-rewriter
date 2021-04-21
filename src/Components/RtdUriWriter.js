@@ -27,8 +27,7 @@ function RtdUriWriter(props, ref) {
       url = prefix + value;
     }
 
-    let result = await NfcProxy.writeNdef({type: 'URI', value: url});
-    Alert.alert(result ? 'Success' : 'Fail to write NDEF');
+    await NfcProxy.writeNdef({type: 'URI', value: url});
   };
 
   return (

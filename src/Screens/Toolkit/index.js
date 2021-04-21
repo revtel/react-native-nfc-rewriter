@@ -26,14 +26,7 @@ function ToolKitScreen(props) {
           description="Write all blocks to zero"
           left={NfcIcons.EraseIcon}
           onPress={async () => {
-            try {
-              await NfcProxy.eraseNfcA();
-              Alert.alert('Success', '', [{text: 'OK', onPress: () => 0}]);
-            } catch (ex) {
-              Alert.alert('Err', JSON.stringify(ex, null, 2), [
-                {text: 'OK', onPress: () => 0},
-              ]);
-            }
+            await NfcProxy.eraseNfcA();
           }}
         />
         <List.Item
@@ -41,14 +34,7 @@ function ToolKitScreen(props) {
           description="Erase and NDEF format"
           left={NfcIcons.EraseIcon}
           onPress={async () => {
-            try {
-              await NfcProxy.eraseNfcA({format: true});
-              Alert.alert('Success', '', [{text: 'OK', onPress: () => 0}]);
-            } catch (ex) {
-              Alert.alert('Err', JSON.stringify(ex, null, 2), [
-                {text: 'OK', onPress: () => 0},
-              ]);
-            }
+            await NfcProxy.eraseNfcA({format: true});
           }}
         />
       </List.Section>

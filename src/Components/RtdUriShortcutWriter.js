@@ -28,8 +28,7 @@ function RtdUriShortcutWriter(props, ref) {
     }
 
     const url = scheme + value;
-    let result = await NfcProxy.writeNdef({type: 'URI', value: url});
-    Alert.alert(result ? 'Success' : 'Fail to write NDEF');
+    await NfcProxy.writeNdef({type: 'URI', value: url});
   };
 
   return (

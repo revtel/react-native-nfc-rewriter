@@ -29,6 +29,16 @@ const withAndroidPrompt = (fn) => {
   return wrapper;
 };
 
+const handleException = (ex) => {
+  console.warn(ex);
+
+  if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+    NfcManager.invalidateSessionWithErrorIOS(
+      `Error: ${(ex && ex.toString()) || 'unknown'}`,
+    );
+  }
+};
+
 class NfcProxy {
   async init() {
     const supported = await NfcManager.isSupported();
@@ -79,17 +89,21 @@ class NfcProxy {
 
   readTag = withAndroidPrompt(async () => {
     let tag = null;
+
     try {
       await NfcManager.requestTechnology([NfcTech.Ndef]);
 
       tag = await NfcManager.getTag();
       tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
 
-      await NfcManager.cancelTechnologyRequest();
-    } catch (ex) {
-      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
-        console.warn(ex);
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
       }
+    } catch (ex) {
+      // for tag reading, we don't actually need to show any error
+      console.warn(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
     }
 
     return tag;
@@ -97,6 +111,7 @@ class NfcProxy {
 
   writeNdef = withAndroidPrompt(async ({type, value}) => {
     let result = false;
+
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef, {
         alertMessage: 'Ready to write some NDEF',
@@ -116,23 +131,22 @@ class NfcProxy {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
 
         if (Platform.OS === 'ios') {
-          await NfcManager.setAlertMessageIOS('Successfully write NDEF');
+          await NfcManager.setAlertMessageIOS('Success');
         }
+
+        result = true;
       }
-
-      result = true;
-
-      await NfcManager.cancelTechnologyRequest();
     } catch (ex) {
-      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
-        console.warn(ex);
-      }
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
     }
 
     return result;
   });
 
   customTransceiveNfcA = withAndroidPrompt(async (commands) => {
+    let result = false;
     const responses = [];
 
     try {
@@ -148,17 +162,23 @@ class NfcProxy {
         responses.push(resp);
       }
 
-      await NfcManager.cancelTechnologyRequest();
-    } catch (ex) {
-      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
-        console.warn(ex);
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
       }
+
+      result = true;
+    } catch (ex) {
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
     }
 
-    return responses;
+    return [result, responses];
   });
 
   eraseNfcA = withAndroidPrompt(async ({format = false} = {}) => {
+    let result = false;
+
     try {
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
@@ -178,17 +198,26 @@ class NfcProxy {
       if (format) {
         const cmdNdefFormat = [0xa2, 0x04, 0x03, 0x00, 0xfe, 0x00];
         await NfcManager.nfcAHandler.transceive(cmdNdefFormat);
-      }
 
-      await NfcManager.cancelTechnologyRequest();
-    } catch (ex) {
-      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
-        console.warn(ex);
+        if (Platform.OS === 'ios') {
+          await NfcManager.setAlertMessageIOS('Success');
+        }
+
+        result = true;
+      } else {
+        result = false;
       }
+    } catch (ex) {
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
     }
+
+    return result;
   });
 
   customTransceiveIsoDep = withAndroidPrompt(async (commands) => {
+    let result = false;
     const responses = [];
 
     try {
@@ -204,14 +233,18 @@ class NfcProxy {
         responses.push(resp);
       }
 
-      await NfcManager.cancelTechnologyRequest();
-    } catch (ex) {
-      if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
-        console.warn(ex);
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
       }
+
+      result = true;
+    } catch (ex) {
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
     }
 
-    return responses;
+    return [result, responses];
   });
 }
 

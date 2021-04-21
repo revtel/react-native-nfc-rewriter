@@ -20,8 +20,7 @@ function RtdTextWriter(props, ref) {
       return;
     }
 
-    let result = await NfcProxy.writeNdef({type: 'TEXT', value});
-    Alert.alert(result ? 'Success' : 'Fail to write NDEF');
+    await NfcProxy.writeNdef({type: 'TEXT', value});
   };
 
   return (
