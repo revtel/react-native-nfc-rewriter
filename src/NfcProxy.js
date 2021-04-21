@@ -119,7 +119,6 @@ class NfcProxy {
 
       let bytes = null;
       if (type === 'TEXT') {
-        console.warn(type, value);
         bytes = Ndef.encodeMessage([Ndef.textRecord(value)]);
       } else if (type === 'URI') {
         bytes = Ndef.encodeMessage([Ndef.uriRecord(value)]);
