@@ -19,10 +19,10 @@ function SettingsScreen(props) {
         <List.Item title="Version" description={version} />
         <List.Item
           title="Repository"
-          description="https://github.com/revteltech/react-native-nfc-rewriter"
+          description="https://github.com/revtel/react-native-nfc-rewriter"
           onPress={() => {
             Linking.openURL(
-              'https://github.com/revteltech/react-native-nfc-rewriter',
+              'https://github.com/revtel/react-native-nfc-rewriter',
             );
           }}
         />
