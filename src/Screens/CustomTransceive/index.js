@@ -36,18 +36,23 @@ function CustomTransceiveScreen(props) {
   }
 
   async function executeCommands() {
-    try {
-      if (nfcTech === NfcTech.NfcA) {
-        setResponses(await NfcProxy.customTransceiveNfcA(commands));
-      } else if (nfcTech === NfcTech.IsoDep) {
-        setResponses(await NfcProxy.customTransceiveIsoDep(commands));
-      }
-      Alert.alert('Commands Finished', '', [{text: 'OK', onPress: () => 0}]);
-    } catch (ex) {
-      Alert.alert('Not Finished', JSON.stringify(ex, null, 2), [
+    let result = [];
+
+    if (nfcTech === NfcTech.NfcA) {
+      result = await NfcProxy.customTransceiveNfcA(commands);
+    } else if (nfcTech === NfcTech.IsoDep) {
+      result = await NfcProxy.customTransceiveIsoDep(commands);
+    }
+
+    const [success, resps] = result;
+
+    if (!success) {
+      Alert.alert('Commands Not Finished', '', [
         {text: 'OK', onPress: () => 0},
       ]);
     }
+
+    setResponses(resps);
   }
 
   function getRecordPayload() {
