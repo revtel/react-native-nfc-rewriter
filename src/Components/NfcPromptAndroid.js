@@ -1,15 +1,14 @@
 import React from 'react';
 import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
-import * as AppContext from '../AppContext';
 import NfcManager from 'react-native-nfc-manager';
+import {useRevent} from 'revent-lib';
 
 function NfcPromptAndroid(props) {
   const [visible, setVisible] = React.useState(false);
   const animValue = React.useRef(new Animated.Value(0)).current;
-  const app = React.useContext(AppContext.Context);
-  const _visible = app.state.showNfcPrompt;
-  const _setVisible = app.actions.setShowNfcPrompt;
+  const [_data, _setData] = useRevent('androidPrompt');
+  const {visible: _visible, message = ''} = _data || {};
 
   React.useEffect(() => {
     if (_visible) {
@@ -31,8 +30,10 @@ function NfcPromptAndroid(props) {
   }, [_visible, animValue]);
 
   function cancelNfcScan() {
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
-    _setVisible(false);
+    setTimeout(() => {
+      NfcManager.cancelTechnologyRequest().catch(() => 0);
+    }, 200);
+    _setData({visible: false, message});
   }
 
   const bgAnimStyle = {
@@ -65,7 +66,7 @@ function NfcPromptAndroid(props) {
               resizeMode="contain"
             />
 
-            <Text>Please tap your NFC tag</Text>
+            <Text>{message}</Text>
           </View>
 
           <Button mode="contained" onPress={cancelNfcScan}>

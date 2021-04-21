@@ -5,7 +5,7 @@ import NfcManager, {
   NfcEvents,
   NfcErrorIOS,
 } from 'react-native-nfc-manager';
-import * as AppContext from './AppContext';
+import * as Revent from 'revent-lib';
 
 class ErrSuccess extends Error {}
 
@@ -13,15 +13,31 @@ const withAndroidPrompt = (fn) => {
   async function wrapper() {
     try {
       if (Platform.OS === 'android') {
-        AppContext.Actions.setShowNfcPrompt(true);
+        Revent.getProxy('androidPrompt').update({
+          visible: true,
+          message: 'Ready to scan NFC',
+        });
       }
 
-      return await fn.apply(null, arguments);
+      const resp = await fn.apply(null, arguments);
+
+      if (Platform.OS === 'android') {
+        Revent.getProxy('androidPrompt').update({
+          visible: true,
+          message: 'Completed',
+        });
+      }
+
+      return resp;
     } catch (ex) {
       throw ex;
     } finally {
       if (Platform.OS === 'android') {
-        AppContext.Actions.setShowNfcPrompt(false);
+        setTimeout(() => {
+          Revent.getProxy('androidPrompt').update({
+            visible: false,
+          });
+        }, 800);
       }
     }
   }
@@ -32,10 +48,16 @@ const withAndroidPrompt = (fn) => {
 const handleException = (ex) => {
   console.warn(ex);
 
-  if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
-    NfcManager.invalidateSessionWithErrorIOS(
-      `Error: ${(ex && ex.toString()) || 'unknown'}`,
-    );
+  if (Platform.OS === 'ios') {
+    if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+      NfcManager.invalidateSessionWithErrorIOS(
+        `Error: ${(ex && ex.toString()) || 'unknown'}`,
+      );
+    }
+  } else {
+    if (typeof ex === 'string' && ex === 'cancelled') {
+      // bypass
+    }
   }
 };
 
