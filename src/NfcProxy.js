@@ -3,7 +3,7 @@ import NfcManager, {
   NfcTech,
   Ndef,
   NfcEvents,
-  NfcErrorIOS,
+  NfcError,
 } from 'react-native-nfc-manager';
 import * as Revent from 'revent-lib';
 
@@ -46,17 +46,12 @@ const withAndroidPrompt = (fn) => {
 };
 
 const handleException = (ex) => {
-  console.warn(ex);
-
-  if (Platform.OS === 'ios') {
-    if (NfcErrorIOS.parse(ex) !== NfcErrorIOS.errCodes.userCancel) {
+  if (!(ex instanceof NfcError.UserCancel)) {
+    console.warn('user cancell!!');
+    if (Platform.OS === 'ios') {
       NfcManager.invalidateSessionWithErrorIOS(
         `Error: ${(ex && ex.toString()) || 'unknown'}`,
       );
-    }
-  } else {
-    if (typeof ex === 'string' && ex === 'cancelled') {
-      // bypass
     }
   }
 };
@@ -123,7 +118,7 @@ class NfcProxy {
       }
     } catch (ex) {
       // for tag reading, we don't actually need to show any error
-      console.warn(ex);
+      console.log(ex);
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
