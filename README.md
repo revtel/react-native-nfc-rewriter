@@ -7,6 +7,11 @@
 
 ---
 
+<br/>
+<p align="center">
+  You could play this app first with downloading from <a href='https://apps.apple.com/tw/app/nfc-rewriter/id1551243964' target='_blank'> App Store</a>.
+</p>
+<br/>
 
 <p align="center">
   This open source React Native NFC app allows read & write to NFC tags
