@@ -4928,9 +4928,9 @@ lodash.throttle@^4.1.1:
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
 lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.4, lodash@^4.3.0:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -6129,10 +6129,10 @@ react-native-modal@^11.5.4:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
-react-native-nfc-manager@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-nfc-manager/-/react-native-nfc-manager-3.3.0.tgz#6cbb9b00966afd27b5b304297e38a57c53b8ab8d"
-  integrity sha512-G42j8g9pDbidDOnk9df7HXTPxElgWEZNRKtKszYKW5Tw9xaRD0Uk/R+kohBD3uwLWClMIp5rHHmy8PESUvSV8g==
+react-native-nfc-manager@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-nfc-manager/-/react-native-nfc-manager-3.4.0.tgz#94101af7794da38cf55b80b77fb5cedd99a14eeb"
+  integrity sha512-unftjuGXGcpoEwXqRAkOLqSaODRe9TLX3w0wk2U9BmkL5q6xVhPd8IfmAQT6ZlP/tYs/azfU5mzFaRCYXb1Now==
 
 react-native-paper@^4.4.1:
   version "4.5.0"
