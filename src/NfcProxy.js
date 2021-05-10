@@ -1,4 +1,4 @@
-import {Platform} from 'react-native';
+import {Platform, Alert} from 'react-native';
 import NfcManager, {
   NfcTech,
   Ndef,
@@ -47,11 +47,13 @@ const withAndroidPrompt = (fn) => {
 
 const handleException = (ex) => {
   if (!(ex instanceof NfcError.UserCancel)) {
-    console.warn('user cancell!!');
+    console.warn(ex);
     if (Platform.OS === 'ios') {
       NfcManager.invalidateSessionWithErrorIOS(
         `Error: ${(ex && ex.toString()) || 'unknown'}`,
       );
+    } else {
+      Alert.alert('NFC Error', ex.toString());
     }
   }
 };
