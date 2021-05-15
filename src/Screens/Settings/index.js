@@ -1,6 +1,15 @@
 import React from 'react';
-import {Image, Linking, View, ScrollView, Text, StyleSheet} from 'react-native';
+import {
+  Image,
+  Linking,
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import {List} from 'react-native-paper';
+import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {version} from '../../../package.json';
 
 const generalText = `
@@ -10,12 +19,53 @@ As an open source project, any kind of contributions and suggestions are always 
 `;
 
 function SettingsScreen(props) {
+  const [nfcStatus, setNfcStatus] = React.useState(null);
+
+  React.useEffect(() => {
+    function onNfcStateChanged(evt = {}) {
+      const {state} = evt;
+      setNfcStatus(state === 'on');
+    }
+
+    async function checkNfcState() {
+      setNfcStatus(await NfcManager.isEnabled());
+      NfcManager.setEventListener(NfcEvents.StateChanged, onNfcStateChanged);
+    }
+
+    if (Platform.OS === 'android') {
+      checkNfcState();
+    }
+
+    return () => {
+      if (Platform.OS === 'android') {
+        NfcManager.setEventListener(NfcEvents.StateChanged, null);
+      }
+    };
+  }, []);
+
   return (
     <ScrollView style={[styles.wrapper]}>
       <View style={styles.topBanner}>
         <Text style={{lineHeight: 16}}>{generalText}</Text>
       </View>
       <List.Section>
+        {Platform.OS === 'android' && (
+          <>
+            <List.Item
+              title="NFC Status"
+              description={
+                nfcStatus === null ? '---' : nfcStatus ? 'ON' : 'OFF'
+              }
+            />
+            <List.Item
+              title="NFC Settings"
+              description="Jump to System NFC Settings"
+              onPress={() => {
+                NfcManager.goToNfcSetting();
+              }}
+            />
+          </>
+        )}
         <List.Item title="Version" description={version} />
         <List.Item
           title="Repository"
