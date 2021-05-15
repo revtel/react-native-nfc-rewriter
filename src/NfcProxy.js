@@ -46,14 +46,17 @@ const withAndroidPrompt = (fn) => {
 };
 
 const handleException = (ex) => {
-  if (!(ex instanceof NfcError.UserCancel)) {
+  if (ex instanceof NfcError.UserCancel) {
+    // bypass
+  } else if (ex instanceof NfcError.Timeout) {
+    Alert.alert('NFC Session Timeout');
+  } else {
     console.warn(ex);
+
     if (Platform.OS === 'ios') {
-      NfcManager.invalidateSessionWithErrorIOS(
-        `Error: ${(ex && ex.toString()) || 'unknown'}`,
-      );
+      NfcManager.invalidateSessionWithErrorIOS(`${ex}`);
     } else {
-      Alert.alert('NFC Error', ex.toString());
+      Alert.alert('NFC Error', `${ex}`);
     }
   }
 };
@@ -95,7 +98,11 @@ class NfcProxy {
         NfcManager.unregisterTagEvent().catch(() => 0);
       });
 
-      NfcManager.setEventListener(NfcEvents.SessionClosed, () => {
+      NfcManager.setEventListener(NfcEvents.SessionClosed, (error) => {
+        if (error) {
+          handleException(error);
+        }
+
         cleanUp();
         if (!tagFound) {
           resolve();
