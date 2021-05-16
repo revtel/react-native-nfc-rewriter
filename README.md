@@ -9,7 +9,9 @@
 
 <br/>
 <p align="center">
-  You could play this app first with downloading from <a href='https://apps.apple.com/tw/app/nfc-rewriter/id1551243964' target='_blank'> App Store</a>.
+  <a href='https://apps.apple.com/tw/app/nfc-rewriter/id1551243964' target='_blank'>
+  <img alt="react-native-nfc-rewriter" src="./images/Apple-App-Store-Icon.png" width="250">
+  </a>
 </p>
 <br/>
 
@@ -53,23 +55,23 @@ The NFC library is powered by <a href="https://github.com/facebook/react-native"
 
 ## Features
 
-* Read NFC tags
-  * uid
-  * NFC technology
-  * NDEF
-* Write NDEF
-  * RTD_URI
-    * url, email, sms, tel, or custom scheme
-  * RTD_TEXT 
-  * WIFI SIMPLE RECORD
-* Toolkits
-  * NfcA
-    * Custom transceive
-    * Erase all
-    * Format to NDEF
-  * IsoDep 
-    * Custom APDU (mostly Android)
-* Save your own records
+- Read NFC tags
+  - uid
+  - NFC technology
+  - NDEF
+- Write NDEF
+  - RTD_URI
+    - url, email, sms, tel, or custom scheme
+  - RTD_TEXT
+  - WIFI SIMPLE RECORD
+- Toolkits
+  - NfcA
+    - Custom transceive
+    - Erase all
+    - Format to NDEF
+  - IsoDep
+    - Custom APDU (mostly Android)
+- Save your own records
 
 ## Made by
 
