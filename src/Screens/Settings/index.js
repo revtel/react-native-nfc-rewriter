@@ -102,7 +102,10 @@ function SettingsScreen(props) {
           )}
           description="http://www.washow.cc"
           onPress={() => {
+            throw new Error('Custom Error 0.0.10');
+            /*
             Linking.openURL('http://www.washow.cc');
+            */
           }}
         />
       </List.Section>
