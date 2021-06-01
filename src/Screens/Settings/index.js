@@ -7,10 +7,14 @@ import {
   Text,
   StyleSheet,
   Platform,
+  Keyboard,
+  Dimensions,
+  Alert,
 } from 'react-native';
-import {List} from 'react-native-paper';
+import {List, TextInput, Button} from 'react-native-paper';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {version} from '../../../package.json';
+import {captureException} from '../../setupSentry';
 
 const generalText = `
 NfcReWriter is an open source project built on-top-of react-native. 
@@ -20,6 +24,10 @@ As an open source project, any kind of contributions and suggestions are always 
 
 function SettingsScreen(props) {
   const [nfcStatus, setNfcStatus] = React.useState(null);
+  const [feedback, setFeedback] = React.useState('');
+  const [keyboardPadding, setKeyboardPadding] = React.useState(0);
+  const scrollViewRef = React.useRef();
+  const scrollPosRef = React.useRef(0);
 
   React.useEffect(() => {
     function onNfcStateChanged(evt = {}) {
@@ -43,8 +51,42 @@ function SettingsScreen(props) {
     };
   }, []);
 
+  React.useEffect(() => {
+    async function onKbShow() {
+      const estimatedKbHeight = Dimensions.get('window').width;
+      setKeyboardPadding(estimatedKbHeight);
+      setTimeout(() => {
+        scrollViewRef.current.scrollTo({
+          y: scrollPosRef.current + estimatedKbHeight,
+        });
+      }, 200);
+    }
+
+    function onKbHide() {
+      setKeyboardPadding(0);
+    }
+
+    if (Platform.OS === 'ios') {
+      Keyboard.addListener('keyboardWillShow', onKbShow);
+      Keyboard.addListener('keyboardWillHide', onKbHide);
+    }
+
+    return () => {
+      if (Platform.OS === 'ios') {
+        Keyboard.removeListener('keyboardWillShow', onKbShow);
+        Keyboard.removeListener('keyboardWillHide', onKbHide);
+      }
+    };
+  }, []);
+
   return (
-    <ScrollView style={[styles.wrapper]}>
+    <ScrollView
+      style={[styles.wrapper]}
+      ref={scrollViewRef}
+      onScroll={({nativeEvent}) => {
+        scrollPosRef.current = nativeEvent.contentOffset.y;
+      }}
+      keyboardShouldPersistTaps="handled">
       <View style={styles.topBanner}>
         <Text style={{lineHeight: 16}}>{generalText}</Text>
       </View>
@@ -106,6 +148,32 @@ function SettingsScreen(props) {
           }}
         />
       </List.Section>
+
+      <View style={{padding: 12}}>
+        <Text style={{textAlign: 'center', fontSize: 16}}>Your Feedback</Text>
+        <TextInput
+          style={{marginTop: 8}}
+          value={feedback}
+          onChangeText={setFeedback}
+        />
+        <Button
+          mode="contained"
+          style={{marginTop: 8}}
+          onPress={() => {
+            if (feedback) {
+              captureException(new Error('Feedback'), {
+                section: 'feedback',
+                extra: {feedback},
+              });
+              Alert.alert('Thanks for your feedback');
+            }
+            setFeedback('');
+          }}>
+          SEND
+        </Button>
+      </View>
+
+      {keyboardPadding > 0 && <View style={{height: keyboardPadding}} />}
     </ScrollView>
   );
 }

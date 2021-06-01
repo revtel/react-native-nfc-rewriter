@@ -57,3 +57,9 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# by revtel 
+.env
+*.jsbundle.map
+*.android.bundle
+*.android.bundle.map
