@@ -61,3 +61,5 @@ buck-out/
 # by revtel 
 .env
 *.jsbundle.map
+*.android.bundle
+*.android.bundle.map

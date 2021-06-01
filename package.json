@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "postinstall": "patch-package",
     "release:android": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",
-    "sentry:ios": "REV_PLATFORM=ios node ./scripts/sentry.js"
+    "sentry:ios": "REV_PLATFORM=ios node ./scripts/sentry.js",
+    "sentry:android": "REV_PLATFORM=android node ./scripts/sentry.js"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.13.4",
