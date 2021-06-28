@@ -5,6 +5,7 @@ import RtdTextWriter from '../../Components/RtdTextWriter';
 import RtdUriWriter from '../../Components/RtdUriWriter';
 import RtdUriShortcutWriter from '../../Components/RtdUriShortcutWriter';
 import WifiSimpleWriter from '../../Components/WifiSimpleWriter';
+import VCardWriter from '../../Components/VCardWriter';
 import ScreenHeader from '../../Components/ScreenHeader';
 
 function NdefWriteScreen(props) {
@@ -23,6 +24,8 @@ function NdefWriteScreen(props) {
       } else if (payload.tnf === Ndef.TNF_MIME_MEDIA) {
         if (payload.mimeType === Ndef.MIME_WFA_WSC) {
           return 'WIFI_SIMPLE';
+        } else if (payload.mimeType === 'text/vcard') {
+          return 'VCARD';
         }
       }
     }
@@ -51,6 +54,9 @@ function NdefWriteScreen(props) {
       } else if (ndefType === 'WIFI_SIMPLE') {
         payload.tnf = Ndef.TNF_MIME_MEDIA;
         payload.mimeType = Ndef.MIME_WFA_WSC;
+      } else if (ndefType === 'VCARD') {
+        payload.tnf = Ndef.TNF_MIME_MEDIA;
+        payload.mimeType = 'text/vcard';
       } else {
         throw new Error('NdefWriteScreen: cannot persist this payload');
       }
@@ -79,6 +85,8 @@ function NdefWriteScreen(props) {
       return <RtdUriWriter ref={handlerRef} value={value} />;
     } else if (ndefType === 'WIFI_SIMPLE') {
       return <WifiSimpleWriter ref={handlerRef} value={value} />;
+    } else if (ndefType === 'VCARD') {
+      return <VCardWriter ref={handlerRef} value={value} />;
     }
     return null;
   };

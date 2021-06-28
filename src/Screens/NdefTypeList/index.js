@@ -53,14 +53,21 @@ function NdefTypeListScreen(props) {
           }
         />
 
-        <List.Subheader>Utility</List.Subheader>
+        <List.Subheader>MIME</List.Subheader>
         <List.Item
           title="WiFi Simple Record"
-          description="WiFi Simple description"
+          description="Connect to your WiFi AP"
           left={NfcIcons.WifiIcon}
           onPress={() =>
             navigation.navigate('NdefWrite', {ndefType: 'WIFI_SIMPLE'})
           }
+        />
+
+        <List.Item
+          title="vCard"
+          description="Write contact records. Please beaware vCard format is not supported by iOS natively"
+          left={NfcIcons.ContactIcon}
+          onPress={() => navigation.navigate('NdefWrite', {ndefType: 'VCARD'})}
         />
       </List.Section>
     </ScrollView>

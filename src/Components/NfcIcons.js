@@ -91,6 +91,26 @@ function TransceiveIcon() {
   );
 }
 
+function MimeIcon() {
+  return (
+    <Image
+      source={require('../../images/RD_mime_A512.png')}
+      style={{width: 44, height: 44}}
+      resizeMode="contain"
+    />
+  );
+}
+
+function ContactIcon() {
+  return (
+    <Image
+      source={require('../../images/RD_contact_A512.png')}
+      style={{width: 44, height: 44}}
+      resizeMode="contain"
+    />
+  );
+}
+
 export {
   NfcIcon,
   TxtIcon,
@@ -101,4 +121,6 @@ export {
   WifiIcon,
   EraseIcon,
   TransceiveIcon,
+  MimeIcon,
+  ContactIcon,
 };

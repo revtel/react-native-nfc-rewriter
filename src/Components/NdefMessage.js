@@ -69,6 +69,8 @@ class NdefMessage extends React.Component {
       const mimeTypeStr = String.fromCharCode(...ndef.type);
       if (mimeTypeStr === Ndef.MIME_WFA_WSC) {
         return <WifiSimplePayload ndef={ndef} />;
+      } else if (mimeTypeStr.indexOf('text') === 0) {
+        return <TextBasedMimePayload ndef={ndef} mimeType={mimeTypeStr} />;
       } else {
         return <Text>{mimeTypeStr}</Text>;
       }
@@ -127,6 +129,19 @@ class WifiSimplePayload extends React.Component {
             {credentials.networkKey || '---'}
           </Text>
         </View>
+      </View>
+    );
+  }
+}
+
+class TextBasedMimePayload extends React.Component {
+  render() {
+    let {ndef, mimeType} = this.props;
+    let text = Ndef.util.bytesToString(ndef.payload);
+    return (
+      <View>
+        <Text style={{fontSize: 16, color: 'gray'}}>{mimeType}</Text>
+        <Text style={{fontSize: 16}}>{text}</Text>
       </View>
     );
   }

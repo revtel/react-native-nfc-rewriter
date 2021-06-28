@@ -150,6 +150,13 @@ class NfcProxy {
         bytes = Ndef.encodeMessage([Ndef.uriRecord(value)]);
       } else if (type === 'WIFI_SIMPLE') {
         bytes = Ndef.encodeMessage([Ndef.wifiSimpleRecord(value)]);
+      } else if (type === 'VCARD') {
+        const {name, tel, org, email} = value;
+        const vCard = `BEGIN:VCARD\nVERSION:2.1\nN:;${name}\nORG: ${org}\nTEL;HOME:${tel}\nEMAIL:${email}\nEND:VCARD`;
+
+        bytes = Ndef.encodeMessage([
+          Ndef.record(Ndef.TNF_MIME_MEDIA, 'text/vcard', [], vCard),
+        ]);
       }
 
       if (bytes) {
