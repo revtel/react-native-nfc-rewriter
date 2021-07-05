@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
+import NfcManager from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -26,6 +27,13 @@ function HomeScreen(props) {
       try {
         setSupported(await NfcProxy.init());
         setEnabled(await NfcProxy.isEnabled());
+
+        if (Platform.OS === 'ios') {
+          const bgNdef = await NfcManager.getBackgroundNdef();
+          if (bgNdef) {
+            navigation.navigate('TagDetail', {tag: {ndefMessage: bgNdef}});
+          }
+        }
       } catch (ex) {
         Alert.alert('ERROR', 'fail to init NFC', [{text: 'OK'}]);
       }
