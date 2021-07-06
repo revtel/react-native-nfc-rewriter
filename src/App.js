@@ -1,3 +1,4 @@
+import './AppOutlets';
 import * as React from 'react';
 import {Platform, UIManager} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';

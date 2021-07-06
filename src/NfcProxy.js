@@ -5,7 +5,7 @@ import NfcManager, {
   NfcEvents,
   NfcError,
 } from 'react-native-nfc-manager';
-import * as Revent from 'revent-lib';
+import {getOutlet} from 'reconnect.js';
 
 class ErrSuccess extends Error {}
 
@@ -13,7 +13,7 @@ const withAndroidPrompt = (fn) => {
   async function wrapper() {
     try {
       if (Platform.OS === 'android') {
-        Revent.getProxy('androidPrompt').update({
+        getOutlet('androidPrompt').update({
           visible: true,
           message: 'Ready to scan NFC',
         });
@@ -22,7 +22,7 @@ const withAndroidPrompt = (fn) => {
       const resp = await fn.apply(null, arguments);
 
       if (Platform.OS === 'android') {
-        Revent.getProxy('androidPrompt').update({
+        getOutlet('androidPrompt').update({
           visible: true,
           message: 'Completed',
         });
@@ -34,7 +34,7 @@ const withAndroidPrompt = (fn) => {
     } finally {
       if (Platform.OS === 'android') {
         setTimeout(() => {
-          Revent.getProxy('androidPrompt').update({
+          getOutlet('androidPrompt').update({
             visible: false,
           });
         }, 800);
