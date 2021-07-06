@@ -2,12 +2,12 @@ import React from 'react';
 import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
 import NfcManager from 'react-native-nfc-manager';
-import {useRevent} from 'revent-lib';
+import {useOutlet} from 'reconnect.js';
 
 function NfcPromptAndroid(props) {
   const [visible, setVisible] = React.useState(false);
   const animValue = React.useRef(new Animated.Value(0)).current;
-  const [_data, _setData] = useRevent('androidPrompt');
+  const [_data, _setData] = useOutlet('androidPrompt');
   const {visible: _visible, message = ''} = _data || {};
 
   React.useEffect(() => {

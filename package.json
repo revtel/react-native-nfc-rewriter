@@ -35,7 +35,7 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.0.0-beta.2",
     "react-native-vector-icons": "^6.6.0",
-    "revent-lib": "0.0.4",
+    "reconnect.js": "^1.1.1",
     "styled-components": "^5.0.1"
   },
   "devDependencies": {
