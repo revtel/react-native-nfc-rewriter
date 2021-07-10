@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
-import NfcManager from 'react-native-nfc-manager';
+import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -25,14 +25,26 @@ function HomeScreen(props) {
   React.useEffect(() => {
     async function initNfc() {
       try {
-        setSupported(await NfcProxy.init());
+        const success = await NfcProxy.init();
+        setSupported(success);
         setEnabled(await NfcProxy.isEnabled());
 
-        if (Platform.OS === 'ios') {
-          const bgNdef = await NfcManager.getBackgroundNdef();
-          if (bgNdef) {
-            navigation.navigate('TagDetail', {tag: {ndefMessage: bgNdef}});
+        if (success) {
+          function onBackgroundTag(bgTag) {
+            if (bgTag) {
+              navigation.navigate('TagDetail', {tag: bgTag});
+            }
           }
+
+          // get the initial launching tag
+          const bgTag = await NfcManager.getBackgroundTag();
+          onBackgroundTag(bgTag);
+
+          // listen to other background tags after the app launched
+          NfcManager.setEventListener(
+            NfcEvents.DiscoverBackgroundTag,
+            onBackgroundTag,
+          );
         }
       } catch (ex) {
         Alert.alert('ERROR', 'fail to init NFC', [{text: 'OK'}]);
@@ -40,7 +52,7 @@ function HomeScreen(props) {
     }
 
     initNfc();
-  }, []);
+  }, [navigation]);
 
   function renderNfcButtons() {
     return (
