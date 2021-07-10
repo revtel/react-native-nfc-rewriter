@@ -4,6 +4,7 @@ import {List, Button} from 'react-native-paper';
 import {NfcTech} from 'react-native-nfc-manager';
 import * as AppContext from '../../AppContext';
 import RecordItem from './RecordItem';
+import SaveRecordModal from '../../Components/SaveRecordModal';
 
 function groupRecordByTech(records) {
   const ndefRecords = [];
@@ -30,6 +31,7 @@ function SavedRecordScreen(props) {
   const {navigation} = props;
   const app = React.useContext(AppContext.Context);
   const recordList = app.state.storageCache;
+  const [recordToCopy, setRecordToCopy] = React.useState(null);
 
   async function clearAll() {
     Alert.alert('CONFIRM', 'Are you sure?', [
@@ -63,18 +65,21 @@ function SavedRecordScreen(props) {
     ]);
   }
 
-  function goToHandler(savedRecord) {
+  function goToHandler(savedRecordIdx, savedRecord) {
     if (savedRecord.payload?.tech === NfcTech.Ndef) {
       navigation.navigate('NdefWrite', {
         savedRecord,
+        savedRecordIdx,
       });
     } else if (savedRecord.payload?.tech === NfcTech.NfcA) {
       navigation.navigate('CustomTransceive', {
         savedRecord,
+        savedRecordIdx,
       });
     } else if (savedRecord.payload?.tech === NfcTech.IsoDep) {
       navigation.navigate('CustomTransceive', {
         savedRecord,
+        savedRecordIdx,
       });
     }
   }
@@ -94,7 +99,11 @@ function SavedRecordScreen(props) {
               record={record}
               idx={idx}
               removeIdx={removeIdx}
-              goToHandler={goToHandler}
+              goToHandler={goToHandler.bind(null, idx)}
+              onCopy={() => {
+                console.warn(record);
+                setRecordToCopy(record);
+              }}
             />
           ))}
         </List.Section>
@@ -107,7 +116,8 @@ function SavedRecordScreen(props) {
               record={record}
               idx={idx}
               removeIdx={removeIdx}
-              goToHandler={goToHandler}
+              goToHandler={goToHandler.bind(null, idx)}
+              onCopy={() => setRecordToCopy(record)}
             />
           ))}
         </List.Section>
@@ -120,13 +130,33 @@ function SavedRecordScreen(props) {
               record={record}
               idx={idx}
               removeIdx={removeIdx}
-              goToHandler={goToHandler}
+              goToHandler={goToHandler.bind(null, idx)}
+              onCopy={() => setRecordToCopy(record)}
             />
           ))}
         </List.Section>
       </ScrollView>
       <Button onPress={clearAll}>CLEAR ALL</Button>
       <SafeAreaView />
+
+      <SaveRecordModal
+        visible={!!recordToCopy}
+        onClose={() => setRecordToCopy(null)}
+        onPersistRecord={async (name) => {
+          if (!recordToCopy) {
+            return false;
+          }
+
+          const nextList = AppContext.Actions.getStorage();
+          nextList.push({
+            name,
+            payload: recordToCopy.payload,
+          });
+
+          await AppContext.Actions.setStorage(nextList);
+          setRecordToCopy(null);
+        }}
+      />
     </>
   );
 }

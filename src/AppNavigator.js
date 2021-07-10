@@ -12,6 +12,7 @@ import CustomTransceiveScreen from './Screens/CustomTransceive';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
+import Toast from './Components/Toast';
 
 const MainStack = createStackNavigator();
 
@@ -128,6 +129,7 @@ function AppNavigator(props) {
     <NavigationContainer>
       <Root />
       <NfcPromptAndroid />
+      <Toast />
     </NavigationContainer>
   );
 }

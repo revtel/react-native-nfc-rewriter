@@ -7,7 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {Button, Menu} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import CommandItem from '../../Components/CustomCommandItem';
 import NfcProxy from '../../NfcProxy';
@@ -68,6 +68,8 @@ function CustomTransceiveScreen(props) {
         title="CUSTOM TRANSCEIVE"
         navigation={props.navigation}
         getRecordPayload={getRecordPayload}
+        savedRecord={params.savedRecord}
+        savedRecordIdx={params.savedRecordIdx}
       />
       <View style={styles.wrapper}>
         <Text style={{padding: 10}}>Tech / {nfcTech}</Text>

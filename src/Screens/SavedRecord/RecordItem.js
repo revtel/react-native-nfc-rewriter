@@ -4,7 +4,7 @@ import {List, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function RecordItem(props) {
-  const {record, removeIdx, goToHandler, idx} = props;
+  const {record, removeIdx, goToHandler, onCopy, idx} = props;
   return (
     <List.Item
       title={record.name}
@@ -21,6 +21,14 @@ function RecordItem(props) {
             )}
             onPress={() => removeIdx(idx)}
           />
+
+          <IconButton
+            icon={() => (
+              <Icon name="save" size={22} style={{alignSelf: 'center'}} />
+            )}
+            onPress={() => onCopy()}
+          />
+
           <IconButton
             icon={() => (
               <Icon

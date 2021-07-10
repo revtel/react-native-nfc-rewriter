@@ -94,9 +94,11 @@ function NdefWriteScreen(props) {
   return (
     <>
       <ScreenHeader
-        title="WRITE NDEF"
+        title={params.savedRecord?.name || 'WRITE NDEF'}
         navigation={props.navigation}
         getRecordPayload={getRecordPayload}
+        savedRecord={params.savedRecord}
+        savedRecordIdx={params.savedRecordIdx}
       />
       <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         {_renderNdefWriter()}
