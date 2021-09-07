@@ -184,7 +184,7 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
   - React-jsinspector (0.62.2)
-  - react-native-nfc-manager (3.5.0):
+  - react-native-nfc-manager (3.10.0):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
@@ -406,7 +406,7 @@ SPEC CHECKSUMS:
   React-jsi: b6dc94a6a12ff98e8877287a0b7620d365201161
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
-  react-native-nfc-manager: 7502dcca41f210888977b3a20924ebaf2c8eadd8
+  react-native-nfc-manager: e0889542676e1587791ca7b15cf41a7d1ba228e5
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
@@ -431,4 +431,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a0f37b5ce8c1b27957105e055beaf030a4b792ad
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.0
