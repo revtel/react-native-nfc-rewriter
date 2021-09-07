@@ -140,6 +140,7 @@ function SavedRecordScreen(props) {
       <SafeAreaView />
 
       <SaveRecordModal
+        title={'COPY THIS RECORD AS'}
         visible={!!recordToCopy}
         onClose={() => setRecordToCopy(null)}
         onPersistRecord={async (name) => {

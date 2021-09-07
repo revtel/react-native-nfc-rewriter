@@ -4,8 +4,14 @@ import {Button, Appbar, TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function SaveRecordModal(props) {
-  const {visible, onClose, record, onPersistRecord} = props;
-  const [name, setName] = React.useState(record?.name || '');
+  const {visible, onClose, title, onPersistRecord} = props;
+  const [name, setName] = React.useState('');
+
+  React.useEffect(() => {
+    if (!visible) {
+      setName('');
+    }
+  }, [visible]);
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -14,7 +20,7 @@ function SaveRecordModal(props) {
           icon={() => <Icon name="close" size={24} />}
           onPress={onClose}
         />
-        <Appbar.Content title="NEW RECORD" />
+        <Appbar.Content title={title || 'SAVE RECORD'} />
       </Appbar.Header>
       <View style={[styles.wrapper, {padding: 15, backgroundColor: 'white'}]}>
         <TextInput
@@ -25,7 +31,13 @@ function SaveRecordModal(props) {
           autoFocus={true}
           style={{marginBottom: 10}}
         />
-        <Button mode="contained" onPress={() => onPersistRecord(name)}>
+        <Button
+          mode="contained"
+          onPress={() => {
+            if (name) {
+              onPersistRecord(name);
+            }
+          }}>
           SAVE
         </Button>
       </View>
