@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {View, Image} from 'react-native';
 import {List, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -24,7 +24,11 @@ function RecordItem(props) {
 
           <IconButton
             icon={() => (
-              <Icon name="save" size={22} style={{alignSelf: 'center'}} />
+              <Image
+                source={require('../../../images/save_as.png')}
+                style={{width: 24, height: 24}}
+                resizeMode="contain"
+              />
             )}
             onPress={() => onCopy()}
           />
