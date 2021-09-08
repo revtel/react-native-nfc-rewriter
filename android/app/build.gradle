@@ -132,8 +132,8 @@ android {
         applicationId "com.revteltech.nfcopenrewriter"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "0.0.14"
+        versionCode 8
+        versionName "0.0.15"
     }
     splits {
         abi {
