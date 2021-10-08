@@ -51,7 +51,12 @@ function HexPads(props) {
 }
 
 function CustomTransceiveModal(props) {
-  const {visible: _visible, setVisible: _setVisible, addCommand} = props;
+  const {
+    visible: _visible,
+    setVisible: _setVisible,
+    isEditing,
+    editCommand,
+  } = props;
   const [visible, setVisible] = React.useState(false);
   const animValue = React.useRef(new Animated.Value(0)).current;
   const [cmdType, setCmdType] = React.useState(CmdType.COMMAND);
@@ -90,12 +95,12 @@ function CustomTransceiveModal(props) {
   function doAddCommand() {
     const cmd = {};
     if (cmdType === CmdType.COMMAND) {
-      addCommand({
+      editCommand({
         type: 'command',
         payload: cmdBytes,
       });
     } else if (cmdType === CmdType.DELAY) {
-      addCommand({
+      editCommand({
         type: 'delay',
         payload: delayMs,
       });
@@ -184,7 +189,7 @@ function CustomTransceiveModal(props) {
 
           <View style={{flexDirection: 'row'}}>
             <Button mode="contained" onPress={doAddCommand} style={{flex: 1}}>
-              Add
+              {isEditing ? 'Modify' : 'Add'}
             </Button>
 
             <Button onPress={doCancel} style={{flex: 1}}>

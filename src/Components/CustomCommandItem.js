@@ -4,7 +4,7 @@ import {IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function CommandItem(props) {
-  const {cmd, resp, onDelete} = props;
+  const {cmd, resp, onDelete, onEdit} = props;
   const wrapperStyle = {
     marginBottom: 10,
     padding: 5,
@@ -53,6 +53,11 @@ function CommandItem(props) {
   return (
     <View style={[wrapperStyle, {flexDirection: 'row', alignItems: 'center'}]}>
       {innerElem}
+
+      <IconButton
+        icon={() => <Icon name="edit" size={22} />}
+        onPress={onEdit}
+      />
 
       <IconButton
         icon={() => <Icon name="delete" size={22} />}

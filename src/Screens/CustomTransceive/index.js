@@ -18,10 +18,17 @@ function CustomTransceiveScreen(props) {
   const {params} = props.route;
   const nfcTech = params.savedRecord?.payload.tech || params.nfcTech;
   const [showCommandModal, setShowCommandModal] = React.useState(false);
+  const [currEditIdx, setCurrEditIdx] = React.useState(null);
   const [commands, setCommands] = React.useState(
     params.savedRecord?.payload.value || [],
   );
   const [responses, setResponses] = React.useState([]);
+
+  React.useEffect(() => {
+    if (!showCommandModal) {
+      setCurrEditIdx(null);
+    }
+  }, [showCommandModal]);
 
   function addCommand(cmd) {
     setCommands([...commands, cmd]);
@@ -31,6 +38,16 @@ function CustomTransceiveScreen(props) {
   function deleteCommand(idx) {
     const nextCommands = [...commands];
     nextCommands.splice(idx, 1);
+    setCommands(nextCommands);
+    setResponses([]);
+  }
+
+  function editCommand(cmd) {
+    if (currEditIdx === null) {
+      return;
+    }
+    const nextCommands = [...commands];
+    nextCommands[currEditIdx] = cmd;
     setCommands(nextCommands);
     setResponses([]);
   }
@@ -80,6 +97,10 @@ function CustomTransceiveScreen(props) {
               resp={responses[idx]}
               key={idx}
               onDelete={() => deleteCommand(idx)}
+              onEdit={() => {
+                setShowCommandModal(true);
+                setCurrEditIdx(idx);
+              }}
             />
           ))}
         </ScrollView>
@@ -103,9 +124,10 @@ function CustomTransceiveScreen(props) {
       </View>
 
       <CustomTransceiveModal
+        isEditing={currEditIdx !== null}
         visible={showCommandModal}
         setVisible={setShowCommandModal}
-        addCommand={addCommand}
+        editCommand={currEditIdx === null ? addCommand : editCommand}
       />
     </>
   );
