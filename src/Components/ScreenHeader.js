@@ -19,7 +19,7 @@ function ScreenHeader(props) {
   async function onPersistRecord(name, updateExist = false) {
     const payload = getRecordPayload();
     const nextList = AppContext.Actions.getStorage();
-    if (updateExist) {
+    if (updateExist && typeof savedRecordIdx === 'number') {
       nextList[savedRecordIdx] = {
         name,
         payload,

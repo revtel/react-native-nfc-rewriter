@@ -9,11 +9,13 @@ import {
   SafeAreaView,
   Platform,
   Alert,
+  Linking,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
-import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
+import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import qs from 'query-string';
 
 function HomeScreen(props) {
   const {navigation} = props;
@@ -31,20 +33,56 @@ function HomeScreen(props) {
 
         if (success) {
           function onBackgroundTag(bgTag) {
-            if (bgTag) {
-              navigation.navigate('TagDetail', {tag: bgTag});
+            navigation.navigate('TagDetail', {tag: bgTag});
+          }
+
+          function onDeepLink(url, launch) {
+            console.warn('deep link:', url, 'launch:', launch);
+
+            try {
+              const customScheme = 'com.revteltech.nfcopenrewriter://';
+              const [action, query] = url.slice(customScheme.length).split('?');
+              const params = qs.parse(query);
+              if (action === 'share') {
+                console.warn('share', params);
+                const sharedRecord = params.data;
+                if (sharedRecord.payload?.tech === NfcTech.Ndef) {
+                  navigation.navigate('NdefWrite', {sharedRecord});
+                } else if (sharedRecord.payload?.tech === NfcTech.NfcA) {
+                  navigation.navigate('CustomTransceive', {sharedRecord});
+                } else if (sharedRecord.payload?.tech === NfcTech.IsoDep) {
+                  navigation.navigate('CustomTransceive', {sharedRecord});
+                } else {
+                  console.warn('unrecognized data');
+                }
+              }
+            } catch (ex) {
+              console.warn('fail to parse deep link', ex);
             }
           }
 
           // get the initial launching tag
           const bgTag = await NfcManager.getBackgroundTag();
-          onBackgroundTag(bgTag);
+          if (bgTag) {
+            onBackgroundTag(bgTag);
+          } else {
+            const link = await Linking.getInitialURL();
+            if (link) {
+              onDeepLink(link, true);
+            }
+          }
 
           // listen to other background tags after the app launched
           NfcManager.setEventListener(
             NfcEvents.DiscoverBackgroundTag,
             onBackgroundTag,
           );
+
+          Linking.setEventListener('url', (event) => {
+            if (event.url) {
+              onDeepLink(event.url, false);
+            }
+          });
         }
       } catch (ex) {
         Alert.alert('ERROR', 'fail to init NFC', [{text: 'OK'}]);

@@ -22,6 +22,7 @@
     "@react-navigation/stack": "^5.0.3",
     "@sentry/react-native": "^2.4.3",
     "eventemitter3": "^4.0.0",
+    "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-native": "0.66.0",
     "react-native-elements": "^1.2.7",
