@@ -10,7 +10,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "release:android": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
+    "android:bundle": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
+    "android:assemble": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",
     "sentry:ios": "REV_PLATFORM=ios node ./scripts/sentry.js",
     "sentry:android": "REV_PLATFORM=android node ./scripts/sentry.js"
   },
