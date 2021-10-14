@@ -46,9 +46,13 @@ function HomeScreen(props) {
                 if (sharedRecord.payload?.tech === NfcTech.Ndef) {
                   navigation.navigate('NdefWrite', {savedRecord: sharedRecord});
                 } else if (sharedRecord.payload?.tech === NfcTech.NfcA) {
-                  navigation.navigate('CustomTransceive', {savedRecord: sharedRecord});
+                  navigation.navigate('CustomTransceive', {
+                    savedRecord: sharedRecord,
+                  });
                 } else if (sharedRecord.payload?.tech === NfcTech.IsoDep) {
-                  navigation.navigate('CustomTransceive', {savedRecord: sharedRecord});
+                  navigation.navigate('CustomTransceive', {
+                    savedRecord: sharedRecord,
+                  });
                 } else {
                   console.warn('unrecognized share payload tech');
                 }

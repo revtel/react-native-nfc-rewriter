@@ -40,7 +40,9 @@ function RecordItem(props) {
             onPress={() => {
               Share.share({
                 title: 'My NFC Record',
-                url: `com.revteltech.nfcopenrewriter://share?data=${JSON.stringify(record)}`
+                url: `com.revteltech.nfcopenrewriter://share?data=${JSON.stringify(
+                  record,
+                )}`,
               });
             }}
           />

@@ -7,13 +7,8 @@ import {Alert} from 'react-native';
 import {showToast} from './Toast';
 
 function ScreenHeader(props) {
-  const {
-    navigation,
-    title,
-    getRecordPayload,
-    savedRecord,
-    savedRecordIdx,
-  } = props;
+  const {navigation, title, getRecordPayload, savedRecord, savedRecordIdx} =
+    props;
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
 
   async function onPersistRecord(name, updateExist = false) {

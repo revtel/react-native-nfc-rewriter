@@ -84,9 +84,8 @@ function SavedRecordScreen(props) {
     }
   }
 
-  const {ndefRecords, nfcARecords, isoDepRecords} = groupRecordByTech(
-    recordList,
-  );
+  const {ndefRecords, nfcARecords, isoDepRecords} =
+    groupRecordByTech(recordList);
 
   return (
     <>
