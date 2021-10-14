@@ -38,7 +38,17 @@ function HomeScreen(props) {
 
           function onDeepLink(url, launch) {
             try {
-              const customScheme = 'com.revteltech.nfcopenrewriter://';
+              const customScheme = [
+                'com.washow.nfcopenrewriter://', // android
+                'com.revteltech.nfcopenrewriter://', // ios
+              ].find((scheme) => {
+                return scheme === url.slice(0, scheme.length);
+              });
+
+              if (!customScheme) {
+                return;
+              }
+
               const [action, query] = url.slice(customScheme.length).split('?');
               const params = qs.parse(query);
               if (action === 'share') {

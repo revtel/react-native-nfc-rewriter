@@ -1,4 +1,4 @@
-package com.revteltech.nfcopenrewriter;
+package com.washow.nfcopenrewriter;
 
 import com.facebook.react.ReactActivity;
 

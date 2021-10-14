@@ -1,4 +1,4 @@
-package com.revteltech.nfcopenrewriter;
+package com.washow.nfcopenrewriter;
 
 import android.app.Application;
 import android.content.Context;

@@ -34,6 +34,16 @@
 				<string>com.revteltech.nfcopenrewriter</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.washow.nfcopenrewriter</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.washow.nfcopenrewriter</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
