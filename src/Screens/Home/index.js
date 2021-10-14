@@ -37,23 +37,20 @@ function HomeScreen(props) {
           }
 
           function onDeepLink(url, launch) {
-            console.warn('deep link:', url, 'launch:', launch);
-
             try {
               const customScheme = 'com.revteltech.nfcopenrewriter://';
               const [action, query] = url.slice(customScheme.length).split('?');
               const params = qs.parse(query);
               if (action === 'share') {
-                console.warn('share', params);
-                const sharedRecord = params.data;
+                const sharedRecord = JSON.parse(params.data);
                 if (sharedRecord.payload?.tech === NfcTech.Ndef) {
-                  navigation.navigate('NdefWrite', {sharedRecord});
+                  navigation.navigate('NdefWrite', {savedRecord: sharedRecord});
                 } else if (sharedRecord.payload?.tech === NfcTech.NfcA) {
-                  navigation.navigate('CustomTransceive', {sharedRecord});
+                  navigation.navigate('CustomTransceive', {savedRecord: sharedRecord});
                 } else if (sharedRecord.payload?.tech === NfcTech.IsoDep) {
-                  navigation.navigate('CustomTransceive', {sharedRecord});
+                  navigation.navigate('CustomTransceive', {savedRecord: sharedRecord});
                 } else {
-                  console.warn('unrecognized data');
+                  console.warn('unrecognized share payload tech');
                 }
               }
             } catch (ex) {
@@ -78,13 +75,14 @@ function HomeScreen(props) {
             onBackgroundTag,
           );
 
-          Linking.setEventListener('url', (event) => {
+          Linking.addEventListener('url', (event) => {
             if (event.url) {
               onDeepLink(event.url, false);
             }
           });
         }
       } catch (ex) {
+        console.warn(ex);
         Alert.alert('ERROR', 'fail to init NFC', [{text: 'OK'}]);
       }
     }

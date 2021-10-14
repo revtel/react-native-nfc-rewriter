@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, Share} from 'react-native';
 import {List, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -31,6 +31,18 @@ function RecordItem(props) {
               />
             )}
             onPress={() => onCopy()}
+          />
+
+          <IconButton
+            icon={() => (
+              <Icon name="share" size={22} style={{alignSelf: 'center'}} />
+            )}
+            onPress={() => {
+              Share.share({
+                title: 'My NFC Record',
+                url: `com.revteltech.nfcopenrewriter://share?data=${JSON.stringify(record)}`
+              });
+            }}
           />
 
           <IconButton

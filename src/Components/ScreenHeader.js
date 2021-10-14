@@ -43,7 +43,7 @@ function ScreenHeader(props) {
           <Appbar.Action
             icon={() => <Icon name="save" size={22} />}
             onPress={() => {
-              if (savedRecord) {
+              if (savedRecord && typeof savedRecordIdx === 'number') {
                 Alert.alert(
                   'Confirm',
                   'Do you want to override current record?',
