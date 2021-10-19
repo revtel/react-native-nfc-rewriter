@@ -13,6 +13,12 @@
   <img alt="react-native-nfc-rewriter" src="./images/Apple-App-Store-Icon.png" width="250">
   </a>
 </p>
+
+<p align="center">
+  <a href='https://play.google.com/store/apps/details?id=com.washow.nfcopenrewriter' target='_blank'>
+  <img alt="react-native-nfc-rewriter" src="./images/google-play-icon.jpeg" width="250">
+  </a>
+</p>
 <br/>
 
 <p align="center">
