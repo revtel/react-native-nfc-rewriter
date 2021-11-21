@@ -18,7 +18,7 @@ function TagKitScreen(props) {
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: "Enable temper detection",
+              title: 'Enable temper detection',
               readOnly: true,
               savedRecord: Ntag424.enableTemper,
             });
@@ -30,7 +30,7 @@ function TagKitScreen(props) {
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: "Verify temper state",
+              title: 'Verify temper state',
               readOnly: true,
               savedRecord: Ntag424.verifyTemperState,
             });
@@ -42,7 +42,7 @@ function TagKitScreen(props) {
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: "Verify signature",
+              title: 'Verify signature',
               readOnly: true,
               savedRecord: Ntag424.readSignature,
             });
