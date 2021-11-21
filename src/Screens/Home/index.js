@@ -140,7 +140,16 @@ function HomeScreen(props) {
             navigation.navigate('ToolKit');
           }}
           style={{marginBottom: 10}}>
-          ToolKit
+          Tool Kit
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={async () => {
+            navigation.navigate('TagKit');
+          }}
+          style={{marginBottom: 10}}>
+          Tag Kit
         </Button>
 
         <Button

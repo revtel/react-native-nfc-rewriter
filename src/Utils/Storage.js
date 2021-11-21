@@ -11,6 +11,7 @@ function createStorage(key) {
       console.warn('fail to parse');
     }
     console.warn(nextList);
+    console.log(JSON.stringify(nextList));
     cache = nextList;
   }
 

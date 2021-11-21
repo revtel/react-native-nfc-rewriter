@@ -8,6 +8,7 @@ import TagDetailScreen from './Screens/TagDetail';
 import NdefTypeListScreen from './Screens/NdefTypeList';
 import NdefWriteScreen from './Screens/NdefWrite';
 import ToolKitScreen from './Screens/Toolkit';
+import TagKitScreen from './Screens/TagKit';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
@@ -65,6 +66,11 @@ function Main(props) {
         name="ToolKit"
         component={ToolKitScreen}
         options={{title: 'NFC TOOL KIT'}}
+      />
+      <MainStack.Screen
+        name="TagKit"
+        component={TagKitScreen}
+        options={{title: 'NFC TAG KIT'}}
       />
       <MainStack.Screen
         name="CustomTransceive"

@@ -7,7 +7,7 @@ import {Alert} from 'react-native';
 import {showToast} from './Toast';
 
 function ScreenHeader(props) {
-  const {navigation, title, getRecordPayload, savedRecord, savedRecordIdx} =
+  const {navigation, title, getRecordPayload, savedRecord, savedRecordIdx, readOnly} =
     props;
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
 
@@ -34,7 +34,7 @@ function ScreenHeader(props) {
       <Appbar.Header style={{backgroundColor: 'white'}}>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title={title} />
-        {!!getRecordPayload && (
+        {!!getRecordPayload && !readOnly && (
           <Appbar.Action
             icon={() => <Icon name="save" size={22} />}
             onPress={() => {

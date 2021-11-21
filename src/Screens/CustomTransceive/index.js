@@ -22,6 +22,7 @@ function CustomTransceiveScreen(props) {
   const [commands, setCommands] = React.useState(
     params.savedRecord?.payload.value || [],
   );
+  const {readOnly, title} = params;
   const [responses, setResponses] = React.useState([]);
 
   React.useEffect(() => {
@@ -82,11 +83,12 @@ function CustomTransceiveScreen(props) {
   return (
     <>
       <ScreenHeader
-        title="CUSTOM TRANSCEIVE"
+        title={title || 'CUSTOM TRANSCEIVE'}
         navigation={props.navigation}
         getRecordPayload={getRecordPayload}
         savedRecord={params.savedRecord}
         savedRecordIdx={params.savedRecordIdx}
+        readOnly={readOnly}
       />
       <View style={styles.wrapper}>
         <Text style={{padding: 10}}>Tech / {nfcTech}</Text>
@@ -101,17 +103,21 @@ function CustomTransceiveScreen(props) {
                 setShowCommandModal(true);
                 setCurrEditIdx(idx);
               }}
+              readOnly={readOnly}
             />
           ))}
         </ScrollView>
 
         <View style={styles.actionBar}>
-          <Button
-            mode="contained"
-            style={{marginBottom: 8}}
-            onPress={() => setShowCommandModal(true)}>
-            ADD
-          </Button>
+          {!readOnly && (
+            <Button
+              mode="contained"
+              style={{marginBottom: 8}}
+              onPress={() => setShowCommandModal(true)}>
+              ADD
+            </Button>
+          )}
+
           <Button
             mode="outlined"
             disabled={commands.length === 0}
