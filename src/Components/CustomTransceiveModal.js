@@ -82,6 +82,12 @@ function CustomTransceiveModal(props) {
     }
   }, [_visible, animValue]);
 
+  React.useEffect(() => {
+    if (props.cmdType && props.cmdType !== cmdType) {
+      setCmdType(props.cmdType);
+    }
+  }, [cmdType, props.cmdType]);
+
   function addByteToCmd(byte) {
     setCmdBytes([...cmdBytes, byte]);
   }
@@ -136,18 +142,20 @@ function CustomTransceiveModal(props) {
         <View style={{flex: 1}} />
 
         <Animated.View style={[styles.prompt, promptAnimStyle]}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{marginRight: 10}}>Type: </Text>
-            {Object.values(CmdType).map((type) => (
-              <Button
-                key={type}
-                mode={type === cmdType ? 'outlined' : 'text'}
-                onPress={() => setCmdType(type)}
-                style={{flex: 1}}>
-                {type}
-              </Button>
-            ))}
-          </View>
+          {!props.cmdType && (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{marginRight: 10}}>Type: </Text>
+              {Object.values(CmdType).map((type) => (
+                <Button
+                  key={type}
+                  mode={type === cmdType ? 'outlined' : 'text'}
+                  onPress={() => setCmdType(type)}
+                  style={{flex: 1}}>
+                  {type}
+                </Button>
+              ))}
+            </View>
+          )}
 
           {cmdType === CmdType.COMMAND && (
             <View
@@ -231,3 +239,4 @@ const styles = StyleSheet.create({
 });
 
 export default CustomTransceiveModal;
+export {CmdType};
