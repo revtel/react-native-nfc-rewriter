@@ -10,7 +10,7 @@ import {
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import CommandItem from '../../Components/CustomCommandItem';
-import NfcProxy from '../../NfcProxy';
+import NfcProxy, {setBeforeTransceive} from '../../NfcProxy';
 import ScreenHeader from '../../Components/ScreenHeader';
 import {NfcTech} from 'react-native-nfc-manager';
 
@@ -24,6 +24,14 @@ function CustomTransceiveScreen(props) {
   );
   const {readOnly, title} = params;
   const [responses, setResponses] = React.useState([]);
+  const [currEditParamIdx, setCurrEditParamIdx] = React.useState(null);
+  const [editableParameters, setEditableParameters] = React.useState(
+    (Array.isArray(params.savedRecord?.parameters) &&
+      params.savedRecord.parameters.map((p) => ({...p, payload: []}))) ||
+      null,
+  );
+  const hasCustomExecuteFunc =
+    typeof params.savedRecord?.onExecute === 'function';
 
   React.useEffect(() => {
     if (!showCommandModal) {
@@ -53,13 +61,46 @@ function CustomTransceiveScreen(props) {
     setResponses([]);
   }
 
+  function editParameter(cmd) {
+    const nextValues = [...editableParameters];
+    nextValues[currEditParamIdx].payload = cmd.payload;
+    setEditableParameters(nextValues);
+
+    // apply parameters into command template
+    setCommands(
+      params.savedRecord.onParameterChanged({
+        parameters: nextValues,
+        commands,
+      }),
+    );
+
+    setCurrEditParamIdx(null);
+  }
+
   async function executeCommands() {
+    if (hasCustomExecuteFunc) {
+      params.savedRecord?.onExecute();
+      return;
+    }
+
     let result = [];
 
-    if (nfcTech === NfcTech.NfcA) {
-      result = await NfcProxy.customTransceiveNfcA(commands);
-    } else if (nfcTech === NfcTech.IsoDep) {
-      result = await NfcProxy.customTransceiveIsoDep(commands);
+    try {
+      if (typeof params.savedRecord?.beforeTransceive === 'function') {
+        console.warn('setBeforeTransceive');
+        setBeforeTransceive(params.savedRecord?.beforeTransceive);
+      }
+
+      if (nfcTech === NfcTech.NfcA) {
+        result = await NfcProxy.customTransceiveNfcA(commands);
+      } else if (nfcTech === NfcTech.IsoDep) {
+        result = await NfcProxy.customTransceiveIsoDep(commands);
+      }
+    } catch (ex) {
+      console.warn('executeCommands w unexpected ex', ex);
+    } finally {
+      console.warn('setBeforeTransceive back');
+      setBeforeTransceive(null);
     }
 
     const [success, resps] = result;
@@ -90,23 +131,64 @@ function CustomTransceiveScreen(props) {
         savedRecordIdx={params.savedRecordIdx}
         readOnly={readOnly}
       />
-      <View style={styles.wrapper}>
-        <Text style={{padding: 10}}>Tech / {nfcTech}</Text>
-        <ScrollView style={[styles.wrapper, {padding: 10}]}>
-          {commands.map((cmd, idx) => (
-            <CommandItem
-              cmd={cmd}
-              resp={responses[idx]}
-              key={idx}
-              onDelete={() => deleteCommand(idx)}
-              onEdit={() => {
-                setShowCommandModal(true);
-                setCurrEditIdx(idx);
-              }}
-              readOnly={readOnly}
-            />
-          ))}
-        </ScrollView>
+      <View style={[styles.wrapper]}>
+        {editableParameters && (
+          <View style={{padding: 10}}>
+            <Text style={{paddingVertical: 10}}>Configurations</Text>
+            {editableParameters.map((p, idx) => {
+              const hexString = p.payload
+                .map((b) => ('00' + b.toString(16)).slice(-2))
+                .join(' ');
+              return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: '#888'}}>{p.name}:</Text>
+                  <Button
+                    onPress={() => {
+                      setShowCommandModal(true);
+                      setCurrEditParamIdx(idx);
+                    }}>
+                    {hexString || 'update'}
+                  </Button>
+                </View>
+              );
+            })}
+          </View>
+        )}
+        {editableParameters ? (
+          <ScrollView style={[styles.wrapper, {padding: 10}]}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 4,
+                padding: 10,
+              }}>
+              <Text>{params.savedRecord?.description || 'No description'}</Text>
+            </View>
+          </ScrollView>
+        ) : (
+          <>
+            <Text style={{padding: 10}}>Tech / {nfcTech}</Text>
+            <ScrollView style={[styles.wrapper, {padding: 10}]}>
+              {commands.map((cmd, idx) => (
+                <CommandItem
+                  cmd={cmd}
+                  resp={responses[idx]}
+                  key={idx}
+                  onDelete={() => deleteCommand(idx)}
+                  onEdit={() => {
+                    setShowCommandModal(true);
+                    setCurrEditIdx(idx);
+                  }}
+                  readOnly={readOnly}
+                />
+              ))}
+            </ScrollView>
+          </>
+        )}
 
         <View style={styles.actionBar}>
           {!readOnly && (
@@ -120,7 +202,7 @@ function CustomTransceiveScreen(props) {
 
           <Button
             mode="outlined"
-            disabled={commands.length === 0}
+            disabled={commands.length === 0 && !hasCustomExecuteFunc}
             style={{backgroundColor: 'pink'}}
             onPress={executeCommands}>
             EXECUTE
@@ -130,10 +212,17 @@ function CustomTransceiveScreen(props) {
       </View>
 
       <CustomTransceiveModal
-        isEditing={currEditIdx !== null}
+        cmdType={currEditParamIdx !== null ? 'command' : null}
+        isEditing={currEditIdx !== null || currEditParamIdx !== null}
         visible={showCommandModal}
         setVisible={setShowCommandModal}
-        editCommand={currEditIdx === null ? addCommand : editCommand}
+        editCommand={
+          currEditParamIdx !== null
+            ? editParameter
+            : currEditIdx !== null
+            ? editCommand
+            : addCommand
+        }
       />
     </>
   );

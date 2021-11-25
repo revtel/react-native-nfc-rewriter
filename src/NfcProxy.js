@@ -7,6 +7,12 @@ import NfcManager, {
 } from 'react-native-nfc-manager';
 import {getOutlet} from 'reconnect.js';
 
+let beforeTransceive = null;
+
+function setBeforeTransceive(callback) {
+  beforeTransceive = callback;
+}
+
 class ErrSuccess extends Error {}
 
 const withAndroidPrompt = (fn) => {
@@ -184,14 +190,31 @@ class NfcProxy {
     try {
       await NfcManager.requestTechnology([NfcTech.NfcA]);
 
-      for (const {type, payload} of commands) {
+      let cmdIdx = 0;
+      for (const command of commands) {
+        let modifiedCommand = null;
+        if (typeof beforeTransceive === 'function') {
+          modifiedCommand = beforeTransceive({
+            cmdIdx,
+            commands,
+            responses,
+          });
+        }
+
+        const {type, payload} = modifiedCommand || command;
         let resp = null;
         if (type === 'command') {
+          console.warn(
+            payload
+              .map((byte) => ('00' + byte.toString(16)).slice(-2))
+              .join(' '),
+          );
           resp = await NfcManager.nfcAHandler.transceive(payload);
         } else if (type === 'delay') {
           await delay(payload);
         }
         responses.push(resp);
+        cmdIdx++;
       }
 
       if (Platform.OS === 'ios') {
@@ -288,4 +311,4 @@ const delay = (ms) => {
 };
 
 export default new NfcProxy();
-export {ErrSuccess};
+export {ErrSuccess, setBeforeTransceive};
