@@ -17,7 +17,8 @@ let _prefix = null;
 
 const verifyRollingCode = {
   name: 'sic43nt-verify-rolling-code',
-  description: `Rolling Code\n\nLet use verify the rolling code.\n It's very cool`,
+  description: `Verify Rolling Code\n\nSIC43NT is a passive NFC-Forum Type 2 Tag. The response NDEF message can be automatically updated by a triggered event based on NFC field or tag tamper evident. \n\nA rolling code in the response NDEF message when there is NFC field or when the wire or trace of the tamper detection circuit has been disconnected.
+The 80 bits of KEY to generate the rolling code, which default format is 3-byte “Prefix” + its 7-byte UID.`,
   payload: {
     tech: 'NfcA',
     value: [],

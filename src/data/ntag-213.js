@@ -2,6 +2,8 @@ const cloneDeep = require('clone-deep');
 
 export function genEnablePasswordCommands(authPageIdx = 0x29) {
   return {
+    description:
+      'Enable Password\n\nWhen set the 4-byte PASSWORD and 2-byte PACK(Password Ack), the write access of memory will be protected.',
     payload: {
       tech: 'NfcA',
       value: [
@@ -79,6 +81,8 @@ export function genEnablePasswordCommands(authPageIdx = 0x29) {
 
 export function genVerifyPasswordCommands() {
   return {
+    description:
+      'Verify Password\n\nWhen accessing to the protected memory, you should send password to make sure the authentication is successful.',
     payload: {
       tech: 'NfcA',
       value: [
