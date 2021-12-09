@@ -124,7 +124,7 @@ function CustomTransceiveScreen(props) {
   return (
     <>
       <ScreenHeader
-        title={title || 'CUSTOM TRANSCEIVE'}
+        title={title || params.savedRecord?.name || 'CUSTOM TRANSCEIVE'}
         navigation={props.navigation}
         getRecordPayload={getRecordPayload}
         savedRecord={params.savedRecord}
