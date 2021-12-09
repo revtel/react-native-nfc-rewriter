@@ -281,7 +281,15 @@ class NfcProxy {
       for (const {type, payload} of commands) {
         let resp = null;
         if (type === 'command') {
+          console.log(
+            '>>> ' +
+              payload.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
+          );
           resp = await NfcManager.isoDepHandler.transceive(payload);
+          console.log(
+            '<<< ' +
+              resp.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
+          );
         } else if (type === 'delay') {
           await delay(payload);
         }
@@ -294,6 +302,7 @@ class NfcProxy {
 
       result = true;
     } catch (ex) {
+      console.warn(ex);
       handleException(ex);
     } finally {
       NfcManager.cancelTechnologyRequest();
