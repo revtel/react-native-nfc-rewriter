@@ -92,9 +92,15 @@ function CustomTransceiveScreen(props) {
       }
 
       if (nfcTech === NfcTech.NfcA) {
-        result = await NfcProxy.customTransceiveNfcA(commands);
+        result = await NfcProxy.customTransceiveNfcA(
+          commands,
+          params.savedRecord?.onPostExecute,
+        );
       } else if (nfcTech === NfcTech.IsoDep) {
-        result = await NfcProxy.customTransceiveIsoDep(commands);
+        result = await NfcProxy.customTransceiveIsoDep(
+          commands,
+          params.savedRecord?.onPostExecute,
+        );
       }
     } catch (ex) {
       console.warn('executeCommands w unexpected ex', ex);

@@ -183,7 +183,7 @@ class NfcProxy {
     return result;
   });
 
-  customTransceiveNfcA = withAndroidPrompt(async (commands) => {
+  customTransceiveNfcA = withAndroidPrompt(async (commands, onPostExecute) => {
     let result = false;
     const responses = [];
 
@@ -222,6 +222,10 @@ class NfcProxy {
       }
 
       result = true;
+
+      if (typeof onPostExecute === 'function') {
+        await onPostExecute([result, responses]);
+      }
     } catch (ex) {
       handleException(ex);
     } finally {
@@ -271,45 +275,51 @@ class NfcProxy {
     return result;
   });
 
-  customTransceiveIsoDep = withAndroidPrompt(async (commands) => {
-    let result = false;
-    const responses = [];
+  customTransceiveIsoDep = withAndroidPrompt(
+    async (commands, onPostExecute) => {
+      let result = false;
+      const responses = [];
 
-    try {
-      await NfcManager.requestTechnology([NfcTech.IsoDep]);
+      try {
+        await NfcManager.requestTechnology([NfcTech.IsoDep]);
 
-      for (const {type, payload} of commands) {
-        let resp = null;
-        if (type === 'command') {
-          console.log(
-            '>>> ' +
-              payload.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
-          );
-          resp = await NfcManager.isoDepHandler.transceive(payload);
-          console.log(
-            '<<< ' +
-              resp.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
-          );
-        } else if (type === 'delay') {
-          await delay(payload);
+        for (const {type, payload} of commands) {
+          let resp = null;
+          if (type === 'command') {
+            console.log(
+              '>>> ' +
+                payload.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
+            );
+            resp = await NfcManager.isoDepHandler.transceive(payload);
+            console.log(
+              '<<< ' +
+                resp.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
+            );
+          } else if (type === 'delay') {
+            await delay(payload);
+          }
+          responses.push(resp);
         }
-        responses.push(resp);
+
+        if (Platform.OS === 'ios') {
+          await NfcManager.setAlertMessageIOS('Success');
+        }
+
+        result = true;
+
+        if (typeof onPostExecute === 'function') {
+          await onPostExecute([result, responses]);
+        }
+      } catch (ex) {
+        console.warn(ex);
+        handleException(ex);
+      } finally {
+        NfcManager.cancelTechnologyRequest();
       }
 
-      if (Platform.OS === 'ios') {
-        await NfcManager.setAlertMessageIOS('Success');
-      }
-
-      result = true;
-    } catch (ex) {
-      console.warn(ex);
-      handleException(ex);
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-
-    return [result, responses];
-  });
+      return [result, responses];
+    },
+  );
 }
 
 // ------------------------
