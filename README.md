@@ -5,24 +5,23 @@
   <h2 align="center">NFC Open ReWriter</h2>
 </p>
 
----
-
 <br/>
+
 <p align="center">
   <a href='https://apps.apple.com/tw/app/nfc-rewriter/id1551243964' target='_blank'>
   <img alt="react-native-nfc-rewriter" src="./images/Apple-App-Store-Icon.png" width="250">
   </a>
-</p>
-
-<p align="center">
   <a href='https://play.google.com/store/apps/details?id=com.washow.nfcopenrewriter' target='_blank'>
   <img alt="react-native-nfc-rewriter" src="./images/google-play-icon.jpeg" width="250">
   </a>
 </p>
-<br/>
 
 <p align="center">
-  This open source React Native NFC app allows read & write to NFC tags
+  This open source React Native NFC app allows read & write to NFC tags. 
+</p>
+
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/whitedogg13">whitedogg13</a> and <a href="https://github.com/revtel">revteltech</a>
 </p>
 
 <table align="center">
