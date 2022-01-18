@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, Alert} from 'react-native';
+import {ScrollView, Alert, Platform} from 'react-native';
 import {List} from 'react-native-paper';
 import NfcProxy from '../../NfcProxy';
 import * as NfcIcons from '../../Components/NfcIcons';
@@ -9,6 +9,29 @@ function ToolKitScreen(props) {
 
   return (
     <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+      <List.Section>
+        <List.Subheader>Ndef</List.Subheader>
+        <List.Item
+          title="Make Read Only"
+          description="Make the NFC tag readonly"
+          left={NfcIcons.TransceiveIcon}
+          onPress={async () => {
+            await NfcProxy.makeReadOnly();
+          }}
+        />
+
+        {Platform.OS === 'android' && (
+          <List.Item
+            title="NDEF Format"
+            description="NDEF format"
+            left={NfcIcons.EraseIcon}
+            onPress={async () => {
+              await NfcProxy.formatNdefAndroid();
+            }}
+          />
+        )}
+      </List.Section>
+
       <List.Section>
         <List.Subheader>NfcA</List.Subheader>
         <List.Item

@@ -320,6 +320,51 @@ class NfcProxy {
       return [result, responses];
     },
   );
+
+  makeReadOnly = withAndroidPrompt(async () => {
+    let result = false;
+
+    try {
+      await NfcManager.requestTechnology([NfcTech.Ndef]);
+      await NfcManager.ndefHandler.makeReadOnly();
+
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
+      }
+
+      result = true;
+    } catch (ex) {
+      console.warn(ex);
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+
+    return result;
+  });
+
+  formatNdefAndroid = withAndroidPrompt(async () => {
+    let result = false;
+
+    try {
+      await NfcManager.requestTechnology([NfcTech.NdefFormatable]);
+      const bytes = Ndef.encodeMessage([Ndef.textRecord('hello nfc')]);
+      await NfcManager.ndefFormatableHandlerAndroid.formatNdef(bytes);
+
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
+      }
+
+      result = true;
+    } catch (ex) {
+      console.warn(ex);
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+
+    return result;
+  });
 }
 
 // ------------------------
