@@ -9,6 +9,7 @@ import SaveRecordModal from '../../Components/SaveRecordModal';
 function groupRecordByTech(records) {
   const ndefRecords = [];
   const nfcARecords = [];
+  const nfcVRecords = [];
   const isoDepRecords = [];
   for (let idx = 0; idx < records.length; idx++) {
     const record = records[idx];
@@ -16,6 +17,8 @@ function groupRecordByTech(records) {
       ndefRecords.push({record, idx});
     } else if (record.payload.tech === NfcTech.NfcA) {
       nfcARecords.push({record, idx});
+    } else if (record.payload.tech === NfcTech.NfcV) {
+      nfcVRecords.push({record, idx});
     } else if (record.payload.tech === NfcTech.IsoDep) {
       isoDepRecords.push({record, idx});
     }
@@ -23,6 +26,7 @@ function groupRecordByTech(records) {
   return {
     ndefRecords,
     nfcARecords,
+    nfcVRecords,
     isoDepRecords,
   };
 }
@@ -76,6 +80,11 @@ function SavedRecordScreen(props) {
         savedRecord,
         savedRecordIdx,
       });
+    } else if (savedRecord.payload?.tech === NfcTech.NfcV) {
+      navigation.navigate('CustomTransceive', {
+        savedRecord,
+        savedRecordIdx,
+      });
     } else if (savedRecord.payload?.tech === NfcTech.IsoDep) {
       navigation.navigate('CustomTransceive', {
         savedRecord,
@@ -84,7 +93,7 @@ function SavedRecordScreen(props) {
     }
   }
 
-  const {ndefRecords, nfcARecords, isoDepRecords} =
+  const {ndefRecords, nfcARecords, nfcVRecords, isoDepRecords} =
     groupRecordByTech(recordList);
 
   return (
@@ -110,6 +119,20 @@ function SavedRecordScreen(props) {
         <List.Section>
           <List.Subheader>NfcA ({nfcARecords.length})</List.Subheader>
           {nfcARecords.map(({record, idx}) => (
+            <RecordItem
+              key={idx}
+              record={record}
+              idx={idx}
+              removeIdx={removeIdx}
+              goToHandler={goToHandler.bind(null, idx)}
+              onCopy={() => setRecordToCopy(record)}
+            />
+          ))}
+        </List.Section>
+
+        <List.Section>
+          <List.Subheader>NfcV ({nfcVRecords.length})</List.Subheader>
+          {nfcVRecords.map(({record, idx}) => (
             <RecordItem
               key={idx}
               record={record}

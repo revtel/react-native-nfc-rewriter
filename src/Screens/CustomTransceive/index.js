@@ -96,6 +96,11 @@ function CustomTransceiveScreen(props) {
           commands,
           params.savedRecord?.onPostExecute,
         );
+      } else if (nfcTech === NfcTech.NfcV) {
+        result = await NfcProxy.customTransceiveNfcV(
+          commands,
+          params.savedRecord?.onPostExecute,
+        );
       } else if (nfcTech === NfcTech.IsoDep) {
         result = await NfcProxy.customTransceiveIsoDep(
           commands,

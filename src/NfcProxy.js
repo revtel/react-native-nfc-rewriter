@@ -321,6 +321,50 @@ class NfcProxy {
     },
   );
 
+  customTransceiveNfcV = withAndroidPrompt(async (commands, onPostExecute) => {
+    let result = false;
+    const responses = [];
+
+    try {
+      await NfcManager.requestTechnology([NfcTech.NfcV]);
+
+      for (const {type, payload} of commands) {
+        let resp = null;
+        if (type === 'command') {
+          console.log(
+            '>>> ' +
+              payload.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
+          );
+          resp = await NfcManager.nfcVHandler.transceive(payload);
+          console.log(
+            '<<< ' +
+              resp.map((b) => ('00' + b.toString(16)).slice(-2)).join(' '),
+          );
+        } else if (type === 'delay') {
+          await delay(payload);
+        }
+        responses.push(resp);
+      }
+
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
+      }
+
+      result = true;
+
+      if (typeof onPostExecute === 'function') {
+        await onPostExecute([result, responses]);
+      }
+    } catch (ex) {
+      console.warn(ex);
+      handleException(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+
+    return [result, responses];
+  });
+
   makeReadOnly = withAndroidPrompt(async () => {
     let result = false;
 

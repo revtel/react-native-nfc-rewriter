@@ -63,6 +63,20 @@ function ToolKitScreen(props) {
       </List.Section>
 
       <List.Section>
+        <List.Subheader>NfcV</List.Subheader>
+        <List.Item
+          title="Custom Transceive"
+          description="Send custom NfcV command into your tag"
+          left={NfcIcons.TransceiveIcon}
+          onPress={() =>
+            navigation.navigate('CustomTransceive', {
+              nfcTech: 'NfcV',
+            })
+          }
+        />
+      </List.Section>
+
+      <List.Section>
         <List.Subheader>IsoDep</List.Subheader>
         <List.Item
           title="Custom Transceive"
