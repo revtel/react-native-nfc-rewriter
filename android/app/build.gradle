@@ -134,8 +134,8 @@ android {
         applicationId "com.washow.nfcopenrewriter"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
-        versionName "0.0.22"
+        versionCode 16
+        versionName "0.0.23"
     }
     splits {
         abi {
