@@ -6454,10 +6454,10 @@
     "prop-types" "^15.6.2"
     "react-native-animatable" "1.3.3"
 
-"react-native-nfc-manager@^3.12.0":
-  "integrity" "sha512-OddYB7pCmoLvNVyhzNEh6Hd2nqMoI7NejhpjG/+L8GoUWt4bjeu76k6LskRlHFQ7eWRhuA31jBCEigazVaR16w=="
-  "resolved" "https://registry.npmjs.org/react-native-nfc-manager/-/react-native-nfc-manager-3.12.0.tgz"
-  "version" "3.12.0"
+"react-native-nfc-manager@^3.13.2":
+  "integrity" "sha512-FwfcVHc2qN6e6WOZ9XHhYoo+BP9JgSfWO82YkviXxIMBwuRHM4OaOCMALS3JhPXLSMNPBL2T637Y9ER23vHXKA=="
+  "resolved" "https://registry.npmjs.org/react-native-nfc-manager/-/react-native-nfc-manager-3.13.2.tgz"
+  "version" "3.13.2"
   dependencies:
     "@expo/config-plugins" "^4.0.16"
 
