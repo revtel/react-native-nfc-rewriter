@@ -74,6 +74,8 @@ The NFC library is powered by <a href="https://github.com/facebook/react-native"
     - Custom transceive
     - Erase all
     - Format to NDEF
+  - NfcV
+    - Custom transceive 
   - IsoDep
     - Custom APDU (mostly Android)
 - Save your own records
