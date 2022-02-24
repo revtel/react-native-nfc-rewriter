@@ -49,7 +49,16 @@ function HomeScreen(props) {
                 return;
               }
 
-              const [action, query] = url.slice(customScheme.length).split('?');
+              // issue #23: we might have '?' in our payload, so we cannot simply "split" it
+              let action = url;
+              let query = '';
+              let splitIdx = url.indexOf('?');
+
+              if (splitIdx > -1) {
+                action = url.slice(0, splitIdx);
+                query = url.slice(splitIdx);
+              }
+
               const params = qs.parse(query);
               if (action === 'share') {
                 const sharedRecord = JSON.parse(params.data);
@@ -78,6 +87,7 @@ function HomeScreen(props) {
             onBackgroundTag(bgTag);
           } else {
             const link = await Linking.getInitialURL();
+            console.warn('DEEP LINK', link);
             if (link) {
               onDeepLink(link, true);
             }
