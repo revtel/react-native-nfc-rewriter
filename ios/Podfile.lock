@@ -274,7 +274,7 @@ PODS:
   - React-jsinspector (0.66.0)
   - React-logger (0.66.0):
     - glog
-  - react-native-nfc-manager (3.11.1):
+  - react-native-nfc-manager (3.13.2):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
@@ -567,7 +567,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 6a05173dc0142abc582bd4edd2d23146b8cc218a
   React-jsinspector: be95ad424ba9f7b817aff22732eb9b1b810a000a
   React-logger: 9a9cd87d4ea681ae929b32ef580638ff1b50fb24
-  react-native-nfc-manager: 9685b845266c90ab03b61ad07f25c4f51f8fc041
+  react-native-nfc-manager: 6d731c2a05ef9621db1e8edea0ef0507a75cca20
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   React-perflogger: 1f554c2b684e2f484f9edcdfdaeedab039fbaca8
   React-RCTActionSheet: 610d5a5d71ab4808734782c8bca6a12ec3563672
