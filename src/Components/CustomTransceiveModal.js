@@ -39,6 +39,8 @@ function HexPads(props) {
               <Button
                 key={c}
                 mode={value === c ? 'contained' : 'text'}
+                // issue #24: force the elevation to 0 to workaround
+                style={{elevation: 0}}
                 onPress={() => addHexChar(c)}>
                 {c}
               </Button>
