@@ -74,8 +74,20 @@ The NFC library is powered by <a href="https://github.com/facebook/react-native"
     - Custom transceive
     - Erase all
     - Format to NDEF
+  - NfcV
+    - Custom transceive 
   - IsoDep
-    - Custom APDU (mostly Android)
+    - Custom APDU (Android)
+  - NdefFormatable (Android)
+    - Format to NDEF
+- Tag Kit
+  - NXP NTAG21X
+    - password protection
+  - NXP NTAG424 DNA
+    - signature verification   
+    - temper detection
+  - SIC4310
+    - rolling code verification
 - Save your own records
 
 ## Made by
