@@ -49,7 +49,7 @@ function HomeScreen(props) {
                 return;
               }
 
-              url = url.split(customScheme.length);
+              url = url.slice(customScheme.length);
 
               // issue #23: we might have '?' in our payload, so we cannot simply "split" it
               let action = url;
