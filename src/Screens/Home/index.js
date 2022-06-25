@@ -101,6 +101,21 @@ function HomeScreen(props) {
             onBackgroundTag,
           );
 
+          // listen to the NFC on/off state on Android device
+          if (Platform.OS === 'android') {
+            NfcManager.setEventListener(
+              NfcEvents.StateChanged,
+              ({state} = {}) => {
+                NfcManager.cancelTechnologyRequest().catch(() => 0);
+                if (state === 'off') {
+                  setEnabled(false);
+                } else if (state === 'on') {
+                  setEnabled(true);
+                }
+              },
+            );
+          }
+
           Linking.addEventListener('url', (event) => {
             if (event.url) {
               onDeepLink(event.url, false);
