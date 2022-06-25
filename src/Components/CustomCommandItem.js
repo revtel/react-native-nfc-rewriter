@@ -4,7 +4,7 @@ import {IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function CommandItem(props) {
-  const {cmd, resp, onDelete, onEdit, readOnly} = props;
+  const {cmd, resp, onDelete, onEdit, readOnly, onMoveUp, onMoveDown} = props;
   const wrapperStyle = {
     marginBottom: 10,
     padding: 5,
@@ -53,6 +53,30 @@ function CommandItem(props) {
   return (
     <View style={[wrapperStyle, {flexDirection: 'row', alignItems: 'center'}]}>
       {innerElem}
+
+      {!readOnly && (
+        <IconButton
+          disabled={!onMoveUp}
+          icon={() => (
+            <View style={{transform: [{rotateZ: '270deg'}]}}>
+              <Icon name="chevron-right" size={22} />
+            </View>
+          )}
+          onPress={onMoveUp}
+        />
+      )}
+
+      {!readOnly && (
+        <IconButton
+          disabled={!onMoveDown}
+          icon={() => (
+            <View style={{transform: [{rotateZ: '90deg'}]}}>
+              <Icon name="chevron-right" size={22} />
+            </View>
+          )}
+          onPress={onMoveDown}
+        />
+      )}
 
       {!readOnly && (
         <IconButton

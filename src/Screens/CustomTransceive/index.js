@@ -51,6 +51,26 @@ function CustomTransceiveScreen(props) {
     setResponses([]);
   }
 
+  function moveCommandDown(idx) {
+    const c = commands[idx];
+    const cc = commands[idx + 1];
+    const before = commands.slice(0, idx);
+    const after = commands.slice(idx + 2);
+    const nextCommands = [...before, cc, c, ...after];
+    setCommands(nextCommands);
+    setResponses([]);
+  }
+
+  function moveCommandUp(idx) {
+    const c = commands[idx];
+    const cc = commands[idx - 1];
+    const before = commands.slice(0, idx - 1);
+    const after = commands.slice(idx + 1);
+    const nextCommands = [...before, c, cc, ...after];
+    setCommands(nextCommands);
+    setResponses([]);
+  }
+
   function editCommand(cmd) {
     if (currEditIdx === null) {
       return;
@@ -189,6 +209,14 @@ function CustomTransceiveScreen(props) {
                   cmd={cmd}
                   resp={responses[idx]}
                   key={idx}
+                  onMoveUp={
+                    commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
+                  }
+                  onMoveDown={
+                    commands.length > 1 &&
+                    idx < commands.length - 1 &&
+                    (() => moveCommandDown(idx))
+                  }
                   onDelete={() => deleteCommand(idx)}
                   onEdit={() => {
                     setShowCommandModal(true);
