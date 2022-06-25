@@ -1,6 +1,6 @@
 {
   "name": "react-native-nfc-rewriter",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "private": true,
   "revAppId": "com.revteltech.nfcopenrewriter",
   "revSentryDsn": "https://0821dcc21de3434ea88aa3900f348a51@o760853.ingest.sentry.io/5792943",
