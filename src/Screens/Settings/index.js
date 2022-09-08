@@ -73,8 +73,8 @@ function SettingsScreen(props) {
 
     return () => {
       if (Platform.OS === 'ios') {
-        Keyboard.removeListener('keyboardWillShow', onKbShow);
-        Keyboard.removeListener('keyboardWillHide', onKbHide);
+        Keyboard.removeAllListeners('keyboardWillShow');
+        Keyboard.removeAllListeners('keyboardWillHide');
       }
     };
   }, []);

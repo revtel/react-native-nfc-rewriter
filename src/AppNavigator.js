@@ -1,6 +1,10 @@
 import * as React from 'react';
+import {Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import {Appbar} from 'react-native-paper';
 import LandingScreen from './Screens/Landing';
 import HomeScreen from './Screens/Home';
@@ -22,22 +26,20 @@ function Main(props) {
     <MainStack.Navigator
       headerMode="screen"
       screenOptions={{
-        header: ({navigation, scene, previous}) => {
+        header: (headerProps) => {
+          const {navigation, back, options, route} = headerProps;
           const excludedScreens = ['Home', 'NdefWrite', 'CustomTransceive'];
 
-          if (
-            excludedScreens.findIndex((name) => name === scene?.route?.name) >
-            -1
-          ) {
+          if (excludedScreens.findIndex((name) => name === route?.name) > -1) {
             return null;
           }
 
           return (
             <Appbar.Header style={{backgroundColor: 'white'}}>
-              {previous && (
+              {back && (
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
               )}
-              <Appbar.Content title={scene.descriptor.options.title || ''} />
+              <Appbar.Content title={options?.title || ''} />
             </Appbar.Header>
           );
         },
@@ -91,17 +93,23 @@ const SettingsStack = createStackNavigator();
 function Settings(props) {
   return (
     <SettingsStack.Navigator
-      mode="modal"
-      headerMode="screen"
+      initialRouteName="Settings"
       screenOptions={{
-        header: ({navigation, scene, previous}) => {
+        header: (headerProps) => {
+          const {navigation, back, options, route} = headerProps;
           return (
-            <Appbar.Header style={{backgroundColor: 'white'}}>
-              {previous && (
-                <Appbar.BackAction onPress={() => navigation.goBack()} />
-              )}
-              <Appbar.Content title={scene.descriptor.options.title || ''} />
-            </Appbar.Header>
+            <>
+              <Appbar.Header
+                style={{
+                  backgroundColor: 'white',
+                  marginTop: Platform.OS === 'ios' ? 40 : 0,
+                }}>
+                {back && (
+                  <Appbar.BackAction onPress={() => navigation.goBack()} />
+                )}
+                <Appbar.Content title={options.title || ''} />
+              </Appbar.Header>
+            </>
           );
         },
       }}>
@@ -118,7 +126,12 @@ const RootStack = createStackNavigator();
 
 function Root(props) {
   return (
-    <RootStack.Navigator headerMode="none" mode="modal">
+    <RootStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        presentation: 'modal',
+        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+      }}>
       <RootStack.Screen name="Landing" component={LandingScreen} />
       <RootStack.Screen name="Settings" component={Settings} />
       <RootStack.Screen
