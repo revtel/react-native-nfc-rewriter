@@ -24,7 +24,6 @@ const MainStack = createStackNavigator();
 function Main(props) {
   return (
     <MainStack.Navigator
-      headerMode="screen"
       screenOptions={{
         header: (headerProps) => {
           const {navigation, back, options, route} = headerProps;
