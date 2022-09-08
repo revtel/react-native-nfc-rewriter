@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, Modal} from 'react-native';
 import {Button, Appbar, TextInput} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function SaveRecordModal(props) {
   const {visible, onClose, title, onPersistRecord} = props;

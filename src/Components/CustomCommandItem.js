@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {IconButton} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function PrettyCommandPayloadBytes(props) {
   const {bytes: _bytes} = props;
@@ -95,7 +95,7 @@ function CommandItem(props) {
 
       {!readOnly && (
         <IconButton
-          icon={() => <Icon name="edit" size={22} />}
+          icon={() => <Icon name="pencil" size={22} />}
           onPress={onEdit}
         />
       )}

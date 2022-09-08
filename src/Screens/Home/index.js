@@ -14,7 +14,7 @@ import {
 import NfcProxy from '../../NfcProxy';
 import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import qs from 'query-string';
 
 function HomeScreen(props) {
@@ -245,7 +245,7 @@ function HomeScreen(props) {
         {supported && enabled && renderNfcButtons()}
 
         <IconButton
-          icon={() => <Icon name="settings" size={32} />}
+          icon={() => <Icon name="cog" size={32} />}
           style={styles.settingIcon}
           onPress={() => {
             navigation.navigate('Settings');

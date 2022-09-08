@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, Image, Share} from 'react-native';
 import {List, IconButton} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function RecordItem(props) {
   const {record, removeIdx, goToHandler, onCopy, idx} = props;
@@ -50,7 +50,7 @@ function RecordItem(props) {
           <IconButton
             icon={() => (
               <Icon
-                name="arrow-forward"
+                name="arrow-right"
                 size={22}
                 style={{alignSelf: 'center'}}
               />
