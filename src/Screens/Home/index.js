@@ -70,6 +70,10 @@ function HomeScreen(props) {
                   navigation.navigate('CustomTransceive', {
                     savedRecord: sharedRecord,
                   });
+                } else if (sharedRecord.payload?.tech === NfcTech.NfcV) {
+                  navigation.navigate('CustomTransceive', {
+                    savedRecord: sharedRecord,
+                  });
                 } else if (sharedRecord.payload?.tech === NfcTech.IsoDep) {
                   navigation.navigate('CustomTransceive', {
                     savedRecord: sharedRecord,
