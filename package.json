@@ -13,6 +13,7 @@
     "android:clean": "cd android && ./gradlew clean",
     "android:bundle": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
     "android:assemble": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",
+    "android:start": "adb shell am start -n com.washow.nfcopenrewriter/.MainActivity",
     "sentry:ios": "REV_PLATFORM=ios node ./scripts/sentry.js",
     "sentry:android": "REV_PLATFORM=android node ./scripts/sentry.js"
   },
@@ -29,7 +30,7 @@
     "react-native": "0.66.0",
     "react-native-device-info": "^10.0.2",
     "react-native-gesture-handler": "^2.6.0",
-    "react-native-nfc-manager": "^3.14.0",
+    "react-native-nfc-manager": "^3.14.1",
     "react-native-paper": "^4.12.4",
     "react-native-safe-area-context": "^4.3.3",
     "react-native-screens": "^3.17.0",
