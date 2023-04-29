@@ -409,6 +409,29 @@ class NfcProxy {
 
     return result;
   });
+
+  readNxpSigNtag2xx = withAndroidPrompt(async () => {
+    let tag = null;
+
+    try {
+      await NfcManager.requestTechnology([NfcTech.NfcA]);
+
+      tag = await NfcManager.getTag();
+      tag.ndefStatus = await NfcManager.ndefHandler.getNdefStatus();
+      tag.nxpBytes = await NfcManager.nfcAHandler.transceive([0x3c, 0x00]);
+
+      if (Platform.OS === 'ios') {
+        await NfcManager.setAlertMessageIOS('Success');
+      }
+    } catch (ex) {
+      // for tag reading, we don't actually need to show any error
+      console.log(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+
+    return tag;
+  });
 }
 
 // ------------------------

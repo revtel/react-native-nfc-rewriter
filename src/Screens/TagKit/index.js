@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, Alert} from 'react-native';
 import {List} from 'react-native-paper';
 import * as NfcIcons from '../../Components/NfcIcons';
 import * as Ntag424 from '../../data/ntag-424';
 import * as Ntag213 from '../../data/ntag-213';
 import * as Ntag215 from '../../data/ntag-215';
 import * as Sic43NT from '../../data/sic-43nt';
+import NfcProxy from '../../NfcProxy';
 
 function TagKitScreen(props) {
   const {navigation} = props;
@@ -78,7 +79,7 @@ function TagKitScreen(props) {
         />
         <List.Item
           title="Verify signature"
-          description="Verify signature"
+          description="Check if your tag is signed by NXP"
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
@@ -86,6 +87,49 @@ function TagKitScreen(props) {
               readOnly: true,
               savedRecord: Ntag424.readSignature,
             });
+          }}
+        />
+
+        <List.Subheader>NXP NTAG 2XX</List.Subheader>
+        <List.Item
+          title="Verify signature"
+          description="Check if your tag is signed by NXP"
+          left={NfcIcons.TransceiveIcon}
+          onPress={async () => {
+            async function checkNxpSig({uid, sig}) {
+              const resp = await fetch(
+                `https://badge-api.revtel2.com/badge/v2/nxp-sig-check?uid=${uid}&sig=${sig}`,
+              );
+
+              if (resp.status !== 200) {
+                throw {
+                  status: resp.status,
+                  error: await resp.json(),
+                };
+              }
+
+              return resp.json();
+            }
+
+            const tag = await NfcProxy.readNxpSigNtag2xx();
+            const uid = tag.id;
+            const sig = tag.nxpBytes.reduce((acc, byte) => {
+              // eslint-disable-next-line no-bitwise
+              return acc + ('0' + (byte & 0xff).toString(16)).slice(-2);
+            }, '');
+
+            if (!sig) {
+              Alert.alert('Fail to obtain NXP Signature');
+              return;
+            }
+
+            try {
+              await checkNxpSig({uid, sig});
+              Alert.alert('Success', 'NXP signature is correct');
+            } catch (ex) {
+              Alert.alert('Failure', 'NXP signature is invalid');
+              console.warn(ex);
+            }
           }}
         />
 
