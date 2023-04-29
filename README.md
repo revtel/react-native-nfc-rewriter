@@ -83,6 +83,7 @@ The NFC library is powered by <a href="https://github.com/facebook/react-native"
 - Tag Kit
   - NXP NTAG21X
     - password protection
+    - signature verification
   - NXP NTAG424 DNA
     - signature verification   
     - temper detection
