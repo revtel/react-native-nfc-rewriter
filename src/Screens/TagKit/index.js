@@ -101,17 +101,21 @@ function TagKitScreen(props) {
                 `https://badge-api.revtel2.com/badge/v2/nxp-sig-check?uid=${uid}&sig=${sig}`,
               );
 
-              if (resp.status !== 200) {
-                throw {
-                  status: resp.status,
-                  error: await resp.json(),
-                };
+              if (resp.status === 400) {
+                throw new Error('invalid-nxp-sig');
+              } else if (resp.status !== 200) {
+                throw new Error('unknown-nxp-sig');
               }
 
               return resp.json();
             }
 
             const tag = await NfcProxy.readNxpSigNtag2xx();
+
+            if (!tag) {
+              return;
+            }
+
             const uid = tag.id;
             const sig = tag.nxpBytes.reduce((acc, byte) => {
               // eslint-disable-next-line no-bitwise
@@ -127,7 +131,14 @@ function TagKitScreen(props) {
               await checkNxpSig({uid, sig});
               Alert.alert('Success', 'NXP signature is correct');
             } catch (ex) {
-              Alert.alert('Failure', 'NXP signature is invalid');
+              if (ex?.message === 'invalid-nxp-sig') {
+                Alert.alert('Failure', 'NXP signature is invalid');
+              } else {
+                Alert.alert(
+                  'Warning',
+                  'cannot verify NXP signature right now, please try again later',
+                );
+              }
               console.warn(ex);
             }
           }}
