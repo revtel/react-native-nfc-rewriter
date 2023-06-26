@@ -9,7 +9,7 @@ const CustomDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#3985cb',
+    primary: '#965fd4',
   },
 };
 

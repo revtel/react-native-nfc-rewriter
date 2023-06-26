@@ -152,6 +152,7 @@ function HomeScreen(props) {
               navigation.navigate('TagDetail', {tag});
             }
           }}
+
           style={{marginBottom: 10}}>
           READ TAGs
         </Button>
@@ -161,6 +162,7 @@ function HomeScreen(props) {
           onPress={async () => {
             navigation.navigate('NdefTypeList');
           }}
+
           style={{marginBottom: 10}}>
           WRITE NDEF
         </Button>
@@ -170,15 +172,17 @@ function HomeScreen(props) {
           onPress={async () => {
             navigation.navigate('ToolKit');
           }}
+
           style={{marginBottom: 10}}>
           Tool Kit
         </Button>
 
-        <Button
+         <Button
           mode="contained"
           onPress={async () => {
             navigation.navigate('TagKit');
           }}
+
           style={{marginBottom: 10}}>
           Tag Kit
         </Button>
