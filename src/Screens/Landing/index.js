@@ -1,12 +1,20 @@
 import React from 'react';
-import {View, StyleSheet, ActivityIndicator, Animated} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Animated,
+  Text,
+} from 'react-native';
 import * as AppContext from '../../AppContext';
+import NfcProxy from '../../NfcProxy';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function LandingScreen(props) {
   const opacityAnimValue = React.useRef(new Animated.Value(0)).current;
   const scaleAnimValue = React.useRef(new Animated.Value(1)).current;
+  const [isNfcSupported, setIsNfcSupported] = React.useState(null);
 
   React.useEffect(() => {
     async function initialize() {
@@ -35,10 +43,15 @@ function LandingScreen(props) {
 
       await AppContext.Actions.initStorage();
 
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: 'Main'}],
-      });
+      const success = await NfcProxy.init();
+      setIsNfcSupported(success);
+
+      if (success) {
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: 'Main'}],
+        });
+      }
     }
 
     initialize();
@@ -55,7 +68,13 @@ function LandingScreen(props) {
         ]}
       />
 
-      <ActivityIndicator size="large" style={{marginTop: 50}} />
+      {isNfcSupported === false ? (
+        <Text style={{fontSize: 24, padding: 20}}>
+          Your device doesn't support NFC
+        </Text>
+      ) : (
+        <ActivityIndicator size="large" style={{marginTop: 50}} />
+      )}
     </View>
   );
 }
