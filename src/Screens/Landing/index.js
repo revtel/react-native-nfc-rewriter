@@ -49,7 +49,7 @@ function LandingScreen(props) {
       if (success) {
         props.navigation.reset({
           index: 0,
-          routes: [{name: 'Main'}],
+          routes: [{name: 'MainTabs'}],
         });
       }
     }

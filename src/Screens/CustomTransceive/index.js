@@ -13,6 +13,7 @@ import CommandItem from '../../Components/CustomCommandItem';
 import NfcProxy, {setBeforeTransceive} from '../../NfcProxy';
 import ScreenHeader from '../../Components/ScreenHeader';
 import {NfcTech} from 'react-native-nfc-manager';
+import SafeView from '../../Components/SafeView';
 
 function CustomTransceiveScreen(props) {
   const {params} = props.route;
@@ -153,7 +154,7 @@ function CustomTransceiveScreen(props) {
   }
 
   return (
-    <>
+    <SafeView showBottom={true} topColor={'white'} bottomColor="#eee">
       <ScreenHeader
         title={title || params.savedRecord?.name || 'CUSTOM TRANSCEIVE'}
         navigation={props.navigation}
@@ -263,7 +264,7 @@ function CustomTransceiveScreen(props) {
             : addCommand
         }
       />
-    </>
+    </SafeView>
   );
 }
 

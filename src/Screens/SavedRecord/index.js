@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {SafeAreaView, ScrollView, Alert} from 'react-native';
-import {List, Button} from 'react-native-paper';
+import {SafeAreaView, ScrollView, Alert, Text} from 'react-native';
+import {Appbar, List, Button} from 'react-native-paper';
 import {NfcTech} from 'react-native-nfc-manager';
 import * as AppContext from '../../AppContext';
 import RecordItem from './RecordItem';
@@ -71,24 +71,36 @@ function SavedRecordScreen(props) {
 
   function goToHandler(savedRecordIdx, savedRecord) {
     if (savedRecord.payload?.tech === NfcTech.Ndef) {
-      navigation.navigate('NdefWrite', {
-        savedRecord,
-        savedRecordIdx,
+      navigation.navigate('Main', {
+        screen: 'NdefWrite',
+        params: {
+          savedRecord,
+          savedRecordIdx,
+        },
       });
     } else if (savedRecord.payload?.tech === NfcTech.NfcA) {
-      navigation.navigate('CustomTransceive', {
-        savedRecord,
-        savedRecordIdx,
+      navigation.navigate('Main', {
+        screen: 'CustomTransceive',
+        params: {
+          savedRecord,
+          savedRecordIdx,
+        },
       });
     } else if (savedRecord.payload?.tech === NfcTech.NfcV) {
-      navigation.navigate('CustomTransceive', {
-        savedRecord,
-        savedRecordIdx,
+      navigation.navigate('Main', {
+        screen: 'CustomTransceive',
+        params: {
+          savedRecord,
+          savedRecordIdx,
+        },
       });
     } else if (savedRecord.payload?.tech === NfcTech.IsoDep) {
-      navigation.navigate('CustomTransceive', {
-        savedRecord,
-        savedRecordIdx,
+      navigation.navigate('Main', {
+        screen: 'CustomTransceive',
+        params: {
+          savedRecord,
+          savedRecordIdx,
+        },
       });
     }
   }
@@ -98,6 +110,9 @@ function SavedRecordScreen(props) {
 
   return (
     <>
+      <Appbar.Header style={{backgroundColor: 'white'}}>
+        <Text style={{marginLeft: 10, fontSize: 24}}>MY RECORDS</Text>
+      </Appbar.Header>
       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <List.Section>
           <List.Subheader>NDEF ({ndefRecords.length})</List.Subheader>

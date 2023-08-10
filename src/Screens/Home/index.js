@@ -10,6 +10,7 @@ import {
   Platform,
   Alert,
   Linking,
+  TouchableOpacity,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
 import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
@@ -29,7 +30,10 @@ function HomeScreen(props) {
         setEnabled(await NfcProxy.isEnabled());
 
         function onBackgroundTag(bgTag) {
-          navigation.navigate('TagDetail', {tag: bgTag});
+          navigation.navigate('Main', {
+            screen: 'TagDetail',
+            params: {tag: bgTag},
+          });
         }
 
         function onDeepLink(url, launch) {
@@ -61,18 +65,30 @@ function HomeScreen(props) {
             if (action === 'share') {
               const sharedRecord = JSON.parse(params.data);
               if (sharedRecord.payload?.tech === NfcTech.Ndef) {
-                navigation.navigate('NdefWrite', {savedRecord: sharedRecord});
+                navigation.navigate('Main', {
+                  screen: 'NdefWrite',
+                  params: {savedRecord: sharedRecord},
+                });
               } else if (sharedRecord.payload?.tech === NfcTech.NfcA) {
-                navigation.navigate('CustomTransceive', {
-                  savedRecord: sharedRecord,
+                navigation.navigate('Main', {
+                  screen: 'CustomTransceive',
+                  params: {
+                    savedRecord: sharedRecord,
+                  },
                 });
               } else if (sharedRecord.payload?.tech === NfcTech.NfcV) {
-                navigation.navigate('CustomTransceive', {
-                  savedRecord: sharedRecord,
+                navigation.navigate('Main', {
+                  screen: 'CustomTransceive',
+                  params: {
+                    savedRecord: sharedRecord,
+                  },
                 });
               } else if (sharedRecord.payload?.tech === NfcTech.IsoDep) {
-                navigation.navigate('CustomTransceive', {
-                  savedRecord: sharedRecord,
+                navigation.navigate('Main', {
+                  screen: 'CustomTransceive',
+                  params: {
+                    savedRecord: sharedRecord,
+                  },
                 });
               } else {
                 console.warn('unrecognized share payload tech');
@@ -134,56 +150,24 @@ function HomeScreen(props) {
     return (
       <View
         style={{
-          flex: 2,
-          alignItems: 'stretch',
-          alignSelf: 'center',
-          width,
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          right: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 20,
         }}>
         <Button
           mode="contained"
           onPress={async () => {
             const tag = await NfcProxy.readTag();
             if (tag) {
-              navigation.navigate('TagDetail', {tag});
+              navigation.navigate('Main', {screen: 'TagDetail', params: {tag}});
             }
           }}
-          style={{marginBottom: 10}}>
-          READ TAGs
-        </Button>
-
-        <Button
-          mode="contained"
-          onPress={async () => {
-            navigation.navigate('NdefTypeList');
-          }}
-          style={{marginBottom: 10}}>
-          WRITE NDEF
-        </Button>
-
-        <Button
-          mode="contained"
-          onPress={async () => {
-            navigation.navigate('ToolKit');
-          }}
-          style={{marginBottom: 10}}>
-          Tool Kit
-        </Button>
-
-        <Button
-          mode="contained"
-          onPress={async () => {
-            navigation.navigate('TagKit');
-          }}
-          style={{marginBottom: 10}}>
-          Tag Kit
-        </Button>
-
-        <Button
-          mode="outlined"
-          onPress={async () => {
-            navigation.navigate('SavedRecord');
-          }}>
-          MY RECORDS
+          style={{width}}>
+          SCAN NFC TAG
         </Button>
       </View>
     );
@@ -193,7 +177,6 @@ function HomeScreen(props) {
     return (
       <View
         style={{
-          flex: 2,
           alignItems: 'stretch',
           alignSelf: 'center',
           width,
@@ -228,7 +211,7 @@ function HomeScreen(props) {
       <View style={{flex: 1, padding}}>
         <View
           style={{
-            flex: 3,
+            flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -237,9 +220,29 @@ function HomeScreen(props) {
             style={{width: 250, height: 250}}
             resizeMode="contain"
           />
+          <Text
+            style={{
+              padding: 20,
+              fontSize: 18,
+              textAlign: 'center',
+              color: '#666',
+            }}>
+            Open Source NFC Reader/Writer App Built On Top Of React Native
+          </Text>
+          <TouchableOpacity
+            onPress={() => Linking.openURL('mailto:nfctogo@gmail.com')}
+            style={{
+              paddingHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Icon name="email" size={18} color={'#888'} />
+            <Text style={{marginLeft: 6, color: '#888'}}>
+              Contact us for any feedback or idea!
+            </Text>
+          </TouchableOpacity>
         </View>
-
-        {enabled ? renderNfcButtons() : renderNfcNotEnabled()}
 
         <IconButton
           icon={() => <Icon name="cog" size={32} />}
@@ -248,6 +251,8 @@ function HomeScreen(props) {
             navigation.navigate('Settings');
           }}
         />
+
+        {enabled ? renderNfcButtons() : renderNfcNotEnabled()}
       </View>
     </>
   );

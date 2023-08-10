@@ -11,7 +11,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import {List, TextInput, Button} from 'react-native-paper';
+import {Appbar, List, TextInput, Button} from 'react-native-paper';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {version} from '../../../package.json';
 import {captureException} from '../../setupSentry';
@@ -26,7 +26,6 @@ function SettingsScreen(props) {
   const [nfcStatus, setNfcStatus] = React.useState(null);
   const [feedback, setFeedback] = React.useState('');
   const [keyboardPadding, setKeyboardPadding] = React.useState(0);
-  const scrollViewRef = React.useRef();
   const scrollPosRef = React.useRef(0);
 
   React.useEffect(() => {
@@ -51,130 +50,84 @@ function SettingsScreen(props) {
     };
   }, []);
 
-  React.useEffect(() => {
-    async function onKbShow() {
-      const estimatedKbHeight = Dimensions.get('window').width;
-      setKeyboardPadding(estimatedKbHeight);
-      setTimeout(() => {
-        scrollViewRef.current.scrollTo({
-          y: scrollPosRef.current + estimatedKbHeight,
-        });
-      }, 200);
-    }
-
-    function onKbHide() {
-      setKeyboardPadding(0);
-    }
-
-    if (Platform.OS === 'ios') {
-      Keyboard.addListener('keyboardWillShow', onKbShow);
-      Keyboard.addListener('keyboardWillHide', onKbHide);
-    }
-
-    return () => {
-      if (Platform.OS === 'ios') {
-        Keyboard.removeAllListeners('keyboardWillShow');
-        Keyboard.removeAllListeners('keyboardWillHide');
-      }
-    };
-  }, []);
-
   return (
-    <ScrollView
-      style={[styles.wrapper]}
-      ref={scrollViewRef}
-      onScroll={({nativeEvent}) => {
-        scrollPosRef.current = nativeEvent.contentOffset.y;
-      }}
-      keyboardShouldPersistTaps="handled">
-      <View style={styles.topBanner}>
-        <Text style={{lineHeight: 16}}>{generalText}</Text>
-      </View>
-      <List.Section>
-        {Platform.OS === 'android' && (
-          <>
-            <List.Item
-              title="NFC Status"
-              description={
-                nfcStatus === null ? '---' : nfcStatus ? 'ON' : 'OFF'
-              }
-            />
-            <List.Item
-              title="NFC Settings"
-              description="Jump to System NFC Settings"
-              onPress={() => {
-                NfcManager.goToNfcSetting();
-              }}
-            />
-          </>
-        )}
-        <List.Item title="Version" description={version} />
-        <List.Item
-          title="Repository"
-          description="https://github.com/revtel/react-native-nfc-rewriter"
-          onPress={() => {
-            Linking.openURL(
-              'https://github.com/revtel/react-native-nfc-rewriter',
-            );
-          }}
-        />
-        <List.Subheader>Creators</List.Subheader>
-        <List.Item
-          title="Revteltech 忻旅科技"
-          left={() => (
-            <Image
-              source={require('../../../images/revicon_512.png')}
-              style={styles.maintainerIcon}
-              resizeMode="contain"
-            />
+    <>
+      <Appbar.Header style={{backgroundColor: 'white'}}>
+        <Appbar.BackAction onPress={() => props.navigation.goBack()} />
+        <Text style={{marginLeft: 10, fontSize: 18}}>About This App</Text>
+      </Appbar.Header>
+      <ScrollView style={[styles.wrapper]}>
+        <View style={styles.topBanner}>
+          <Text style={{lineHeight: 16}}>{generalText}</Text>
+        </View>
+        <List.Section>
+          {Platform.OS === 'android' && (
+            <>
+              <List.Item
+                title="NFC Status"
+                description={
+                  nfcStatus === null ? '---' : nfcStatus ? 'ON' : 'OFF'
+                }
+              />
+              <List.Item
+                title="NFC Settings"
+                description="Jump to System NFC Settings"
+                onPress={() => {
+                  NfcManager.goToNfcSetting();
+                }}
+              />
+            </>
           )}
-          description="https://www.revtel.tech/en"
-          onPress={() => {
-            Linking.openURL('https://www.revtel.tech/en');
-          }}
-        />
-        <List.Item
-          title="Washow 萬象創造"
-          left={() => (
-            <Image
-              source={require('../../../images/washow_icon.png')}
-              style={styles.maintainerIcon}
-              resizeMode="contain"
-            />
-          )}
-          description="http://www.washow.cc"
-          onPress={() => {
-            Linking.openURL('http://www.washow.cc');
-          }}
-        />
-      </List.Section>
-
-      <View style={{padding: 12}}>
-        <Text style={{textAlign: 'center', fontSize: 16}}>Your Feedback</Text>
-        <TextInput
-          style={{marginTop: 8}}
-          value={feedback}
-          onChangeText={setFeedback}
-        />
+          <List.Item title="Version" description={version} />
+          <List.Item
+            title="Repository"
+            description="https://github.com/revtel/react-native-nfc-rewriter"
+            onPress={() => {
+              Linking.openURL(
+                'https://github.com/revtel/react-native-nfc-rewriter',
+              );
+            }}
+          />
+          <List.Subheader>Creators</List.Subheader>
+          <List.Item
+            title="Revteltech 忻旅科技"
+            left={() => (
+              <Image
+                source={require('../../../images/revicon_512.png')}
+                style={styles.maintainerIcon}
+                resizeMode="contain"
+              />
+            )}
+            description="https://www.revtel.tech/en"
+            onPress={() => {
+              Linking.openURL('https://www.revtel.tech/en');
+            }}
+          />
+          <List.Item
+            title="NFC To GO"
+            left={() => (
+              <Image
+                source={require('../../../images/n2g_512.png')}
+                style={styles.maintainerIcon}
+                resizeMode="contain"
+              />
+            )}
+            description="https://www.nfctogo.com"
+            onPress={() => {
+              Linking.openURL('https://www.nfctogo.com');
+            }}
+          />
+        </List.Section>
         <Button
           mode="contained"
-          style={{marginTop: 8}}
+          style={{margin: 20}}
           onPress={() => {
-            if (feedback) {
-              captureException(new Error('Feedback'), {
-                section: 'feedback',
-                extra: {feedback},
-              });
-              Alert.alert('Thanks for your feedback');
-            }
-            setFeedback('');
+            Linking.openURL('mailto:nfctogo@gmail.com');
           }}>
-          SEND
+          Contact Us
         </Button>
-      </View>
-
-      {keyboardPadding > 0 && <View style={{height: keyboardPadding}} />}
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }
 

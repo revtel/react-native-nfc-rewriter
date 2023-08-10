@@ -18,8 +18,72 @@ import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
 import Toast from './Components/Toast';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as Theme from './Theme';
 
+const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
+const HomeTabs = createBottomTabNavigator();
+
+function HomeTabNav() {
+  return (
+    <HomeTabs.Navigator
+      screenOptions={({route}) => {
+        const focusedName = getFocusedRouteNameFromRoute(route);
+        const extraProps = {};
+        if (focusedName !== undefined) {
+          if (focusedName !== 'Home' && focusedName !== 'Assistant') {
+            extraProps.tabBarStyle = {height: 0, display: 'none'};
+          }
+        }
+
+        return {
+          tabBarIcon: ({focused, color, size}) => {
+            let iconName;
+
+            if (route.name === 'HomeTab') {
+              iconName = 'nfc-search-variant';
+            } else if (route.name === 'NdefTypeListTab') {
+              iconName = 'database-edit';
+            } else if (route.name === 'ToolKitTab') {
+              iconName = 'tools';
+            } else if (route.name === 'MyRecordsTab') {
+              iconName = 'archive-star';
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+          headerShown: false,
+          tabBarActiveTintColor: Theme.colors.blue,
+          tabBarInactiveTintColor: 'gray',
+          ...extraProps,
+        };
+      }}>
+      <HomeTabs.Screen
+        name="HomeTab"
+        component={HomeScreen}
+        options={{tabBarLabel: 'SCAN TAG'}}
+      />
+      <HomeTabs.Screen
+        name="NdefTypeListTab"
+        component={NdefTypeListScreen}
+        options={{title: 'WRITE NDEF'}}
+      />
+      <HomeTabs.Screen
+        name="ToolKitTab"
+        component={ToolKitScreen}
+        options={{title: 'TOOLKIT'}}
+      />
+      <HomeTabs.Screen
+        name="MyRecordsTab"
+        component={SavedRecordScreen}
+        options={{title: 'MY RECORDS'}}
+      />
+    </HomeTabs.Navigator>
+  );
+}
 
 function Main(props) {
   return (
@@ -44,34 +108,14 @@ function Main(props) {
         },
       }}>
       <MainStack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{title: 'HOME'}}
-      />
-      <MainStack.Screen
         name="TagDetail"
         options={{title: 'TAG DETAIL'}}
         component={TagDetailScreen}
       />
       <MainStack.Screen
-        name="NdefTypeList"
-        component={NdefTypeListScreen}
-        options={{title: 'CHOOSE NDEF TYPE'}}
-      />
-      <MainStack.Screen
         name="NdefWrite"
         component={NdefWriteScreen}
         options={{title: 'WRITE NDEF'}}
-      />
-      <MainStack.Screen
-        name="ToolKit"
-        component={ToolKitScreen}
-        options={{title: 'NFC TOOL KIT'}}
-      />
-      <MainStack.Screen
-        name="TagKit"
-        component={TagKitScreen}
-        options={{title: 'NFC TAG KIT'}}
       />
       <MainStack.Screen
         name="CustomTransceive"
@@ -87,42 +131,6 @@ function Main(props) {
   );
 }
 
-const SettingsStack = createStackNavigator();
-
-function Settings(props) {
-  return (
-    <SettingsStack.Navigator
-      initialRouteName="Settings"
-      screenOptions={{
-        header: (headerProps) => {
-          const {navigation, back, options, route} = headerProps;
-          return (
-            <>
-              <Appbar.Header
-                style={{
-                  backgroundColor: 'white',
-                  marginTop: Platform.OS === 'ios' ? 40 : 0,
-                }}>
-                {back && (
-                  <Appbar.BackAction onPress={() => navigation.goBack()} />
-                )}
-                <Appbar.Content title={options.title || ''} />
-              </Appbar.Header>
-            </>
-          );
-        },
-      }}>
-      <SettingsStack.Screen
-        name="Settings"
-        options={{title: 'Settings'}}
-        component={SettingsScreen}
-      />
-    </SettingsStack.Navigator>
-  );
-}
-
-const RootStack = createStackNavigator();
-
 function Root(props) {
   return (
     <RootStack.Navigator
@@ -132,10 +140,11 @@ function Root(props) {
         cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
       }}>
       <RootStack.Screen name="Landing" component={LandingScreen} />
-      <RootStack.Screen name="Settings" component={Settings} />
+      <RootStack.Screen name="Settings" component={SettingsScreen} />
+      <RootStack.Screen name="Main" component={Main} />
       <RootStack.Screen
-        name="Main"
-        component={Main}
+        name="MainTabs"
+        component={HomeTabNav}
         options={{animationEnabled: false}}
       />
     </RootStack.Navigator>
