@@ -220,7 +220,7 @@ PODS:
   - React-jsinspector (0.69.7)
   - React-logger (0.69.7):
     - glog
-  - react-native-nfc-manager (3.14.7):
+  - react-native-nfc-manager (3.14.8):
     - React-Core
   - react-native-safe-area-context (4.3.3):
     - RCT-Folly
@@ -298,7 +298,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.2.7):
     - React-Core
-  - RNDeviceInfo (10.0.2):
+  - RNDeviceInfo (10.13.1):
     - React-Core
   - RNGestureHandler (2.6.0):
     - React-Core
@@ -469,8 +469,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: a73bec0218ba959fc92f811b581ad6c2270c6b6f
   React-jsinspector: 8134ee22182b8dd98dc0973db6266c398103ce6c
   React-logger: 1e7ac909607ee65fd5c4d8bea8c6e644f66b8843
-  react-native-nfc-manager: ca60627c7b9270019b9442d86f9e20fe9cb2ee28
-  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
+  react-native-nfc-manager: a8deab313eb6bd8fabce46f4fa4a9534a4bda725
+  react-native-safe-area-context: deca3b734e6ad82df91bd6e68f3eb48bbb96b758
   React-perflogger: 8e832d4e21fdfa613033c76d58d7e617341e804b
   React-RCTActionSheet: 9ca778182a9523991bff6381045885b6e808bb73
   React-RCTAnimation: 9ced26ad20b96e532ac791a8ab92a7b1ce2266b8
@@ -484,8 +484,8 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 65cd2782a57e1d59a68aa5d504edf94278578e41
   ReactCommon: 1e783348b9aa73ae68236271df972ba898560a95
   RNCAsyncStorage: d599364c12b1ddb042cc2d7ab6f8258962b83097
-  RNCMaskedView: cb9670ea9239998340eaab21df13fa12a1f9de15
-  RNDeviceInfo: 0a7c1d2532aa7691f9b9925a27e43af006db4dae
+  RNCMaskedView: ad49d114ee1faa6e4116c310276073b61a0b3dd2
+  RNDeviceInfo: 5362eb14292ef9b0a68fb56851adf7884f1e64bc
   RNGestureHandler: 920eb17f5b1e15dae6e5ed1904045f8f90e0b11e
   RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
   RNSentry: 68644ef607b780551cc555f084869764f2566652
@@ -493,6 +493,6 @@ SPEC CHECKSUMS:
   Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
   Yoga: 0b84a956f7393ef1f37f3bb213c516184e4a689d
 
-PODFILE CHECKSUM: db95454ce8fd7fc766b8423d4c2946bc6b5d05b1
+PODFILE CHECKSUM: f793f259b282a5866217719d90fa9c04fa39a6ff
 
 COCOAPODS: 1.12.1

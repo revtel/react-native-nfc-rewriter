@@ -36,10 +36,20 @@
                   android:host="*" />
         </intent-filter>
         <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https"
+                  android:host="www.nfctogo.com" 
+                  android:path="/applink" />
+        </intent-filter>
+        <intent-filter>
             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+            <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:scheme="https"
-                  android:host="washow.netlify.app" />
+                  android:host="www.nfctogo.com" 
+                  android:path="/applink" />
         </intent-filter>
         <intent-filter>
             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>

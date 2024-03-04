@@ -29,7 +29,7 @@
     "query-string": "^7.0.1",
     "react": "18.0.0",
     "react-native": "0.69.7",
-    "react-native-device-info": "^10.0.2",
+    "react-native-device-info": "^10.11.0",
     "react-native-gesture-handler": "^2.6.0",
     "react-native-nfc-manager": "^3.14.8",
     "react-native-paper": "^4.12.4",
