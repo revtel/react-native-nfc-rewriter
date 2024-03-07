@@ -41,7 +41,7 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
                   android:host="www.nfctogo.com" 
-                  android:path="/applink" />
+                  android:pathPrefix="/applink" />
         </intent-filter>
         <intent-filter>
             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
@@ -49,13 +49,14 @@
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:scheme="https"
                   android:host="www.nfctogo.com" 
-                  android:path="/applink" />
+                  android:pathPrefix="/applink" />
         </intent-filter>
         <intent-filter>
             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:scheme="https"
-                  android:host="api.realitag.app" />
+                  android:host="api.realitag.app" 
+                  android:pathPrefix="" />
         </intent-filter>
         <intent-filter>
           <action android:name="android.nfc.action.TECH_DISCOVERED"/>
