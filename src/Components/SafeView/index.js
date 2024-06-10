@@ -18,7 +18,8 @@ export default function SafeView(props) {
           <SafeAreaView
             style={{
               backgroundColor: topColor,
-              height: DeviceInfo.hasNotch() ? 40 : 0,
+              height:
+                DeviceInfo.hasNotch() || DeviceInfo.hasDynamicIsland() ? 50 : 0,
             }}
           />
           <StatusBar barStyle={'dark-content'} />
