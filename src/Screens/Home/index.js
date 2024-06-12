@@ -223,12 +223,52 @@ function HomeScreen(props) {
           <Text
             style={{
               padding: 20,
-              fontSize: 18,
+              fontSize: 20,
+              fontWeight: 'bold',
               textAlign: 'center',
               color: '#666',
             }}>
-            Open Source NFC Reader/Writer App Built On Top Of React Native
+            Open Source NFC Reader/Writer
           </Text>
+
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                'https://github.com/revtel/react-native-nfc-rewriter',
+              )
+            }
+            style={{
+              paddingHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 10,
+            }}>
+            <Icon name="github" size={18} color={'#888'} />
+            <Text style={{marginLeft: 6, color: '#888'}}>
+              Github Repo (App)
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                'https://github.com/revtel/react-native-nfc-manager',
+              )
+            }
+            style={{
+              paddingHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 10,
+            }}>
+            <Icon name="github" size={18} color={'#888'} />
+            <Text style={{marginLeft: 6, color: '#888'}}>
+              Github Repo (Library)
+            </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => Linking.openURL('mailto:nfctogo@gmail.com')}
             style={{
@@ -238,9 +278,7 @@ function HomeScreen(props) {
               justifyContent: 'center',
             }}>
             <Icon name="email" size={18} color={'#888'} />
-            <Text style={{marginLeft: 6, color: '#888'}}>
-              Contact us for any feedback or idea!
-            </Text>
+            <Text style={{marginLeft: 6, color: '#888'}}>Contact Us</Text>
           </TouchableOpacity>
         </View>
 

@@ -7,7 +7,6 @@ import RtdUriShortcutWriter from '../../Components/RtdUriShortcutWriter';
 import WifiSimpleWriter from '../../Components/WifiSimpleWriter';
 import VCardWriter from '../../Components/VCardWriter';
 import ScreenHeader from '../../Components/ScreenHeader';
-import SafeView from '../../Components/SafeView';
 
 function NdefWriteScreen(props) {
   const {params} = props.route;
@@ -93,7 +92,7 @@ function NdefWriteScreen(props) {
   };
 
   return (
-    <SafeView showBottom={true} topColor={'white'} bottomColor="#eee">
+    <>
       <ScreenHeader
         title={params.savedRecord?.name || 'WRITE NDEF'}
         navigation={props.navigation}
@@ -104,7 +103,7 @@ function NdefWriteScreen(props) {
       <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         {_renderNdefWriter()}
       </View>
-    </SafeView>
+    </>
   );
 }
 
