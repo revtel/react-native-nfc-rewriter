@@ -1,15 +1,16 @@
 import './AppOutlets';
 import * as React from 'react';
 import {Platform, UIManager} from 'react-native';
-import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
+import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import AppNavigator from './AppNavigator';
 import * as AppContext from './AppContext';
 
-const CustomDefaultTheme = {
+const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
     primary: '#3985cb',
+    secondary: 'yellow',
   },
 };
 
@@ -29,7 +30,7 @@ class App extends React.Component {
   render() {
     return (
       <AppContext.Provider>
-        <PaperProvider theme={CustomDefaultTheme}>
+        <PaperProvider theme={theme}>
           <AppNavigator />
         </PaperProvider>
       </AppContext.Provider>

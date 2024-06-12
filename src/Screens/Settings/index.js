@@ -14,7 +14,6 @@ import {
 import {Appbar, List, TextInput, Button} from 'react-native-paper';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {version} from '../../../package.json';
-import {captureException} from '../../setupSentry';
 
 const generalText = `
 NfcReWriter is an open source project built on-top-of react-native. 
