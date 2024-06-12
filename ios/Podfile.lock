@@ -459,8 +459,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: a73bec0218ba959fc92f811b581ad6c2270c6b6f
   React-jsinspector: 8134ee22182b8dd98dc0973db6266c398103ce6c
   React-logger: 1e7ac909607ee65fd5c4d8bea8c6e644f66b8843
-  react-native-nfc-manager: fe2eadc790339536e9cf0c517a866e235c414f6a
-  react-native-safe-area-context: deca3b734e6ad82df91bd6e68f3eb48bbb96b758
+  react-native-nfc-manager: eb48fbfb7b41e054854465313613cfa7940302b8
+  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
   React-perflogger: 8e832d4e21fdfa613033c76d58d7e617341e804b
   React-RCTActionSheet: 9ca778182a9523991bff6381045885b6e808bb73
   React-RCTAnimation: 9ced26ad20b96e532ac791a8ab92a7b1ce2266b8
@@ -473,9 +473,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: 600a9f8b3537db360563d50fab3d040c262567d4
   React-runtimeexecutor: 65cd2782a57e1d59a68aa5d504edf94278578e41
   ReactCommon: 1e783348b9aa73ae68236271df972ba898560a95
-  RNCAsyncStorage: d599364c12b1ddb042cc2d7ab6f8258962b83097
-  RNCMaskedView: ad49d114ee1faa6e4116c310276073b61a0b3dd2
-  RNDeviceInfo: 3c56fced14bde6406ef250d785b15a39b26cc3b2
+  RNCAsyncStorage: 26f25150da507524a7815f2ada06ca0967f65633
+  RNCMaskedView: cb9670ea9239998340eaab21df13fa12a1f9de15
+  RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
   RNGestureHandler: 920eb17f5b1e15dae6e5ed1904045f8f90e0b11e
   RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
