@@ -44,18 +44,10 @@
         </intent-filter>
         <intent-filter>
             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-            <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:scheme="https"
                   android:host="www.nfctogo.com" 
                   android:pathPrefix="/applink" />
-        </intent-filter>
-        <intent-filter>
-            <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-            <data android:scheme="https"
-                  android:host="api.realitag.app" 
-                  android:pathPrefix="" />
         </intent-filter>
         <intent-filter>
           <action android:name="android.nfc.action.TECH_DISCOVERED"/>
