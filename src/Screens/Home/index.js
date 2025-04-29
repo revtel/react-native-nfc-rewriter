@@ -17,6 +17,7 @@ import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import qs from 'query-string';
+import NativeNfcManager from '../../../specs/NativeNfcManager';
 
 function HomeScreen(props) {
   const {navigation} = props;
@@ -168,6 +169,14 @@ function HomeScreen(props) {
           }}
           style={{width}}>
           SCAN NFC TAG
+        </Button>
+
+        <Button
+          onPress={async () => {
+            console.log(NativeNfcManager.echo('hello'));
+          }}
+          style={{width, marginTop: 10}}>
+          TEST
         </Button>
       </View>
     );

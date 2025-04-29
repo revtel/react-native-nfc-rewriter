@@ -12,7 +12,10 @@
     "android:clean": "cd android && ./gradlew clean",
     "android:bundle": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
     "android:assemble": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",
-    "android:start": "adb shell am start -n com.washow.nfcopenrewriter/.MainActivity"
+    "android:start": "adb shell am start -n com.washow.nfcopenrewriter/.MainActivity",
+    "codegen:js": "tsc",
+    "codegen:ios": "cd ios && bundle install && bundle exec pod install && cd ..",
+    "codegen:android": "cd android && ./gradlew generateCodegenArtifactsFromSchema && cd .."
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
@@ -57,7 +60,8 @@
     "execa": "^5.0.1",
     "husky": "^5.0.9",
     "lint-staged": "^10.5.4",
-    "ora": "^5.4.0"
+    "ora": "^5.4.0",
+    "typescript": "^5.6.3"
   },
   "husky": {
     "hooks": {
@@ -75,5 +79,13 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "codegenConfig": {
+    "name": "NativeNfcManagerSpec",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.revtel.nfc"
+    }
   }
 }

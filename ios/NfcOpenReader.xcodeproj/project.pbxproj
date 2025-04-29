@@ -15,6 +15,7 @@
 		CE84735E1E3E4B0E641002B8 /* libPods-NfcOpenReader-NfcOpenReaderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6F1D18DDC279D4CAD47C46 /* libPods-NfcOpenReader-NfcOpenReaderTests.a */; };
 		D606E5272C1941EB000053FC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D606E5262C1941EB000053FC /* PrivacyInfo.xcprivacy */; };
 		D62564F3292363F30067F29D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = D62564F2292363F30067F29D /* AppDelegate.mm */; };
+		D67AC65F2DC07DD500F38C33 /* RCTNativeNfcManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = D67AC65E2DC07DD500F38C33 /* RCTNativeNfcManager.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,8 @@
 		D606E5262C1941EB000053FC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NfcOpenReader/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D61F666F271420FC0083FB8E /* NfcOpenReader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NfcOpenReader.entitlements; path = NfcOpenReader/NfcOpenReader.entitlements; sourceTree = "<group>"; };
 		D62564F2292363F30067F29D /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = NfcOpenReader/AppDelegate.mm; sourceTree = "<group>"; };
+		D67AC65A2DC07D7000F38C33 /* RCTNativeNfcManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNativeNfcManager.h; sourceTree = "<group>"; };
+		D67AC65E2DC07DD500F38C33 /* RCTNativeNfcManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeNfcManager.mm; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -132,6 +135,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D67AC6592DC07D2700F38C33 /* NativeNfcManager */,
 				13B07FAE1A68108700A75B9A /* NfcOpenReader */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* NfcOpenReaderTests */,
@@ -151,6 +155,15 @@
 				00E356EE1AD99517003FC87E /* NfcOpenReaderTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D67AC6592DC07D2700F38C33 /* NativeNfcManager */ = {
+			isa = PBXGroup;
+			children = (
+				D67AC65A2DC07D7000F38C33 /* RCTNativeNfcManager.h */,
+				D67AC65E2DC07DD500F38C33 /* RCTNativeNfcManager.mm */,
+			);
+			path = NativeNfcManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -417,6 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D62564F3292363F30067F29D /* AppDelegate.mm in Sources */,
+				D67AC65F2DC07DD500F38C33 /* RCTNativeNfcManager.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
