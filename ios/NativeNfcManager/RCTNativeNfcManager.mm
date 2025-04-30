@@ -20,13 +20,13 @@
   return std::make_shared<facebook::react::NativeNfcManagerSpecJSI>(params);
 }
 
-- (NSString * _Nullable)echo:(NSString *)key {
-  return key;
-}
-
 + (NSString *)moduleName
 {
   return @"NativeNfcManager";
+}
+
+- (void)echo:(NSString *)value callback:(RCTResponseSenderBlock)callback {
+  callback(@[[NSNull null], value]);
 }
 
 @end

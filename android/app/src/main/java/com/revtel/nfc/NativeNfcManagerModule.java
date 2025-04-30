@@ -2,6 +2,8 @@ package com.revtel.nfc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.facebook.react.bridge.Callback;
 import com.revtel.nfc.NativeNfcManagerSpec;
 import com.facebook.react.bridge.ReactApplicationContext;
 
@@ -19,7 +21,7 @@ public class NativeNfcManagerModule extends NativeNfcManagerSpec {
     }
 
     @Override
-    public String echo(String key) {
-        return key;
+    public void echo(String value, Callback callback) {
+        callback.invoke(null, value);
     }
 }

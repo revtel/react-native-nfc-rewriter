@@ -14,8 +14,9 @@
     "android:assemble": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",
     "android:start": "adb shell am start -n com.washow.nfcopenrewriter/.MainActivity",
     "codegen:js": "tsc",
-    "codegen:ios": "cd ios && bundle install && bundle exec pod install && cd ..",
-    "codegen:android": "cd android && ./gradlew generateCodegenArtifactsFromSchema && cd .."
+    "codegen:ios": "cd ios && bundle install && bundle exec pod install && pod install && cd ..",
+    "codegen:android": "cd android && ./gradlew generateCodegenArtifactsFromSchema && cd ..",
+    "codegen": "npm run codegen:js && npm run codegen:ios && npm run codegen:android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",

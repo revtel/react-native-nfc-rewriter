@@ -17,7 +17,7 @@ import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import qs from 'query-string';
-import NativeNfcManager from '../../../specs/NativeNfcManager';
+import NfcManagerV4 from '../../NfcManagerV4';
 
 function HomeScreen(props) {
   const {navigation} = props;
@@ -173,7 +173,8 @@ function HomeScreen(props) {
 
         <Button
           onPress={async () => {
-            console.log(NativeNfcManager.echo('hello'));
+            const resp = await NfcManagerV4.echo('test test');
+            console.log('new arch resp', resp);
           }}
           style={{width, marginTop: 10}}>
           TEST
