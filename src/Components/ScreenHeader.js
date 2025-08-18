@@ -3,7 +3,7 @@ import {Appbar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SaveRecordModal from './SaveRecordModal';
 import * as AppContext from '../AppContext';
-import {Alert} from 'react-native';
+import {Alert, StatusBar, useColorScheme} from 'react-native';
 import {showToast} from './Toast';
 
 function ScreenHeader(props) {
@@ -16,6 +16,7 @@ function ScreenHeader(props) {
     readOnly,
   } = props;
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
+  const colorScheme = useColorScheme();
 
   async function onPersistRecord(name, updateExist = false) {
     const payload = getRecordPayload();
@@ -37,6 +38,9 @@ function ScreenHeader(props) {
 
   return (
     <>
+      <StatusBar
+        barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
+      />
       <Appbar.Header style={{backgroundColor: 'white'}}>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title={title} />

@@ -4,6 +4,7 @@ import {Platform, UIManager} from 'react-native';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import AppNavigator from './AppNavigator';
 import * as AppContext from './AppContext';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const theme = {
   ...DefaultTheme,
@@ -29,11 +30,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <AppContext.Provider>
-        <PaperProvider theme={theme}>
-          <AppNavigator />
-        </PaperProvider>
-      </AppContext.Provider>
+      <SafeAreaProvider>
+        <AppContext.Provider>
+          <PaperProvider theme={theme}>
+            <AppNavigator />
+          </PaperProvider>
+        </AppContext.Provider>
+      </SafeAreaProvider>
     );
   }
 }
