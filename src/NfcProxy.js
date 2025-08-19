@@ -25,16 +25,7 @@ const withAndroidPrompt = (fn) => {
         });
       }
 
-      const resp = await fn.apply(null, arguments);
-
-      if (Platform.OS === 'android') {
-        getOutlet('androidPrompt').update({
-          visible: true,
-          message: 'Completed',
-        });
-      }
-
-      return resp;
+      return await fn.apply(null, arguments);
     } catch (ex) {
       throw ex;
     } finally {

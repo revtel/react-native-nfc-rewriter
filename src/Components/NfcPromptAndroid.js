@@ -1,5 +1,13 @@
 import React from 'react';
-import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
+import {
+  Image,
+  Text,
+  View,
+  Animated,
+  StyleSheet,
+  Modal,
+  Dimensions,
+} from 'react-native';
 import {Button} from 'react-native-paper';
 import NfcManager from 'react-native-nfc-manager';
 import {useOutlet} from 'reconnect.js';
@@ -14,9 +22,10 @@ function NfcPromptAndroid(props) {
     if (_visible) {
       setVisible(true);
       Animated.timing(animValue, {
-        duration: 300,
+        duration: 200,
         toValue: 1,
         useNativeDriver: true,
+        delay: 200,
       }).start();
     } else {
       Animated.timing(animValue, {
@@ -46,7 +55,7 @@ function NfcPromptAndroid(props) {
       {
         translateY: animValue.interpolate({
           inputRange: [0, 1],
-          outputRange: [300, 0],
+          outputRange: [Dimensions.get('window').height + 100, 0],
         }),
       },
     ],
