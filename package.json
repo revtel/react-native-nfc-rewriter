@@ -12,7 +12,7 @@
     "android:clean": "cd android && ./gradlew clean",
     "android:bundle": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
     "android:assemble": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",
-    "android:elf_check": "./scripts/check_elf_alignment.sh ./android/app/build/outputs/apk/release/app-release.apk",
+    "android:elf_check": "./scripts/check_elf_alignment.sh ./android/app/build/outputs/apk/release/app-release.apk | grep -E 'x86_64.*UNALIGNED'",
     "android:start": "adb shell am start -n com.washow.nfcopenrewriter/.MainActivity",
     "postinstall": "patch-package"
   },
