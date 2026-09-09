@@ -36,5 +36,23 @@ target 'NfcOpenReader' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # fmt 11.0.2's consteval support fails with Apple Clang 21 (Xcode 26).
+    # Keep this patch here so clean installs and CI builds are reproducible.
+    fmt_header = File.join(installer.sandbox.root, 'fmt/include/fmt/base.h')
+    if File.exist?(fmt_header)
+      fmt_source = File.read(fmt_header)
+      fmt_original = "#elif defined(__apple_build_version__) && __apple_build_version__ < 14000029L\n" \
+        '#  define FMT_USE_CONSTEVAL 0  // consteval is broken in Apple clang < 14.'
+      fmt_patched = "#elif defined(__apple_build_version__)\n" \
+        '#  define FMT_USE_CONSTEVAL 0  // consteval is broken in Apple clang.'
+
+      if fmt_source.include?(fmt_original)
+        File.write(fmt_header, fmt_source.sub(fmt_original, fmt_patched))
+        Pod::UI.puts 'Patched fmt consteval support for Apple Clang'.green
+      elsif !fmt_source.include?(fmt_patched)
+        raise 'Unable to patch fmt consteval support: expected condition not found'
+      end
+    end
   end
 end
