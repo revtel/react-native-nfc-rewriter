@@ -65,6 +65,10 @@ yarn-error.log
 # testing
 /coverage
 
+# OpenSpec (local only)
+/openspec/
+/.codex/skills/openspec-*/
+
 # by revtel 
 .env
 *.jsbundle.map

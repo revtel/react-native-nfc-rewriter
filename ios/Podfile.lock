@@ -1210,7 +1210,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-nfc-manager (4.0.0-beta.3):
+  - react-native-nfc-manager (4.0.0-beta.9):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2112,7 +2112,7 @@ SPEC CHECKSUMS:
   React-logger: 094beeb633228cb5d7a1b7235e21c77f901eb1a6
   React-Mapbuffer: ac43f5b92893ee6cba15a712b211191f9dfbf089
   React-microtasksnativemodule: c32cbd3d9c334a51311ab9d717e2c72c7032a256
-  react-native-nfc-manager: 936af2bf644ccabd67ac62e74a2aa53ade6afcce
+  react-native-nfc-manager: 0d12d7acd04517ea7b6459e0159cc6d28acc0958
   react-native-safe-area-context: 9b169299f9dc95f1d7fe1dd266fde53bd899cd0c
   React-nativeconfig: f77b4627803bf7886a1f2e96b33b8af34e583cc4
   React-NativeModulesApple: 6bfb56c8a05c9181727a4375c6fce152171c038d

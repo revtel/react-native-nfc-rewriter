@@ -6064,10 +6064,10 @@ react-native-is-edge-to-edge@1.1.7:
   resolved "https://registry.npmjs.org/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.1.7.tgz"
   integrity sha512-EH6i7E8epJGIcu7KpfXYXiV2JFIYITtq+rVS8uEb+92naMRBdxhTuS8Wn2Q7j9sqyO0B+Xbaaf9VdipIAmGW4w==
 
-react-native-nfc-manager@^4.0.0-beta.3:
-  version "4.0.0-beta.3"
-  resolved "https://registry.npmjs.org/react-native-nfc-manager/-/react-native-nfc-manager-4.0.0-beta.3.tgz"
-  integrity sha512-T45oEpznFpLvDSsQq+2UWqVbSQx2eeIG5o/X2KDHlivEi37TXaSV+8TsTlkVJhsBK3ONtyauNhSYa+pFMwso+g==
+react-native-nfc-manager@4.0.0-beta.9:
+  version "4.0.0-beta.9"
+  resolved "https://registry.npmjs.org/react-native-nfc-manager/-/react-native-nfc-manager-4.0.0-beta.9.tgz"
+  integrity sha512-Yol6NNYU1bLLVXUAdhVlZMXUpJe7eu2SL3JtgOBaemHYzNlhQugfT7ggkF2UXVKn1JUqjbSeopdZ+1Wlqwo8SQ==
 
 react-native-paper@^5.12.3:
   version "5.13.3"
@@ -6117,7 +6117,7 @@ react-native-vector-icons@*, react-native-vector-icons@^10.2.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.61.5", react-native@0.77.3:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.61.5", react-native@>=0.76, react-native@0.77.3:
   version "0.77.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.77.3.tgz"
   integrity sha512-fIYZ9+zX+iGcb/xGZA6oN3Uq9x46PdqVYtlyG+WmOIFQPVXgryaS9FJLdTvoTpsEA2JXGSGgNOdm640IdAW3cA==
@@ -6182,7 +6182,7 @@ react-test-renderer@18.3.1:
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.2"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@^18.3.1, "react@>= 16.9.0", react@>=16.3.0, react@>=16.8, react@>=17.0.0, react@18.3.1:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@^18.3.1, "react@>= 16.9.0", react@>=16.3.0, react@>=16.8, react@>=17.0.0, react@>=18.2, react@18.3.1:
   version "18.3.1"
   resolved "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
