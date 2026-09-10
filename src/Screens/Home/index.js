@@ -13,22 +13,23 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
-import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
+import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import qs from 'query-string';
+import {parseShareDeepLink} from '../../features/home/deepLink';
+import {useNfcAvailability} from '../../features/home/useNfcAvailability';
+import {useTagScan} from '../../features/home/useTagScan';
 
 function HomeScreen(props) {
   const {navigation} = props;
-  const [enabled, setEnabled] = React.useState(null);
+  const {enabled, refresh: refreshNfcAvailability} = useNfcAvailability();
+  const scanTag = useTagScan(navigation);
   const padding = 40;
   const width = Dimensions.get('window').width - 2 * padding;
 
   React.useEffect(() => {
     async function initNfc() {
       try {
-        setEnabled(await NfcProxy.isEnabled());
-
         function onBackgroundTag(bgTag) {
           navigation.navigate('Main', {
             screen: 'TagDetail',
@@ -36,63 +37,11 @@ function HomeScreen(props) {
           });
         }
 
-        function onDeepLink(url, launch) {
+        function onDeepLink(url) {
           try {
-            const customScheme = [
-              'com.washow.nfcopenrewriter://', // android
-              'com.revteltech.nfcopenrewriter://', // ios
-            ].find((scheme) => {
-              return scheme === url.slice(0, scheme.length);
-            });
-
-            if (!customScheme) {
-              return;
-            }
-
-            url = url.slice(customScheme.length);
-
-            // issue #23: we might have '?' in our payload, so we cannot simply "split" it
-            let action = url;
-            let query = '';
-            let splitIdx = url.indexOf('?');
-
-            if (splitIdx > -1) {
-              action = url.slice(0, splitIdx);
-              query = url.slice(splitIdx);
-            }
-
-            const params = qs.parse(query);
-            if (action === 'share') {
-              const sharedRecord = JSON.parse(params.data);
-              if (sharedRecord.payload?.tech === NfcTech.Ndef) {
-                navigation.navigate('Main', {
-                  screen: 'NdefWrite',
-                  params: {savedRecord: sharedRecord},
-                });
-              } else if (sharedRecord.payload?.tech === NfcTech.NfcA) {
-                navigation.navigate('Main', {
-                  screen: 'CustomTransceive',
-                  params: {
-                    savedRecord: sharedRecord,
-                  },
-                });
-              } else if (sharedRecord.payload?.tech === NfcTech.NfcV) {
-                navigation.navigate('Main', {
-                  screen: 'CustomTransceive',
-                  params: {
-                    savedRecord: sharedRecord,
-                  },
-                });
-              } else if (sharedRecord.payload?.tech === NfcTech.IsoDep) {
-                navigation.navigate('Main', {
-                  screen: 'CustomTransceive',
-                  params: {
-                    savedRecord: sharedRecord,
-                  },
-                });
-              } else {
-                console.warn('unrecognized share payload tech');
-              }
+            const target = parseShareDeepLink(url);
+            if (target) {
+              navigation.navigate(target.name, target.params);
             }
           } catch (ex) {
             console.warn('fail to parse deep link', ex);
@@ -107,7 +56,7 @@ function HomeScreen(props) {
           const link = await Linking.getInitialURL();
           console.warn('DEEP LINK', link);
           if (link) {
-            onDeepLink(link, true);
+            onDeepLink(link);
           }
         }
 
@@ -117,24 +66,9 @@ function HomeScreen(props) {
           onBackgroundTag,
         );
 
-        // listen to the NFC on/off state on Android device
-        if (Platform.OS === 'android') {
-          NfcManager.setEventListener(
-            NfcEvents.StateChanged,
-            ({state} = {}) => {
-              NfcManager.cancelTechnologyRequest().catch(() => 0);
-              if (state === 'off') {
-                setEnabled(false);
-              } else if (state === 'on') {
-                setEnabled(true);
-              }
-            },
-          );
-        }
-
         Linking.addEventListener('url', (event) => {
           if (event.url) {
-            onDeepLink(event.url, false);
+            onDeepLink(event.url);
           }
         });
       } catch (ex) {
@@ -160,12 +94,7 @@ function HomeScreen(props) {
         }}>
         <Button
           mode="contained"
-          onPress={async () => {
-            const tag = await NfcProxy.readTag();
-            if (tag) {
-              navigation.navigate('Main', {screen: 'TagDetail', params: {tag}});
-            }
-          }}
+          onPress={scanTag}
           style={{width}}>
           SCAN NFC TAG
         </Button>
@@ -195,9 +124,7 @@ function HomeScreen(props) {
 
         <Button
           mode="outlined"
-          onPress={async () => {
-            setEnabled(await NfcProxy.isEnabled());
-          }}>
+          onPress={refreshNfcAvailability}>
           CHECK AGAIN
         </Button>
       </View>

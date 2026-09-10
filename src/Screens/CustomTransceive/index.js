@@ -10,9 +10,16 @@ import {
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import CommandItem from '../../Components/CustomCommandItem';
-import NfcProxy, {setBeforeTransceive} from '../../NfcProxy';
+import NfcProxy from '../../NfcProxy';
 import ScreenHeader from '../../Components/ScreenHeader';
 import {NfcTech} from 'react-native-nfc-manager';
+import {
+  appendCommand,
+  moveCommand,
+  removeCommand,
+  replaceCommand,
+  updateParameter,
+} from '../../features/transceive/commandList';
 
 function CustomTransceiveScreen(props) {
   const {params} = props.route;
@@ -40,34 +47,22 @@ function CustomTransceiveScreen(props) {
   }, [showCommandModal]);
 
   function addCommand(cmd) {
-    setCommands([...commands, cmd]);
+    setCommands(appendCommand(commands, cmd));
     setResponses([]);
   }
 
   function deleteCommand(idx) {
-    const nextCommands = [...commands];
-    nextCommands.splice(idx, 1);
-    setCommands(nextCommands);
+    setCommands(removeCommand(commands, idx));
     setResponses([]);
   }
 
   function moveCommandDown(idx) {
-    const c = commands[idx];
-    const cc = commands[idx + 1];
-    const before = commands.slice(0, idx);
-    const after = commands.slice(idx + 2);
-    const nextCommands = [...before, cc, c, ...after];
-    setCommands(nextCommands);
+    setCommands(moveCommand(commands, idx, idx + 1));
     setResponses([]);
   }
 
   function moveCommandUp(idx) {
-    const c = commands[idx];
-    const cc = commands[idx - 1];
-    const before = commands.slice(0, idx - 1);
-    const after = commands.slice(idx + 1);
-    const nextCommands = [...before, c, cc, ...after];
-    setCommands(nextCommands);
+    setCommands(moveCommand(commands, idx, idx - 1));
     setResponses([]);
   }
 
@@ -75,15 +70,16 @@ function CustomTransceiveScreen(props) {
     if (currEditIdx === null) {
       return;
     }
-    const nextCommands = [...commands];
-    nextCommands[currEditIdx] = cmd;
-    setCommands(nextCommands);
+    setCommands(replaceCommand(commands, currEditIdx, cmd));
     setResponses([]);
   }
 
   function editParameter(cmd) {
-    const nextValues = [...editableParameters];
-    nextValues[currEditParamIdx].payload = cmd.payload;
+    const nextValues = updateParameter(
+      editableParameters,
+      currEditParamIdx,
+      cmd.payload,
+    );
     setEditableParameters(nextValues);
 
     // apply parameters into command template
@@ -106,32 +102,30 @@ function CustomTransceiveScreen(props) {
     let result = [];
 
     try {
-      if (typeof params.savedRecord?.beforeTransceive === 'function') {
-        console.warn('setBeforeTransceive');
-        setBeforeTransceive(params.savedRecord?.beforeTransceive);
-      }
-
+      const options = {
+        beforeTransceive: params.savedRecord?.beforeTransceive,
+      };
       if (nfcTech === NfcTech.NfcA) {
         result = await NfcProxy.customTransceiveNfcA(
           commands,
           params.savedRecord?.onPostExecute,
+          options,
         );
       } else if (nfcTech === NfcTech.NfcV) {
         result = await NfcProxy.customTransceiveNfcV(
           commands,
           params.savedRecord?.onPostExecute,
+          options,
         );
       } else if (nfcTech === NfcTech.IsoDep) {
         result = await NfcProxy.customTransceiveIsoDep(
           commands,
           params.savedRecord?.onPostExecute,
+          options,
         );
       }
     } catch (ex) {
       console.warn('executeCommands w unexpected ex', ex);
-    } finally {
-      console.warn('setBeforeTransceive back');
-      setBeforeTransceive(null);
     }
 
     const [success, resps] = result;

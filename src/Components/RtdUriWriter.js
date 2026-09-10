@@ -1,13 +1,14 @@
 import * as React from 'react';
-import {View, Alert} from 'react-native';
+import {View} from 'react-native';
 import {Menu, TextInput, Button} from 'react-native-paper';
-import NfcProxy from '../NfcProxy';
+import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
 
 function RtdUriWriter(props, ref) {
   const [value, setValue] = React.useState(props.value?.value || '');
   const [prefix, setPrefix] = React.useState(props.value?.prefix || 'https://');
   const [showMenu, setShowMenu] = React.useState(false);
   const inputRef = React.useRef();
+  const write = useNdefWriter('URI');
 
   if (ref) {
     ref.current = {
@@ -27,7 +28,7 @@ function RtdUriWriter(props, ref) {
       url = prefix + value;
     }
 
-    await NfcProxy.writeNdef({type: 'URI', value: url});
+    await write(url);
   };
 
   return (

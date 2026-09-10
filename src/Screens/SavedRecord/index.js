@@ -1,35 +1,13 @@
 import * as React from 'react';
 import {SafeAreaView, ScrollView, Alert, Text} from 'react-native';
 import {Appbar, List, Button} from 'react-native-paper';
-import {NfcTech} from 'react-native-nfc-manager';
 import * as AppContext from '../../AppContext';
 import RecordItem from './RecordItem';
 import SaveRecordModal from '../../Components/SaveRecordModal';
-
-function groupRecordByTech(records) {
-  const ndefRecords = [];
-  const nfcARecords = [];
-  const nfcVRecords = [];
-  const isoDepRecords = [];
-  for (let idx = 0; idx < records.length; idx++) {
-    const record = records[idx];
-    if (record.payload.tech === NfcTech.Ndef) {
-      ndefRecords.push({record, idx});
-    } else if (record.payload.tech === NfcTech.NfcA) {
-      nfcARecords.push({record, idx});
-    } else if (record.payload.tech === NfcTech.NfcV) {
-      nfcVRecords.push({record, idx});
-    } else if (record.payload.tech === NfcTech.IsoDep) {
-      isoDepRecords.push({record, idx});
-    }
-  }
-  return {
-    ndefRecords,
-    nfcARecords,
-    nfcVRecords,
-    isoDepRecords,
-  };
-}
+import {
+  getRecordNavigationTarget,
+  groupRecordsByTech,
+} from '../../features/records/recordModel';
 
 function SavedRecordScreen(props) {
   const {navigation} = props;
@@ -57,9 +35,7 @@ function SavedRecordScreen(props) {
       {
         text: 'DO IT',
         onPress: async () => {
-          const nextRecordList = [...recordList];
-          nextRecordList.splice(idx, 1);
-          await app.actions.setStorage(nextRecordList);
+          await app.actions.removeRecord(idx);
         },
       },
       {
@@ -70,43 +46,14 @@ function SavedRecordScreen(props) {
   }
 
   function goToHandler(savedRecordIdx, savedRecord) {
-    if (savedRecord.payload?.tech === NfcTech.Ndef) {
-      navigation.navigate('Main', {
-        screen: 'NdefWrite',
-        params: {
-          savedRecord,
-          savedRecordIdx,
-        },
-      });
-    } else if (savedRecord.payload?.tech === NfcTech.NfcA) {
-      navigation.navigate('Main', {
-        screen: 'CustomTransceive',
-        params: {
-          savedRecord,
-          savedRecordIdx,
-        },
-      });
-    } else if (savedRecord.payload?.tech === NfcTech.NfcV) {
-      navigation.navigate('Main', {
-        screen: 'CustomTransceive',
-        params: {
-          savedRecord,
-          savedRecordIdx,
-        },
-      });
-    } else if (savedRecord.payload?.tech === NfcTech.IsoDep) {
-      navigation.navigate('Main', {
-        screen: 'CustomTransceive',
-        params: {
-          savedRecord,
-          savedRecordIdx,
-        },
-      });
+    const target = getRecordNavigationTarget(savedRecord, savedRecordIdx);
+    if (target) {
+      navigation.navigate(target.name, target.params);
     }
   }
 
   const {ndefRecords, nfcARecords, nfcVRecords, isoDepRecords} =
-    groupRecordByTech(recordList);
+    groupRecordsByTech(recordList);
 
   return (
     <>
@@ -185,13 +132,10 @@ function SavedRecordScreen(props) {
             return false;
           }
 
-          const nextList = AppContext.Actions.getStorage();
-          nextList.push({
+          await app.actions.appendRecord({
             name,
             payload: recordToCopy.payload,
           });
-
-          await AppContext.Actions.setStorage(nextList);
           setRecordToCopy(null);
         }}
       />

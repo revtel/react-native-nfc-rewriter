@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {View, Alert} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
-import NfcProxy from '../NfcProxy';
+import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
 
 function VCardWriter(props, ref) {
   const [name, setName] = React.useState(props.value?.name || '');
   const [org, setOrg] = React.useState(props.value?.org || '');
   const [tel, setTel] = React.useState(props.value?.tel || '');
   const [email, setEmail] = React.useState(props.value?.email || '');
+  const write = useNdefWriter('VCARD');
 
   if (ref) {
     ref.current = {
@@ -24,10 +25,7 @@ function VCardWriter(props, ref) {
       return;
     }
 
-    await NfcProxy.writeNdef({
-      type: 'VCARD',
-      value: {name, org, tel, email},
-    });
+    await write({name, org, tel, email});
   };
 
   return (

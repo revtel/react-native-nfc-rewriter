@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {View, Alert} from 'react-native';
+import {View} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
-import NfcProxy from '../NfcProxy';
+import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
 
 const InputLabel = {
   'sms:': 'Number',
@@ -13,6 +13,7 @@ function RtdUriShortcutWriter(props, ref) {
   const scheme = props.scheme;
   const [value, setValue] = React.useState(props.value?.value || '');
   const inputRef = React.useRef();
+  const write = useNdefWriter('URI');
 
   if (ref) {
     ref.current = {
@@ -28,7 +29,7 @@ function RtdUriShortcutWriter(props, ref) {
     }
 
     const url = scheme + value;
-    await NfcProxy.writeNdef({type: 'URI', value: url});
+    await write(url);
   };
 
   return (

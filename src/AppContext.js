@@ -1,47 +1,68 @@
 import React from 'react';
-import {createStorage} from './Utils/Storage';
+import {createRecordRepository} from './services/records/recordRepository';
 
-const recordListHandler = createStorage('recordList');
+const defaultActions = {
+  appendRecord: async () => [],
+  initStorage: async () => [],
+  removeRecord: async () => [],
+  setShowNfcPrompt: () => {},
+  setStorage: async () => [],
+  updateRecord: async () => [],
+};
 
-const Context = React.createContext();
-
-const Actions = {};
+const Context = React.createContext({
+  state: {showNfcPrompt: false, storageCache: []},
+  actions: defaultActions,
+});
 
 class Provider extends React.Component {
   constructor(props) {
-    super();
+    super(props);
+    this.recordRepository = createRecordRepository();
     this.state = {
       showNfcPrompt: false,
       storageCache: [],
     };
-  }
-
-  async componentDidMount() {
-    Actions.setShowNfcPrompt = (show) => {
-      this.setState({showNfcPrompt: show});
-    };
-
-    Actions.initStorage = async () => {
-      const nextCache = await recordListHandler.get(true);
-      this.setState({storageCache: nextCache});
-    };
-
-    Actions.getStorage = () => {
-      return this.state.storageCache;
-    };
-
-    Actions.setStorage = async (data) => {
-      await recordListHandler.set(data);
-      this.setState({storageCache: await recordListHandler.get(true)});
+    this.actions = {
+      appendRecord: this.appendRecord,
+      initStorage: this.initStorage,
+      removeRecord: this.removeRecord,
+      setShowNfcPrompt: this.setShowNfcPrompt,
+      setStorage: this.setStorage,
+      updateRecord: this.updateRecord,
     };
   }
+
+  setShowNfcPrompt = (showNfcPrompt) => {
+    this.setState({showNfcPrompt});
+  };
+
+  syncRecords = (storageCache) => {
+    this.setState({storageCache});
+    return storageCache;
+  };
+
+  initStorage = async () =>
+    this.syncRecords(await this.recordRepository.load());
+
+  setStorage = async (records) =>
+    this.syncRecords(await this.recordRepository.save(records));
+
+  appendRecord = async (record) =>
+    this.syncRecords(await this.recordRepository.append(record));
+
+  updateRecord = async (idx, record) =>
+    this.syncRecords(await this.recordRepository.update(idx, record));
+
+  removeRecord = async (idx) =>
+    this.syncRecords(await this.recordRepository.remove(idx));
 
   render() {
     return (
       <Context.Provider
         value={{
           state: this.state,
-          actions: Actions,
+          actions: this.actions,
         }}>
         {this.props.children}
       </Context.Provider>
@@ -49,4 +70,4 @@ class Provider extends React.Component {
   }
 }
 
-export {Context, Provider, Actions};
+export {Context, Provider};

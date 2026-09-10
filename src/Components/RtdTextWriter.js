@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Alert} from 'react-native';
+import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
-import NfcProxy from '../NfcProxy';
+import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
 
 function RtdTextWriter(props, ref) {
   const inputRef = React.useRef();
   const [value, setValue] = React.useState(props.value || '');
+  const write = useNdefWriter('TEXT');
 
   if (ref) {
     ref.current = {
@@ -20,7 +21,7 @@ function RtdTextWriter(props, ref) {
       return;
     }
 
-    await NfcProxy.writeNdef({type: 'TEXT', value});
+    await write(value);
   };
 
   return (

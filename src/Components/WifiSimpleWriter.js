@@ -1,13 +1,14 @@
 import * as React from 'react';
-import {View, Alert} from 'react-native';
+import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
-import NfcProxy from '../NfcProxy';
+import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
 
 function WifiSimpleWriter(props, ref) {
   const [ssid, setSsid] = React.useState(props.value?.ssid || '');
   const [networkKey, setNetworkKey] = React.useState(
     props.value?.networkKey || '',
   );
+  const write = useNdefWriter('WIFI_SIMPLE');
 
   if (ref) {
     ref.current = {
@@ -20,10 +21,7 @@ function WifiSimpleWriter(props, ref) {
       return;
     }
 
-    await NfcProxy.writeNdef({
-      type: 'WIFI_SIMPLE',
-      value: {ssid, networkKey},
-    });
+    await write({ssid, networkKey});
   };
 
   return (

@@ -17,22 +17,16 @@ function ScreenHeader(props) {
   } = props;
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
   const colorScheme = useColorScheme();
+  const app = React.useContext(AppContext.Context);
 
   async function onPersistRecord(name, updateExist = false) {
     const payload = getRecordPayload();
-    const nextList = AppContext.Actions.getStorage();
+    const record = {name, payload};
     if (updateExist && typeof savedRecordIdx === 'number') {
-      nextList[savedRecordIdx] = {
-        name,
-        payload,
-      };
+      await app.actions.updateRecord(savedRecordIdx, record);
     } else {
-      nextList.push({
-        name,
-        payload,
-      });
+      await app.actions.appendRecord(record);
     }
-    await AppContext.Actions.setStorage(nextList);
     setSaveModalVisible(false);
   }
 

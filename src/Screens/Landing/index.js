@@ -12,6 +12,7 @@ import NfcProxy from '../../NfcProxy';
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function LandingScreen(props) {
+  const app = React.useContext(AppContext.Context);
   const opacityAnimValue = React.useRef(new Animated.Value(0)).current;
   const scaleAnimValue = React.useRef(new Animated.Value(1)).current;
   const [isNfcSupported, setIsNfcSupported] = React.useState(null);
@@ -41,7 +42,7 @@ function LandingScreen(props) {
 
       await delay(500);
 
-      await AppContext.Actions.initStorage();
+      await app.actions.initStorage();
 
       const success = await NfcProxy.init();
       setIsNfcSupported(success);
@@ -55,7 +56,7 @@ function LandingScreen(props) {
     }
 
     initialize();
-  }, [props.navigation, opacityAnimValue, scaleAnimValue]);
+  }, [app.actions, props.navigation, opacityAnimValue, scaleAnimValue]);
 
   return (
     <View style={styles.container}>
