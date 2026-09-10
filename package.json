@@ -9,6 +9,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
+    "testflight": "./tools/testflight.sh",
     "android:clean": "cd android && ./gradlew clean",
     "android:bundle": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
     "android:assemble": "cd android && ./gradlew assembleRelease && cd .. && open android/app/build/outputs/apk/release",

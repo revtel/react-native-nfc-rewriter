@@ -69,6 +69,10 @@ yarn-error.log
 /openspec/
 /.codex/skills/openspec-*/
 
+# TestFlight credentials (local only)
+/.testflight.env
+/.testflight-secrets/
+
 # by revtel 
 .env
 *.jsbundle.map
