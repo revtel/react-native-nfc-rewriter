@@ -37,6 +37,17 @@ target 'NfcOpenReader' do
       # :ccache_enabled => true
     )
 
+    # Xcode 27 rejects resource bundle targets whose podspecs still declare
+    # deployment targets below this app's React Native minimum (iOS 15.1).
+    installer.pods_project.targets.each do |pod_target|
+      pod_target.build_configurations.each do |build_configuration|
+        target_version = build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+        if target_version && Gem::Version.new(target_version) < Gem::Version.new(min_ios_version_supported)
+          build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min_ios_version_supported
+        end
+      end
+    end
+
     # fmt 11.0.2's consteval support fails with Apple Clang 21 (Xcode 26).
     # Keep this patch here so clean installs and CI builds are reproducible.
     fmt_header = File.join(installer.sandbox.root, 'fmt/include/fmt/base.h')

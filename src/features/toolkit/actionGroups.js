@@ -101,6 +101,12 @@ function getToolkitActionGroups({
           onPress: () => navigate(customTransceiveRoute('NfcA')),
         },
         {
+          title: 'NTAG21x Memory Scan',
+          description: 'Inspect NTAG213/215/216 memory pages',
+          left: NfcIcons.NfcIcon,
+          onPress: () => navigate({screen: 'Ntag21xMemoryScan'}),
+        },
+        {
           title: 'Erase',
           description: 'Write all blocks to zero',
           left: NfcIcons.EraseIcon,

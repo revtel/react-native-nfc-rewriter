@@ -15,6 +15,7 @@ import {
   customTransceiveNfcV,
   eraseNfcA,
 } from './services/nfc/transceiveService';
+import {scanNtag21x} from './services/nfc/ntag21xScanService';
 
 class ErrSuccess extends Error {}
 
@@ -50,6 +51,8 @@ class NfcProxy {
   formatNdefAndroid = formatNdefAndroid;
 
   readNxpSigNtag2xx = readNxpSigNtag2xx;
+
+  scanNtag21x = scanNtag21x;
 }
 
 export default new NfcProxy();

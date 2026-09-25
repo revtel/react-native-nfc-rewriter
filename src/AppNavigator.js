@@ -14,6 +14,7 @@ import NdefWriteScreen from './Screens/NdefWrite';
 import ToolKitScreen from './Screens/Toolkit';
 import TagKitScreen from './Screens/TagKit';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
+import Ntag21xMemoryScanScreen from './Screens/Ntag21xMemoryScan';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
@@ -121,6 +122,11 @@ function Main(props) {
         name="CustomTransceive"
         component={CustomTransceiveScreen}
         options={{title: 'CUSTOM TRANSCEIVE'}}
+      />
+      <MainStack.Screen
+        name="Ntag21xMemoryScan"
+        component={Ntag21xMemoryScanScreen}
+        options={{title: 'NTAG21x MEMORY SCAN'}}
       />
       <MainStack.Screen
         name="SavedRecord"

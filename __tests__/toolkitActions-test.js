@@ -52,4 +52,17 @@ describe('toolkit actions', () => {
       params: {nfcTech: 'NfcA'},
     });
   });
+
+  it('opens the NTAG21x memory scanner from NfcA tools', () => {
+    const navigation = {navigate: jest.fn()};
+    const groups = getToolkitActionGroups({navigation, nfc: {}});
+    const action = groups[1].actions.find(
+      ({title}) => title === 'NTAG21x Memory Scan',
+    );
+
+    action.onPress();
+    expect(navigation.navigate).toHaveBeenCalledWith('Main', {
+      screen: 'Ntag21xMemoryScan',
+    });
+  });
 });
