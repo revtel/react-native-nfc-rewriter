@@ -101,8 +101,14 @@ function getToolkitActionGroups({
           onPress: () => navigate(customTransceiveRoute('NfcA')),
         },
         {
-          title: 'NTAG21x Memory Scan',
-          description: 'Inspect NTAG213/215/216 memory pages',
+          title: 'Flow Script',
+          description: 'Build a response-driven NFC-A workflow',
+          left: NfcIcons.TransceiveIcon,
+          onPress: () => navigate({screen: 'NfcScriptEditor', params: {nfcTech: 'NfcA'}}),
+        },
+        {
+          title: 'Type 2 Memory Scan',
+          description: 'Inspect Type 2-compatible tag memory',
           left: NfcIcons.NfcIcon,
           onPress: () => navigate({screen: 'Ntag21xMemoryScan'}),
         },
@@ -191,6 +197,12 @@ function getToolkitActionGroups({
           description: 'Send custom APDU command into your tag',
           left: NfcIcons.TransceiveIcon,
           onPress: () => navigate(customTransceiveRoute('IsoDep')),
+        },
+        {
+          title: 'Flow Script',
+          description: 'Build a response-driven ISO-DEP workflow',
+          left: NfcIcons.TransceiveIcon,
+          onPress: () => navigate({screen: 'NfcScriptEditor', params: {nfcTech: 'IsoDep'}}),
         },
         {
           title: '[NTAG424 DNA] Enable temper detection',

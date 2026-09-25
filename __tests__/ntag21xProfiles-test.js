@@ -1,5 +1,7 @@
 import {
+  getGenericType2Profile,
   getNtag21xProfile,
+  getPreviewProfile,
   identifyNtag21x,
 } from '../src/features/ntag21x-memory/profiles';
 
@@ -25,5 +27,30 @@ describe('NTAG21x profiles', () => {
     expect(identifyNtag21x(version(0x10))).toBeNull();
     expect(identifyNtag21x([...version(0x0f).slice(0, 7), 0x00])).toBeNull();
     expect(getNtag21xProfile('NTAG999')).toBeNull();
+  });
+});
+
+describe('generic Type 2 profile', () => {
+  it('derives only the CC-declared data area', () => {
+    const profile = getGenericType2Profile([0xe1, 0x10, 0x06, 0x00]);
+    expect(profile).toMatchObject({
+      model: 'Type 2',
+      scope: 'data_area',
+      userBytes: 48,
+      pageCount: 16,
+      lastPage: 15,
+    });
+    expect(profile.regions.map(({key}) => key)).toEqual([
+      'manufacturer',
+      'cc',
+      'user',
+    ]);
+  });
+
+  it('does not invent a bound for invalid, too-small, or unaddressable CCs', () => {
+    expect(getGenericType2Profile([0, 0x10, 0x06, 0])).toBeNull();
+    expect(getGenericType2Profile([0xe1, 0x10, 0x01, 0])).toBeNull();
+    expect(getGenericType2Profile([0xe1, 0x10, 0x7f, 0])).toBeNull();
+    expect(getPreviewProfile()).toMatchObject({pageCount: 4, scope: 'preview'});
   });
 });

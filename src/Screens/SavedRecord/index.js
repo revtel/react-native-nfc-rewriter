@@ -52,7 +52,7 @@ function SavedRecordScreen(props) {
     }
   }
 
-  const {ndefRecords, nfcARecords, nfcVRecords, isoDepRecords} =
+  const {ndefRecords, nfcARecords, nfcVRecords, isoDepRecords, scriptRecords} =
     groupRecordsByTech(recordList);
 
   return (
@@ -61,6 +61,19 @@ function SavedRecordScreen(props) {
         <Text style={{marginLeft: 10, fontSize: 24}}>MY RECORDS</Text>
       </Appbar.Header>
       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+        <List.Section>
+          <List.Subheader>NFC Scripts ({scriptRecords.length})</List.Subheader>
+          {scriptRecords.map(({record, idx}) => (
+            <RecordItem
+              key={idx}
+              record={record}
+              idx={idx}
+              removeIdx={removeIdx}
+              goToHandler={goToHandler.bind(null, idx)}
+              onCopy={() => setRecordToCopy(record)}
+            />
+          ))}
+        </List.Section>
         <List.Section>
           <List.Subheader>NDEF ({ndefRecords.length})</List.Subheader>
           {ndefRecords.map(({record, idx}) => (

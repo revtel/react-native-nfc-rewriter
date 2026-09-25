@@ -1,5 +1,8 @@
+import {decodeCapabilityContainer} from './layout';
+
 const VERSION_PREFIX = [0x00, 0x04, 0x04, 0x02, 0x01, 0x00];
 const PROTOCOL_TYPE = 0x03;
+const MAX_READ_PAGE = 0xff;
 
 function makeProfile(model, storageSize, pageCount, userEndPage) {
   return Object.freeze({
@@ -56,4 +59,50 @@ function getNtag21xProfile(model) {
   return PROFILES[model] || null;
 }
 
-export {getNtag21xProfile, identifyNtag21x};
+function getGenericType2Profile(ccBytes) {
+  const cc = decodeCapabilityContainer(ccBytes);
+  if (cc.status !== 'valid' || cc.dataAreaBytes < 16) {
+    return null;
+  }
+
+  const lastPage = 3 + cc.dataAreaBytes / 4;
+  if (lastPage > MAX_READ_PAGE) {
+    return null;
+  }
+
+  return {
+    model: 'Type 2',
+    scope: 'data_area',
+    pageCount: lastPage + 1,
+    lastPage,
+    userBytes: cc.dataAreaBytes,
+    regions: [
+      {key: 'manufacturer', title: 'Manufacturer / static lock', start: 0, end: 2},
+      {key: 'cc', title: 'Capability Container', start: 3, end: 3},
+      {key: 'user', title: 'CC-declared data area', start: 4, end: lastPage},
+    ],
+  };
+}
+
+const PREVIEW_PROFILE = Object.freeze({
+  model: 'Type 2',
+  scope: 'preview',
+  pageCount: 4,
+  lastPage: 3,
+  userBytes: 0,
+  regions: Object.freeze([
+    {key: 'manufacturer', title: 'Manufacturer / static lock', start: 0, end: 2},
+    {key: 'cc', title: 'Capability Container', start: 3, end: 3},
+  ]),
+});
+
+function getPreviewProfile() {
+  return PREVIEW_PROFILE;
+}
+
+export {
+  getGenericType2Profile,
+  getNtag21xProfile,
+  getPreviewProfile,
+  identifyNtag21x,
+};

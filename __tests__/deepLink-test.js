@@ -26,4 +26,20 @@ describe('share deep links', () => {
       parseShareDeepLink('com.washow.nfcopenrewriter://share?data=nope'),
     ).toBeNull();
   });
+
+  it('loads a shared versioned NFC script without executing it', () => {
+    const record = {
+      name: 'Read & inspect',
+      payload: {
+        kind: 'nfc-script', version: 1, tech: 'NfcA',
+        steps: [{type: 'stop', outcome: 'success', message: 'A & B'}],
+      },
+    };
+    const url = `com.revteltech.nfcopenrewriter://share?data=${encodeURIComponent(JSON.stringify(record))}`;
+    expect(parseShareDeepLink(url)).toEqual({
+      name: 'Main',
+      params: {screen: 'NfcScriptEditor', params: {savedRecord: record}},
+      record,
+    });
+  });
 });

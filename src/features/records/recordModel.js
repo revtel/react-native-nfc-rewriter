@@ -13,6 +13,9 @@ const RECORD_GROUPS = [
 ];
 
 function getRecordScreen(record) {
+  if (record?.payload?.kind === 'nfc-script') {
+    return 'NfcScriptEditor';
+  }
   const tech = record?.payload?.tech;
   if (tech === RECORD_TECH.NDEF) {
     return 'NdefWrite';
@@ -48,8 +51,13 @@ function groupRecordsByTech(records) {
   const groups = Object.fromEntries(
     RECORD_GROUPS.map(({key}) => [key, []]),
   );
+  groups.scriptRecords = [];
 
   records.forEach((record, idx) => {
+    if (record?.payload?.kind === 'nfc-script') {
+      groups.scriptRecords.push({record, idx});
+      return;
+    }
     const group = RECORD_GROUPS.find(
       ({tech}) => tech === record?.payload?.tech,
     );

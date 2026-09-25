@@ -53,16 +53,28 @@ describe('toolkit actions', () => {
     });
   });
 
-  it('opens the NTAG21x memory scanner from NfcA tools', () => {
+  it('opens the Type 2 memory scanner from NfcA tools', () => {
     const navigation = {navigate: jest.fn()};
     const groups = getToolkitActionGroups({navigation, nfc: {}});
     const action = groups[1].actions.find(
-      ({title}) => title === 'NTAG21x Memory Scan',
+      ({title}) => title === 'Type 2 Memory Scan',
     );
 
     action.onPress();
     expect(navigation.navigate).toHaveBeenCalledWith('Main', {
       screen: 'Ntag21xMemoryScan',
     });
+  });
+
+  it('offers a flow script for NFC-A and ISO-DEP', () => {
+    const navigation = {navigate: jest.fn()};
+    const groups = getToolkitActionGroups({navigation, nfc: {}});
+    for (const [groupIndex, tech] of [[1, 'NfcA'], [3, 'IsoDep']]) {
+      const action = groups[groupIndex].actions.find(({title}) => title === 'Flow Script');
+      action.onPress();
+      expect(navigation.navigate).toHaveBeenLastCalledWith('Main', {
+        screen: 'NfcScriptEditor', params: {nfcTech: tech},
+      });
+    }
   });
 });

@@ -9,6 +9,7 @@ import {
 describe('record model', () => {
   const ndef = {name: 'text', payload: {tech: 'Ndef'}};
   const nfcA = {name: 'commands', payload: {tech: 'NfcA'}};
+  const script = {name: 'flow', payload: {kind: 'nfc-script', version: 1, tech: 'IsoDep', steps: []}};
 
   it('groups known records while retaining their storage indexes', () => {
     const result = groupRecordsByTech([
@@ -21,6 +22,7 @@ describe('record model', () => {
     expect(result.nfcARecords).toEqual([{record: nfcA, idx: 2}]);
     expect(result.nfcVRecords).toEqual([]);
     expect(result.isoDepRecords).toEqual([]);
+    expect(result.scriptRecords).toEqual([]);
   });
 
   it('selects the compatible nested screen for a saved record', () => {
@@ -32,6 +34,12 @@ describe('record model', () => {
       },
     });
     expect(getRecordNavigationTarget({payload: {tech: 'Unknown'}})).toBeNull();
+    expect(getRecordNavigationTarget(script, 4)).toEqual({
+      name: 'Main',
+      params: {screen: 'NfcScriptEditor', params: {savedRecord: script, savedRecordIdx: 4}},
+    });
+    expect(groupRecordsByTech([nfcA, script]).scriptRecords).toEqual([{record: script, idx: 1}]);
+    expect(groupRecordsByTech([nfcA, script]).isoDepRecords).toEqual([]);
   });
 
   it('updates record lists immutably', () => {

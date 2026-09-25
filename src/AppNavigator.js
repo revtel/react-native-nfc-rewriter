@@ -14,6 +14,7 @@ import NdefWriteScreen from './Screens/NdefWrite';
 import ToolKitScreen from './Screens/Toolkit';
 import TagKitScreen from './Screens/TagKit';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
+import NfcScriptEditorScreen from './Screens/NfcScriptEditor';
 import Ntag21xMemoryScanScreen from './Screens/Ntag21xMemoryScan';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
@@ -92,7 +93,7 @@ function Main(props) {
       screenOptions={{
         header: (headerProps) => {
           const {navigation, back, options, route} = headerProps;
-          const excludedScreens = ['Home', 'NdefWrite', 'CustomTransceive'];
+          const excludedScreens = ['Home', 'NdefWrite', 'CustomTransceive', 'NfcScriptEditor'];
 
           if (excludedScreens.findIndex((name) => name === route?.name) > -1) {
             return null;
@@ -124,9 +125,14 @@ function Main(props) {
         options={{title: 'CUSTOM TRANSCEIVE'}}
       />
       <MainStack.Screen
+        name="NfcScriptEditor"
+        component={NfcScriptEditorScreen}
+        options={{title: 'NFC FLOW SCRIPT'}}
+      />
+      <MainStack.Screen
         name="Ntag21xMemoryScan"
         component={Ntag21xMemoryScanScreen}
-        options={{title: 'NTAG21x MEMORY SCAN'}}
+        options={{title: 'TYPE 2 MEMORY SCAN'}}
       />
       <MainStack.Screen
         name="SavedRecord"

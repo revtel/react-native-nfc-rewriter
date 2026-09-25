@@ -14,6 +14,7 @@ import {
   formatPageAddress,
   formatPageBytes,
   getPageLabel,
+  getPageRegion,
 } from '../../features/ntag21x-memory/layout';
 import {buildMemoryView} from '../../features/ntag21x-memory/viewModel';
 
@@ -27,50 +28,74 @@ function accessLabel(value) {
   return `reserved (${value.toString(16).toUpperCase()})`;
 }
 
-function PageRow({page, profile, regionTitle, view}) {
-  const label = getPageLabel(profile, page.address);
-  const isSecretPage = label === 'PWD' || label === 'PACK';
-  const tlvs = view.tlvs.entries.filter(
-    (entry) => entry.page === page.address && entry.type !== 0xfe,
-  );
+function FourPageRow({row, view}) {
   return (
-    <View style={styles.pageRow}>
-      <Text style={styles.pageAddress}>{formatPageAddress(page.address)}</Text>
-      <View style={styles.pageContent}>
-        <Text style={styles.hexText}>{formatPageBytes(page.bytes)}</Text>
-        {label !== regionTitle && <Text style={styles.pageLabel}>{label}</Text>}
-        {page.address === 3 && view.cc.status === 'valid' && (
-          <Text style={styles.pageLabel}>
-            Type 2 v{view.cc.version} · {view.cc.dataAreaBytes} B NDEF area ·
-            Read {accessLabel(view.cc.readAccess)} · Write{' '}
-            {accessLabel(view.cc.writeAccess)}
-          </Text>
-        )}
-        {page.address === 3 && view.cc.status !== 'valid' && (
-          <Text style={styles.pageStatus}>
-            {view.cc.status === 'unavailable'
-              ? 'CC unavailable; meaning unknown.'
-              : `CC invalid: ${view.cc.errors.join(', ')}`}
-          </Text>
-        )}
-        {tlvs.map((entry, index) => (
-          <Text key={`${entry.byteOffset}-${index}`} style={styles.pageLabel}>
-            {entry.name} @ +{entry.pageByteOffset}
-            {typeof entry.length === 'number' ? ` · ${entry.length} B` : ''}
-            {entry.status !== 'valid' ? ` · ${entry.status}` : ''}
-          </Text>
+    <View style={styles.pageGroup}>
+      <View style={styles.pageCells}>
+        {row.pages.map((page, index) => (
+          <View key={row.start + index} style={styles.pageCell}>
+            {page && (
+              <>
+                <Text style={styles.pageAddress}>
+                  {formatPageAddress(page.address)}
+                </Text>
+                <Text style={styles.hexText}>{formatPageBytes(page.bytes)}</Text>
+                {page.status !== 'read' && (
+                  <Text style={styles.pageStatus}>
+                    {page.status === 'unreadable' ? 'Unreadable' : 'Not scanned'}
+                  </Text>
+                )}
+              </>
+            )}
+          </View>
         ))}
-        {page.status !== 'read' && (
-          <Text style={styles.pageStatus}>
-            {page.status === 'unreadable' ? 'Unreadable' : 'Not scanned'}
-          </Text>
-        )}
-        {isSecretPage && page.status === 'read' && (
-          <Text style={styles.pageStatus}>
-            Readback does not reveal stored secret bytes.
-          </Text>
-        )}
       </View>
+      {row.pages.filter(Boolean).map((page) => {
+        const label = getPageLabel(view.profile, page.address);
+        const region = getPageRegion(view.profile, page.address);
+        const tlvs = view.tlvs.entries.filter(
+          (entry) => entry.page === page.address && entry.type !== 0xfe,
+        );
+        return (
+          <View key={`notes-${page.address}`}>
+            {label && (page.address === 3 || region.key !== 'user') && (
+              <Text style={styles.pageLabel}>
+                {formatPageAddress(page.address)} · {label}
+              </Text>
+            )}
+            {page.address === 3 && view.cc.status === 'valid' && (
+              <Text style={styles.pageLabel}>
+                {formatPageAddress(page.address)} · Type 2 v{view.cc.version} ·{' '}
+                {view.cc.dataAreaBytes} B NDEF area · Read{' '}
+                {accessLabel(view.cc.readAccess)} · Write{' '}
+                {accessLabel(view.cc.writeAccess)}
+              </Text>
+            )}
+            {page.address === 3 && view.cc.status !== 'valid' && (
+              <Text style={styles.pageStatus}>
+                {formatPageAddress(page.address)} ·{' '}
+                {view.cc.status === 'unavailable'
+                  ? 'CC unavailable; meaning unknown.'
+                  : `CC invalid: ${view.cc.errors.join(', ')}`}
+              </Text>
+            )}
+            {tlvs.map((entry, index) => (
+              <Text key={`${entry.byteOffset}-${index}`} style={styles.pageLabel}>
+                {formatPageAddress(page.address)} · {entry.name} @ +
+                {entry.pageByteOffset}
+                {typeof entry.length === 'number' ? ` · ${entry.length} B` : ''}
+                {entry.status !== 'valid' ? ` · ${entry.status}` : ''}
+              </Text>
+            ))}
+            {(label === 'PWD' || label === 'PACK') && page.status === 'read' && (
+              <Text style={styles.pageStatus}>
+                {formatPageAddress(page.address)} · Readback does not reveal stored
+                secret bytes.
+              </Text>
+            )}
+          </View>
+        );
+      })}
     </View>
   );
 }
@@ -86,22 +111,44 @@ function ScanSummary({scan, view}) {
           {scan.status === 'unsupported' ? 'UNSUPPORTED TAG' : 'TAG NOT IDENTIFIED'}
         </Text>
         <Text style={styles.bodyText}>
-          This scan supports NTAG213, NTAG215, and NTAG216. No memory size was
-          inferred.
+          No readable Type 2 pages were confirmed. No memory size was inferred.
         </Text>
       </View>
     );
   }
 
   const failureAddress = scan.failure?.address;
+  const scope = scan.scope || 'full';
+  const title =
+    scope === 'data_area'
+      ? `TYPE 2 · ${scan.status === 'complete' ? 'DATA AREA COMPLETE' : 'PARTIAL'}`
+      : scope === 'preview'
+      ? 'TYPE 2 · LIMITED PREVIEW'
+      : `${view.profile.model} · ${scan.status.toUpperCase()}`;
   return (
     <View style={styles.card}>
-      <Text style={styles.statusTitle}>
-        {view.profile.model}  ·  {scan.status.toUpperCase()}
-      </Text>
+      <Text style={styles.statusTitle}>{title}</Text>
       <Text style={styles.bodyText}>
-        {scan.readPages} / {scan.pageCount} pages read · {view.profile.pageCount * 4} bytes total
+        {scan.readPages} / {scan.pageCount} pages read
       </Text>
+      {scope === 'full' && (
+        <Text style={styles.bodyText}>
+          Documented model range · {view.profile.pageCount * 4} bytes
+        </Text>
+      )}
+      {scope === 'data_area' && (
+        <Text style={styles.bodyText}>
+          CC declares {view.cc.dataAreaBytes} B of data area. Vendor memory beyond
+          it was not scanned.
+        </Text>
+      )}
+      {scope === 'preview' && (
+        <Text style={styles.warningText}>
+          {scan.limitReason === 'unaddressable_cc'
+            ? `CC declares ${view.cc.dataAreaBytes} B, but that range is not safely addressable. Only the initial four pages were read.`
+            : 'Capacity unknown. Only the initial four pages were read.'}
+        </Text>
+      )}
       {view.uid && <Text style={styles.bodyText}>UID  {view.uid}</Text>}
       {scan.status === 'partial' && (
         <Text style={styles.warningText}>
@@ -126,10 +173,9 @@ function Ntag21xMemoryScanScreen() {
   const [progress, setProgress] = React.useState(null);
   const [expanded, setExpanded] = React.useState({
     manufacturer: true,
-    cc: true,
     user: true,
-    dynamicLock: false,
-    configuration: false,
+    dynamicLock: true,
+    configuration: true,
   });
   const mounted = React.useRef(true);
 
@@ -149,7 +195,7 @@ function Ntag21xMemoryScanScreen() {
     setScanning(true);
     let result;
     try {
-      result = await NfcProxy.scanNtag21x({
+      result = await NfcProxy.scanType2Memory({
         onProgress: (update) => {
           if (mounted.current) {
             setProgress(update);
@@ -167,9 +213,9 @@ function Ntag21xMemoryScanScreen() {
 
   const view = React.useMemo(() => buildMemoryView(scan), [scan]);
   const sections = view
-    ? view.sections.map((region) => ({
+    ? view.rowSections.map((region) => ({
         ...region,
-        data: expanded[region.key] ? region.pages : [],
+        data: expanded[region.key] ? region.rows : [],
       }))
     : [];
 
@@ -179,12 +225,12 @@ function Ntag21xMemoryScanScreen() {
       contentContainerStyle={styles.content}
       stickySectionHeadersEnabled={false}
       sections={sections}
-      keyExtractor={(page) => `${page.address}`}
+      keyExtractor={(row) => `${row.start}`}
       ListHeaderComponent={
         <>
           <View style={styles.card}>
             <Text style={styles.bodyText}>
-              Inspect NTAG213, NTAG215, or NTAG216 memory page by page.
+              Inspect Type 2-compatible tag memory in four-page rows.
             </Text>
             <Text style={styles.noteText}>
               This scan sends no write or authentication commands. An enabled NFC
@@ -237,14 +283,7 @@ function Ntag21xMemoryScanScreen() {
           </Text>
         </TouchableOpacity>
       )}
-      renderItem={({item, section}) => (
-        <PageRow
-          page={item}
-          profile={view.profile}
-          regionTitle={section.title}
-          view={view}
-        />
-      )}
+      renderItem={({item}) => <FourPageRow row={item} view={view} />}
     />
   );
 }
@@ -276,24 +315,23 @@ const styles = StyleSheet.create({
   regionText: {flex: 1},
   regionTitle: {fontSize: 14, fontWeight: '700', color: '#263238'},
   regionRange: {fontSize: 12, color: '#52616b'},
-  pageRow: {
+  pageGroup: {
     backgroundColor: 'white',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#d3dbe0',
-    flexDirection: 'row',
     padding: 10,
   },
+  pageCells: {flexDirection: 'row'},
+  pageCell: {flex: 1, minWidth: 0, paddingRight: 3},
   pageAddress: {
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '700',
     color: '#3985cb',
-    width: 36,
   },
-  pageContent: {flex: 1},
   hexText: {
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    fontSize: 14,
+    fontSize: 10,
     color: '#263238',
   },
   pageLabel: {fontSize: 12, color: '#52616b', marginTop: 3},
