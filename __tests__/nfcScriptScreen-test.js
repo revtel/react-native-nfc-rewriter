@@ -3,7 +3,10 @@ import {Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import renderer, {act} from 'react-test-renderer';
 import NfcProxy from '../src/NfcProxy';
+import HexBytePad from '../src/Components/HexBytePad';
 import NfcScriptEditorScreen, {StepList} from '../src/Screens/NfcScriptEditor';
+import NfcScriptHelpScreen from '../src/Screens/NfcScriptHelp';
+import {executeScript} from '../src/features/nfc-script/interpreter';
 import {newScript} from '../src/features/nfc-script/model';
 
 jest.mock('../src/NfcProxy', () => ({runNfcScript: jest.fn()}));
@@ -80,5 +83,223 @@ test('saved script is not run on open and shows trace only after explicit run', 
   });
   expect(NfcProxy.runNfcScript).toHaveBeenCalledWith(savedRecord.payload);
   expect(text(tree).replace(/\s+/g, ' ')).toContain('SW: 9000');
+  tree.unmount();
+});
+
+test('editor opens the dedicated help screen without running NFC', async () => {
+  NfcProxy.runNfcScript.mockClear();
+  const navigation = {goBack: jest.fn(), navigate: jest.fn()};
+  let tree;
+  await act(async () => {
+    tree = renderer.create(
+      <NfcScriptEditorScreen
+        route={{params: {nfcTech: 'NfcA'}}}
+        navigation={navigation}
+      />,
+    );
+  });
+  await act(async () => {
+    button(tree, 'HELP: EXAMPLES & FORMATS').props.onPress();
+  });
+  expect(navigation.navigate).toHaveBeenCalledWith('NfcScriptHelp', {
+    tech: 'NfcA',
+  });
+  expect(NfcProxy.runNfcScript).not.toHaveBeenCalled();
+  tree.unmount();
+});
+
+test('help screen shows a complete capture-to-command example and format reference', async () => {
+  let tree;
+  await act(async () => {
+    tree = renderer.create(<NfcScriptHelpScreen route={{params: {tech: 'IsoDep'}}} />);
+  });
+  expect(text(tree)).toContain('1. TRANSCEIVE — read the fixed location');
+  expect(text(tree)).toContain('Variable name:  targetPage');
+  expect(text(tree)).toContain('30 ${targetPage:u8}');
+  expect(text(tree)).toContain('30 10');
+  expect(text(tree)).toContain('${payload:bytes}');
+  expect(text(tree)).toContain('sw: 0x9000');
+  tree.unmount();
+});
+
+test('documented pointer example resolves captured tag data into next command', async () => {
+  const transceive = jest
+    .fn()
+    .mockResolvedValueOnce([4, 0x10, ...Array(14).fill(0)])
+    .mockResolvedValueOnce(Array(16).fill(0));
+  const result = await executeScript(
+    {
+      ...newScript('NfcA'),
+      steps: [
+        {type: 'transceive', template: '30 04'},
+        {
+          type: 'capture',
+          name: 'targetPage',
+          source: 'data',
+          offset: 1,
+          format: 'u8',
+        },
+        {type: 'transceive', template: '30 ${targetPage:u8}'},
+      ],
+    },
+    {transceive},
+  );
+  expect(result.success).toBe(true);
+  expect(result.variables.targetPage).toBe(16);
+  expect(transceive.mock.calls).toEqual([[[0x30, 0x04]], [[0x30, 0x10]]]);
+});
+
+test('builder mode appends a typed variable segment without cursor control', async () => {
+  const onChange = jest.fn();
+  let tree;
+  await act(async () => {
+    tree = renderer.create(
+      <StepList
+        steps={[
+          {type: 'transceive', template: '30 04'},
+          {
+            type: 'capture',
+            name: 'targetPage',
+            source: 'data',
+            offset: 1,
+            format: 'u8',
+          },
+          {type: 'transceive', template: '30 00'},
+        ]}
+        onChange={onChange}
+      />,
+    );
+  });
+  await act(async () => {
+    tree.root
+      .findAllByType(Button)
+      .filter((node) => node.props.children === 'BUILDER')[1]
+      .props.onPress();
+  });
+  await act(async () => {
+    button(tree, 'CHOOSE VARIABLE')
+      .props.onPress();
+  });
+  expect(text(tree)).toContain('targetPage · number');
+  await act(async () => {
+    button(tree, 'targetPage · number').props.onPress();
+  });
+  await act(async () => {
+    tree.root
+      .findAllByType(Button)
+      .filter((node) => node.props.children === 'u16le')
+      .at(-1)
+      .props.onPress();
+  });
+  await act(async () => {
+    button(tree, 'ADD VARIABLE').props.onPress();
+  });
+  expect(onChange.mock.calls.at(-1)[0][2].template).toBe(
+    '30 00 ${targetPage:u16le}',
+  );
+  tree.unmount();
+});
+
+test('variable picker keeps branch variables inside their own path', async () => {
+  let tree;
+  await act(async () => {
+    tree = renderer.create(
+      <StepList
+        steps={[
+          {type: 'set', name: 'outer', expression: '1'},
+          {
+            type: 'if',
+            left: '1',
+            operator: '==',
+            right: '1',
+            then: [
+              {type: 'set', name: 'inner', expression: '2'},
+              {type: 'transceive', template: ''},
+            ],
+            else: [],
+          },
+          {type: 'transceive', template: ''},
+        ]}
+        onChange={jest.fn()}
+      />,
+    );
+  });
+  await act(async () => {
+    tree.root
+      .findAllByType(Button)
+      .filter((node) => node.props.children === 'BUILDER')[0]
+      .props.onPress();
+  });
+  await act(async () => {
+    tree.root
+      .findAllByType(Button)
+      .filter((node) => node.props.children === 'CHOOSE VARIABLE')[0]
+      .props.onPress();
+  });
+  expect(button(tree, 'outer · number')).toBeDefined();
+  expect(button(tree, 'inner · number')).toBeDefined();
+  await act(async () => {
+    button(tree, 'CANCEL').props.onPress();
+  });
+  await act(async () => {
+    tree.root
+      .findAllByType(Button)
+      .filter((node) => node.props.children === 'BUILDER')[1]
+      .props.onPress();
+  });
+  await act(async () => {
+    tree.root
+      .findAllByType(Button)
+      .filter((node) => node.props.children === 'CHOOSE VARIABLE')[1]
+      .props.onPress();
+  });
+  expect(button(tree, 'outer · number')).toBeDefined();
+  expect(button(tree, 'inner · number')).toBeUndefined();
+  tree.unmount();
+});
+
+test('builder mode uses the shared hex modal to append literal bytes', async () => {
+  const onChange = jest.fn();
+  let tree;
+  await act(async () => {
+    tree = renderer.create(
+      <StepList
+        steps={[{type: 'transceive', template: '30'}]}
+        onChange={onChange}
+      />,
+    );
+  });
+  await act(async () => {
+    button(tree, 'BUILDER').props.onPress();
+  });
+  await act(async () => {
+    button(tree, 'ADD HEX BYTES').props.onPress();
+  });
+  await act(async () => {
+    tree.root.findByType(HexBytePad).props.onByte(0x04);
+  });
+  await act(async () => {
+    button(tree, 'ADD BYTES').props.onPress();
+  });
+  expect(onChange.mock.calls.at(-1)[0][0].template).toBe('30 04');
+  tree.unmount();
+});
+
+test('builder mode does not discard an invalid text command', async () => {
+  const onChange = jest.fn();
+  let tree;
+  await act(async () => {
+    tree = renderer.create(
+      <StepList
+        steps={[{type: 'transceive', template: '30 0'}]}
+        onChange={onChange}
+      />,
+    );
+  });
+  await act(async () => {
+    button(tree, 'BUILDER').props.onPress();
+  });
+  expect(text(tree)).toContain('Fix command syntax in TEXT mode');
+  expect(onChange).not.toHaveBeenCalled();
   tree.unmount();
 });

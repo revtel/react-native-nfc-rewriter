@@ -1,56 +1,12 @@
 import React from 'react';
 import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
+import HexBytePad from './HexBytePad';
 
 const CmdType = {
   COMMAND: 'command',
   DELAY: 'delay',
 };
-
-function HexPads(props) {
-  const {addByteToCmd} = props;
-  const [value, setValue] = React.useState('');
-  const values = Array.from({length: 16});
-  const rows = values.reduce((acc, _, idx) => {
-    if (idx % 4 === 0) {
-      acc.push([]);
-    }
-
-    acc[acc.length - 1].push(idx);
-    return acc;
-  }, []);
-
-  function addHexChar(c) {
-    if (value.length === 1) {
-      addByteToCmd(parseInt(value + c, 16));
-      setValue('');
-    } else {
-      setValue(c);
-    }
-  }
-
-  return (
-    <View>
-      {rows.map((row, idx) => (
-        <View key={idx} style={{flexDirection: 'row', padding: 10}}>
-          {row.map((hex) => {
-            const c = hex.toString(16).toUpperCase();
-            return (
-              <Button
-                key={c}
-                mode={value === c ? 'contained' : 'text'}
-                // issue #24: force the elevation to 0 to workaround
-                style={{elevation: 0}}
-                onPress={() => addHexChar(c)}>
-                {c}
-              </Button>
-            );
-          })}
-        </View>
-      ))}
-    </View>
-  );
-}
 
 function CustomTransceiveModal(props) {
   const {
@@ -58,11 +14,14 @@ function CustomTransceiveModal(props) {
     setVisible: _setVisible,
     isEditing,
     editCommand,
+    onInsertBytes,
   } = props;
+  const isByteInsert = typeof onInsertBytes === 'function';
   const [visible, setVisible] = React.useState(false);
   const animValue = React.useRef(new Animated.Value(0)).current;
   const [cmdType, setCmdType] = React.useState(CmdType.COMMAND);
   const [cmdBytes, setCmdBytes] = React.useState([]);
+  const [padKey, setPadKey] = React.useState(0);
   const [delayMs, setDelayMs] = React.useState(100);
 
   React.useEffect(() => {
@@ -73,16 +32,18 @@ function CustomTransceiveModal(props) {
         toValue: 1,
         useNativeDriver: true,
       }).start();
-    } else {
+    } else if (visible) {
       Animated.timing(animValue, {
         duration: 200,
         toValue: 0,
         useNativeDriver: true,
-      }).start(() => {
-        setVisible(false);
+      }).start(({finished}) => {
+        if (finished) {
+          setVisible(false);
+        }
       });
     }
-  }, [_visible, animValue]);
+  }, [_visible, animValue, visible]);
 
   React.useEffect(() => {
     if (props.cmdType && props.cmdType !== cmdType) {
@@ -91,17 +52,26 @@ function CustomTransceiveModal(props) {
   }, [cmdType, props.cmdType]);
 
   function addByteToCmd(byte) {
-    setCmdBytes([...cmdBytes, byte]);
+    setCmdBytes((current) => [...current, byte]);
   }
 
   function resetValues() {
     setCmdType(CmdType.COMMAND);
     setCmdBytes([]);
+    setPadKey((current) => current + 1);
     setDelayMs(100);
   }
 
   function doAddCommand() {
-    const cmd = {};
+    if (isByteInsert) {
+      if (cmdBytes.length === 0) {
+        return;
+      }
+      onInsertBytes([...cmdBytes]);
+      resetValues();
+      _setVisible(false);
+      return;
+    }
     if (cmdType === CmdType.COMMAND) {
       editCommand({
         type: 'command',
@@ -139,12 +109,13 @@ function CustomTransceiveModal(props) {
   };
 
   return (
-    <Modal transparent={true} visible={visible}>
+    <Modal transparent={true} visible={visible} onRequestClose={doCancel}>
       <View style={[styles.wrapper]}>
         <View style={{flex: 1}} />
 
         <Animated.View style={[styles.prompt, promptAnimStyle]}>
-          {!props.cmdType && (
+          {isByteInsert && <Text style={styles.title}>Add hex bytes</Text>}
+          {!props.cmdType && !isByteInsert && (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={{marginRight: 10}}>Type: </Text>
               {Object.values(CmdType).map((type) => (
@@ -178,7 +149,7 @@ function CustomTransceiveModal(props) {
                 </Button>
                 <Button onPress={() => setCmdBytes([])}>Clr</Button>
               </View>
-              <HexPads addByteToCmd={addByteToCmd} />
+              <HexBytePad key={padKey} onByte={addByteToCmd} />
             </View>
           )}
 
@@ -198,8 +169,12 @@ function CustomTransceiveModal(props) {
           )}
 
           <View style={{flexDirection: 'row'}}>
-            <Button mode="contained" onPress={doAddCommand} style={{flex: 1}}>
-              {isEditing ? 'Modify' : 'Add'}
+            <Button
+              mode="contained"
+              onPress={doAddCommand}
+              disabled={isByteInsert && cmdBytes.length === 0}
+              style={{flex: 1}}>
+              {isByteInsert ? 'ADD BYTES' : isEditing ? 'Modify' : 'Add'}
             </Button>
 
             <Button onPress={doCancel} style={{flex: 1}}>
@@ -215,6 +190,7 @@ function CustomTransceiveModal(props) {
 }
 
 const styles = StyleSheet.create({
+  title: {fontSize: 20, fontWeight: '700', textAlign: 'center'},
   wrapper: {
     width: '100%',
     height: '100%',

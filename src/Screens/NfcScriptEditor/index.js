@@ -8,13 +8,20 @@ import {
   View,
 } from 'react-native';
 import {Button} from 'react-native-paper';
+import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import ScreenHeader from '../../Components/ScreenHeader';
 import NfcProxy from '../../NfcProxy';
+import {
+  parseTemplateTokens,
+  serializeTemplateTokens,
+  variablesAfterStep,
+} from '../../features/nfc-script/editorHelpers';
 import {
   makeStep,
   newScript,
   validateScript,
 } from '../../features/nfc-script/model';
+import VariableInsertModal from './VariableInsertModal';
 
 const STEP_TYPES = [
   'transceive',
@@ -63,15 +70,142 @@ function Choice({values, selected, onSelect}) {
   );
 }
 
-function StepFields({step, change, depth}) {
+function CommandTemplateField({template, change, available}) {
+  const value = typeof template === 'string' ? template : '';
+  const [mode, setMode] = React.useState('TEXT');
+  const [showVariablePicker, setShowVariablePicker] = React.useState(false);
+  const [showHexPicker, setShowHexPicker] = React.useState(false);
+  const [modeError, setModeError] = React.useState(null);
+  let tokens = [];
+  if (mode === 'BUILDER') {
+    try {
+      tokens = parseTemplateTokens(value);
+    } catch (error) {
+      tokens = [];
+    }
+  }
+
+  function selectMode(nextMode) {
+    if (nextMode === 'BUILDER') {
+      try {
+        parseTemplateTokens(value);
+      } catch (error) {
+        setModeError(`Fix command syntax in TEXT mode: ${error.message}`);
+        return;
+      }
+    }
+    setModeError(null);
+    setMode(nextMode);
+  }
+
+  function updateTokens(nextTokens) {
+    change({template: serializeTemplateTokens(nextTokens)});
+  }
+
+  function moveToken(index, direction) {
+    const next = [...tokens];
+    const target = index + direction;
+    [next[index], next[target]] = [next[target], next[index]];
+    updateTokens(next);
+  }
+
+  return (
+    <>
+      <Text style={styles.fieldLabel}>
+        Command bytes (hex and ${'{expression:format}'})
+      </Text>
+      <Choice
+        values={['TEXT', 'BUILDER']}
+        selected={mode}
+        onSelect={selectMode}
+      />
+      {modeError && <Text style={styles.error}>{modeError}</Text>}
+      {mode === 'TEXT' ? (
+        <>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            value={value}
+            onChangeText={(text) => change({template: text})}
+            autoCapitalize="none"
+            autoCorrect={false}
+            multiline
+          />
+          <Text style={styles.hint}>
+            {'Example: 30 ${targetPage:u8}. See HELP for formats.'}
+          </Text>
+        </>
+      ) : (
+        <>
+          <Text style={styles.hint}>
+            Add hex bytes or variables in send order. Use TEXT for arithmetic
+            expressions or direct editing.
+          </Text>
+          {tokens.length === 0 && (
+            <Text style={styles.hint}>No command segments yet.</Text>
+          )}
+          {tokens.map((token, index) => (
+            <View key={`${index}-${token}`} style={styles.commandSegment}>
+              <Text style={styles.commandToken}>{`${index + 1}. ${token}`}</Text>
+              <Button
+                compact
+                disabled={index === 0}
+                onPress={() => moveToken(index, -1)}>
+                ↑
+              </Button>
+              <Button
+                compact
+                disabled={index === tokens.length - 1}
+                onPress={() => moveToken(index, 1)}>
+                ↓
+              </Button>
+              <Button
+                compact
+                onPress={() =>
+                  updateTokens(tokens.filter((_, position) => position !== index))
+                }>
+                ✕
+              </Button>
+            </View>
+          ))}
+          <View style={styles.builderActions}>
+            <Button mode="outlined" onPress={() => setShowHexPicker(true)}>
+              ADD HEX BYTES
+            </Button>
+            <Button mode="outlined" onPress={() => setShowVariablePicker(true)}>
+              CHOOSE VARIABLE
+            </Button>
+          </View>
+          <Text style={styles.commandPreview}>{value || '(empty command)'}</Text>
+        </>
+      )}
+      <CustomTransceiveModal
+        visible={showHexPicker}
+        setVisible={setShowHexPicker}
+        onInsertBytes={(bytes) =>
+          updateTokens([
+            ...tokens,
+            ...bytes.map((byte) => byte.toString(16).padStart(2, '0').toUpperCase()),
+          ])
+        }
+      />
+      <VariableInsertModal
+        visible={showVariablePicker}
+        available={available}
+        onInsert={(token) => updateTokens([...tokens, token])}
+        onClose={() => setShowVariablePicker(false)}
+      />
+    </>
+  );
+}
+
+function StepFields({step, change, depth, available, tech}) {
   switch (step.type) {
     case 'transceive':
       return (
-        <Field
-          label="Command bytes (hex and ${expression:format})"
-          value={step.template}
-          onChange={(template) => change({template})}
-          multiline
+        <CommandTemplateField
+          template={step.template}
+          change={change}
+          available={available}
         />
       );
     case 'delay':
@@ -96,6 +230,9 @@ function StepFields({step, change, depth}) {
             value={step.expression}
             onChange={(expression) => change({expression})}
           />
+          <Text style={styles.hint}>
+            {'Example: basePage + 4. Use a variable from an earlier step.'}
+          </Text>
         </>
       );
     case 'capture':
@@ -137,6 +274,9 @@ function StepFields({step, change, depth}) {
               numeric
             />
           )}
+          <Text style={styles.hint}>
+            Read from the latest response. Byte offset starts at 0.
+          </Text>
         </>
       );
     case 'if':
@@ -162,12 +302,16 @@ function StepFields({step, change, depth}) {
             steps={step.then || []}
             onChange={(thenSteps) => change({then: thenSteps})}
             depth={depth + 1}
+            available={available}
+            tech={tech}
           />
           <Text style={styles.branchLabel}>FALSE PATH</Text>
           <StepList
             steps={step.else || []}
             onChange={(elseSteps) => change({else: elseSteps})}
             depth={depth + 1}
+            available={available}
+            tech={tech}
           />
         </>
       );
@@ -193,6 +337,8 @@ function StepFields({step, change, depth}) {
             steps={step.steps || []}
             onChange={(body) => change({steps: body})}
             depth={depth + 1}
+            available={{...available, index: 'number'}}
+            tech={tech}
           />
         </>
       );
@@ -220,8 +366,9 @@ function StepFields({step, change, depth}) {
   }
 }
 
-function StepList({steps, onChange, depth = 0}) {
+function StepList({steps, onChange, depth = 0, available = {}, tech = 'NfcA'}) {
   const [showAdd, setShowAdd] = React.useState(false);
+  let currentAvailable = {...available};
   const update = (idx, patch) =>
     onChange(
       steps.map((step, position) =>
@@ -237,7 +384,10 @@ function StepList({steps, onChange, depth = 0}) {
 
   return (
     <View style={[styles.stepList, depth > 0 && styles.nestedList]}>
-      {steps.map((step, idx) => (
+      {steps.map((step, idx) => {
+        const stepAvailable = currentAvailable;
+        currentAvailable = variablesAfterStep(currentAvailable, step, tech);
+        return (
         <View key={`${depth}-${idx}`} style={styles.stepCard}>
           <View style={styles.stepHeader}>
             <Text style={styles.stepTitle}>
@@ -266,9 +416,12 @@ function StepList({steps, onChange, depth = 0}) {
             step={step || {}}
             change={(patch) => update(idx, patch)}
             depth={depth}
+            available={stepAvailable}
+            tech={tech}
           />
         </View>
-      ))}
+        );
+      })}
       {depth <= 6 && (
         <>
           <Button mode="outlined" onPress={() => setShowAdd(!showAdd)}>
@@ -441,6 +594,14 @@ function NfcScriptEditorScreen({navigation, route}) {
                 One technology and one NFC session per run. Scripts run only
                 when you tap RUN.
               </Text>
+              <Button
+                mode="outlined"
+                onPress={() =>
+                  navigation.navigate('NfcScriptHelp', {tech: script.tech})
+                }
+              >
+                HELP: EXAMPLES & FORMATS
+              </Button>
               {errors.map((error, idx) => (
                 <Text key={idx} style={styles.error}>
                   {error}
@@ -449,6 +610,7 @@ function NfcScriptEditorScreen({navigation, route}) {
               <StepList
                 steps={Array.isArray(script.steps) ? script.steps : []}
                 onChange={(steps) => editScript({...script, steps})}
+                tech={script.tech}
               />
             </>
           ) : (
@@ -502,6 +664,22 @@ const styles = StyleSheet.create({
     color: '#172B4D',
   },
   multilineInput: {minHeight: 64, textAlignVertical: 'top'},
+  commandSegment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#D8E0EA',
+    borderWidth: 1,
+    borderRadius: 4,
+    marginBottom: 6,
+    paddingLeft: 6,
+  },
+  commandToken: {flex: 1, color: '#172B4D', fontFamily: 'monospace'},
+  builderActions: {flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8},
+  commandPreview: {
+    color: '#172B4D',
+    fontFamily: 'monospace',
+    marginTop: 8,
+  },
   choices: {flexDirection: 'row', flexWrap: 'wrap', marginVertical: 4},
   choice: {marginRight: 4, marginBottom: 4},
   branchLabel: {fontWeight: '700', color: '#355E89', marginTop: 8},

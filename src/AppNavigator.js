@@ -15,6 +15,7 @@ import ToolKitScreen from './Screens/Toolkit';
 import TagKitScreen from './Screens/TagKit';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
 import NfcScriptEditorScreen from './Screens/NfcScriptEditor';
+import NfcScriptHelpScreen from './Screens/NfcScriptHelp';
 import Ntag21xMemoryScanScreen from './Screens/Ntag21xMemoryScan';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
@@ -128,6 +129,11 @@ function Main(props) {
         name="NfcScriptEditor"
         component={NfcScriptEditorScreen}
         options={{title: 'NFC FLOW SCRIPT'}}
+      />
+      <MainStack.Screen
+        name="NfcScriptHelp"
+        component={NfcScriptHelpScreen}
+        options={{title: 'FLOW SCRIPT HELP'}}
       />
       <MainStack.Screen
         name="Ntag21xMemoryScan"
