@@ -1,10 +1,7 @@
 import * as React from 'react';
-import {Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeBottomTabNavigator} from '@react-navigation/bottom-tabs/unstable';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LandingScreen from './Screens/Landing';
 import HomeScreen from './Screens/Home';
 import TagDetailScreen from './Screens/TagDetail';
@@ -20,15 +17,11 @@ import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
 import Toast from './Components/Toast';
 import {PRIMARY_TABS} from './features/navigation/primaryTabs';
+import {nativeTabIcon} from './features/navigation/nativeTabIcon';
 import * as Theme from './Theme';
 
 const RootStack = createNativeStackNavigator();
-// Android native tabs currently clip the system status bar on cutout devices.
-// Keep native tabs on iOS and use the stable tab view on Android.
-const HomeTabs =
-  Platform.OS === 'ios'
-    ? createNativeBottomTabNavigator()
-    : createBottomTabNavigator();
+const HomeTabs = createNativeBottomTabNavigator();
 
 const tabScreens = {
   HomeTab: HomeScreen,
@@ -37,26 +30,13 @@ const tabScreens = {
   MyRecordsTab: SavedRecordScreen,
 };
 
-function tabIcon(routeName) {
-  const names = PRIMARY_TABS.find(({name}) => name === routeName)?.icons;
-  if (!names) {
-    return undefined;
-  }
-  if (Platform.OS === 'android') {
-    return ({color, size}) => (
-      <MaterialIcons name={names.android} size={size} color={color} />
-    );
-  }
-  return {type: 'sfSymbol', name: names.ios};
-}
-
 function HomeTabNav() {
   return (
     <HomeTabs.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarActiveTintColor: Theme.colors.blue,
-        tabBarIcon: tabIcon(route.name),
+        tabBarIcon: nativeTabIcon(route.name),
       })}
     >
       {PRIMARY_TABS.map(({name, title}) => (
