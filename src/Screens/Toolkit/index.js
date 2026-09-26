@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {ScrollView, Text} from 'react-native';
 import {Appbar, List} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import {getToolkitActionGroups} from '../../features/toolkit/actionGroups';
 
 function ToolKitScreen({navigation}) {
   const groups = getToolkitActionGroups({navigation});
 
   return (
-    <>
+    <SafeAreaView edges={{bottom: true}} style={{flex: 1}}>
       <Appbar.Header style={{backgroundColor: 'white'}}>
         <Text style={{marginLeft: 10, fontSize: 24}}>NFC TOOLKIT</Text>
       </Appbar.Header>
@@ -22,7 +23,7 @@ function ToolKitScreen({navigation}) {
           </List.Section>
         ))}
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
 

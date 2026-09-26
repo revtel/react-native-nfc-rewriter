@@ -98,18 +98,28 @@ describe('Type 2 memory scan screen', () => {
       0, 1, 2, 3,
     ]);
     const ccRow = list.props.renderItem({item: firstSection.data[0]});
-    const ccTree = renderer.create(ccRow);
+    let ccTree;
+    await act(async () => {
+      ccTree = renderer.create(ccRow);
+    });
     expect(visibleText(ccTree)).toContain('E1 10 12 00');
     expect(visibleText(ccTree).replace(/\s+/g, ' ')).toContain('144 B NDEF area');
-    const userHeader = renderer.create(
-      list.props.renderSectionHeader({
-        section: list.props.sections.find(({key}) => key === 'user'),
-      }),
-    );
+    let userHeader;
+    await act(async () => {
+      userHeader = renderer.create(
+        list.props.renderSectionHeader({
+          section: list.props.sections.find(({key}) => key === 'user'),
+        }),
+      );
+    });
     expect(visibleText(userHeader).replace(/\s+/g, ' ')).toContain(
       'TLV incomplete',
     );
-    tree.unmount();
+    await act(async () => {
+      ccTree.unmount();
+      userHeader.unmount();
+      tree.unmount();
+    });
   });
 
   it('labels a generic scan as data-area only and leaves final slots empty', async () => {

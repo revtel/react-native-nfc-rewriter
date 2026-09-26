@@ -3,11 +3,9 @@ import {
   View,
   Text,
   Image,
-  Dimensions,
+  ScrollView,
   StatusBar,
   StyleSheet,
-  SafeAreaView,
-  Platform,
   Alert,
   Linking,
   TouchableOpacity,
@@ -16,6 +14,7 @@ import NfcProxy from '../../NfcProxy';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import {parseShareDeepLink} from '../../features/home/deepLink';
 import {useNfcAvailability} from '../../features/home/useNfcAvailability';
 import {useTagScan} from '../../features/home/useTagScan';
@@ -25,16 +24,12 @@ function HomeScreen(props) {
   const {enabled, refresh: refreshNfcAvailability} = useNfcAvailability();
   const scanTag = useTagScan(navigation);
   const padding = 40;
-  const width = Dimensions.get('window').width - 2 * padding;
 
   React.useEffect(() => {
     async function initNfc() {
       try {
         function onBackgroundTag(bgTag) {
-          navigation.navigate('Main', {
-            screen: 'TagDetail',
-            params: {tag: bgTag},
-          });
+          navigation.navigate('TagDetail', {tag: bgTag});
         }
 
         function onDeepLink(url) {
@@ -84,18 +79,14 @@ function HomeScreen(props) {
     return (
       <View
         style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 20,
-        }}>
+          paddingVertical: 20,
+        }}
+      >
         <Button
           mode="contained"
           onPress={scanTag}
-          style={{width}}>
+          style={{alignSelf: 'stretch'}}
+        >
           SCAN NFC TAG
         </Button>
       </View>
@@ -107,9 +98,9 @@ function HomeScreen(props) {
       <View
         style={{
           alignItems: 'stretch',
-          alignSelf: 'center',
-          width,
-        }}>
+          alignSelf: 'stretch',
+        }}
+      >
         <Text style={{textAlign: 'center', marginBottom: 10}}>
           Your NFC is not enabled. Please first enable it and hit CHECK AGAIN
           button
@@ -118,13 +109,12 @@ function HomeScreen(props) {
         <Button
           mode="contained"
           onPress={() => NfcProxy.goToNfcSetting()}
-          style={{marginBottom: 10}}>
+          style={{marginBottom: 10}}
+        >
           GO TO NFC SETTINGS
         </Button>
 
-        <Button
-          mode="outlined"
-          onPress={refreshNfcAvailability}>
+        <Button mode="outlined" onPress={refreshNfcAvailability}>
           CHECK AGAIN
         </Button>
       </View>
@@ -134,91 +124,99 @@ function HomeScreen(props) {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView />
-      <View style={{flex: 1, padding}}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image
-            source={require('../../../images/nfc-rewriter-icon.png')}
-            style={{width: 250, height: 250}}
-            resizeMode="contain"
+      <SafeAreaView edges={{top: true, bottom: true}} style={{flex: 1}}>
+        <View style={{flex: 1, paddingHorizontal: padding}}>
+          <ScrollView
+            style={{flex: 1}}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingVertical: 48,
+            }}
+          >
+            <Image
+              source={require('../../../images/nfc-rewriter-icon.png')}
+              style={{width: 250, height: 250}}
+              resizeMode="contain"
+            />
+            <Text
+              style={{
+                padding: 20,
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: '#666',
+              }}
+            >
+              Open Source NFC Reader/Writer
+            </Text>
+
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL(
+                  'https://github.com/revtel/react-native-nfc-rewriter',
+                )
+              }
+              style={{
+                paddingHorizontal: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              }}
+            >
+              <Icon name="github" size={18} color={'#888'} />
+              <Text style={{marginLeft: 6, color: '#888'}}>
+                Github Repo (App)
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL(
+                  'https://github.com/revtel/react-native-nfc-manager',
+                )
+              }
+              style={{
+                paddingHorizontal: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              }}
+            >
+              <Icon name="github" size={18} color={'#888'} />
+              <Text style={{marginLeft: 6, color: '#888'}}>
+                Github Repo (Library)
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => Linking.openURL('mailto:nfctogo@gmail.com')}
+              style={{
+                paddingHorizontal: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Icon name="email" size={18} color={'#888'} />
+              <Text style={{marginLeft: 6, color: '#888'}}>Contact Us</Text>
+            </TouchableOpacity>
+          </ScrollView>
+
+          <IconButton
+            icon={() => <Icon name="cog" size={32} />}
+            style={styles.settingIcon}
+            onPress={() => {
+              navigation.navigate('Settings');
+            }}
           />
-          <Text
-            style={{
-              padding: 20,
-              fontSize: 20,
-              fontWeight: 'bold',
-              textAlign: 'center',
-              color: '#666',
-            }}>
-            Open Source NFC Reader/Writer
-          </Text>
 
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                'https://github.com/revtel/react-native-nfc-rewriter',
-              )
-            }
-            style={{
-              paddingHorizontal: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 10,
-            }}>
-            <Icon name="github" size={18} color={'#888'} />
-            <Text style={{marginLeft: 6, color: '#888'}}>
-              Github Repo (App)
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                'https://github.com/revtel/react-native-nfc-manager',
-              )
-            }
-            style={{
-              paddingHorizontal: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 10,
-            }}>
-            <Icon name="github" size={18} color={'#888'} />
-            <Text style={{marginLeft: 6, color: '#888'}}>
-              Github Repo (Library)
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => Linking.openURL('mailto:nfctogo@gmail.com')}
-            style={{
-              paddingHorizontal: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Icon name="email" size={18} color={'#888'} />
-            <Text style={{marginLeft: 6, color: '#888'}}>Contact Us</Text>
-          </TouchableOpacity>
+          {enabled ? renderNfcButtons() : renderNfcNotEnabled()}
         </View>
-
-        <IconButton
-          icon={() => <Icon name="cog" size={32} />}
-          style={styles.settingIcon}
-          onPress={() => {
-            navigation.navigate('Settings');
-          }}
-        />
-
-        {enabled ? renderNfcButtons() : renderNfcNotEnabled()}
-      </View>
+      </SafeAreaView>
     </>
   );
 }
@@ -226,7 +224,7 @@ function HomeScreen(props) {
 const styles = StyleSheet.create({
   settingIcon: {
     position: 'absolute',
-    top: Platform.OS === 'android' ? 20 : 0,
+    top: 0,
     right: 20,
   },
 });

@@ -11,6 +11,10 @@ import {newScript} from '../src/features/nfc-script/model';
 
 jest.mock('../src/NfcProxy', () => ({runNfcScript: jest.fn()}));
 jest.mock('../src/Components/ScreenHeader', () => 'ScreenHeader');
+jest.mock('react-native-safe-area-context', () => ({
+  ...jest.requireActual('react-native-safe-area-context'),
+  useSafeAreaInsets: () => ({bottom: 0}),
+}));
 
 function button(tree, label) {
   return tree.root

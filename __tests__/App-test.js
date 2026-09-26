@@ -13,8 +13,14 @@ jest.mock('../src/AppNavigator', () => 'AppNavigator');
 import App from '../src/App';
 
 // Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+import renderer, {act} from 'react-test-renderer';
 
-it('renders correctly', () => {
-  renderer.create(<App />);
+it('renders correctly', async () => {
+  let tree;
+  await act(async () => {
+    tree = renderer.create(<App />);
+  });
+  await act(async () => {
+    tree.unmount();
+  });
 });

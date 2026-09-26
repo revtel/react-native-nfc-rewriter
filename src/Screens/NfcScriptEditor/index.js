@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import ScreenHeader from '../../Components/ScreenHeader';
@@ -516,6 +516,7 @@ function TraceView({result}) {
 }
 
 function NfcScriptEditorScreen({navigation, route}) {
+  const {bottom: bottomInset} = useSafeAreaInsets();
   const params = route?.params || {};
   const [script, setScript] = React.useState(
     () => params.savedRecord?.payload || newScript(params.nfcTech || 'NfcA'),
@@ -617,7 +618,7 @@ function NfcScriptEditorScreen({navigation, route}) {
             <TraceView result={result} />
           )}
         </ScrollView>
-        <SafeAreaView />
+        <View style={{height: bottomInset}} />
       </View>
     </>
   );

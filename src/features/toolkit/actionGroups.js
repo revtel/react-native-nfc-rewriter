@@ -65,7 +65,7 @@ function getToolkitActionGroups({
   nfc = NfcProxy,
   platform = Platform.OS,
 }) {
-  const navigate = (target) => navigation.navigate('Main', target);
+  const navigate = (target) => navigation.navigate(target.screen, target.params);
   const savedAction = (title, savedRecord) => () =>
     navigate(savedCommandRoute(title, savedRecord));
 

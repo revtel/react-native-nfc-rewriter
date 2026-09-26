@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {SafeAreaView, ScrollView, Alert, Text} from 'react-native';
+import {ScrollView, Alert, Text} from 'react-native';
 import {Appbar, List, Button} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import * as AppContext from '../../AppContext';
 import RecordItem from './RecordItem';
 import SaveRecordModal from '../../Components/SaveRecordModal';
@@ -56,7 +57,7 @@ function SavedRecordScreen(props) {
     groupRecordsByTech(recordList);
 
   return (
-    <>
+    <SafeAreaView edges={{bottom: true}} style={{flex: 1}}>
       <Appbar.Header style={{backgroundColor: 'white'}}>
         <Text style={{marginLeft: 10, fontSize: 24}}>MY RECORDS</Text>
       </Appbar.Header>
@@ -134,7 +135,6 @@ function SavedRecordScreen(props) {
         </List.Section>
       </ScrollView>
       <Button onPress={clearAll}>CLEAR ALL</Button>
-      <SafeAreaView />
 
       <SaveRecordModal
         title={'COPY THIS RECORD AS'}
@@ -152,7 +152,7 @@ function SavedRecordScreen(props) {
           setRecordToCopy(null);
         }}
       />
-    </>
+    </SafeAreaView>
   );
 }
 

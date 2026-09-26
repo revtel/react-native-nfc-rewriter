@@ -1,18 +1,16 @@
 import * as React from 'react';
 import {Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from '@react-navigation/stack';
-import {Appbar} from 'react-native-paper';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeBottomTabNavigator} from '@react-navigation/bottom-tabs/unstable';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LandingScreen from './Screens/Landing';
 import HomeScreen from './Screens/Home';
 import TagDetailScreen from './Screens/TagDetail';
 import NdefTypeListScreen from './Screens/NdefTypeList';
 import NdefWriteScreen from './Screens/NdefWrite';
 import ToolKitScreen from './Screens/Toolkit';
-import TagKitScreen from './Screens/TagKit';
 import CustomTransceiveScreen from './Screens/CustomTransceive';
 import NfcScriptEditorScreen from './Screens/NfcScriptEditor';
 import NfcScriptHelpScreen from './Screens/NfcScriptHelp';
@@ -21,155 +19,111 @@ import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
 import Toast from './Components/Toast';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {PRIMARY_TABS} from './features/navigation/primaryTabs';
 import * as Theme from './Theme';
 
-const RootStack = createStackNavigator();
-const MainStack = createStackNavigator();
-const HomeTabs = createBottomTabNavigator();
+const RootStack = createNativeStackNavigator();
+// Android native tabs currently clip the system status bar on cutout devices.
+// Keep native tabs on iOS and use the stable tab view on Android.
+const HomeTabs =
+  Platform.OS === 'ios'
+    ? createNativeBottomTabNavigator()
+    : createBottomTabNavigator();
+
+const tabScreens = {
+  HomeTab: HomeScreen,
+  NdefTypeListTab: NdefTypeListScreen,
+  ToolKitTab: ToolKitScreen,
+  MyRecordsTab: SavedRecordScreen,
+};
+
+function tabIcon(routeName) {
+  const names = PRIMARY_TABS.find(({name}) => name === routeName)?.icons;
+  if (!names) {
+    return undefined;
+  }
+  if (Platform.OS === 'android') {
+    return ({color, size}) => (
+      <MaterialIcons name={names.android} size={size} color={color} />
+    );
+  }
+  return {type: 'sfSymbol', name: names.ios};
+}
 
 function HomeTabNav() {
   return (
     <HomeTabs.Navigator
-      screenOptions={({route}) => {
-        const focusedName = getFocusedRouteNameFromRoute(route);
-        const extraProps = {};
-        if (focusedName !== undefined) {
-          if (focusedName !== 'Home' && focusedName !== 'Assistant') {
-            extraProps.tabBarStyle = {height: 0, display: 'none'};
-          }
-        }
-
-        return {
-          tabBarIcon: ({focused, color, size}) => {
-            let iconName;
-
-            if (route.name === 'HomeTab') {
-              iconName = 'nfc-search-variant';
-            } else if (route.name === 'NdefTypeListTab') {
-              iconName = 'database-edit';
-            } else if (route.name === 'ToolKitTab') {
-              iconName = 'tools';
-            } else if (route.name === 'MyRecordsTab') {
-              iconName = 'archive-star';
-            }
-
-            return <Icon name={iconName} size={size} color={color} />;
-          },
-          headerShown: false,
-          tabBarActiveTintColor: Theme.colors.blue,
-          tabBarInactiveTintColor: 'gray',
-          ...extraProps,
-        };
-      }}>
-      <HomeTabs.Screen
-        name="HomeTab"
-        component={HomeScreen}
-        options={{tabBarLabel: 'SCAN TAG'}}
-      />
-      <HomeTabs.Screen
-        name="NdefTypeListTab"
-        component={NdefTypeListScreen}
-        options={{title: 'WRITE NDEF'}}
-      />
-      <HomeTabs.Screen
-        name="ToolKitTab"
-        component={ToolKitScreen}
-        options={{title: 'TOOLKIT'}}
-      />
-      <HomeTabs.Screen
-        name="MyRecordsTab"
-        component={SavedRecordScreen}
-        options={{title: 'MY RECORDS'}}
-      />
+      screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarActiveTintColor: Theme.colors.blue,
+        tabBarIcon: tabIcon(route.name),
+      })}
+    >
+      {PRIMARY_TABS.map(({name, title}) => (
+        <HomeTabs.Screen
+          key={name}
+          name={name}
+          component={tabScreens[name]}
+          options={{title}}
+        />
+      ))}
     </HomeTabs.Navigator>
   );
 }
 
-function Main(props) {
+function Root() {
   return (
-    <MainStack.Navigator
-      screenOptions={{
-        header: (headerProps) => {
-          const {navigation, back, options, route} = headerProps;
-          const excludedScreens = ['Home', 'NdefWrite', 'CustomTransceive', 'NfcScriptEditor'];
-
-          if (excludedScreens.findIndex((name) => name === route?.name) > -1) {
-            return null;
-          }
-
-          return (
-            <Appbar.Header style={{backgroundColor: 'white'}}>
-              {back && (
-                <Appbar.BackAction onPress={() => navigation.goBack()} />
-              )}
-              <Appbar.Content title={options?.title || ''} />
-            </Appbar.Header>
-          );
-        },
-      }}>
-      <MainStack.Screen
-        name="TagDetail"
-        options={{title: 'TAG DETAIL'}}
-        component={TagDetailScreen}
+    <RootStack.Navigator initialRouteName="Landing">
+      <RootStack.Screen
+        name="Landing"
+        component={LandingScreen}
+        options={{headerShown: false}}
       />
-      <MainStack.Screen
+      <RootStack.Screen
+        name="MainTabs"
+        component={HomeTabNav}
+        options={{headerShown: false}}
+      />
+      <RootStack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{headerShown: false, presentation: 'modal'}}
+      />
+      <RootStack.Screen
+        name="TagDetail"
+        component={TagDetailScreen}
+        options={{title: 'TAG DETAIL'}}
+      />
+      <RootStack.Screen
         name="NdefWrite"
         component={NdefWriteScreen}
-        options={{title: 'WRITE NDEF'}}
+        options={{headerShown: false}}
       />
-      <MainStack.Screen
+      <RootStack.Screen
         name="CustomTransceive"
         component={CustomTransceiveScreen}
-        options={{title: 'CUSTOM TRANSCEIVE'}}
+        options={{headerShown: false}}
       />
-      <MainStack.Screen
+      <RootStack.Screen
         name="NfcScriptEditor"
         component={NfcScriptEditorScreen}
-        options={{title: 'NFC FLOW SCRIPT'}}
+        options={{headerShown: false}}
       />
-      <MainStack.Screen
+      <RootStack.Screen
         name="NfcScriptHelp"
         component={NfcScriptHelpScreen}
         options={{title: 'FLOW SCRIPT HELP'}}
       />
-      <MainStack.Screen
+      <RootStack.Screen
         name="Ntag21xMemoryScan"
         component={Ntag21xMemoryScanScreen}
         options={{title: 'TYPE 2 MEMORY SCAN'}}
-      />
-      <MainStack.Screen
-        name="SavedRecord"
-        component={SavedRecordScreen}
-        options={{title: 'MY SAVED RECORDS'}}
-      />
-    </MainStack.Navigator>
-  );
-}
-
-function Root(props) {
-  return (
-    <RootStack.Navigator
-      screenOptions={{
-        headerShown: false,
-        presentation: 'modal',
-        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-      }}>
-      <RootStack.Screen name="Landing" component={LandingScreen} />
-      <RootStack.Screen name="Settings" component={SettingsScreen} />
-      <RootStack.Screen name="Main" component={Main} />
-      <RootStack.Screen
-        name="MainTabs"
-        component={HomeTabNav}
-        options={{animationEnabled: false}}
       />
     </RootStack.Navigator>
   );
 }
 
-function AppNavigator(props) {
+function AppNavigator() {
   return (
     <NavigationContainer>
       <Root />

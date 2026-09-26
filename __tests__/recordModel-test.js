@@ -25,18 +25,15 @@ describe('record model', () => {
     expect(result.scriptRecords).toEqual([]);
   });
 
-  it('selects the compatible nested screen for a saved record', () => {
+  it('selects the compatible workflow screen for a saved record', () => {
     expect(getRecordNavigationTarget(ndef, 3)).toEqual({
-      name: 'Main',
-      params: {
-        screen: 'NdefWrite',
-        params: {savedRecord: ndef, savedRecordIdx: 3},
-      },
+      name: 'NdefWrite',
+      params: {savedRecord: ndef, savedRecordIdx: 3},
     });
     expect(getRecordNavigationTarget({payload: {tech: 'Unknown'}})).toBeNull();
     expect(getRecordNavigationTarget(script, 4)).toEqual({
-      name: 'Main',
-      params: {screen: 'NfcScriptEditor', params: {savedRecord: script, savedRecordIdx: 4}},
+      name: 'NfcScriptEditor',
+      params: {savedRecord: script, savedRecordIdx: 4},
     });
     expect(groupRecordsByTech([nfcA, script]).scriptRecords).toEqual([{record: script, idx: 1}]);
     expect(groupRecordsByTech([nfcA, script]).isoDepRecords).toEqual([]);

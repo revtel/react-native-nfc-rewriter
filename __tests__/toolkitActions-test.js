@@ -47,9 +47,8 @@ describe('toolkit actions', () => {
     const groups = getToolkitActionGroups({navigation, nfc: {}});
     groups[1].actions[0].onPress();
 
-    expect(navigation.navigate).toHaveBeenCalledWith('Main', {
-      screen: 'CustomTransceive',
-      params: {nfcTech: 'NfcA'},
+    expect(navigation.navigate).toHaveBeenCalledWith('CustomTransceive', {
+      nfcTech: 'NfcA',
     });
   });
 
@@ -61,9 +60,7 @@ describe('toolkit actions', () => {
     );
 
     action.onPress();
-    expect(navigation.navigate).toHaveBeenCalledWith('Main', {
-      screen: 'Ntag21xMemoryScan',
-    });
+    expect(navigation.navigate).toHaveBeenCalledWith('Ntag21xMemoryScan', undefined);
   });
 
   it('offers a flow script for NFC-A and ISO-DEP', () => {
@@ -72,8 +69,8 @@ describe('toolkit actions', () => {
     for (const [groupIndex, tech] of [[1, 'NfcA'], [3, 'IsoDep']]) {
       const action = groups[groupIndex].actions.find(({title}) => title === 'Flow Script');
       action.onPress();
-      expect(navigation.navigate).toHaveBeenLastCalledWith('Main', {
-        screen: 'NfcScriptEditor', params: {nfcTech: tech},
+      expect(navigation.navigate).toHaveBeenLastCalledWith('NfcScriptEditor', {
+        nfcTech: tech,
       });
     }
   });

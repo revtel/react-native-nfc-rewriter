@@ -5,8 +5,8 @@ import {
   View,
   Text,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import CommandItem from '../../Components/CustomCommandItem';
@@ -22,6 +22,7 @@ import {
 } from '../../features/transceive/commandList';
 
 function CustomTransceiveScreen(props) {
+  const {bottom: bottomInset} = useSafeAreaInsets();
   const {params} = props.route;
   const nfcTech = params.savedRecord?.payload.tech || params.nfcTech;
   const [showCommandModal, setShowCommandModal] = React.useState(false);
@@ -241,7 +242,7 @@ function CustomTransceiveScreen(props) {
             EXECUTE
           </Button>
         </View>
-        <SafeAreaView />
+        <View style={{height: bottomInset}} />
       </View>
 
       <CustomTransceiveModal

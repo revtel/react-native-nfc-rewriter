@@ -10,8 +10,8 @@ describe('share deep links', () => {
       'com.revteltech.nfcopenrewriter://',
     ]) {
       expect(parseShareDeepLink(`${scheme}share?data=${data}`)).toEqual({
-        name: 'Main',
-        params: {screen: 'NdefWrite', params: {savedRecord: record}},
+        name: 'NdefWrite',
+        params: {savedRecord: record},
         record,
       });
     }
@@ -37,8 +37,8 @@ describe('share deep links', () => {
     };
     const url = `com.revteltech.nfcopenrewriter://share?data=${encodeURIComponent(JSON.stringify(record))}`;
     expect(parseShareDeepLink(url)).toEqual({
-      name: 'Main',
-      params: {screen: 'NfcScriptEditor', params: {savedRecord: record}},
+      name: 'NfcScriptEditor',
+      params: {savedRecord: record},
       record,
     });
   });

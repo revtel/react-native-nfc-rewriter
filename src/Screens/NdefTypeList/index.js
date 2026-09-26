@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {ScrollView, Text} from 'react-native';
 import {Appbar, List} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import * as NfcIcons from '../../Components/NfcIcons';
 
 function NdefTypeListScreen(props) {
   const {navigation} = props;
 
   return (
-    <>
+    <SafeAreaView edges={{bottom: true}} style={{flex: 1}}>
       <Appbar.Header style={{backgroundColor: 'white'}}>
         <Text style={{marginLeft: 10, fontSize: 24}}>WRITE NDEF</Text>
       </Appbar.Header>
@@ -20,10 +21,7 @@ function NdefTypeListScreen(props) {
             description="Write text into NFC tags"
             left={NfcIcons.TxtIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {ndefType: 'TEXT'},
-              })
+              navigation.navigate('NdefWrite', {ndefType: 'TEXT'})
             }
           />
           <List.Item
@@ -31,10 +29,7 @@ function NdefTypeListScreen(props) {
             description="Write web link or uri into NFC tags"
             left={NfcIcons.UriIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {ndefType: 'URI'},
-              })
+              navigation.navigate('NdefWrite', {ndefType: 'URI'})
             }
           />
 
@@ -43,12 +38,9 @@ function NdefTypeListScreen(props) {
             description="Write number into NFC tags to make phone call"
             left={NfcIcons.TelIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {
-                  ndefType: 'URI',
-                  scheme: 'tel:',
-                },
+              navigation.navigate('NdefWrite', {
+                ndefType: 'URI',
+                scheme: 'tel:',
               })
             }
           />
@@ -58,12 +50,9 @@ function NdefTypeListScreen(props) {
             description="Write number into NFC tags to send SMS"
             left={NfcIcons.SmsIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {
-                  ndefType: 'URI',
-                  scheme: 'sms:',
-                },
+              navigation.navigate('NdefWrite', {
+                ndefType: 'URI',
+                scheme: 'sms:',
               })
             }
           />
@@ -73,12 +62,9 @@ function NdefTypeListScreen(props) {
             description="Write email into NFC tags"
             left={NfcIcons.EmailIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {
-                  ndefType: 'URI',
-                  scheme: 'mailto:',
-                },
+              navigation.navigate('NdefWrite', {
+                ndefType: 'URI',
+                scheme: 'mailto:',
               })
             }
           />
@@ -89,10 +75,7 @@ function NdefTypeListScreen(props) {
             description="Connect to your WiFi AP"
             left={NfcIcons.WifiIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {ndefType: 'WIFI_SIMPLE'},
-              })
+              navigation.navigate('NdefWrite', {ndefType: 'WIFI_SIMPLE'})
             }
           />
 
@@ -101,15 +84,12 @@ function NdefTypeListScreen(props) {
             description="Write contact records. Please beaware vCard format is not supported by iOS natively"
             left={NfcIcons.ContactIcon}
             onPress={() =>
-              navigation.navigate('Main', {
-                screen: 'NdefWrite',
-                params: {ndefType: 'VCARD'},
-              })
+              navigation.navigate('NdefWrite', {ndefType: 'VCARD'})
             }
           />
         </List.Section>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
 

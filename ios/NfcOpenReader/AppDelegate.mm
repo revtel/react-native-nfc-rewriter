@@ -1,8 +1,36 @@
 #import "AppDelegate.h"
 #import <React/RCTBundleURLProvider.h>
+#import <React-RCTAppDelegate/RCTDefaultReactNativeFactoryDelegate.h>
+#import <React-RCTAppDelegate/RCTReactNativeFactory.h>
 #import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 #import <React/RCTLinkingManager.h>
 #import "NfcManager.h"
+
+@interface ReactNativeDelegate : RCTDefaultReactNativeFactoryDelegate
+@end
+
+@implementation ReactNativeDelegate
+
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+{
+  return [self bundleURL];
+}
+
+- (NSURL *)bundleURL
+{
+#if DEBUG
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+#else
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
+}
+
+@end
+
+@interface AppDelegate ()
+@property (nonatomic, strong) ReactNativeDelegate *reactNativeDelegate;
+@property (nonatomic, strong) RCTReactNativeFactory *reactNativeFactory;
+@end
 
 @implementation AppDelegate
 
@@ -26,27 +54,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.moduleName = @"NfcOpenReader";
-    self.dependencyProvider = [RCTAppDependencyProvider new];
-    // You can add your custom initial props in the dictionary below.
-    // They will be passed down to the ViewController used by React Native.
-    self.initialProps = @{};
-
-    return [super application:application didFinishLaunchingWithOptions:launchOptions];
-}
-
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
-{
-  return [self bundleURL];
-}
- 
-- (NSURL *)bundleURL
-{
-#if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
-#else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
+    self.reactNativeDelegate = [ReactNativeDelegate new];
+    self.reactNativeDelegate.dependencyProvider = [RCTAppDependencyProvider new];
+    self.reactNativeFactory = [[RCTReactNativeFactory alloc] initWithDelegate:self.reactNativeDelegate];
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.reactNativeFactory startReactNativeWithModuleName:@"NfcOpenReader"
+                                                  inWindow:self.window
+                                         initialProperties:@{}
+                                             launchOptions:launchOptions];
+    return YES;
 }
 
 @end

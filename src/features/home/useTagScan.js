@@ -5,7 +5,7 @@ function useTagScan(navigation) {
   return React.useCallback(async () => {
     const tag = await NfcProxy.readTag();
     if (tag) {
-      navigation.navigate('Main', {screen: 'TagDetail', params: {tag}});
+      navigation.navigate('TagDetail', {tag});
     }
     return tag;
   }, [navigation]);

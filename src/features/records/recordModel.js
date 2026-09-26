@@ -41,10 +41,7 @@ function getRecordNavigationTarget(record, savedRecordIdx) {
     params.savedRecordIdx = savedRecordIdx;
   }
 
-  return {
-    name: 'Main',
-    params: {screen, params},
-  };
+  return {name: screen, params};
 }
 
 function groupRecordsByTech(records) {
