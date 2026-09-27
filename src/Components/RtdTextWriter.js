@@ -1,12 +1,14 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
+import {useVisualTheme} from '../visual/theme';
+import NdefWriterForm from './NdefWriterForm';
 
 function RtdTextWriter(props, ref) {
   const inputRef = React.useRef();
   const [value, setValue] = React.useState(props.value || '');
   const write = useNdefWriter('TEXT');
+  const {colors, spacing} = useVisualTheme();
 
   if (ref) {
     ref.current = {
@@ -25,7 +27,7 @@ function RtdTextWriter(props, ref) {
   };
 
   return (
-    <View>
+    <NdefWriterForm hint="Plain text is stored as an NDEF Text record." onWrite={writeNdef}>
       <TextInput
         ref={inputRef}
         mode="outlined"
@@ -34,14 +36,10 @@ function RtdTextWriter(props, ref) {
         value={value}
         autoCapitalize={false}
         onChangeText={setValue}
-        style={{marginBottom: 10}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
         autoFocus={true}
       />
-
-      <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
-        WRITE
-      </Button>
-    </View>
+    </NdefWriterForm>
   );
 }
 

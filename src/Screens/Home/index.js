@@ -9,6 +9,7 @@ import {
   Alert,
   Linking,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
@@ -18,12 +19,20 @@ import {SafeAreaView} from 'react-native-screens/experimental';
 import {parseShareDeepLink} from '../../features/home/deepLink';
 import {useNfcAvailability} from '../../features/home/useNfcAvailability';
 import {useTagScan} from '../../features/home/useTagScan';
+import {useVisualTheme} from '../../visual/theme';
+
+const resourceLinks = [
+  {label: 'Github Repo (App)', icon: 'github', url: 'https://github.com/revtel/react-native-nfc-rewriter'},
+  {label: 'Github Repo (Library)', icon: 'github', url: 'https://github.com/revtel/react-native-nfc-manager'},
+  {label: 'Contact Us', icon: 'email', url: 'mailto:nfctogo@gmail.com'},
+];
 
 function HomeScreen(props) {
   const {navigation} = props;
   const {enabled, refresh: refreshNfcAvailability} = useNfcAvailability();
   const scanTag = useTagScan(navigation);
-  const padding = 40;
+  const {colors, spacing, type, isDark} = useVisualTheme();
+  const styles = React.useMemo(() => makeStyles(colors, spacing, type), [colors, spacing, type]);
 
   React.useEffect(() => {
     async function initNfc() {
@@ -75,158 +84,108 @@ function HomeScreen(props) {
     initNfc();
   }, [navigation]);
 
-  function renderNfcButtons() {
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-        }}
-      >
-        <Button
-          mode="contained"
-          onPress={scanTag}
-          style={{alignSelf: 'stretch'}}
-        >
-          SCAN NFC TAG
-        </Button>
-      </View>
-    );
-  }
-
-  function renderNfcNotEnabled() {
-    return (
-      <View
-        style={{
-          alignItems: 'stretch',
-          alignSelf: 'stretch',
-        }}
-      >
-        <Text style={{textAlign: 'center', marginBottom: 10}}>
-          Your NFC is not enabled. Please first enable it and hit CHECK AGAIN
-          button
-        </Text>
-
-        <Button
-          mode="contained"
-          onPress={() => NfcProxy.goToNfcSetting()}
-          style={{marginBottom: 10}}
-        >
-          GO TO NFC SETTINGS
-        </Button>
-
-        <Button mode="outlined" onPress={refreshNfcAvailability}>
-          CHECK AGAIN
-        </Button>
-      </View>
-    );
-  }
-
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView edges={{top: true, bottom: true}} style={{flex: 1}}>
-        <View style={{flex: 1, paddingHorizontal: padding}}>
-          <ScrollView
-            style={{flex: 1}}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingVertical: 48,
-            }}
-          >
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+      <SafeAreaView edges={{top: true, bottom: true}} style={styles.container}>
+        <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+          <View style={styles.topBar}>
             <Image
               source={require('../../../images/nfc-rewriter-icon.png')}
-              style={{width: 250, height: 250}}
+              style={styles.brandIcon}
               resizeMode="contain"
             />
-            <Text
-              style={{
-                padding: 20,
-                fontSize: 20,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                color: '#666',
-              }}
-            >
-              Open Source NFC Reader/Writer
+            <Text style={styles.brandText}>NFC Reader/Writer</Text>
+            <IconButton
+              icon="cog-outline"
+              iconColor={colors.accent}
+              accessibilityLabel="Settings"
+              onPress={() => navigation.navigate('Settings')}
+            />
+          </View>
+
+          <View style={styles.hero}>
+            <Text style={styles.title}>SCAN TAG</Text>
+            <Text style={styles.subtitle}>
+              Hold your device near an NFC tag to read its contents.
             </Text>
+            <View style={styles.signal} accessibilityElementsHidden>
+              <Icon name="nfc" size={72} color={colors.accent} />
+            </View>
+            {enabled === null ? (
+              <View style={styles.statusRow}>
+                <ActivityIndicator color={colors.accent} />
+                <Text style={styles.statusText}>Checking NFC status…</Text>
+              </View>
+            ) : enabled ? (
+              <>
+                <Button mode="contained" icon="nfc" style={styles.primaryButton} contentStyle={styles.buttonContent} onPress={scanTag}>
+                  SCAN NFC TAG
+                </Button>
+                <Text style={styles.statusText}>NFC is enabled</Text>
+              </>
+            ) : (
+              <View style={styles.recovery}>
+                <Text style={styles.statusTitle}>NFC is not enabled</Text>
+                <Text style={styles.statusText}>
+                  Enable NFC in device settings, then check again.
+                </Text>
+                <Button mode="contained" style={styles.primaryButton} contentStyle={styles.buttonContent} onPress={() => NfcProxy.goToNfcSetting()}>
+                  GO TO NFC SETTINGS
+                </Button>
+                <Button mode="outlined" style={styles.secondaryButton} onPress={refreshNfcAvailability}>
+                  CHECK AGAIN
+                </Button>
+              </View>
+            )}
+          </View>
 
-            <TouchableOpacity
-              onPress={() =>
-                Linking.openURL(
-                  'https://github.com/revtel/react-native-nfc-rewriter',
-                )
-              }
-              style={{
-                paddingHorizontal: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 10,
-              }}
-            >
-              <Icon name="github" size={18} color={'#888'} />
-              <Text style={{marginLeft: 6, color: '#888'}}>
-                Github Repo (App)
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() =>
-                Linking.openURL(
-                  'https://github.com/revtel/react-native-nfc-manager',
-                )
-              }
-              style={{
-                paddingHorizontal: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 10,
-              }}
-            >
-              <Icon name="github" size={18} color={'#888'} />
-              <Text style={{marginLeft: 6, color: '#888'}}>
-                Github Repo (Library)
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => Linking.openURL('mailto:nfctogo@gmail.com')}
-              style={{
-                paddingHorizontal: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Icon name="email" size={18} color={'#888'} />
-              <Text style={{marginLeft: 6, color: '#888'}}>Contact Us</Text>
-            </TouchableOpacity>
-          </ScrollView>
-
-          <IconButton
-            icon={() => <Icon name="cog" size={32} />}
-            style={styles.settingIcon}
-            onPress={() => {
-              navigation.navigate('Settings');
-            }}
-          />
-
-          {enabled ? renderNfcButtons() : renderNfcNotEnabled()}
-        </View>
+          <View style={styles.links}>
+            <Text style={styles.sectionLabel}>PROJECT</Text>
+            {resourceLinks.map(({label, icon, url}) => (
+              <TouchableOpacity
+                key={label}
+                accessibilityRole="link"
+                accessibilityLabel={label}
+                onPress={() => Linking.openURL(url)}
+                style={styles.linkRow}
+              >
+                <Icon name={icon} size={20} color={colors.textMuted} />
+                <Text style={styles.linkText}>{label}</Text>
+                <Icon name="chevron-right" size={20} color={colors.accent} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </>
   );
 }
 
-const styles = StyleSheet.create({
-  settingIcon: {
-    position: 'absolute',
-    top: 0,
-    right: 20,
-  },
-});
+function makeStyles(colors, spacing, type) {
+  return StyleSheet.create({
+    container: {flex: 1, backgroundColor: colors.background},
+    scroll: {flex: 1},
+    content: {flexGrow: 1, paddingHorizontal: spacing.xl, paddingBottom: spacing.xl},
+    topBar: {flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.border, paddingVertical: spacing.md},
+    brandIcon: {width: 40, height: 40, marginRight: spacing.md},
+    brandText: {color: colors.text, fontSize: type.label, fontWeight: '700', flex: 1},
+    hero: {flexGrow: 1, paddingTop: spacing.xxl, paddingBottom: spacing.xl},
+    title: {color: colors.text, fontSize: type.hero, fontWeight: '800'},
+    subtitle: {color: colors.textMuted, fontSize: type.body, lineHeight: 21, marginTop: spacing.sm},
+    signal: {alignSelf: 'center', width: 144, height: 144, borderRadius: 72, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center', marginVertical: spacing.xxl},
+    primaryButton: {marginTop: spacing.md},
+    secondaryButton: {marginTop: spacing.md},
+    buttonContent: {minHeight: 52},
+    statusRow: {flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.md},
+    statusTitle: {color: colors.text, fontSize: type.label, fontWeight: '700'},
+    statusText: {color: colors.textMuted, fontSize: type.body, marginTop: spacing.sm},
+    recovery: {paddingTop: spacing.sm},
+    links: {borderTopWidth: 1, borderTopColor: colors.border, paddingTop: spacing.md},
+    sectionLabel: {color: colors.textMuted, fontSize: type.caption, fontWeight: '700', marginBottom: spacing.sm},
+    linkRow: {minHeight: 48, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.border},
+    linkText: {flex: 1, color: colors.textMuted, fontSize: type.body, marginLeft: spacing.md},
+  });
+}
 
 export default HomeScreen;

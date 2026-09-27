@@ -1,7 +1,9 @@
 import * as React from 'react';
-import {View, Alert} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {Alert} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
+import {useVisualTheme} from '../visual/theme';
+import NdefWriterForm from './NdefWriterForm';
 
 function VCardWriter(props, ref) {
   const [name, setName] = React.useState(props.value?.name || '');
@@ -9,6 +11,7 @@ function VCardWriter(props, ref) {
   const [tel, setTel] = React.useState(props.value?.tel || '');
   const [email, setEmail] = React.useState(props.value?.email || '');
   const write = useNdefWriter('VCARD');
+  const {colors, spacing} = useVisualTheme();
 
   if (ref) {
     ref.current = {
@@ -29,13 +32,13 @@ function VCardWriter(props, ref) {
   };
 
   return (
-    <View>
+    <NdefWriterForm hint="A name and at least one contact method are required." onWrite={writeNdef}>
       <TextInput
         mode="outlined"
         label="Name"
         value={name}
         onChangeText={setName}
-        style={{marginBottom: 10}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
 
       <TextInput
@@ -43,7 +46,7 @@ function VCardWriter(props, ref) {
         label="Org"
         value={org}
         onChangeText={setOrg}
-        style={{marginBottom: 10}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
 
       <TextInput
@@ -51,7 +54,7 @@ function VCardWriter(props, ref) {
         label="Tel"
         value={tel}
         onChangeText={setTel}
-        style={{marginBottom: 10}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
 
       <TextInput
@@ -59,13 +62,9 @@ function VCardWriter(props, ref) {
         label="Email"
         value={email}
         onChangeText={setEmail}
-        style={{marginBottom: 20}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
-
-      <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
-        WRITE
-      </Button>
-    </View>
+    </NdefWriterForm>
   );
 }
 

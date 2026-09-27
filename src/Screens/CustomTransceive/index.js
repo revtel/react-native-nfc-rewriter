@@ -6,7 +6,7 @@ import {
   Text,
   ScrollView,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import CommandItem from '../../Components/CustomCommandItem';
@@ -20,9 +20,11 @@ import {
   replaceCommand,
   updateParameter,
 } from '../../features/transceive/commandList';
+import {useVisualTheme} from '../../visual/theme';
 
 function CustomTransceiveScreen(props) {
-  const {bottom: bottomInset} = useSafeAreaInsets();
+  const {colors, spacing, type} = useVisualTheme();
+  const styles = createStyles(colors, spacing, type);
   const {params} = props.route;
   const nfcTech = params.savedRecord?.payload.tech || params.nfcTech;
   const [showCommandModal, setShowCommandModal] = React.useState(false);
@@ -157,93 +159,102 @@ function CustomTransceiveScreen(props) {
         savedRecordIdx={params.savedRecordIdx}
         readOnly={readOnly}
       />
-      <View style={[styles.wrapper]}>
-        {editableParameters && (
-          <View style={{padding: 10}}>
-            <Text style={{paddingVertical: 10}}>Configurations</Text>
-            {editableParameters.map((p, idx) => {
-              const hexString = p.payload
-                .map((b) => ('00' + b.toString(16)).slice(-2))
-                .join(' ');
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{color: '#888'}}>{p.name}:</Text>
-                  <Button
-                    onPress={() => {
-                      setShowCommandModal(true);
-                      setCurrEditParamIdx(idx);
-                    }}>
-                    {hexString || 'update'}
-                  </Button>
-                </View>
-              );
-            })}
+      <SafeAreaView edges={{bottom: true}} style={styles.wrapper}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <Text style={styles.eyebrow}>NFC WORKBENCH</Text>
+          <Text style={styles.heading}>Custom Transceive</Text>
+          <Text style={styles.intro}>
+            Review commands and responses before running them against a tag.
+          </Text>
+          <View style={styles.techBadge}>
+            <Text style={styles.techBadgeText}>TECH / {nfcTech}</Text>
           </View>
-        )}
-        {editableParameters ? (
-          <ScrollView style={[styles.wrapper, {padding: 10}]}>
-            <View
-              style={{
-                backgroundColor: 'white',
-                borderRadius: 4,
-                padding: 10,
-              }}>
-              <Text>{params.savedRecord?.description || 'No description'}</Text>
-            </View>
-          </ScrollView>
-        ) : (
-          <>
-            <Text style={{padding: 10}}>Tech / {nfcTech}</Text>
-            <ScrollView style={[styles.wrapper, {padding: 10}]}>
-              {commands.map((cmd, idx) => (
-                <CommandItem
-                  cmd={cmd}
-                  resp={responses[idx]}
-                  key={idx}
-                  onMoveUp={
-                    commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
-                  }
-                  onMoveDown={
-                    commands.length > 1 &&
-                    idx < commands.length - 1 &&
-                    (() => moveCommandDown(idx))
-                  }
-                  onDelete={() => deleteCommand(idx)}
-                  onEdit={() => {
-                    setShowCommandModal(true);
-                    setCurrEditIdx(idx);
-                  }}
-                  readOnly={readOnly}
-                />
-              ))}
-            </ScrollView>
-          </>
-        )}
 
-        <View style={styles.actionBar}>
-          {!readOnly && (
-            <Button
-              mode="contained"
-              style={{marginBottom: 8}}
-              onPress={() => setShowCommandModal(true)}>
-              ADD
-            </Button>
+          {editableParameters ? (
+            <>
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>CONFIGURATIONS</Text>
+                {editableParameters.map((p, idx) => {
+                  const hexString = p.payload
+                    .map((b) => ('00' + b.toString(16)).slice(-2))
+                    .join(' ');
+                  return (
+                    <View key={`${p.name}-${idx}`} style={styles.parameterRow}>
+                      <Text style={styles.parameterName}>{p.name}</Text>
+                      <Button
+                        mode="outlined"
+                        accessibilityLabel={`Edit ${p.name}`}
+                        disabled={readOnly}
+                        onPress={() => {
+                          setShowCommandModal(true);
+                          setCurrEditParamIdx(idx);
+                        }}>
+                        {hexString || 'update'}
+                      </Button>
+                    </View>
+                  );
+                })}
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>DESCRIPTION</Text>
+                <Text style={styles.description}>
+                  {params.savedRecord?.description || 'No description'}
+                </Text>
+              </View>
+            </>
+          ) : (
+            <View style={styles.commandSection}>
+              <Text style={styles.sectionTitle}>COMMANDS · {commands.length}</Text>
+              {commands.length === 0 ? (
+                <Text style={styles.emptyText}>No commands yet. Add one to begin.</Text>
+              ) : (
+                commands.map((cmd, idx) => (
+                  <CommandItem
+                    cmd={cmd}
+                    resp={responses[idx]}
+                    key={idx}
+                    onMoveUp={
+                      commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
+                    }
+                    onMoveDown={
+                      commands.length > 1 &&
+                      idx < commands.length - 1 &&
+                      (() => moveCommandDown(idx))
+                    }
+                    onDelete={() => deleteCommand(idx)}
+                    onEdit={() => {
+                      setShowCommandModal(true);
+                      setCurrEditIdx(idx);
+                    }}
+                    readOnly={readOnly}
+                  />
+                ))
+              )}
+            </View>
           )}
 
-          <Button
-            mode="outlined"
-            disabled={commands.length === 0 && !hasCustomExecuteFunc}
-            style={{backgroundColor: 'pink'}}
-            onPress={executeCommands}>
-            EXECUTE
-          </Button>
-        </View>
-        <View style={{height: bottomInset}} />
-      </View>
+          <View style={styles.actionBar}>
+            {!readOnly && (
+              <Button
+                mode="outlined"
+                style={styles.addButton}
+                contentStyle={styles.actionContent}
+                accessibilityLabel="Add command"
+                onPress={() => setShowCommandModal(true)}>
+                ADD COMMAND
+              </Button>
+            )}
+            <Button
+              mode="contained"
+              disabled={commands.length === 0 && !hasCustomExecuteFunc}
+              contentStyle={styles.actionContent}
+              accessibilityLabel="Execute commands"
+              onPress={executeCommands}>
+              EXECUTE
+            </Button>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
 
       <CustomTransceiveModal
         cmdType={currEditParamIdx !== null ? 'command' : null}
@@ -262,13 +273,26 @@ function CustomTransceiveScreen(props) {
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-  actionBar: {
-    padding: 10,
-  },
-});
+function createStyles(colors, spacing, type) {
+  return StyleSheet.create({
+    wrapper: {flex: 1, backgroundColor: colors.background},
+    content: {padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
+    eyebrow: {color: colors.accent, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.sm},
+    heading: {color: colors.text, fontSize: type.hero, fontWeight: '700', marginBottom: spacing.sm},
+    intro: {color: colors.textMuted, fontSize: type.label, lineHeight: 22, marginBottom: spacing.lg},
+    techBadge: {alignSelf: 'flex-start', backgroundColor: colors.surfaceMuted, borderRadius: 8, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, marginBottom: spacing.xl},
+    techBadgeText: {color: colors.accent, fontSize: type.caption, fontWeight: '700'},
+    section: {backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 16, padding: spacing.lg, marginBottom: spacing.lg},
+    commandSection: {marginBottom: spacing.lg},
+    sectionTitle: {color: colors.textMuted, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.md},
+    parameterRow: {flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm},
+    parameterName: {color: colors.text, fontSize: type.body},
+    description: {color: colors.text, fontSize: type.body, lineHeight: 22},
+    emptyText: {color: colors.textMuted, fontSize: type.body, padding: spacing.lg, borderColor: colors.border, borderWidth: 1, borderRadius: 12},
+    actionBar: {gap: spacing.md, marginTop: spacing.sm},
+    addButton: {borderColor: colors.accent},
+    actionContent: {minHeight: 48},
+  });
+}
 
 export default CustomTransceiveScreen;

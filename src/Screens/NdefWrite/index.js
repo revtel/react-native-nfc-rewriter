@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import {NfcTech, Ndef} from 'react-native-nfc-manager';
 import RtdTextWriter from '../../Components/RtdTextWriter';
 import RtdUriWriter from '../../Components/RtdUriWriter';
@@ -11,8 +12,18 @@ import {
   buildNdefRecordPayload,
   getNdefType,
 } from '../../features/ndef-write/recordModel';
+import {useVisualTheme} from '../../visual/theme';
+
+const FORM_TITLE = {
+  TEXT: 'Text record',
+  URI: 'Link record',
+  WIFI_SIMPLE: 'WiFi Simple Record',
+  VCARD: 'vCard record',
+};
 
 function NdefWriteScreen(props) {
+  const {colors, spacing, type} = useVisualTheme();
+  const styles = createStyles(colors, spacing, type);
   const {params} = props.route;
   const handlerRef = React.useRef();
 
@@ -21,6 +32,10 @@ function NdefWriteScreen(props) {
   }
 
   const ndefType = getNdefType(params, {Ndef, NfcTech});
+  const formTitle =
+    ndefType === 'URI' && (params.scheme || params.savedRecord?.payload?.value?.scheme)
+      ? 'Contact shortcut'
+      : FORM_TITLE[ndefType] || 'NDEF record';
 
   function getRecordPayload() {
     if (handlerRef.current?.getValue) {
@@ -67,11 +82,54 @@ function NdefWriteScreen(props) {
         savedRecord={params.savedRecord}
         savedRecordIdx={params.savedRecordIdx}
       />
-      <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
-        {_renderNdefWriter()}
-      </View>
+      <SafeAreaView edges={{bottom: true}} style={styles.safeArea}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets
+          contentContainerStyle={styles.content}>
+          <Text style={styles.eyebrow}>NDEF WRITER</Text>
+          <Text style={styles.heading}>{formTitle}</Text>
+          <Text style={styles.intro}>
+            Prepare the record below, then hold an NFC tag near your device to write it.
+          </Text>
+          <View style={styles.formCard}>{_renderNdefWriter()}</View>
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
+}
+
+function createStyles(colors, spacing, type) {
+  return StyleSheet.create({
+    safeArea: {flex: 1, backgroundColor: colors.background},
+    content: {padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
+    eyebrow: {
+      color: colors.accent,
+      fontSize: type.caption,
+      fontWeight: '700',
+      letterSpacing: 1,
+      marginBottom: spacing.sm,
+    },
+    heading: {
+      color: colors.text,
+      fontSize: type.hero,
+      fontWeight: '700',
+      marginBottom: spacing.sm,
+    },
+    intro: {
+      color: colors.textMuted,
+      fontSize: type.label,
+      lineHeight: 22,
+      marginBottom: spacing.xl,
+    },
+    formCard: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 18,
+      padding: spacing.lg,
+    },
+  });
 }
 
 export default NdefWriteScreen;

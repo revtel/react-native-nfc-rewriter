@@ -1,9 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Text, Modal} from 'react-native';
+import {StyleSheet, View, Modal} from 'react-native';
 import {Button, Appbar, TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useVisualTheme} from '../visual/theme';
 
 function SaveRecordModal(props) {
+  const {colors} = useVisualTheme();
   const {visible, onClose, title, onPersistRecord} = props;
   const [name, setName] = React.useState('');
 
@@ -15,14 +17,14 @@ function SaveRecordModal(props) {
 
   return (
     <Modal visible={visible} animationType="slide">
-      <Appbar.Header>
+      <Appbar.Header style={{backgroundColor: colors.surface}}>
         <Appbar.Action
-          icon={() => <Icon name="close" size={24} />}
+          icon={() => <Icon name="close" size={24} color={colors.text} />}
           onPress={onClose}
         />
         <Appbar.Content title={title || 'SAVE RECORD'} />
       </Appbar.Header>
-      <View style={[styles.wrapper, {padding: 15, backgroundColor: 'white'}]}>
+      <View style={[styles.wrapper, {padding: 15, backgroundColor: colors.background}]}>
         <TextInput
           value={name}
           onChangeText={setName}

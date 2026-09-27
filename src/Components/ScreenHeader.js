@@ -5,6 +5,7 @@ import SaveRecordModal from './SaveRecordModal';
 import * as AppContext from '../AppContext';
 import {Alert, StatusBar, useColorScheme} from 'react-native';
 import {showToast} from './Toast';
+import {useVisualTheme} from '../visual/theme';
 
 function ScreenHeader(props) {
   const {
@@ -17,6 +18,7 @@ function ScreenHeader(props) {
   } = props;
   const [saveModalVisible, setSaveModalVisible] = React.useState(false);
   const colorScheme = useColorScheme();
+  const {colors} = useVisualTheme();
   const app = React.useContext(AppContext.Context);
 
   async function onPersistRecord(name, updateExist = false) {
@@ -35,12 +37,13 @@ function ScreenHeader(props) {
       <StatusBar
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
       />
-      <Appbar.Header style={{backgroundColor: 'white'}}>
+      <Appbar.Header style={{backgroundColor: colors.surface}}>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title={title} />
+        <Appbar.Content title={title} titleStyle={{color: colors.text}} />
         {!!getRecordPayload && !readOnly && (
           <Appbar.Action
-            icon={() => <Icon name="content-save" size={24} />}
+            accessibilityLabel="Save record"
+            icon={() => <Icon name="content-save" size={24} color={colors.accent} />}
             onPress={() => {
               if (savedRecord && typeof savedRecordIdx === 'number') {
                 Alert.alert(

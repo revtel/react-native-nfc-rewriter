@@ -44,35 +44,35 @@ function rtdValueToName(value) {
 
 class NdefMessage extends React.Component {
   render() {
-    const {ndef} = this.props;
+    const {ndef, colors} = this.props;
     const tnfName = tnfValueToName(ndef.tnf);
     const rtdName = rtdValueToName(ndef.type);
 
     return (
       <View>
-        {tnfName && <Text>{`TNF: ${tnfName}`}</Text>}
-        {rtdName && <Text>{`RTD: ${rtdName}`}</Text>}
+        {tnfName && <Text style={{color: colors.textMuted}}>{`TNF: ${tnfName}`}</Text>}
+        {rtdName && <Text style={{color: colors.textMuted}}>{`RTD: ${rtdName}`}</Text>}
 
-        {this._renderPayload({ndef, rtdName})}
+        {this._renderPayload({ndef, rtdName, colors})}
       </View>
     );
   }
 
-  _renderPayload = ({ndef, rtdName}) => {
+  _renderPayload = ({ndef, rtdName, colors}) => {
     if (ndef.tnf === Ndef.TNF_WELL_KNOWN) {
       if (rtdName === 'URI') {
-        return <RtdUriPayload ndef={ndef} />;
+        return <RtdUriPayload ndef={ndef} colors={colors} />;
       } else if (rtdName === 'TEXT') {
-        return <RtdTextPayload ndef={ndef} />;
+        return <RtdTextPayload ndef={ndef} colors={colors} />;
       }
     } else if (ndef.ntf === Ndef.MIME_MEDIA) {
       const mimeTypeStr = String.fromCharCode(...ndef.type);
       if (mimeTypeStr === Ndef.MIME_WFA_WSC) {
-        return <WifiSimplePayload ndef={ndef} />;
+        return <WifiSimplePayload ndef={ndef} colors={colors} />;
       } else if (mimeTypeStr.indexOf('text') === 0) {
-        return <TextBasedMimePayload ndef={ndef} mimeType={mimeTypeStr} />;
+        return <TextBasedMimePayload ndef={ndef} mimeType={mimeTypeStr} colors={colors} />;
       } else {
-        return <Text>{mimeTypeStr}</Text>;
+        return <Text style={{color: colors.text}}>{mimeTypeStr}</Text>;
       }
     }
     return null;
@@ -81,19 +81,19 @@ class NdefMessage extends React.Component {
 
 class RtdTextPayload extends React.Component {
   render() {
-    let {ndef} = this.props;
+    let {ndef, colors} = this.props;
     let text = Ndef.text.decodePayload(ndef.payload);
-    return <Text style={{fontSize: 18}}>{text}</Text>;
+    return <Text selectable style={{fontSize: 18, color: colors.text}}>{text}</Text>;
   }
 }
 
 class RtdUriPayload extends React.Component {
   render() {
-    let {ndef} = this.props;
+    let {ndef, colors} = this.props;
     let uri = Ndef.uri.decodePayload(ndef.payload);
     return (
       <TouchableOpacity onPress={() => this._goToUri(uri)}>
-        <Text style={{fontSize: 18, textDecorationLine: 'underline'}}>
+        <Text style={{fontSize: 18, color: colors.accent, textDecorationLine: 'underline'}}>
           {uri}
         </Text>
       </TouchableOpacity>
@@ -112,20 +112,20 @@ class RtdUriPayload extends React.Component {
 
 class WifiSimplePayload extends React.Component {
   render() {
-    let {ndef} = this.props;
+    let {ndef, colors} = this.props;
     let credentials = Ndef.wifiSimple.decodePayload(ndef.payload);
     return (
       <View style={{marginTop: 10}}>
-        <Text style={{marginBottom: 5}}>WIFI_SIMPLE</Text>
+        <Text style={{marginBottom: 5, color: colors.text}}>WIFI_SIMPLE</Text>
         <View style={{flexDirection: 'row', marginBottom: 5}}>
-          <Text style={{color: 'grey', marginRight: 5}}>SSID:</Text>
-          <Text style={{fontSize: 16, flex: 1}}>
+          <Text style={{color: colors.textMuted, marginRight: 5}}>SSID:</Text>
+          <Text style={{fontSize: 16, flex: 1, color: colors.text}}>
             {credentials.ssid || '---'}
           </Text>
         </View>
         <View style={{flexDirection: 'row', marginBottom: 5}}>
-          <Text style={{color: 'grey', marginRight: 5}}>Network Key:</Text>
-          <Text style={{fontSize: 16, flex: 1}}>
+          <Text style={{color: colors.textMuted, marginRight: 5}}>Network Key:</Text>
+          <Text style={{fontSize: 16, flex: 1, color: colors.text}}>
             {credentials.networkKey || '---'}
           </Text>
         </View>
@@ -136,12 +136,12 @@ class WifiSimplePayload extends React.Component {
 
 class TextBasedMimePayload extends React.Component {
   render() {
-    let {ndef, mimeType} = this.props;
+    let {ndef, mimeType, colors} = this.props;
     let text = Ndef.util.bytesToString(ndef.payload);
     return (
       <View>
-        <Text style={{fontSize: 16, color: 'gray'}}>{mimeType}</Text>
-        <Text style={{fontSize: 16}}>{text}</Text>
+        <Text style={{fontSize: 16, color: colors.textMuted}}>{mimeType}</Text>
+        <Text style={{fontSize: 16, color: colors.text}}>{text}</Text>
       </View>
     );
   }

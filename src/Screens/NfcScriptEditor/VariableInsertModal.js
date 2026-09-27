@@ -1,8 +1,11 @@
 import React from 'react';
 import {Modal, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
+import {useVisualTheme} from '../../visual/theme';
 
 function VariableInsertModal({available, onClose, onInsert, visible}) {
+  const {colors} = useVisualTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
   const [selectedName, setSelectedName] = React.useState(null);
   const [format, setFormat] = React.useState('u8');
   if (!visible) {
@@ -93,25 +96,27 @@ function VariableInsertModal({available, onClose, onInsert, visible}) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F5F7FA', padding: 20},
-  title: {fontSize: 22, fontWeight: '700', color: '#23436A', marginBottom: 8},
-  hint: {color: '#54606E', lineHeight: 20, marginBottom: 12},
+function makeStyles(colors) {
+  return StyleSheet.create({
+  container: {flex: 1, backgroundColor: colors.background, padding: 20},
+  title: {fontSize: 22, fontWeight: '700', color: colors.text, marginBottom: 8},
+  hint: {color: colors.textMuted, lineHeight: 20, marginBottom: 12},
   list: {flexGrow: 0, maxHeight: 300, marginBottom: 16},
   variable: {marginBottom: 8},
-  label: {fontWeight: '700', color: '#23436A', marginBottom: 8},
+  label: {fontWeight: '700', color: colors.text, marginBottom: 8},
   formats: {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'},
   preview: {
-    backgroundColor: 'white',
-    borderColor: '#D8E0EA',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderWidth: 1,
     borderRadius: 4,
-    color: '#172B4D',
+    color: colors.technical,
     fontFamily: 'monospace',
     padding: 12,
     marginVertical: 12,
   },
   actions: {flexDirection: 'row', justifyContent: 'space-between', marginTop: 8},
-});
+  });
+}
 
 export default VariableInsertModal;

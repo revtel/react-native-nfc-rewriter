@@ -4,12 +4,16 @@ import {Button} from 'react-native-paper';
 import renderer, {act} from 'react-test-renderer';
 import NfcProxy from '../src/NfcProxy';
 import HexBytePad from '../src/Components/HexBytePad';
-import NfcScriptEditorScreen, {StepList} from '../src/Screens/NfcScriptEditor';
+import NfcScriptEditorScreen, {StepList, TraceView} from '../src/Screens/NfcScriptEditor';
 import NfcScriptHelpScreen from '../src/Screens/NfcScriptHelp';
 import {executeScript} from '../src/features/nfc-script/interpreter';
 import {newScript} from '../src/features/nfc-script/model';
 
 jest.mock('../src/NfcProxy', () => ({runNfcScript: jest.fn()}));
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => ({
+  __esModule: true,
+  default: 'Icon',
+}));
 jest.mock('../src/Components/ScreenHeader', () => 'ScreenHeader');
 jest.mock('react-native-safe-area-context', () => ({
   ...jest.requireActual('react-native-safe-area-context'),
@@ -49,6 +53,27 @@ test('nested card editor creates a branch', async () => {
     else: [],
   });
   tree.unmount();
+});
+
+test('long command and response bytes remain fully selectable in trace', async () => {
+  const bytes = Array.from({length: 64}, (_, index) => index);
+  let tree;
+  await act(async () => {
+    tree = renderer.create(
+      <TraceView result={{
+        success: true,
+        trace: [{location: '0', type: 'transceive', command: bytes, response: {raw: bytes}}],
+      }} />,
+    );
+  });
+  const technicalLines = tree.root.findAllByType(Text).filter((node) =>
+    node.props.selectable && node.props.children?.[0] === '→ ',
+  );
+  expect(technicalLines).toHaveLength(1);
+  expect(technicalLines[0].props.selectable).toBe(true);
+  expect(technicalLines[0].props.numberOfLines).toBeUndefined();
+  expect(technicalLines[0].props.children.join('')).toContain('3F');
+  await act(async () => tree.unmount());
 });
 
 test('saved script is not run on open and shows trace only after explicit run', async () => {
@@ -103,7 +128,9 @@ test('editor opens the dedicated help screen without running NFC', async () => {
     );
   });
   await act(async () => {
-    button(tree, 'HELP: EXAMPLES & FORMATS').props.onPress();
+    tree.root.findAll((node) => !!node.props.accessibilityLabel)
+      .find((node) => node.props.accessibilityLabel === 'Help: examples and formats')
+      .props.onPress();
   });
   expect(navigation.navigate).toHaveBeenCalledWith('NfcScriptHelp', {
     tech: 'NfcA',

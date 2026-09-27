@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {View} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
+import {useVisualTheme} from '../visual/theme';
+import NdefWriterForm from './NdefWriterForm';
 
 function WifiSimpleWriter(props, ref) {
   const [ssid, setSsid] = React.useState(props.value?.ssid || '');
@@ -9,6 +10,7 @@ function WifiSimpleWriter(props, ref) {
     props.value?.networkKey || '',
   );
   const write = useNdefWriter('WIFI_SIMPLE');
+  const {colors, spacing} = useVisualTheme();
 
   if (ref) {
     ref.current = {
@@ -25,13 +27,13 @@ function WifiSimpleWriter(props, ref) {
   };
 
   return (
-    <View>
+    <NdefWriterForm hint="Enter the network name and key to encode WiFi credentials." onWrite={writeNdef}>
       <TextInput
         mode="outlined"
         label="SSID"
         value={ssid}
         onChangeText={setSsid}
-        style={{marginBottom: 10}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
 
       <TextInput
@@ -39,13 +41,9 @@ function WifiSimpleWriter(props, ref) {
         label="Network Key"
         value={networkKey}
         onChangeText={setNetworkKey}
-        style={{marginBottom: 20}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
-
-      <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
-        WRITE
-      </Button>
-    </View>
+    </NdefWriterForm>
   );
 }
 

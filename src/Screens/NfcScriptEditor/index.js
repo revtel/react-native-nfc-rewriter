@@ -5,9 +5,12 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
+  Pressable,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Button} from 'react-native-paper';
+import {Button, IconButton} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
 import ScreenHeader from '../../Components/ScreenHeader';
 import NfcProxy from '../../NfcProxy';
@@ -22,6 +25,7 @@ import {
   validateScript,
 } from '../../features/nfc-script/model';
 import VariableInsertModal from './VariableInsertModal';
+import {useVisualTheme} from '../../visual/theme';
 
 const STEP_TYPES = [
   'transceive',
@@ -35,7 +39,13 @@ const STEP_TYPES = [
 const CAPTURE_FORMATS = ['u8', 'u16be', 'u16le', 'bytes'];
 const OPERATORS = ['==', '!=', '<', '<=', '>', '>='];
 
+function useEditorStyles() {
+  const {colors, spacing, type} = useVisualTheme();
+  return React.useMemo(() => makeStyles(colors, spacing, type), [colors, spacing, type]);
+}
+
 function Field({label, value, onChange, numeric = false, multiline = false}) {
+  const styles = useEditorStyles();
   return (
     <View style={styles.field}>
       <Text style={styles.fieldLabel}>{label}</Text>
@@ -47,12 +57,14 @@ function Field({label, value, onChange, numeric = false, multiline = false}) {
         autoCapitalize="none"
         autoCorrect={false}
         multiline={multiline}
+        accessibilityLabel={label}
       />
     </View>
   );
 }
 
 function Choice({values, selected, onSelect}) {
+  const styles = useEditorStyles();
   return (
     <View style={styles.choices}>
       {values.map((value) => (
@@ -71,6 +83,7 @@ function Choice({values, selected, onSelect}) {
 }
 
 function CommandTemplateField({template, change, available}) {
+  const styles = useEditorStyles();
   const value = typeof template === 'string' ? template : '';
   const [mode, setMode] = React.useState('TEXT');
   const [showVariablePicker, setShowVariablePicker] = React.useState(false);
@@ -119,7 +132,6 @@ function CommandTemplateField({template, change, available}) {
         selected={mode}
         onSelect={selectMode}
       />
-      {modeError && <Text style={styles.error}>{modeError}</Text>}
       {mode === 'TEXT' ? (
         <>
           <TextInput
@@ -129,7 +141,9 @@ function CommandTemplateField({template, change, available}) {
             autoCapitalize="none"
             autoCorrect={false}
             multiline
+            accessibilityLabel="Command bytes"
           />
+          {modeError && <Text style={styles.error}>{modeError}</Text>}
           <Text style={styles.hint}>
             {'Example: 30 ${targetPage:u8}. See HELP for formats.'}
           </Text>
@@ -145,7 +159,7 @@ function CommandTemplateField({template, change, available}) {
           )}
           {tokens.map((token, index) => (
             <View key={`${index}-${token}`} style={styles.commandSegment}>
-              <Text style={styles.commandToken}>{`${index + 1}. ${token}`}</Text>
+              <Text selectable style={styles.commandToken}>{`${index + 1}. ${token}`}</Text>
               <Button
                 compact
                 disabled={index === 0}
@@ -175,7 +189,7 @@ function CommandTemplateField({template, change, available}) {
               CHOOSE VARIABLE
             </Button>
           </View>
-          <Text style={styles.commandPreview}>{value || '(empty command)'}</Text>
+          <Text selectable style={styles.commandPreview}>{value || '(empty command)'}</Text>
         </>
       )}
       <CustomTransceiveModal
@@ -199,6 +213,7 @@ function CommandTemplateField({template, change, available}) {
 }
 
 function StepFields({step, change, depth, available, tech}) {
+  const styles = useEditorStyles();
   switch (step.type) {
     case 'transceive':
       return (
@@ -366,7 +381,8 @@ function StepFields({step, change, depth, available, tech}) {
   }
 }
 
-function StepList({steps, onChange, depth = 0, available = {}, tech = 'NfcA'}) {
+function StepList({steps, onChange, depth = 0, available = {}, tech = 'NfcA', errors = []}) {
+  const styles = useEditorStyles();
   const [showAdd, setShowAdd] = React.useState(false);
   let currentAvailable = {...available};
   const update = (idx, patch) =>
@@ -393,24 +409,22 @@ function StepList({steps, onChange, depth = 0, available = {}, tech = 'NfcA'}) {
             <Text style={styles.stepTitle}>
               {idx + 1}. {String(step?.type || 'unknown').toUpperCase()}
             </Text>
-            <Button compact disabled={idx === 0} onPress={() => move(idx, -1)}>
-              ↑
-            </Button>
-            <Button
-              compact
+            <IconButton icon="arrow-up" size={20} accessibilityLabel="Move step up" disabled={idx === 0} onPress={() => move(idx, -1)} />
+            <IconButton
+              icon="arrow-down"
+              size={20}
+              accessibilityLabel="Move step down"
               disabled={idx === steps.length - 1}
               onPress={() => move(idx, 1)}
-            >
-              ↓
-            </Button>
-            <Button
-              compact
+            />
+            <IconButton
+              icon="delete-outline"
+              size={20}
+              accessibilityLabel="Remove step"
               onPress={() =>
                 onChange(steps.filter((_, position) => position !== idx))
               }
-            >
-              ✕
-            </Button>
+            />
           </View>
           <StepFields
             step={step || {}}
@@ -419,6 +433,9 @@ function StepList({steps, onChange, depth = 0, available = {}, tech = 'NfcA'}) {
             available={stepAvailable}
             tech={tech}
           />
+          {errors.filter((error) => error.startsWith(`Step ${idx + 1}:`)).map((error, errorIndex) => (
+            <Text key={errorIndex} style={styles.error}>{error}</Text>
+          ))}
         </View>
         );
       })}
@@ -461,6 +478,7 @@ function formatBytes(bytes) {
 }
 
 function TraceView({result}) {
+  const styles = useEditorStyles();
   if (!result) {
     return (
       <Text style={styles.hint}>Run the script to see an execution trace.</Text>
@@ -476,12 +494,12 @@ function TraceView({result}) {
           <Text style={styles.stepTitle}>
             {entry.location} · {entry.type.toUpperCase()}
           </Text>
-          {entry.command && <Text>→ {formatBytes(entry.command)}</Text>}
+          {entry.command && <Text selectable style={styles.technicalText}>→ {formatBytes(entry.command)}</Text>}
           {entry.response && (
             <>
-              <Text>← {formatBytes(entry.response.raw)}</Text>
+              <Text selectable style={styles.technicalText}>← {formatBytes(entry.response.raw)}</Text>
               {entry.response.sw !== undefined && (
-                <Text>
+                <Text selectable style={styles.technicalText}>
                   Data: {formatBytes(entry.response.data)} · SW:{' '}
                   {entry.response.sw
                     .toString(16)
@@ -492,7 +510,7 @@ function TraceView({result}) {
             </>
           )}
           {entry.variable && (
-            <Text>
+            <Text selectable style={styles.technicalText}>
               {entry.variable.name} ={' '}
               {Array.isArray(entry.variable.value)
                 ? formatBytes(entry.variable.value)
@@ -500,15 +518,15 @@ function TraceView({result}) {
             </Text>
           )}
           {entry.branch && (
-            <Text>
+            <Text style={styles.traceText}>
               Branch: {entry.branch} ({entry.comparison.left}{' '}
               {entry.comparison.operator} {entry.comparison.right})
             </Text>
           )}
-          {entry.count !== undefined && <Text>Iterations: {entry.count}</Text>}
-          {entry.ms !== undefined && <Text>Delay: {entry.ms} ms</Text>}
+          {entry.count !== undefined && <Text style={styles.traceText}>Iterations: {entry.count}</Text>}
+          {entry.ms !== undefined && <Text style={styles.traceText}>Delay: {entry.ms} ms</Text>}
           {entry.error && <Text style={styles.error}>{entry.error}</Text>}
-          {entry.message && <Text>{entry.message}</Text>}
+          {entry.message && <Text style={styles.traceText}>{entry.message}</Text>}
         </View>
       ))}
     </View>
@@ -516,6 +534,8 @@ function TraceView({result}) {
 }
 
 function NfcScriptEditorScreen({navigation, route}) {
+  const styles = useEditorStyles();
+  const {colors} = useVisualTheme();
   const {bottom: bottomInset} = useSafeAreaInsets();
   const params = route?.params || {};
   const [script, setScript] = React.useState(
@@ -525,6 +545,9 @@ function NfcScriptEditorScreen({navigation, route}) {
   const [running, setRunning] = React.useState(false);
   const [result, setResult] = React.useState(null);
   const errors = validateScript(script);
+  const hasNestedSteps = Array.isArray(script.steps) && script.steps.some(
+    (step) => step?.type === 'if' || step?.type === 'repeat',
+  );
 
   function editScript(nextScript) {
     setScript(nextScript);
@@ -562,6 +585,7 @@ function NfcScriptEditorScreen({navigation, route}) {
           <Button
             compact
             mode={mode === 'editor' ? 'contained' : 'outlined'}
+            style={styles.toolbarButton}
             onPress={() => setMode('editor')}
           >
             EDITOR
@@ -569,6 +593,7 @@ function NfcScriptEditorScreen({navigation, route}) {
           <Button
             compact
             mode={mode === 'trace' ? 'contained' : 'outlined'}
+            style={styles.toolbarButton}
             onPress={() => setMode('trace')}
           >
             TRACE
@@ -576,13 +601,15 @@ function NfcScriptEditorScreen({navigation, route}) {
           <Button
             compact
             mode="contained"
+            icon="play"
+            style={styles.toolbarRun}
             disabled={running || errors.length > 0}
             onPress={run}
           >
             {running ? 'RUNNING' : 'RUN'}
           </Button>
         </View>
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           {mode === 'editor' ? (
             <>
               <Text style={styles.heading}>Technology</Text>
@@ -595,15 +622,19 @@ function NfcScriptEditorScreen({navigation, route}) {
                 One technology and one NFC session per run. Scripts run only
                 when you tap RUN.
               </Text>
-              <Button
-                mode="outlined"
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Help: examples and formats"
+                style={styles.helpButton}
                 onPress={() =>
                   navigation.navigate('NfcScriptHelp', {tech: script.tech})
                 }
               >
-                HELP: EXAMPLES & FORMATS
-              </Button>
-              {errors.map((error, idx) => (
+                <Icon name="information-outline" size={20} color={colors.accent} />
+                <Text style={styles.helpText}>HELP: EXAMPLES & FORMATS</Text>
+              </Pressable>
+              <Text style={styles.stepsHeading}>Steps · {Array.isArray(script.steps) ? script.steps.length : 0}</Text>
+              {errors.filter((error) => hasNestedSteps || !/^Step \d+:/.test(error)).map((error, idx) => (
                 <Text key={idx} style={styles.error}>
                   {error}
                 </Text>
@@ -612,6 +643,7 @@ function NfcScriptEditorScreen({navigation, route}) {
                 steps={Array.isArray(script.steps) ? script.steps : []}
                 onChange={(steps) => editScript({...script, steps})}
                 tech={script.tech}
+                errors={hasNestedSteps ? [] : errors}
               />
             </>
           ) : (
@@ -624,67 +656,41 @@ function NfcScriptEditorScreen({navigation, route}) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F5F7FA'},
-  toolbar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 8,
-    backgroundColor: 'white',
-  },
-  content: {padding: 12, paddingBottom: 36},
-  heading: {fontSize: 18, fontWeight: '600', marginBottom: 8},
-  hint: {color: '#54606E', marginVertical: 8},
-  error: {color: '#B42318', marginVertical: 4},
-  success: {color: '#127447', marginVertical: 4},
-  stepList: {marginVertical: 8},
-  nestedList: {
-    borderLeftWidth: 3,
-    borderLeftColor: '#8AA9D2',
-    paddingLeft: 8,
-    marginLeft: 4,
-  },
-  stepCard: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#D8E0EA',
-    padding: 10,
-    marginBottom: 10,
-  },
-  stepHeader: {flexDirection: 'row', alignItems: 'center'},
-  stepTitle: {fontWeight: '700', flex: 1, color: '#23436A'},
-  field: {marginVertical: 4},
-  fieldLabel: {color: '#455468', marginBottom: 4},
-  input: {
-    borderWidth: 1,
-    borderColor: '#B9C7D5',
-    borderRadius: 4,
-    minHeight: 40,
-    paddingHorizontal: 8,
-    color: '#172B4D',
-  },
-  multilineInput: {minHeight: 64, textAlignVertical: 'top'},
-  commandSegment: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#D8E0EA',
-    borderWidth: 1,
-    borderRadius: 4,
-    marginBottom: 6,
-    paddingLeft: 6,
-  },
-  commandToken: {flex: 1, color: '#172B4D', fontFamily: 'monospace'},
-  builderActions: {flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8},
-  commandPreview: {
-    color: '#172B4D',
-    fontFamily: 'monospace',
-    marginTop: 8,
-  },
-  choices: {flexDirection: 'row', flexWrap: 'wrap', marginVertical: 4},
-  choice: {marginRight: 4, marginBottom: 4},
-  branchLabel: {fontWeight: '700', color: '#355E89', marginTop: 8},
-});
+function makeStyles(colors, spacing, type) {
+  const mono = Platform.OS === 'ios' ? 'Menlo' : 'monospace';
+  return StyleSheet.create({
+    container: {flex: 1, backgroundColor: colors.background},
+    toolbar: {flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.sm, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border},
+    toolbarButton: {minWidth: 76},
+    toolbarRun: {marginLeft: 'auto'},
+    content: {padding: spacing.xl, paddingBottom: spacing.xxl},
+    heading: {fontSize: type.title, fontWeight: '700', color: colors.text, marginBottom: spacing.sm},
+    helpButton: {alignSelf: 'stretch', flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 48, paddingVertical: spacing.sm, marginTop: spacing.lg, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.border},
+    helpText: {color: colors.accent, fontWeight: '700', fontSize: type.body, flexShrink: 1},
+    stepsHeading: {color: colors.text, fontSize: type.label, fontWeight: '700', marginTop: spacing.xl},
+    hint: {color: colors.textMuted, fontSize: type.body, lineHeight: 21, marginVertical: spacing.sm},
+    error: {color: colors.danger, fontSize: type.body, marginVertical: spacing.sm},
+    success: {color: colors.success, fontSize: type.body, marginVertical: spacing.sm},
+    stepList: {marginVertical: spacing.sm},
+    nestedList: {borderLeftWidth: 2, borderLeftColor: colors.border, paddingLeft: spacing.md, marginLeft: spacing.sm},
+    stepCard: {backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border, paddingVertical: spacing.md, paddingHorizontal: spacing.sm, marginBottom: spacing.sm},
+    stepHeader: {flexDirection: 'row', alignItems: 'center', minHeight: 48},
+    stepTitle: {fontWeight: '700', flex: 1, color: colors.text, fontSize: type.label},
+    field: {marginVertical: spacing.sm},
+    fieldLabel: {color: colors.textMuted, fontSize: type.body, marginBottom: spacing.sm},
+    input: {borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, borderRadius: 6, minHeight: 44, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, color: colors.technical, fontSize: type.body},
+    multilineInput: {minHeight: 64, textAlignVertical: 'top', fontFamily: mono},
+    commandSegment: {flexDirection: 'row', alignItems: 'center', borderColor: colors.border, borderWidth: 1, borderRadius: 6, marginBottom: spacing.sm, paddingLeft: spacing.sm, backgroundColor: colors.surfaceMuted},
+    commandToken: {flex: 1, flexShrink: 1, color: colors.technical, fontFamily: mono, fontSize: type.body},
+    builderActions: {flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.sm},
+    commandPreview: {color: colors.technical, fontFamily: mono, marginTop: spacing.md, fontSize: type.body, flexShrink: 1},
+    choices: {flexDirection: 'row', flexWrap: 'wrap', marginVertical: spacing.sm},
+    choice: {marginRight: spacing.sm, marginBottom: spacing.sm},
+    branchLabel: {fontWeight: '700', color: colors.textMuted, marginTop: spacing.lg, marginBottom: spacing.sm},
+    technicalText: {color: colors.technical, fontFamily: mono, fontSize: type.body, marginTop: spacing.sm, flexShrink: 1},
+    traceText: {color: colors.text, fontSize: type.body, marginTop: spacing.sm},
+  });
+}
 
 export default NfcScriptEditorScreen;
 export {StepList, TraceView};

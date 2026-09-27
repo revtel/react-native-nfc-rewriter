@@ -1,12 +1,23 @@
 import React from 'react';
-import {StyleSheet, View, ScrollView, Text} from 'react-native';
-import {Button} from 'react-native-paper';
+import {Platform, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-screens/experimental';
 import NdefMessage from '../../Components/NdefMessage';
 import {getTechList} from '../../Utils/getTechList';
+import {useVisualTheme} from '../../visual/theme';
 
-function TagDetailScreen(props) {
-  const {tag} = props.route.params;
+function DetailSection({title, children, styles}) {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionLabel}>{title}</Text>
+      {children}
+    </View>
+  );
+}
 
+function TagDetailScreen({route}) {
+  const {tag} = route.params;
+  const {colors, spacing, type} = useVisualTheme();
+  const styles = createStyles(colors, spacing, type);
   const techs = getTechList(tag);
   const ndef =
     Array.isArray(tag.ndefMessage) && tag.ndefMessage.length > 0
@@ -14,58 +25,100 @@ function TagDetailScreen(props) {
       : null;
 
   return (
-    <ScrollView style={[styles.wrapper, {padding: 10}]}>
-      <View style={styles.section}>
-        <Text style={styles.sectionLabel}>UID</Text>
-        <Text>{tag.id || '---'}</Text>
-      </View>
+    <SafeAreaView edges={{bottom: true}} style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.eyebrow}>SCAN RESULT</Text>
+        <Text style={styles.intro}>Identity, technologies, and raw tag data.</Text>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionLabel}>TECHNOLOGIES</Text>
-        <View style={styles.row}>
-          {techs.map((tech) => (
-            <Button
-              key={tech}
-              mode="outlined"
-              style={{marginRight: 5, marginBottom: 5}}>
-              {tech}
-            </Button>
-          ))}
-        </View>
-      </View>
+        <DetailSection title="UID" styles={styles}>
+          <Text selectable style={styles.technicalValue}>{tag.id || '---'}</Text>
+        </DetailSection>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionLabel}>NDEF</Text>
-        {ndef ? <NdefMessage ndef={ndef} /> : <Text>---</Text>}
-      </View>
+        <DetailSection title="TECHNOLOGIES" styles={styles}>
+          {techs.length > 0 ? (
+            <View style={styles.techList}>
+              {techs.map((tech) => (
+                <View key={tech} style={styles.techChip}>
+                  <Text style={styles.techText}>{tech}</Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.emptyValue}>---</Text>
+          )}
+        </DetailSection>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionLabel}>TAG OBJECT</Text>
-        <Text>{JSON.stringify(tag, null, 2)}</Text>
-      </View>
-    </ScrollView>
+        <DetailSection title="NDEF" styles={styles}>
+          {ndef ? (
+            <NdefMessage ndef={ndef} colors={colors} />
+          ) : (
+            <Text style={styles.emptyValue}>No NDEF message</Text>
+          )}
+        </DetailSection>
+
+        <DetailSection title="TAG OBJECT" styles={styles}>
+          <Text selectable style={styles.rawData}>
+            {JSON.stringify(tag, null, 2)}
+          </Text>
+        </DetailSection>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  section: {
-    padding: 8,
-    borderRadius: 8,
-    backgroundColor: 'white',
-    marginBottom: 15,
-  },
-  sectionLabel: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: 'gray',
-  },
-});
+function createStyles(colors, spacing, type) {
+  return StyleSheet.create({
+    safeArea: {flex: 1, backgroundColor: colors.background},
+    content: {padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
+    eyebrow: {
+      color: colors.accent,
+      fontSize: type.caption,
+      fontWeight: '700',
+      letterSpacing: 1,
+      marginBottom: spacing.sm,
+    },
+    intro: {
+      color: colors.textMuted,
+      fontSize: type.label,
+      marginBottom: spacing.xl,
+    },
+    section: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 16,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+    },
+    sectionLabel: {
+      color: colors.textMuted,
+      fontSize: type.caption,
+      fontWeight: '700',
+      letterSpacing: 1,
+      marginBottom: spacing.md,
+    },
+    technicalValue: {
+      color: colors.technical,
+      fontSize: type.label,
+      lineHeight: 23,
+      fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'}),
+    },
+    techList: {flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm},
+    techChip: {
+      backgroundColor: colors.surfaceMuted,
+      borderRadius: 8,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+    },
+    techText: {color: colors.accent, fontSize: type.body, fontWeight: '600'},
+    emptyValue: {color: colors.textMuted, fontSize: type.body},
+    rawData: {
+      color: colors.technical,
+      fontSize: type.body,
+      lineHeight: 21,
+      fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'}),
+    },
+  });
+}
 
 export default TagDetailScreen;

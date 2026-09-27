@@ -2,6 +2,8 @@ import * as React from 'react';
 import {View} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
 import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
+import {useVisualTheme} from '../visual/theme';
+import NdefWriterForm from './NdefWriterForm';
 
 const InputLabel = {
   'sms:': 'Number',
@@ -14,6 +16,7 @@ function RtdUriShortcutWriter(props, ref) {
   const [value, setValue] = React.useState(props.value?.value || '');
   const inputRef = React.useRef();
   const write = useNdefWriter('URI');
+  const {colors, spacing} = useVisualTheme();
 
   if (ref) {
     ref.current = {
@@ -33,8 +36,8 @@ function RtdUriShortcutWriter(props, ref) {
   };
 
   return (
-    <View>
-      <View style={{flexDirection: 'row', marginBottom: 10}}>
+    <NdefWriterForm hint="The shortcut prefix will be included in the record." onWrite={writeNdef}>
+      <View style={{flexDirection: 'row', marginBottom: spacing.lg}}>
         <Button mode="outlined" disabled>
           {scheme}
         </Button>
@@ -50,13 +53,9 @@ function RtdUriShortcutWriter(props, ref) {
         value={value}
         autoCapitalize={false}
         onChangeText={setValue}
-        style={{marginBottom: 20}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
-
-      <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
-        WRITE
-      </Button>
-    </View>
+    </NdefWriterForm>
   );
 }
 

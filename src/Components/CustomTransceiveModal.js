@@ -1,7 +1,8 @@
 import React from 'react';
-import {Image, Text, View, Animated, StyleSheet, Modal} from 'react-native';
+import {Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
 import HexBytePad from './HexBytePad';
+import {useVisualTheme} from '../visual/theme';
 
 const CmdType = {
   COMMAND: 'command',
@@ -9,6 +10,12 @@ const CmdType = {
 };
 
 function CustomTransceiveModal(props) {
+  const {colors} = useVisualTheme();
+  const modalStyles = React.useMemo(() => ({
+    prompt: {backgroundColor: colors.surface},
+    text: {color: colors.text},
+    technical: {color: colors.technical},
+  }), [colors]);
   const {
     visible: _visible,
     setVisible: _setVisible,
@@ -113,11 +120,11 @@ function CustomTransceiveModal(props) {
       <View style={[styles.wrapper]}>
         <View style={{flex: 1}} />
 
-        <Animated.View style={[styles.prompt, promptAnimStyle]}>
-          {isByteInsert && <Text style={styles.title}>Add hex bytes</Text>}
+        <Animated.View style={[styles.prompt, modalStyles.prompt, promptAnimStyle]}>
+          {isByteInsert && <Text style={[styles.title, modalStyles.text]}>Add hex bytes</Text>}
           {!props.cmdType && !isByteInsert && (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{marginRight: 10}}>Type: </Text>
+              <Text style={[modalStyles.text, {marginRight: 10}]}>Type: </Text>
               {Object.values(CmdType).map((type) => (
                 <Button
                   key={type}
@@ -133,7 +140,7 @@ function CustomTransceiveModal(props) {
           {cmdType === CmdType.COMMAND && (
             <View
               style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={{textAlign: 'center', letterSpacing: 1.2}}>
+              <Text style={[modalStyles.technical, {textAlign: 'center', letterSpacing: 1.2}]}>
                 {cmdBytes.length === 0 && '--'}
                 {cmdBytes.reduce((acc, byte, idx) => {
                   const hexChar = (

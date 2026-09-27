@@ -1,7 +1,11 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {useVisualTheme} from '../../visual/theme';
+
+const HelpStylesContext = React.createContext(null);
 
 function Section({title, children}) {
+  const styles = React.useContext(HelpStylesContext);
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
@@ -11,10 +15,12 @@ function Section({title, children}) {
 }
 
 function Code({children}) {
+  const styles = React.useContext(HelpStylesContext);
   return <Text style={styles.code}>{children}</Text>;
 }
 
 function Step({number, title, children}) {
+  const styles = React.useContext(HelpStylesContext);
   return (
     <View style={styles.step}>
       <Text style={styles.stepTitle}>{`${number}. ${title}`}</Text>
@@ -25,7 +31,10 @@ function Step({number, title, children}) {
 
 function NfcScriptHelpScreen({route}) {
   const tech = route?.params?.tech;
+  const {colors} = useVisualTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
   return (
+    <HelpStylesContext.Provider value={styles}>
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Flow Script guide</Text>
       <Text style={styles.body}>
@@ -138,35 +147,38 @@ function NfcScriptHelpScreen({route}) {
         <Code>{'30 ${targetPage + index * 4:u8}'}</Code>
       </Section>
     </ScrollView>
+    </HelpStylesContext.Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F5F7FA'},
+function makeStyles(colors) {
+  return StyleSheet.create({
+  container: {flex: 1, backgroundColor: colors.background},
   content: {padding: 16, paddingBottom: 40},
-  title: {fontSize: 22, fontWeight: '700', color: '#23436A', marginBottom: 12},
+  title: {fontSize: 22, fontWeight: '700', color: colors.text, marginBottom: 12},
   section: {marginTop: 14, marginBottom: 4},
-  sectionTitle: {fontSize: 18, fontWeight: '700', color: '#23436A', marginBottom: 8},
+  sectionTitle: {fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 8},
   step: {
-    backgroundColor: 'white',
-    borderColor: '#D8E0EA',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
     marginBottom: 10,
   },
-  stepTitle: {fontWeight: '700', color: '#355E89', marginBottom: 8},
-  body: {color: '#34465B', lineHeight: 21, marginBottom: 9},
+  stepTitle: {fontWeight: '700', color: colors.accent, marginBottom: 8},
+  body: {color: colors.textMuted, lineHeight: 21, marginBottom: 9},
   code: {
-    backgroundColor: '#EDF3FA',
+    backgroundColor: colors.surfaceMuted,
     borderRadius: 4,
-    color: '#172B4D',
+    color: colors.technical,
     fontFamily: 'monospace',
     lineHeight: 20,
     padding: 8,
     marginBottom: 9,
   },
-  note: {color: '#355E89', marginBottom: 9},
-});
+  note: {color: colors.accent, marginBottom: 9},
+  });
+}
 
 export default NfcScriptHelpScreen;

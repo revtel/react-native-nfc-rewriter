@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useColorScheme} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createNativeBottomTabNavigator} from '@react-navigation/bottom-tabs/unstable';
@@ -18,7 +19,7 @@ import NfcPromptAndroid from './Components/NfcPromptAndroid';
 import Toast from './Components/Toast';
 import {PRIMARY_TABS} from './features/navigation/primaryTabs';
 import {nativeTabIcon} from './features/navigation/nativeTabIcon';
-import * as Theme from './Theme';
+import {createNavigationTheme, visualColors} from './visual/theme';
 
 const RootStack = createNativeStackNavigator();
 const HomeTabs = createNativeBottomTabNavigator();
@@ -31,11 +32,12 @@ const tabScreens = {
 };
 
 function HomeTabNav() {
+  const colors = visualColors(useColorScheme() === 'dark');
   return (
     <HomeTabs.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
-        tabBarActiveTintColor: Theme.colors.blue,
+        tabBarActiveTintColor: colors.accent,
         tabBarIcon: nativeTabIcon(route.name),
       })}
     >
@@ -104,8 +106,9 @@ function Root() {
 }
 
 function AppNavigator() {
+  const isDark = useColorScheme() === 'dark';
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={createNavigationTheme(isDark)}>
       <Root />
       <NfcPromptAndroid />
       <Toast />

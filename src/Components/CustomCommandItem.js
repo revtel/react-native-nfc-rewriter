@@ -1,113 +1,87 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {IconButton} from 'react-native-paper';
+import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useVisualTheme} from '../visual/theme';
 
-function PrettyCommandPayloadBytes(props) {
-  const {bytes: _bytes} = props;
-
+function PrettyCommandPayloadBytes({bytes, styles}) {
+  const source = Array.isArray(bytes) ? bytes : [];
   const rows = [];
-  let bytes = [..._bytes];
-  while (bytes.length > 0) {
-    rows.push(bytes.slice(0, 8));
-    bytes = bytes.slice(8);
+  for (let index = 0; index < source.length; index += 8) {
+    rows.push(source.slice(index, index + 8));
   }
 
+  if (rows.length === 0) {
+    return <Text style={styles.emptyBytes}>No bytes</Text>;
+  }
+  return rows.map((row, index) => (
+    <Text key={index} selectable style={styles.bytes}>
+      {row.map((byte) => ('00' + byte.toString(16).toUpperCase()).slice(-2)).join(' ')}
+    </Text>
+  ));
+}
+
+function Action({label, icon, onPress, disabled, danger, styles, colors}) {
   return (
-    <View>
-      {rows.map((row, idx) => {
-        return (
-          <Text key={idx}>
-            {row.reduce((acc, byte) => {
-              return (
-                acc + ('00' + byte.toString(16).toUpperCase()).slice(-2) + ' '
-              );
-            }, '')}
-          </Text>
-        );
-      })}
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{disabled: Boolean(disabled)}}
+      disabled={disabled}
+      onPress={onPress}
+      style={[styles.action, danger && styles.dangerAction, disabled && styles.disabledAction]}>
+      <Icon name={icon} size={18} color={danger ? colors.danger : colors.accent} />
+      <Text style={[styles.actionText, danger && styles.dangerText]}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function CommandItem({cmd, resp, onDelete, onEdit, readOnly, onMoveUp, onMoveDown}) {
+  const {colors, spacing, type} = useVisualTheme();
+  const styles = createStyles(colors, spacing, type);
+
+  return (
+    <View style={styles.card}>
+      <Text style={styles.kind}>
+        {cmd.type === 'command' ? 'TRANSCEIVE' : cmd.type.toUpperCase()}
+      </Text>
+      {cmd.type === 'command' ? (
+        <PrettyCommandPayloadBytes bytes={cmd.payload} styles={styles} />
+      ) : (
+        <Text selectable style={styles.payload}>{String(cmd.payload ?? '')}</Text>
+      )}
+      {Array.isArray(resp) && (
+        <View style={styles.response}>
+          <Text style={styles.kind}>RESPONSE</Text>
+          <PrettyCommandPayloadBytes bytes={resp} styles={styles} />
+        </View>
+      )}
+      {!readOnly && (
+        <View style={styles.actions}>
+          <Action label="UP" icon="arrow-up" onPress={onMoveUp} disabled={!onMoveUp} styles={styles} colors={colors} />
+          <Action label="DOWN" icon="arrow-down" onPress={onMoveDown} disabled={!onMoveDown} styles={styles} colors={colors} />
+          <Action label="EDIT" icon="pencil-outline" onPress={onEdit} styles={styles} colors={colors} />
+          <Action label="DELETE" icon="delete-outline" onPress={onDelete} danger styles={styles} colors={colors} />
+        </View>
+      )}
     </View>
   );
 }
 
-function CommandItem(props) {
-  const {cmd, resp, onDelete, onEdit, readOnly, onMoveUp, onMoveDown} = props;
-  const wrapperStyle = {
-    marginBottom: 10,
-    padding: 5,
-    borderRadius: 2,
-    backgroundColor: 'white',
-  };
-
-  let innerElem = null;
-
-  if (cmd.type === 'command') {
-    innerElem = (
-      <View style={{flex: 1}}>
-        <Text style={{marginRight: 5, color: 'gray'}}>TRANSCEIVE</Text>
-        <PrettyCommandPayloadBytes bytes={cmd.payload} />
-        {Array.isArray(resp) && (
-          <>
-            <Text style={{marginRight: 5, color: 'gray'}}>RESPONSE</Text>
-            <PrettyCommandPayloadBytes bytes={resp} />
-          </>
-        )}
-      </View>
-    );
-  } else {
-    innerElem = (
-      <>
-        <Text style={{marginRight: 5, color: 'gray'}}>
-          {cmd.type.toUpperCase()}
-        </Text>
-        <Text style={{flex: 1}}>{cmd.payload}</Text>
-      </>
-    );
-  }
-
-  return (
-    <View style={[wrapperStyle, {flexDirection: 'row', alignItems: 'center'}]}>
-      {innerElem}
-
-      {!readOnly && (
-        <IconButton
-          disabled={!onMoveUp}
-          icon={() => (
-            <View style={{transform: [{rotateZ: '270deg'}]}}>
-              <Icon name="chevron-right" size={22} />
-            </View>
-          )}
-          onPress={onMoveUp}
-        />
-      )}
-
-      {!readOnly && (
-        <IconButton
-          disabled={!onMoveDown}
-          icon={() => (
-            <View style={{transform: [{rotateZ: '90deg'}]}}>
-              <Icon name="chevron-right" size={22} />
-            </View>
-          )}
-          onPress={onMoveDown}
-        />
-      )}
-
-      {!readOnly && (
-        <IconButton
-          icon={() => <Icon name="pencil" size={22} />}
-          onPress={onEdit}
-        />
-      )}
-
-      {!readOnly && (
-        <IconButton
-          icon={() => <Icon name="delete" size={22} />}
-          onPress={onDelete}
-        />
-      )}
-    </View>
-  );
+function createStyles(colors, spacing, type) {
+  return StyleSheet.create({
+    card: {backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 14, padding: spacing.lg, marginBottom: spacing.md},
+    kind: {color: colors.textMuted, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.sm},
+    bytes: {color: colors.technical, fontSize: type.label, lineHeight: 24, fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'})},
+    emptyBytes: {color: colors.textMuted, fontSize: type.body},
+    payload: {color: colors.technical, fontSize: type.label, lineHeight: 22},
+    response: {borderTopColor: colors.border, borderTopWidth: 1, marginTop: spacing.md, paddingTop: spacing.md},
+    actions: {flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.lg},
+    action: {flexDirection: 'row', alignItems: 'center', gap: spacing.xs, minHeight: 42, borderRadius: 10, borderColor: colors.border, borderWidth: 1, paddingHorizontal: spacing.md},
+    actionText: {color: colors.accent, fontSize: type.caption, fontWeight: '700'},
+    dangerAction: {borderColor: colors.danger},
+    dangerText: {color: colors.danger},
+    disabledAction: {opacity: 0.45},
+  });
 }
 
 export default CommandItem;

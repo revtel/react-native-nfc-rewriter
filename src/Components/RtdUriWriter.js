@@ -2,6 +2,8 @@ import * as React from 'react';
 import {View} from 'react-native';
 import {Menu, TextInput, Button} from 'react-native-paper';
 import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
+import {useVisualTheme} from '../visual/theme';
+import NdefWriterForm from './NdefWriterForm';
 
 function RtdUriWriter(props, ref) {
   const [value, setValue] = React.useState(props.value?.value || '');
@@ -9,6 +11,7 @@ function RtdUriWriter(props, ref) {
   const [showMenu, setShowMenu] = React.useState(false);
   const inputRef = React.useRef();
   const write = useNdefWriter('URI');
+  const {colors, spacing} = useVisualTheme();
 
   if (ref) {
     ref.current = {
@@ -32,8 +35,8 @@ function RtdUriWriter(props, ref) {
   };
 
   return (
-    <View>
-      <View style={{flexDirection: 'row', marginBottom: 10}}>
+    <NdefWriterForm hint="Choose a prefix, then enter the link or URI." onWrite={writeNdef}>
+      <View style={{flexDirection: 'row', marginBottom: spacing.lg}}>
         <Menu
           visible={showMenu}
           onDismiss={() => setShowMenu(false)}
@@ -64,13 +67,9 @@ function RtdUriWriter(props, ref) {
         value={value}
         autoCapitalize={false}
         onChangeText={setValue}
-        style={{marginBottom: 20}}
+        style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}
       />
-
-      <Button mode="contained" labelStyle={{fontSize: 20}} onPress={writeNdef}>
-        WRITE
-      </Button>
-    </View>
+    </NdefWriterForm>
   );
 }
 
