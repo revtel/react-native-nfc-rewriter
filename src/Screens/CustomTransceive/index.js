@@ -4,8 +4,8 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
 } from 'react-native';
+import {NestableDraggableFlatList, NestableScrollContainer} from 'react-native-draggable-flatlist';
 import {SafeAreaView} from 'react-native-screens/experimental';
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
@@ -34,6 +34,14 @@ function CustomTransceiveScreen(props) {
   );
   const {readOnly, title} = params;
   const [responses, setResponses] = React.useState([]);
+  const commandKeys = React.useRef(new WeakMap());
+  const nextCommandKey = React.useRef(0);
+  function commandKey(command) {
+    if (!commandKeys.current.has(command)) {
+      commandKeys.current.set(command, `command-${nextCommandKey.current++}`);
+    }
+    return commandKeys.current.get(command);
+  }
   const [currEditParamIdx, setCurrEditParamIdx] = React.useState(null);
   const [editableParameters, setEditableParameters] = React.useState(
     (Array.isArray(params.savedRecord?.parameters) &&
@@ -160,7 +168,7 @@ function CustomTransceiveScreen(props) {
         readOnly={readOnly}
       />
       <SafeAreaView edges={{bottom: true}} style={styles.wrapper}>
-        <ScrollView contentContainerStyle={styles.content}>
+        <NestableScrollContainer contentContainerStyle={styles.content}>
           <Text style={styles.eyebrow}>NFC WORKBENCH</Text>
           <Text style={styles.heading}>Custom Transceive</Text>
           <Text style={styles.intro}>
@@ -208,27 +216,44 @@ function CustomTransceiveScreen(props) {
               {commands.length === 0 ? (
                 <Text style={styles.emptyText}>No commands yet. Add one to begin.</Text>
               ) : (
-                commands.map((cmd, idx) => (
-                  <CommandItem
-                    cmd={cmd}
-                    resp={responses[idx]}
-                    key={idx}
-                    onMoveUp={
-                      commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
+                <NestableDraggableFlatList
+                  data={commands}
+                  keyExtractor={commandKey}
+                  onDragEnd={({from, to}) => {
+                    if (from !== to) {
+                      setCommands((current) => moveCommand(current, from, to));
+                      setResponses([]);
                     }
-                    onMoveDown={
-                      commands.length > 1 &&
-                      idx < commands.length - 1 &&
-                      (() => moveCommandDown(idx))
+                  }}
+                  renderItem={({item: cmd, getIndex, drag, isActive}) => {
+                    const idx = getIndex();
+                    if (idx === undefined) {
+                      return null;
                     }
-                    onDelete={() => deleteCommand(idx)}
-                    onEdit={() => {
-                      setShowCommandModal(true);
-                      setCurrEditIdx(idx);
-                    }}
-                    readOnly={readOnly}
-                  />
-                ))
+                    return (
+                      <CommandItem
+                        cmd={cmd}
+                        resp={responses[idx]}
+                        onDrag={drag}
+                        isActive={isActive}
+                        onMoveUp={
+                          commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
+                        }
+                        onMoveDown={
+                          commands.length > 1 &&
+                          idx < commands.length - 1 &&
+                          (() => moveCommandDown(idx))
+                        }
+                        onDelete={() => deleteCommand(idx)}
+                        onEdit={() => {
+                          setShowCommandModal(true);
+                          setCurrEditIdx(idx);
+                        }}
+                        readOnly={readOnly}
+                      />
+                    );
+                  }}
+                />
               )}
             </View>
           )}
@@ -253,7 +278,7 @@ function CustomTransceiveScreen(props) {
               EXECUTE
             </Button>
           </View>
-        </ScrollView>
+        </NestableScrollContainer>
       </SafeAreaView>
 
       <CustomTransceiveModal
@@ -276,7 +301,7 @@ function CustomTransceiveScreen(props) {
 function createStyles(colors, spacing, type) {
   return StyleSheet.create({
     wrapper: {flex: 1, backgroundColor: colors.background},
-    content: {padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
+    content: {paddingHorizontal: spacing.lg, paddingTop: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
     eyebrow: {color: colors.accent, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.sm},
     heading: {color: colors.text, fontSize: type.hero, fontWeight: '700', marginBottom: spacing.sm},
     intro: {color: colors.textMuted, fontSize: type.label, lineHeight: 22, marginBottom: spacing.lg},

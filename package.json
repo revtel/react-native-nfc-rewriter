@@ -28,6 +28,7 @@
     "react": "19.2.3",
     "react-native": "0.86.3",
     "react-native-device-info": "^14.0.2",
+    "react-native-draggable-flatlist": "4.0.3",
     "react-native-gesture-handler": "2.33.0",
     "react-native-nfc-manager": "4.0.0-beta.9",
     "react-native-paper": "^5.12.3",

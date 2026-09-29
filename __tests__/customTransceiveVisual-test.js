@@ -3,7 +3,22 @@ import {ScrollView, Text} from 'react-native';
 import renderer, {act} from 'react-test-renderer';
 import CustomTransceiveScreen from '../src/Screens/CustomTransceive';
 import CommandItem from '../src/Components/CustomCommandItem';
+import {NestableDraggableFlatList} from 'react-native-draggable-flatlist';
+import NfcProxy from '../src/NfcProxy';
 
+jest.mock('react-native-draggable-flatlist', () => {
+  const {ScrollView: MockScrollView, View} = require('react-native');
+  return {
+    NestableScrollContainer: MockScrollView,
+    NestableDraggableFlatList: ({data, renderItem, keyExtractor}) => (
+      <View>{data.map((item, index) => (
+        <View key={keyExtractor(item)}>
+          {renderItem({item, getIndex: () => index, drag: jest.fn(), isActive: false})}
+        </View>
+      ))}</View>
+    ),
+  };
+});
 jest.mock('react-native-nfc-manager', () => ({NfcTech: {NfcA: 'NfcA', NfcV: 'NfcV', IsoDep: 'IsoDep'}}));
 jest.mock('../src/NfcProxy', () => ({__esModule: true, default: {customTransceiveNfcA: jest.fn(), customTransceiveNfcV: jest.fn(), customTransceiveIsoDep: jest.fn()}}));
 jest.mock('react-native-screens/experimental', () => ({SafeAreaView: 'SafeAreaView'}));
@@ -26,18 +41,25 @@ async function render(component) {
 }
 
 test('command rows show readable response bytes and labeled editable actions', async () => {
-  const callbacks = {onMoveUp: jest.fn(), onMoveDown: jest.fn(), onEdit: jest.fn(), onDelete: jest.fn()};
+  const callbacks = {onMoveUp: jest.fn(), onMoveDown: jest.fn(), onEdit: jest.fn(), onDelete: jest.fn(), onDrag: jest.fn()};
   const tree = await render(<CommandItem cmd={{type: 'command', payload: [0x30, 0xff]}} resp={[0x90, 0x00]} {...callbacks} />);
   const actions = tree.root.findAll((node) => node.props.accessibilityRole === 'button');
   const labels = [...new Set(actions.map((node) => node.props.accessibilityLabel))];
-  expect(labels).toEqual(['UP', 'DOWN', 'EDIT', 'DELETE']);
+  expect(labels).toEqual(['Reorder command', 'EDIT', 'DELETE']);
   const texts = tree.root.findAllByType(Text).map((node) => node.props.children);
   expect(texts).toContain('30 FF');
   expect(texts).toContain('90 00');
-  for (const [label, callback] of [['UP', callbacks.onMoveUp], ['DOWN', callbacks.onMoveDown], ['EDIT', callbacks.onEdit], ['DELETE', callbacks.onDelete]]) {
+  for (const [label, callback] of [['EDIT', callbacks.onEdit], ['DELETE', callbacks.onDelete]]) {
     await act(async () => actions.find((node) => node.props.accessibilityLabel === label && typeof node.props.onPress === 'function').props.onPress());
     expect(callback).toHaveBeenCalledTimes(1);
   }
+  const handle = actions.find((node) => node.props.accessibilityLabel === 'Reorder command');
+  await act(async () => handle.props.onLongPress());
+  expect(callbacks.onDrag).toHaveBeenCalledTimes(1);
+  await act(async () => handle.props.onAccessibilityAction({nativeEvent: {actionName: 'moveUp'}}));
+  expect(callbacks.onMoveUp).toHaveBeenCalledTimes(1);
+  await act(async () => handle.props.onAccessibilityAction({nativeEvent: {actionName: 'moveDown'}}));
+  expect(callbacks.onMoveDown).toHaveBeenCalledTimes(1);
   await act(async () => tree.unmount());
 });
 
@@ -65,5 +87,34 @@ test('read-only saved workflow retains command data and Execute but hides Add', 
   expect(buttons.find((node) => node.props.accessibilityLabel === 'Execute commands').props.disabled).toBe(false);
   expect(tree.root.findByType(CommandItem).props.readOnly).toBe(true);
   expect(tree.root.findByType(CommandItem).props.cmd).toEqual(savedRecord.payload.value[0]);
+  await act(async () => tree.unmount());
+});
+
+
+test('drag reorder changes execution and saved order and clears stale responses', async () => {
+  const commands = [
+    {type: 'command', payload: [0x30]},
+    {type: 'delay', payload: 100},
+    {type: 'command', payload: [0x30]},
+  ];
+  const savedRecord = {name: 'Reorder', payload: {tech: 'NfcA', value: commands}};
+  NfcProxy.customTransceiveNfcA.mockResolvedValue([true, [[0xaa], [], [0xbb]]]);
+  const tree = await render(<CustomTransceiveScreen route={{params: {savedRecord}}} navigation={{goBack: jest.fn()}} />);
+  const list = () => tree.root.findByType(NestableDraggableFlatList);
+  const originalKeys = commands.map(list().props.keyExtractor);
+  expect(new Set(originalKeys).size).toBe(3);
+  const execute = () => tree.root.findAllByType('Button').find((node) => node.props.accessibilityLabel === 'Execute commands');
+  await act(async () => execute().props.onPress());
+  expect(tree.root.findAllByType(CommandItem)[0].props.resp).toEqual([0xaa]);
+  await act(async () => list().props.onDragEnd({from: 0, to: 2}));
+  const reordered = [commands[1], commands[2], commands[0]];
+  expect(list().props.data).toEqual(reordered);
+  expect(list().props.data.map(list().props.keyExtractor)).toEqual([originalKeys[1], originalKeys[2], originalKeys[0]]);
+  expect(tree.root.findAllByType(CommandItem).every((node) => node.props.resp === undefined)).toBe(true);
+  expect(tree.root.findByType('ScreenHeader').props.getRecordPayload().value).toEqual(reordered);
+  await act(async () => execute().props.onPress());
+  expect(NfcProxy.customTransceiveNfcA.mock.calls.at(-1)[0]).toEqual(reordered);
+  await act(async () => list().props.onDragEnd({from: 1, to: 1}));
+  expect(tree.root.findAllByType(CommandItem)[0].props.resp).toEqual([0xaa]);
   await act(async () => tree.unmount());
 });

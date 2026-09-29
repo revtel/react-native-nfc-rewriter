@@ -1,10 +1,22 @@
 import React from 'react';
-import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Platform, Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useVisualTheme} from '../visual/theme';
 
-function PrettyCommandPayloadBytes({bytes, styles}) {
+function PrettyCommandPayloadBytes({bytes, styles, compact = false}) {
   const source = Array.isArray(bytes) ? bytes : [];
+  const formatBytes = (values) => values
+    .map((byte) => ('00' + byte.toString(16).toUpperCase()).slice(-2))
+    .join(' ');
+  if (compact) {
+    return (
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <Text selectable style={source.length ? styles.bytes : styles.emptyBytes}>
+          {source.length ? formatBytes(source) : 'No bytes'}
+        </Text>
+      </ScrollView>
+    );
+  }
   const rows = [];
   for (let index = 0; index < source.length; index += 8) {
     rows.push(source.slice(index, index + 8));
@@ -15,7 +27,7 @@ function PrettyCommandPayloadBytes({bytes, styles}) {
   }
   return rows.map((row, index) => (
     <Text key={index} selectable style={styles.bytes}>
-      {row.map((byte) => ('00' + byte.toString(16).toUpperCase()).slice(-2)).join(' ')}
+      {formatBytes(row)}
     </Text>
   ));
 }
@@ -28,39 +40,62 @@ function Action({label, icon, onPress, disabled, danger, styles, colors}) {
       accessibilityState={{disabled: Boolean(disabled)}}
       disabled={disabled}
       onPress={onPress}
-      style={[styles.action, danger && styles.dangerAction, disabled && styles.disabledAction]}>
-      <Icon name={icon} size={18} color={danger ? colors.danger : colors.accent} />
-      <Text style={[styles.actionText, danger && styles.dangerText]}>{label}</Text>
+      style={({pressed}) => [styles.action, pressed && styles.pressedAction, disabled && styles.disabledAction]}>
+      <Icon name={icon} size={22} color={danger ? colors.danger : colors.accent} />
     </Pressable>
   );
 }
 
-function CommandItem({cmd, resp, onDelete, onEdit, readOnly, onMoveUp, onMoveDown}) {
+function CommandItem({cmd, resp, onDelete, onEdit, readOnly, onMoveUp, onMoveDown, onDrag, isActive}) {
   const {colors, spacing, type} = useVisualTheme();
   const styles = createStyles(colors, spacing, type);
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.kind}>
-        {cmd.type === 'command' ? 'TRANSCEIVE' : cmd.type.toUpperCase()}
-      </Text>
-      {cmd.type === 'command' ? (
-        <PrettyCommandPayloadBytes bytes={cmd.payload} styles={styles} />
-      ) : (
-        <Text selectable style={styles.payload}>{String(cmd.payload ?? '')}</Text>
-      )}
+    <View style={[styles.card, isActive && styles.activeCard]}>
+      <View style={styles.row}>
+        <View style={styles.command}>
+          <Text style={styles.kind}>
+            {cmd.type === 'command' ? 'TRANSCEIVE' : cmd.type.toUpperCase()}
+          </Text>
+          {cmd.type === 'command' ? (
+            <PrettyCommandPayloadBytes bytes={cmd.payload} styles={styles} compact />
+          ) : (
+            <Text selectable style={styles.payload}>{String(cmd.payload ?? '')}</Text>
+          )}
+        </View>
+        {!readOnly && (
+          <View style={styles.actions}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Reorder command"
+              accessibilityHint="Long press and drag to change the command order"
+              accessibilityState={{disabled: !onMoveUp && !onMoveDown}}
+              accessibilityActions={[
+                ...(onMoveUp ? [{name: 'moveUp', label: 'Move up'}] : []),
+                ...(onMoveDown ? [{name: 'moveDown', label: 'Move down'}] : []),
+              ]}
+              onAccessibilityAction={({nativeEvent}) => {
+                if (nativeEvent.actionName === 'moveUp') {
+                  onMoveUp?.();
+                } else if (nativeEvent.actionName === 'moveDown') {
+                  onMoveDown?.();
+                }
+              }}
+              disabled={isActive || (!onMoveUp && !onMoveDown)}
+              onLongPress={onDrag}
+              delayLongPress={200}
+              style={[styles.action, !onMoveUp && !onMoveDown && styles.disabledAction]}>
+              <Icon name="drag-horizontal" size={22} color={colors.textMuted} />
+            </Pressable>
+            <Action label="EDIT" icon="pencil-outline" onPress={onEdit} disabled={isActive} styles={styles} colors={colors} />
+            <Action label="DELETE" icon="delete-outline" onPress={onDelete} disabled={isActive} danger styles={styles} colors={colors} />
+          </View>
+        )}
+      </View>
       {Array.isArray(resp) && (
         <View style={styles.response}>
           <Text style={styles.kind}>RESPONSE</Text>
           <PrettyCommandPayloadBytes bytes={resp} styles={styles} />
-        </View>
-      )}
-      {!readOnly && (
-        <View style={styles.actions}>
-          <Action label="UP" icon="arrow-up" onPress={onMoveUp} disabled={!onMoveUp} styles={styles} colors={colors} />
-          <Action label="DOWN" icon="arrow-down" onPress={onMoveDown} disabled={!onMoveDown} styles={styles} colors={colors} />
-          <Action label="EDIT" icon="pencil-outline" onPress={onEdit} styles={styles} colors={colors} />
-          <Action label="DELETE" icon="delete-outline" onPress={onDelete} danger styles={styles} colors={colors} />
         </View>
       )}
     </View>
@@ -69,17 +104,18 @@ function CommandItem({cmd, resp, onDelete, onEdit, readOnly, onMoveUp, onMoveDow
 
 function createStyles(colors, spacing, type) {
   return StyleSheet.create({
-    card: {backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 14, padding: spacing.lg, marginBottom: spacing.md},
-    kind: {color: colors.textMuted, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.sm},
-    bytes: {color: colors.technical, fontSize: type.label, lineHeight: 24, fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'})},
+    card: {backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 8, padding: spacing.sm, marginBottom: spacing.sm},
+    activeCard: {backgroundColor: colors.surfaceMuted, borderColor: colors.accent, elevation: 4},
+    row: {flexDirection: 'row', alignItems: 'center', minHeight: 48},
+    command: {flex: 1, minWidth: 0, marginRight: spacing.xs},
+    kind: {color: colors.textMuted, fontSize: type.caption, fontWeight: '600', marginBottom: spacing.xs},
+    bytes: {color: colors.technical, fontSize: type.body, lineHeight: 22, fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'})},
     emptyBytes: {color: colors.textMuted, fontSize: type.body},
     payload: {color: colors.technical, fontSize: type.label, lineHeight: 22},
-    response: {borderTopColor: colors.border, borderTopWidth: 1, marginTop: spacing.md, paddingTop: spacing.md},
-    actions: {flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.lg},
-    action: {flexDirection: 'row', alignItems: 'center', gap: spacing.xs, minHeight: 42, borderRadius: 10, borderColor: colors.border, borderWidth: 1, paddingHorizontal: spacing.md},
-    actionText: {color: colors.accent, fontSize: type.caption, fontWeight: '700'},
-    dangerAction: {borderColor: colors.danger},
-    dangerText: {color: colors.danger},
+    response: {borderTopColor: colors.border, borderTopWidth: 1, marginTop: spacing.sm, paddingTop: spacing.sm},
+    actions: {flexDirection: 'row', flexShrink: 0},
+    action: {alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: 8},
+    pressedAction: {backgroundColor: colors.surfaceMuted},
     disabledAction: {opacity: 0.45},
   });
 }

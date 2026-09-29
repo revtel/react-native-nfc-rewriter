@@ -5,6 +5,7 @@ import {PaperProvider} from 'react-native-paper';
 import AppNavigator from './AppNavigator';
 import * as AppContext from './AppContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {createPaperTheme} from './visual/theme';
 
 function ThemedApp() {
@@ -31,11 +32,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <SafeAreaProvider>
-        <AppContext.Provider>
-          <ThemedApp />
-        </AppContext.Provider>
-      </SafeAreaProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <SafeAreaProvider>
+          <AppContext.Provider>
+            <ThemedApp />
+          </AppContext.Provider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     );
   }
 }
