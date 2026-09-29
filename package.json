@@ -1,6 +1,6 @@
 {
   "name": "react-native-nfc-rewriter",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "private": true,
   "revAppInd": "com.revteltech.nfcopenrewriter",
   "scripts": {
