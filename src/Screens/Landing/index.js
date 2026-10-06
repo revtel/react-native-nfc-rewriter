@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import React from 'react';
 import {
   View,
@@ -12,6 +14,7 @@ import NfcProxy from '../../NfcProxy';
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function LandingScreen(props) {
+  useTranslation();
   const app = React.useContext(AppContext.Context);
   const opacityAnimValue = React.useRef(new Animated.Value(0)).current;
   const scaleAnimValue = React.useRef(new Animated.Value(1)).current;
@@ -71,7 +74,7 @@ function LandingScreen(props) {
 
       {isNfcSupported === false ? (
         <Text style={{fontSize: 24, padding: 20}}>
-          Your device doesn't support NFC
+          {tr("Your device doesn't support NFC")}
         </Text>
       ) : (
         <ActivityIndicator size="large" style={{marginTop: 50}} />

@@ -1,3 +1,4 @@
+import {translateText as tr} from '../../i18n';
 import {Alert, Platform} from 'react-native';
 import NfcProxy from '../../NfcProxy';
 import * as NfcIcons from '../../Components/NfcIcons';
@@ -31,7 +32,7 @@ async function verifyNxpSignature(nfc) {
     return acc + ('0' + (byte & 0xff).toString(16)).slice(-2);
   }, '');
   if (!sig) {
-    Alert.alert('Fail to obtain NXP Signature');
+    Alert.alert(tr('Fail to obtain NXP Signature'));
     return;
   }
 
@@ -46,14 +47,14 @@ async function verifyNxpSignature(nfc) {
       throw new Error('unknown-nxp-sig');
     }
     await response.json();
-    Alert.alert('Success', 'NXP signature is correct');
+    Alert.alert(tr('Success'), tr('NXP signature is correct'));
   } catch (error) {
     if (error?.message === 'invalid-nxp-sig') {
-      Alert.alert('Failure', 'NXP signature is invalid');
+      Alert.alert(tr('Failure'), tr('NXP signature is invalid'));
     } else {
       Alert.alert(
-        'Warning',
-        'cannot verify NXP signature right now, please try again later',
+        tr('Warning'),
+        tr('cannot verify NXP signature right now, please try again later'),
       );
     }
     console.warn(error);
@@ -65,7 +66,8 @@ function getToolkitActionGroups({
   nfc = NfcProxy,
   platform = Platform.OS,
 }) {
-  const navigate = (target) => navigation.navigate(target.screen, target.params);
+  const navigate = (target) =>
+    navigation.navigate(target.screen, target.params);
   const savedAction = (title, savedRecord) => () =>
     navigate(savedCommandRoute(title, savedRecord));
 
@@ -104,7 +106,8 @@ function getToolkitActionGroups({
           title: 'Flow Script',
           description: 'Build a response-driven NFC-A workflow',
           left: NfcIcons.TransceiveIcon,
-          onPress: () => navigate({screen: 'NfcScriptEditor', params: {nfcTech: 'NfcA'}}),
+          onPress: () =>
+            navigate({screen: 'NfcScriptEditor', params: {nfcTech: 'NfcA'}}),
         },
         {
           title: 'Type 2 Memory Scan',
@@ -202,15 +205,13 @@ function getToolkitActionGroups({
           title: 'Flow Script',
           description: 'Build a response-driven ISO-DEP workflow',
           left: NfcIcons.TransceiveIcon,
-          onPress: () => navigate({screen: 'NfcScriptEditor', params: {nfcTech: 'IsoDep'}}),
+          onPress: () =>
+            navigate({screen: 'NfcScriptEditor', params: {nfcTech: 'IsoDep'}}),
         },
         {
           title: '[NTAG424 DNA] Enable temper detection',
           left: NfcIcons.TransceiveIcon,
-          onPress: savedAction(
-            'Enable temper detection',
-            Ntag424.enableTemper,
-          ),
+          onPress: savedAction('Enable temper detection', Ntag424.enableTemper),
         },
         {
           title: '[NTAG424 DNA] Verify temper state',

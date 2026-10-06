@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import React from 'react';
 import {
   Image,
@@ -13,10 +15,15 @@ import NfcManager from 'react-native-nfc-manager';
 import {useOutlet} from 'reconnect.js';
 
 function NfcPromptAndroid(props) {
+  useTranslation();
   const [visible, setVisible] = React.useState(false);
   const animValue = React.useRef(new Animated.Value(0)).current;
   const [_data, _setData] = useOutlet('androidPrompt');
-  const {visible: _visible, message = ''} = _data || {};
+  const {
+    visible: _visible,
+    message = '',
+    cancelLabel = tr('CANCEL'),
+  } = _data || {};
 
   React.useEffect(() => {
     if (_visible) {
@@ -42,7 +49,7 @@ function NfcPromptAndroid(props) {
     setTimeout(() => {
       NfcManager.cancelTechnologyRequest().catch(() => 0);
     }, 200);
-    _setData({visible: false, message});
+    _setData({visible: false, message, cancelLabel});
   }
 
   const bgAnimStyle = {
@@ -68,7 +75,8 @@ function NfcPromptAndroid(props) {
 
         <Animated.View style={[styles.prompt, promptAnimStyle]}>
           <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+          >
             <Image
               source={require('../../images/nfc-512.png')}
               style={{width: 120, height: 120, padding: 20}}
@@ -79,7 +87,7 @@ function NfcPromptAndroid(props) {
           </View>
 
           <Button mode="contained" onPress={cancelNfcScan}>
-            CANCEL
+            {cancelLabel}
           </Button>
         </Animated.View>
 

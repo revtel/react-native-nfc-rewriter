@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import * as React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-screens/experimental';
@@ -22,6 +24,7 @@ const FORM_TITLE = {
 };
 
 function NdefWriteScreen(props) {
+  useTranslation();
   const {colors, spacing, type} = useVisualTheme();
   const styles = createStyles(colors, spacing, type);
   const {params} = props.route;
@@ -33,17 +36,17 @@ function NdefWriteScreen(props) {
 
   const ndefType = getNdefType(params, {Ndef, NfcTech});
   const formTitle =
-    ndefType === 'URI' && (params.scheme || params.savedRecord?.payload?.value?.scheme)
-      ? 'Contact shortcut'
-      : FORM_TITLE[ndefType] || 'NDEF record';
+    ndefType === 'URI' &&
+    (params.scheme || params.savedRecord?.payload?.value?.scheme)
+      ? tr('Contact shortcut')
+      : FORM_TITLE[ndefType] || tr('NDEF record');
 
   function getRecordPayload() {
     if (handlerRef.current?.getValue) {
-      return buildNdefRecordPayload(
-        ndefType,
-        handlerRef.current.getValue(),
-        {Ndef, NfcTech},
-      );
+      return buildNdefRecordPayload(ndefType, handlerRef.current.getValue(), {
+        Ndef,
+        NfcTech,
+      });
     }
 
     return null;
@@ -76,7 +79,7 @@ function NdefWriteScreen(props) {
   return (
     <>
       <ScreenHeader
-        title={params.savedRecord?.name || 'WRITE NDEF'}
+        title={params.savedRecord?.name || tr('WRITE NDEF')}
         navigation={props.navigation}
         getRecordPayload={getRecordPayload}
         savedRecord={params.savedRecord}
@@ -86,11 +89,14 @@ function NdefWriteScreen(props) {
         <ScrollView
           keyboardShouldPersistTaps="handled"
           automaticallyAdjustKeyboardInsets
-          contentContainerStyle={styles.content}>
-          <Text style={styles.eyebrow}>NDEF WRITER</Text>
-          <Text style={styles.heading}>{formTitle}</Text>
+          contentContainerStyle={styles.content}
+        >
+          <Text style={styles.eyebrow}>{tr('NDEF WRITER')}</Text>
+          <Text style={styles.heading}>{tr(formTitle)}</Text>
           <Text style={styles.intro}>
-            Prepare the record below, then hold an NFC tag near your device to write it.
+            {tr(
+              'Prepare the record below, then hold an NFC tag near your device to write it.',
+            )}
           </Text>
           <View style={styles.formCard}>{_renderNdefWriter()}</View>
         </ScrollView>

@@ -1,3 +1,5 @@
+import {withTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import React from 'react';
 import {View, Text, Alert, TouchableOpacity, Linking} from 'react-native';
 import {Ndef} from 'react-native-nfc-manager';
@@ -50,8 +52,12 @@ class NdefMessage extends React.Component {
 
     return (
       <View>
-        {tnfName && <Text style={{color: colors.textMuted}}>{`TNF: ${tnfName}`}</Text>}
-        {rtdName && <Text style={{color: colors.textMuted}}>{`RTD: ${rtdName}`}</Text>}
+        {tnfName && (
+          <Text style={{color: colors.textMuted}}>{`TNF: ${tnfName}`}</Text>
+        )}
+        {rtdName && (
+          <Text style={{color: colors.textMuted}}>{`RTD: ${rtdName}`}</Text>
+        )}
 
         {this._renderPayload({ndef, rtdName, colors})}
       </View>
@@ -70,7 +76,13 @@ class NdefMessage extends React.Component {
       if (mimeTypeStr === Ndef.MIME_WFA_WSC) {
         return <WifiSimplePayload ndef={ndef} colors={colors} />;
       } else if (mimeTypeStr.indexOf('text') === 0) {
-        return <TextBasedMimePayload ndef={ndef} mimeType={mimeTypeStr} colors={colors} />;
+        return (
+          <TextBasedMimePayload
+            ndef={ndef}
+            mimeType={mimeTypeStr}
+            colors={colors}
+          />
+        );
       } else {
         return <Text style={{color: colors.text}}>{mimeTypeStr}</Text>;
       }
@@ -83,7 +95,11 @@ class RtdTextPayload extends React.Component {
   render() {
     let {ndef, colors} = this.props;
     let text = Ndef.text.decodePayload(ndef.payload);
-    return <Text selectable style={{fontSize: 18, color: colors.text}}>{text}</Text>;
+    return (
+      <Text selectable style={{fontSize: 18, color: colors.text}}>
+        {text}
+      </Text>
+    );
   }
 }
 
@@ -93,7 +109,13 @@ class RtdUriPayload extends React.Component {
     let uri = Ndef.uri.decodePayload(ndef.payload);
     return (
       <TouchableOpacity onPress={() => this._goToUri(uri)}>
-        <Text style={{fontSize: 18, color: colors.accent, textDecorationLine: 'underline'}}>
+        <Text
+          style={{
+            fontSize: 18,
+            color: colors.accent,
+            textDecorationLine: 'underline',
+          }}
+        >
           {uri}
         </Text>
       </TouchableOpacity>
@@ -105,7 +127,7 @@ class RtdUriPayload extends React.Component {
       await Linking.openURL(uri);
     } catch (ex) {
       console.warn(ex);
-      Alert.alert('Cannot open uri');
+      Alert.alert(tr('Cannot open uri'));
     }
   };
 }
@@ -124,7 +146,9 @@ class WifiSimplePayload extends React.Component {
           </Text>
         </View>
         <View style={{flexDirection: 'row', marginBottom: 5}}>
-          <Text style={{color: colors.textMuted, marginRight: 5}}>Network Key:</Text>
+          <Text style={{color: colors.textMuted, marginRight: 5}}>
+            {tr('Network Key:')}
+          </Text>
           <Text style={{fontSize: 16, flex: 1, color: colors.text}}>
             {credentials.networkKey || '---'}
           </Text>
@@ -147,4 +171,4 @@ class TextBasedMimePayload extends React.Component {
   }
 }
 
-export default NdefMessage;
+export default withTranslation()(NdefMessage);

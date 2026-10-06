@@ -1,9 +1,12 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {useVisualTheme} from '../visual/theme';
 
 function NdefWriterForm({children, hint, onWrite}) {
+  useTranslation();
   const {colors, spacing, type} = useVisualTheme();
   const styles = StyleSheet.create({
     hint: {
@@ -19,15 +22,16 @@ function NdefWriterForm({children, hint, onWrite}) {
 
   return (
     <View>
-      <Text style={styles.hint}>{hint}</Text>
+      <Text style={styles.hint}>{tr(hint)}</Text>
       <View style={styles.fields}>{children}</View>
       <Button
         mode="contained"
         style={styles.writeButton}
         contentStyle={styles.writeContent}
-        accessibilityLabel="Write record to NFC tag"
-        onPress={onWrite}>
-        WRITE TO TAG
+        accessibilityLabel={tr('Write record to NFC tag')}
+        onPress={onWrite}
+      >
+        {tr('WRITE TO TAG')}
       </Button>
     </View>
   );

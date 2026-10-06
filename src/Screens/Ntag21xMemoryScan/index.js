@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import * as React from 'react';
 import {
   ActivityIndicator,
@@ -18,17 +20,27 @@ import {
 } from '../../features/ntag21x-memory/layout';
 import {buildMemoryView} from '../../features/ntag21x-memory/viewModel';
 
+function regionTitle(section, profile) {
+  return profile.regions
+    .filter(
+      (region) => region.end >= section.start && region.start <= section.end,
+    )
+    .map((region) => tr(region.title))
+    .join(' / ');
+}
+
 function accessLabel(value) {
   if (value === 0) {
-    return 'free';
+    return tr('free');
   }
   if (value === 15) {
-    return 'prohibited';
+    return tr('prohibited');
   }
-  return `reserved (${value.toString(16).toUpperCase()})`;
+  return tr('reserved ({{value}})', {value: value.toString(16).toUpperCase()});
 }
 
 function FourPageRow({row, view}) {
+  useTranslation();
   return (
     <View style={styles.pageGroup}>
       <View style={styles.pageCells}>
@@ -39,10 +51,14 @@ function FourPageRow({row, view}) {
                 <Text style={styles.pageAddress}>
                   {formatPageAddress(page.address)}
                 </Text>
-                <Text style={styles.hexText}>{formatPageBytes(page.bytes)}</Text>
+                <Text style={styles.hexText}>
+                  {formatPageBytes(page.bytes)}
+                </Text>
                 {page.status !== 'read' && (
                   <Text style={styles.pageStatus}>
-                    {page.status === 'unreadable' ? 'Unreadable' : 'Not scanned'}
+                    {page.status === 'unreadable'
+                      ? tr('Unreadable')
+                      : tr('Not scanned')}
                   </Text>
                 )}
               </>
@@ -60,39 +76,55 @@ function FourPageRow({row, view}) {
           <View key={`notes-${page.address}`}>
             {label && (page.address === 3 || region.key !== 'user') && (
               <Text style={styles.pageLabel}>
-                {formatPageAddress(page.address)} · {label}
+                {formatPageAddress(page.address)} · {tr(label)}
               </Text>
             )}
             {page.address === 3 && view.cc.status === 'valid' && (
               <Text style={styles.pageLabel}>
-                {formatPageAddress(page.address)} · Type 2 v{view.cc.version} ·{' '}
-                {view.cc.dataAreaBytes} B NDEF area · Read{' '}
-                {accessLabel(view.cc.readAccess)} · Write{' '}
-                {accessLabel(view.cc.writeAccess)}
+                {tr(
+                  '{{address}} · Type 2 v{{version}} · {{bytes}} B NDEF area · Read {{read}} · Write {{write}}',
+                  {
+                    address: formatPageAddress(page.address),
+                    version: view.cc.version,
+                    bytes: view.cc.dataAreaBytes,
+                    read: accessLabel(view.cc.readAccess),
+                    write: accessLabel(view.cc.writeAccess),
+                  },
+                )}
               </Text>
             )}
             {page.address === 3 && view.cc.status !== 'valid' && (
               <Text style={styles.pageStatus}>
                 {formatPageAddress(page.address)} ·{' '}
                 {view.cc.status === 'unavailable'
-                  ? 'CC unavailable; meaning unknown.'
-                  : `CC invalid: ${view.cc.errors.join(', ')}`}
+                  ? tr('CC unavailable; meaning unknown.')
+                  : tr('CC invalid: {{errors}}', {
+                      errors: view.cc.errors
+                        .map((error) => tr(error))
+                        .join(', '),
+                    })}
               </Text>
             )}
             {tlvs.map((entry, index) => (
-              <Text key={`${entry.byteOffset}-${index}`} style={styles.pageLabel}>
-                {formatPageAddress(page.address)} · {entry.name} @ +
+              <Text
+                key={`${entry.byteOffset}-${index}`}
+                style={styles.pageLabel}
+              >
+                {formatPageAddress(page.address)} · {tr(entry.name)} @ +
                 {entry.pageByteOffset}
                 {typeof entry.length === 'number' ? ` · ${entry.length} B` : ''}
-                {entry.status !== 'valid' ? ` · ${entry.status}` : ''}
+                {entry.status !== 'valid' ? ` · ${tr(entry.status)}` : ''}
               </Text>
             ))}
-            {(label === 'PWD' || label === 'PACK') && page.status === 'read' && (
-              <Text style={styles.pageStatus}>
-                {formatPageAddress(page.address)} · Readback does not reveal stored
-                secret bytes.
-              </Text>
-            )}
+            {(label === 'PWD' || label === 'PACK') &&
+              page.status === 'read' && (
+                <Text style={styles.pageStatus}>
+                  {tr(
+                    '{{address}} · Readback does not reveal stored secret bytes.',
+                    {address: formatPageAddress(page.address)},
+                  )}
+                </Text>
+              )}
           </View>
         );
       })}
@@ -101,6 +133,7 @@ function FourPageRow({row, view}) {
 }
 
 function ScanSummary({scan, view}) {
+  useTranslation();
   if (!scan) {
     return null;
   }
@@ -108,10 +141,14 @@ function ScanSummary({scan, view}) {
     return (
       <View style={styles.card}>
         <Text style={styles.statusTitle}>
-          {scan.status === 'unsupported' ? 'UNSUPPORTED TAG' : 'TAG NOT IDENTIFIED'}
+          {scan.status === 'unsupported'
+            ? tr('UNSUPPORTED TAG')
+            : tr('TAG NOT IDENTIFIED')}
         </Text>
         <Text style={styles.bodyText}>
-          No readable Type 2 pages were confirmed. No memory size was inferred.
+          {tr(
+            'No readable Type 2 pages were confirmed. No memory size was inferred.',
+          )}
         </Text>
       </View>
     );
@@ -121,46 +158,60 @@ function ScanSummary({scan, view}) {
   const scope = scan.scope || 'full';
   const title =
     scope === 'data_area'
-      ? `TYPE 2 · ${scan.status === 'complete' ? 'DATA AREA COMPLETE' : 'PARTIAL'}`
+      ? `TYPE 2 · ${
+          scan.status === 'complete' ? tr('DATA AREA COMPLETE') : tr('PARTIAL')
+        }`
       : scope === 'preview'
-      ? 'TYPE 2 · LIMITED PREVIEW'
-      : `${view.profile.model} · ${scan.status.toUpperCase()}`;
+      ? tr('TYPE 2 · LIMITED PREVIEW')
+      : `${view.profile.model} · ${tr(scan.status.toUpperCase())}`;
   return (
     <View style={styles.card}>
       <Text style={styles.statusTitle}>{title}</Text>
       <Text style={styles.bodyText}>
-        {scan.readPages} / {scan.pageCount} pages read
+        {tr('{{read}} / {{total}} pages read', {
+          read: scan.readPages,
+          total: scan.pageCount,
+        })}
       </Text>
       {scope === 'full' && (
         <Text style={styles.bodyText}>
-          Documented model range · {view.profile.pageCount * 4} bytes
+          {tr('Documented model range · {{bytes}} bytes', {
+            bytes: view.profile.pageCount * 4,
+          })}
         </Text>
       )}
       {scope === 'data_area' && (
         <Text style={styles.bodyText}>
-          CC declares {view.cc.dataAreaBytes} B of data area. Vendor memory beyond
-          it was not scanned.
+          {tr(
+            'CC declares {{bytes}} B of data area. Vendor memory beyond it was not scanned.',
+            {bytes: view.cc.dataAreaBytes},
+          )}
         </Text>
       )}
       {scope === 'preview' && (
         <Text style={styles.warningText}>
           {scan.limitReason === 'unaddressable_cc'
-            ? `CC declares ${view.cc.dataAreaBytes} B, but that range is not safely addressable. Only the initial four pages were read.`
-            : 'Capacity unknown. Only the initial four pages were read.'}
+            ? tr(
+                'CC declares {{bytes}} B, but that range is not safely addressable. Only the initial four pages were read.',
+                {bytes: view.cc.dataAreaBytes},
+              )
+            : tr('Capacity unknown. Only the initial four pages were read.')}
         </Text>
       )}
-      {view.uid && <Text style={styles.bodyText}>UID  {view.uid}</Text>}
+      {view.uid && <Text style={styles.bodyText}>UID {view.uid}</Text>}
       {scan.status === 'partial' && (
         <Text style={styles.warningText}>
           {typeof failureAddress === 'number'
-            ? `Page ${formatPageAddress(failureAddress)} unreadable. `
-            : 'Scan interrupted. '}
+            ? tr('Page {{address}} unreadable.', {
+                address: formatPageAddress(failureAddress),
+              }) + ' '
+            : tr('Scan interrupted.') + ' '}
           {scan.failure?.cause === 'invalid_response'
-            ? 'Unexpected response length.'
+            ? tr('Unexpected response length.')
             : scan.failure?.cause === 'session_error'
-            ? 'NFC session ended.'
-            : 'Cause unknown.'}{' '}
-          Later pages were not scanned.
+            ? tr('NFC session ended.')
+            : tr('Cause unknown.')}{' '}
+          {tr('Later pages were not scanned.')}
         </Text>
       )}
     </View>
@@ -168,6 +219,7 @@ function ScanSummary({scan, view}) {
 }
 
 function Ntag21xMemoryScanScreen() {
+  useTranslation();
   const [scan, setScan] = React.useState(null);
   const [scanning, setScanning] = React.useState(false);
   const [progress, setProgress] = React.useState(null);
@@ -230,51 +282,60 @@ function Ntag21xMemoryScanScreen() {
         <>
           <View style={styles.card}>
             <Text style={styles.bodyText}>
-              Inspect Type 2-compatible tag memory in four-page rows.
+              {tr('Inspect Type 2-compatible tag memory in four-page rows.')}
             </Text>
             <Text style={styles.noteText}>
-              This scan sends no write or authentication commands. An enabled NFC
-              counter may advance during reading.
+              {tr(
+                'This scan sends no write or authentication commands. An enabled NFC counter may advance during reading.',
+              )}
             </Text>
             <Button mode="contained" disabled={scanning} onPress={startScan}>
-              {scan ? 'SCAN AGAIN' : 'SCAN TAG'}
+              {scan ? tr('SCAN AGAIN') : tr('SCAN TAG')}
             </Button>
             {scanning && (
               <View style={styles.progressRow}>
                 <ActivityIndicator />
                 <Text style={styles.bodyText}>
                   {progress
-                    ? `${progress.model}: ${progress.readPages} / ${progress.pageCount} pages`
-                    : 'Identifying tag...'}
+                    ? tr('{{model}}: {{read}} / {{total}} pages', {
+                        model: progress.model,
+                        read: progress.readPages,
+                        total: progress.pageCount,
+                      })
+                    : tr('Identifying tag...')}
                 </Text>
               </View>
             )}
           </View>
           <ScanSummary scan={scan} view={view} />
-          {view && <Text style={styles.mapTitle}>MEMORY LAYOUT</Text>}
+          {view && <Text style={styles.mapTitle}>{tr('MEMORY LAYOUT')}</Text>}
         </>
       }
       renderSectionHeader={({section}) => (
         <TouchableOpacity
           accessibilityRole="button"
-          accessibilityLabel={`${section.title}, pages ${formatPageAddress(
-            section.start,
-          )} to ${formatPageAddress(section.end)}`}
+          accessibilityLabel={tr('{{title}}, pages {{start}} to {{end}}', {
+            title: regionTitle(section, view.profile),
+            start: formatPageAddress(section.start),
+            end: formatPageAddress(section.end),
+          })}
           onPress={() =>
             setExpanded((current) => ({
               ...current,
               [section.key]: !current[section.key],
             }))
           }
-          style={styles.regionHeader}>
+          style={styles.regionHeader}
+        >
           <View style={styles.regionText}>
             <Text style={styles.regionTitle}>
-              {expanded[section.key] ? '▾' : '▸'} {section.title}
+              {expanded[section.key] ? '▾' : '▸'}{' '}
+              {regionTitle(section, view.profile)}
             </Text>
             {section.key === 'user' && view.tlvs.status !== 'complete' && (
               <Text style={styles.pageStatus}>
-                TLV {view.tlvs.status}:{' '}
-                {view.tlvs.error || 'later bytes unavailable'}
+                TLV {tr(view.tlvs.status)}:{' '}
+                {tr(view.tlvs.error) || tr('later bytes unavailable')}
               </Text>
             )}
           </View>
@@ -298,10 +359,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bodyText: {fontSize: 14, color: '#263238', lineHeight: 21, marginBottom: 4},
-  noteText: {fontSize: 13, color: '#5d6870', lineHeight: 19, marginVertical: 12},
+  noteText: {
+    fontSize: 13,
+    color: '#5d6870',
+    lineHeight: 19,
+    marginVertical: 12,
+  },
   warningText: {fontSize: 13, color: '#955300', lineHeight: 19, marginTop: 5},
-  statusTitle: {fontSize: 18, fontWeight: '700', color: '#263238', marginBottom: 6},
-  progressRow: {flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 12},
+  statusTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#263238',
+    marginBottom: 6,
+  },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 12,
+  },
   mapTitle: {fontSize: 14, fontWeight: '700', color: '#52616b', margin: 8},
   regionHeader: {
     backgroundColor: '#e7edf2',

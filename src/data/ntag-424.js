@@ -1,3 +1,4 @@
+import {translateText as tr} from '../i18n';
 import {Alert} from 'react-native';
 import NfcManager from 'react-native-nfc-manager';
 
@@ -31,9 +32,9 @@ const readSignature = {
         const resp = await (await fetch(endpoint)).json();
         console.warn('verify resp', resp);
         if (resp.result) {
-          Alert.alert('Signature is correct');
+          Alert.alert(tr('Signature is correct'));
         } else {
-          Alert.alert('Signature is wrong');
+          Alert.alert(tr('Signature is wrong'));
         }
       } catch (ex) {
         console.warn(ex);

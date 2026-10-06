@@ -1982,6 +1982,28 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - RNLocalize (3.7.2):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNReanimated (4.7.0):
     - hermes-engine
     - RCTRequired
@@ -2305,6 +2327,7 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -2473,6 +2496,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2565,12 +2590,13 @@ SPEC CHECKSUMS:
   RNCClipboard: 43ac6243b4872faeeb159e8261747c2b1bc2f002
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNGestureHandler: 820091e7c8a218a357ec492872fab965b31acfd2
+  RNLocalize: 74d0d3383e04991641b20342353d0776ce49a563
   RNReanimated: 6d400f4b78e05a81d29b0eb815a26628a2ac0930
   RNScreens: eeca9fe79bacbb2de611b8d1baf20aa6e35c826b
   RNVectorIcons: 1965d63e341570227866dafdf9fd53c4c6ef3bb3
   RNWorklets: 3da8f468c848547646f4e6b12fb46ad93a2cdee2
   Yoga: 18b74b3ade30bebc1904004dfaceae1dd02a330a
 
-PODFILE CHECKSUM: cc7f676c55e7f3cd5de680b7b3bca66f88335e67
+PODFILE CHECKSUM: 0ac1ffdca8dc4fa5955d216f4b65e3792c941338
 
 COCOAPODS: 1.15.2

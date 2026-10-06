@@ -1,13 +1,7 @@
+import {sessionTranslator} from '../../i18n';
 import {Platform} from 'react-native';
-import NfcManager, {
-  NfcEvents,
-  NfcTech,
-} from 'react-native-nfc-manager';
-import {
-  handleNfcException,
-  runNfcSession,
-  withAndroidPrompt,
-} from './session';
+import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
+import {handleNfcException, runNfcSession, withAndroidPrompt} from './session';
 
 async function readTag() {
   const result = await runNfcSession({
@@ -37,6 +31,7 @@ async function readNxpSigNtag2xx() {
 }
 
 function readNdefOnce() {
+  const translate = sessionTranslator();
   return withAndroidPrompt(
     () =>
       new Promise((resolve) => {
@@ -50,14 +45,14 @@ function readNdefOnce() {
           tagFound = tag;
           resolve(tagFound);
           if (Platform.OS === 'ios') {
-            NfcManager.setAlertMessageIOS('NDEF tag found');
+            NfcManager.setAlertMessageIOS(translate('NDEF tag found'));
           }
           NfcManager.unregisterTagEvent().catch(() => 0);
         });
 
         NfcManager.setEventListener(NfcEvents.SessionClosed, (error) => {
           if (error) {
-            handleNfcException(error);
+            handleNfcException(error, translate);
           }
           cleanUp();
           if (!tagFound) {
@@ -65,8 +60,11 @@ function readNdefOnce() {
           }
         });
 
-        NfcManager.registerTagEvent();
+        NfcManager.registerTagEvent({
+          alertMessage: translate('Ready to scan NFC'),
+        });
       }),
+    translate,
   );
 }
 

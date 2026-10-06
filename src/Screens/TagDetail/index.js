@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import React from 'react';
 import {Platform, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-screens/experimental';
@@ -6,6 +8,7 @@ import {getTechList} from '../../Utils/getTechList';
 import {useVisualTheme} from '../../visual/theme';
 
 function DetailSection({title, children, styles}) {
+  useTranslation();
   return (
     <View style={styles.section}>
       <Text style={styles.sectionLabel}>{title}</Text>
@@ -15,6 +18,7 @@ function DetailSection({title, children, styles}) {
 }
 
 function TagDetailScreen({route}) {
+  useTranslation();
   const {tag} = route.params;
   const {colors, spacing, type} = useVisualTheme();
   const styles = createStyles(colors, spacing, type);
@@ -27,14 +31,18 @@ function TagDetailScreen({route}) {
   return (
     <SafeAreaView edges={{bottom: true}} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.eyebrow}>SCAN RESULT</Text>
-        <Text style={styles.intro}>Identity, technologies, and raw tag data.</Text>
+        <Text style={styles.eyebrow}>{tr('SCAN RESULT')}</Text>
+        <Text style={styles.intro}>
+          {tr('Identity, technologies, and raw tag data.')}
+        </Text>
 
         <DetailSection title="UID" styles={styles}>
-          <Text selectable style={styles.technicalValue}>{tag.id || '---'}</Text>
+          <Text selectable style={styles.technicalValue}>
+            {tag.id || '---'}
+          </Text>
         </DetailSection>
 
-        <DetailSection title="TECHNOLOGIES" styles={styles}>
+        <DetailSection title={tr('TECHNOLOGIES')} styles={styles}>
           {techs.length > 0 ? (
             <View style={styles.techList}>
               {techs.map((tech) => (
@@ -52,11 +60,11 @@ function TagDetailScreen({route}) {
           {ndef ? (
             <NdefMessage ndef={ndef} colors={colors} />
           ) : (
-            <Text style={styles.emptyValue}>No NDEF message</Text>
+            <Text style={styles.emptyValue}>{tr('No NDEF message')}</Text>
           )}
         </DetailSection>
 
-        <DetailSection title="TAG OBJECT" styles={styles}>
+        <DetailSection title={tr('TAG OBJECT')} styles={styles}>
           <Text selectable style={styles.rawData}>
             {JSON.stringify(tag, null, 2)}
           </Text>

@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import React from 'react';
 import {
   Image,
@@ -7,25 +9,39 @@ import {
   Text,
   StyleSheet,
   Platform,
-  Keyboard,
-  Dimensions,
-  Alert,
 } from 'react-native';
-import {Appbar, List, TextInput, Button} from 'react-native-paper';
+import {Appbar, List, Button} from 'react-native-paper';
 import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
+import {LanguageContext} from '../../i18n/LanguageProvider';
+import {useVisualTheme} from '../../visual/theme';
 import {version} from '../../../package.json';
 
-const generalText = `
-NfcReWriter is an open source project built on-top-of react-native. 
-
-As an open source project, any kind of contributions and suggestions are always welcome!
-`;
+function LanguageChoice({value, label, selected, onSelect}) {
+  const renderIcon = React.useCallback(
+    (iconProps) => (
+      <List.Icon
+        {...iconProps}
+        icon={selected ? 'radiobox-marked' : 'radiobox-blank'}
+      />
+    ),
+    [selected],
+  );
+  return (
+    <List.Item
+      title={label}
+      accessibilityRole="radio"
+      accessibilityState={{checked: selected}}
+      onPress={() => onSelect(value)}
+      right={renderIcon}
+    />
+  );
+}
 
 function SettingsScreen(props) {
+  useTranslation();
+  const {mode, selectLanguage} = React.useContext(LanguageContext);
+  const {colors} = useVisualTheme();
   const [nfcStatus, setNfcStatus] = React.useState(null);
-  const [feedback, setFeedback] = React.useState('');
-  const [keyboardPadding, setKeyboardPadding] = React.useState(0);
-  const scrollPosRef = React.useRef(0);
 
   React.useEffect(() => {
     function onNfcStateChanged(evt = {}) {
@@ -51,35 +67,65 @@ function SettingsScreen(props) {
 
   return (
     <>
-      <Appbar.Header style={{backgroundColor: 'white'}}>
+      <Appbar.Header style={{backgroundColor: colors.surface}}>
         <Appbar.BackAction onPress={() => props.navigation.goBack()} />
-        <Text style={{marginLeft: 10, fontSize: 18}}>About This App</Text>
+        <Text
+          style={{
+            marginLeft: 10,
+            fontSize: 18,
+            color: colors.text,
+            flexShrink: 1,
+          }}
+        >
+          {tr('About This App')}
+        </Text>
       </Appbar.Header>
-      <ScrollView style={[styles.wrapper]}>
-        <View style={styles.topBanner}>
-          <Text style={{lineHeight: 16}}>{generalText}</Text>
+      <ScrollView
+        style={[styles.wrapper, {backgroundColor: colors.background}]}
+      >
+        <View style={[styles.topBanner, {backgroundColor: colors.surface}]}>
+          <Text style={{lineHeight: 22, color: colors.text}}>
+            {tr(
+              'NfcReWriter is an open source project built on react-native. Contributions and suggestions are welcome!',
+            )}
+          </Text>
         </View>
         <List.Section>
+          <List.Subheader>{tr('Language')}</List.Subheader>
+          {[
+            ['system', tr('Follow system')],
+            ['zh-Hant', '繁體中文'],
+            ['en', 'English'],
+            ['ja', '日本語'],
+          ].map(([value, label]) => (
+            <LanguageChoice
+              key={value}
+              value={value}
+              label={label}
+              selected={mode === value}
+              onSelect={selectLanguage}
+            />
+          ))}
           {Platform.OS === 'android' && (
             <>
               <List.Item
-                title="NFC Status"
+                title={tr('NFC Status')}
                 description={
-                  nfcStatus === null ? '---' : nfcStatus ? 'ON' : 'OFF'
+                  nfcStatus === null ? '---' : nfcStatus ? tr('ON') : tr('OFF')
                 }
               />
               <List.Item
-                title="NFC Settings"
-                description="Jump to System NFC Settings"
+                title={tr('NFC Settings')}
+                description={tr('Jump to System NFC Settings')}
                 onPress={() => {
                   NfcManager.goToNfcSetting();
                 }}
               />
             </>
           )}
-          <List.Item title="Version" description={version} />
+          <List.Item title={tr('Version')} description={version} />
           <List.Item
-            title="Repository"
+            title={tr('Repository')}
             description="https://github.com/revtel/react-native-nfc-rewriter"
             onPress={() => {
               Linking.openURL(
@@ -87,7 +133,7 @@ function SettingsScreen(props) {
               );
             }}
           />
-          <List.Subheader>Creators</List.Subheader>
+          <List.Subheader>{tr('Creators')}</List.Subheader>
           <List.Item
             title="Revteltech 忻旅科技"
             left={() => (
@@ -122,8 +168,9 @@ function SettingsScreen(props) {
           style={{margin: 20}}
           onPress={() => {
             Linking.openURL('mailto:nfctogo@gmail.com');
-          }}>
-          Contact Us
+          }}
+        >
+          {tr('Contact Us')}
         </Button>
       </ScrollView>
     </>

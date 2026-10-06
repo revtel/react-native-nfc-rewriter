@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import * as React from 'react';
 import {ScrollView, Alert} from 'react-native';
 import {List} from 'react-native-paper';
@@ -9,6 +11,7 @@ import * as Sic43NT from '../../data/sic-43nt';
 import NfcProxy from '../../NfcProxy';
 
 function TagKitScreen(props) {
+  useTranslation();
   const {navigation} = props;
 
   return (
@@ -16,36 +19,36 @@ function TagKitScreen(props) {
       <List.Section>
         <List.Subheader>SIC 43NT</List.Subheader>
         <List.Item
-          title="Verify rolling code"
-          description="Verify rolling code"
+          title={tr('Verify rolling code')}
+          description={tr('Verify rolling code')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Verify rolling code',
+              title: tr('Verify rolling code'),
               readOnly: true,
               savedRecord: Sic43NT.verifyRollingCode,
             });
           }}
         />
         <List.Item
-          title="Enable password"
-          description="Enable password protection"
+          title={tr('Enable password')}
+          description={tr('Enable password protection')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Enable password protection',
+              title: tr('Enable password protection'),
               readOnly: true,
               savedRecord: Sic43NT.enablePassword,
             });
           }}
         />
         <List.Item
-          title="Verify password"
-          description="Verify password"
+          title={tr('Verify password')}
+          description={tr('Verify password')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Verify password',
+              title: tr('Verify password'),
               readOnly: true,
               savedRecord: Sic43NT.verifyPassword,
             });
@@ -54,36 +57,36 @@ function TagKitScreen(props) {
 
         <List.Subheader>NXP NTAG 424 DNA</List.Subheader>
         <List.Item
-          title="Enable temper detection"
+          title={tr('Enable temper detection')}
           description="Enable temper detection function"
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Enable temper detection',
+              title: tr('Enable temper detection'),
               readOnly: true,
               savedRecord: Ntag424.enableTemper,
             });
           }}
         />
         <List.Item
-          title="Verify temper state"
-          description="Verify temper state"
+          title={tr('Verify temper state')}
+          description={tr('Verify temper state')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Verify temper state',
+              title: tr('Verify temper state'),
               readOnly: true,
               savedRecord: Ntag424.verifyTemperState,
             });
           }}
         />
         <List.Item
-          title="Verify signature"
+          title={tr('Verify signature')}
           description="Check if your tag is signed by NXP"
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Verify signature',
+              title: tr('Verify signature'),
               readOnly: true,
               savedRecord: Ntag424.readSignature,
             });
@@ -92,7 +95,7 @@ function TagKitScreen(props) {
 
         <List.Subheader>NXP NTAG 2XX</List.Subheader>
         <List.Item
-          title="Verify signature"
+          title={tr('Verify signature')}
           description="Check if your tag is signed by NXP"
           left={NfcIcons.TransceiveIcon}
           onPress={async () => {
@@ -123,20 +126,22 @@ function TagKitScreen(props) {
             }, '');
 
             if (!sig) {
-              Alert.alert('Fail to obtain NXP Signature');
+              Alert.alert(tr('Fail to obtain NXP Signature'));
               return;
             }
 
             try {
               await checkNxpSig({uid, sig});
-              Alert.alert('Success', 'NXP signature is correct');
+              Alert.alert(tr('Success'), tr('NXP signature is correct'));
             } catch (ex) {
               if (ex?.message === 'invalid-nxp-sig') {
-                Alert.alert('Failure', 'NXP signature is invalid');
+                Alert.alert(tr('Failure'), tr('NXP signature is invalid'));
               } else {
                 Alert.alert(
-                  'Warning',
-                  'cannot verify NXP signature right now, please try again later',
+                  tr('Warning'),
+                  tr(
+                    'cannot verify NXP signature right now, please try again later',
+                  ),
                 );
               }
               console.warn(ex);
@@ -146,24 +151,24 @@ function TagKitScreen(props) {
 
         <List.Subheader>NXP NTAG 213</List.Subheader>
         <List.Item
-          title="Enable password"
-          description="Enable password protection"
+          title={tr('Enable password')}
+          description={tr('Enable password protection')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Enable password protection',
+              title: tr('Enable password protection'),
               readOnly: true,
               savedRecord: Ntag213.enablePassword,
             });
           }}
         />
         <List.Item
-          title="Verify password"
-          description="Verify password"
+          title={tr('Verify password')}
+          description={tr('Verify password')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Verify password',
+              title: tr('Verify password'),
               readOnly: true,
               savedRecord: Ntag213.verifyPassword,
             });
@@ -172,24 +177,24 @@ function TagKitScreen(props) {
 
         <List.Subheader>NXP NTAG 215</List.Subheader>
         <List.Item
-          title="Enable password"
-          description="Enable password protection"
+          title={tr('Enable password')}
+          description={tr('Enable password protection')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Enable password protection',
+              title: tr('Enable password protection'),
               readOnly: true,
               savedRecord: Ntag215.enablePassword,
             });
           }}
         />
         <List.Item
-          title="Verify password"
-          description="Verify password"
+          title={tr('Verify password')}
+          description={tr('Verify password')}
           left={NfcIcons.TransceiveIcon}
           onPress={() => {
             navigation.navigate('CustomTransceive', {
-              title: 'Verify password',
+              title: tr('Verify password'),
               readOnly: true,
               savedRecord: Ntag215.verifyPassword,
             });

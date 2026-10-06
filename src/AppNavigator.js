@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from './i18n';
 import * as React from 'react';
 import {useColorScheme} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -32,6 +34,7 @@ const tabScreens = {
 };
 
 function HomeTabNav() {
+  useTranslation();
   const colors = visualColors(useColorScheme() === 'dark');
   return (
     <HomeTabs.Navigator
@@ -46,7 +49,7 @@ function HomeTabNav() {
           key={name}
           name={name}
           component={tabScreens[name]}
-          options={{title}}
+          options={{title: tr(title)}}
         />
       ))}
     </HomeTabs.Navigator>
@@ -54,6 +57,7 @@ function HomeTabNav() {
 }
 
 function Root() {
+  useTranslation();
   return (
     <RootStack.Navigator initialRouteName="Landing">
       <RootStack.Screen
@@ -74,7 +78,7 @@ function Root() {
       <RootStack.Screen
         name="TagDetail"
         component={TagDetailScreen}
-        options={{title: 'TAG DETAIL'}}
+        options={{title: tr('TAG DETAIL')}}
       />
       <RootStack.Screen
         name="NdefWrite"
@@ -94,18 +98,19 @@ function Root() {
       <RootStack.Screen
         name="NfcScriptHelp"
         component={NfcScriptHelpScreen}
-        options={{title: 'FLOW SCRIPT HELP'}}
+        options={{title: tr('FLOW SCRIPT HELP')}}
       />
       <RootStack.Screen
         name="Ntag21xMemoryScan"
         component={Ntag21xMemoryScanScreen}
-        options={{title: 'TYPE 2 MEMORY SCAN'}}
+        options={{title: tr('TYPE 2 MEMORY SCAN')}}
       />
     </RootStack.Navigator>
   );
 }
 
 function AppNavigator() {
+  useTranslation();
   const isDark = useColorScheme() === 'dark';
   return (
     <NavigationContainer theme={createNavigationTheme(isDark)}>

@@ -334,3 +334,19 @@ test('builder mode does not discard an invalid text command', async () => {
   expect(onChange).not.toHaveBeenCalled();
   tree.unmount();
 });
+
+test('localized step fields retain protocol types and variable metadata', async () => {
+  const {i18n, translateText: tr} = require('../src/i18n');
+  for (const language of ['zh-Hant', 'ja']) {
+    let tree;
+    const onChange = jest.fn();
+    await act(async () => {
+      await i18n.changeLanguage(language);
+      tree = renderer.create(<StepList steps={[{type: 'delay', ms: 100}, {type: 'repeat', count: '1', maxIterations: 2, steps: []}]} onChange={onChange} />);
+    });
+    expect(text(tree)).toContain(tr('Delay (ms, max 5000)'));
+    expect(text(tree)).toContain(tr('Maximum iterations (1–64)'));
+    await act(async () => tree.unmount());
+  }
+  await act(async () => i18n.changeLanguage('en'));
+});

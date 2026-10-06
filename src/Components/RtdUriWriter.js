@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import * as React from 'react';
 import {View} from 'react-native';
 import {Menu, TextInput, Button} from 'react-native-paper';
@@ -6,6 +8,7 @@ import {useVisualTheme} from '../visual/theme';
 import NdefWriterForm from './NdefWriterForm';
 
 function RtdUriWriter(props, ref) {
+  useTranslation();
   const [value, setValue] = React.useState(props.value?.value || '');
   const [prefix, setPrefix] = React.useState(props.value?.prefix || 'https://');
   const [showMenu, setShowMenu] = React.useState(false);
@@ -35,7 +38,10 @@ function RtdUriWriter(props, ref) {
   };
 
   return (
-    <NdefWriterForm hint="Choose a prefix, then enter the link or URI." onWrite={writeNdef}>
+    <NdefWriterForm
+      hint={tr('Choose a prefix, then enter the link or URI.')}
+      onWrite={writeNdef}
+    >
       <View style={{flexDirection: 'row', marginBottom: spacing.lg}}>
         <Menu
           visible={showMenu}
@@ -44,7 +50,8 @@ function RtdUriWriter(props, ref) {
             <Button mode="outlined" onPress={() => setShowMenu(true)}>
               {prefix}
             </Button>
-          }>
+          }
+        >
           {['https://', 'http://', '---'].map((type) => (
             <Menu.Item
               key={type}

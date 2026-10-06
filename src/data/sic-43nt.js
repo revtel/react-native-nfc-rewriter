@@ -1,3 +1,4 @@
+import {translateText as tr} from '../i18n';
 import NfcProxy from '../NfcProxy';
 import {Ndef} from 'react-native-nfc-manager';
 import {Alert} from 'react-native';
@@ -54,10 +55,10 @@ The 80 bits of KEY to generate the rolling code, which default format is 3-byte 
       if (result.sig !== code) {
         throw new Error('sig error');
       }
-      Alert.alert('Rolling code match!!');
+      Alert.alert(tr('Rolling code match!!'));
     } catch (ex) {
       console.warn(ex);
-      Alert.alert("Rolling code doesn't match!!");
+      Alert.alert(tr("Rolling code doesn't match!!"));
     }
   },
 };

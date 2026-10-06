@@ -166,6 +166,7 @@ async function executeScript(
             entry.message = step.message;
             stopped = {
               success: step.outcome === 'success',
+              userMessage: Boolean(step.message),
               error:
                 step.outcome === 'failure'
                   ? step.message || 'Script stopped'
@@ -188,6 +189,7 @@ async function executeScript(
     trace,
     variables: {...variables},
     error: stopped?.error || null,
+    ...(stopped?.userMessage ? {userMessage: true} : {}),
   };
 }
 

@@ -76,3 +76,20 @@ test('shared hex modal preserves legacy Custom Transceive command output', async
   });
   tree.unmount();
 });
+
+test('localized command labels never change command payload types', async () => {
+  const {i18n, translateText: tr} = require('../src/i18n');
+  const editCommand = jest.fn();
+  for (const language of ['zh-Hant', 'ja']) {
+    let tree;
+    await act(async () => {
+      await i18n.changeLanguage(language);
+      tree = renderer.create(<CustomTransceiveModal visible setVisible={() => {}} editCommand={editCommand} />);
+    });
+    await act(async () => tree.root.findByType(HexBytePad).props.onByte(0x30));
+    await act(async () => button(tree, tr('Add')).props.onPress());
+    expect(editCommand).toHaveBeenLastCalledWith({type: 'command', payload: [0x30]});
+    await act(async () => tree.unmount());
+  }
+  await act(async () => i18n.changeLanguage('en'));
+});

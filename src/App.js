@@ -1,4 +1,5 @@
 import './AppOutlets';
+import {LanguageProvider} from './i18n/LanguageProvider';
 import * as React from 'react';
 import {Platform, UIManager, useColorScheme} from 'react-native';
 import {PaperProvider} from 'react-native-paper';
@@ -35,7 +36,9 @@ class App extends React.Component {
       <GestureHandlerRootView style={{flex: 1}}>
         <SafeAreaProvider>
           <AppContext.Provider>
-            <ThemedApp />
+            <LanguageProvider>
+              <ThemedApp />
+            </LanguageProvider>
           </AppContext.Provider>
         </SafeAreaProvider>
       </GestureHandlerRootView>

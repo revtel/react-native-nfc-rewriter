@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import * as React from 'react';
 import {View} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
@@ -12,6 +14,7 @@ const InputLabel = {
 };
 
 function RtdUriShortcutWriter(props, ref) {
+  useTranslation();
   const scheme = props.scheme;
   const [value, setValue] = React.useState(props.value?.value || '');
   const inputRef = React.useRef();
@@ -36,7 +39,10 @@ function RtdUriShortcutWriter(props, ref) {
   };
 
   return (
-    <NdefWriterForm hint="The shortcut prefix will be included in the record." onWrite={writeNdef}>
+    <NdefWriterForm
+      hint={tr('The shortcut prefix will be included in the record.')}
+      onWrite={writeNdef}
+    >
       <View style={{flexDirection: 'row', marginBottom: spacing.lg}}>
         <Button mode="outlined" disabled>
           {scheme}
@@ -48,7 +54,7 @@ function RtdUriShortcutWriter(props, ref) {
       <TextInput
         ref={inputRef}
         mode="outlined"
-        label={InputLabel[scheme]}
+        label={tr(InputLabel[scheme])}
         multiline={true}
         value={value}
         autoCapitalize={false}

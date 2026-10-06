@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import * as React from 'react';
 import {TextInput} from 'react-native-paper';
 import {useNdefWriter} from '../features/ndef-write/useNdefWriter';
@@ -5,6 +7,7 @@ import {useVisualTheme} from '../visual/theme';
 import NdefWriterForm from './NdefWriterForm';
 
 function WifiSimpleWriter(props, ref) {
+  useTranslation();
   const [ssid, setSsid] = React.useState(props.value?.ssid || '');
   const [networkKey, setNetworkKey] = React.useState(
     props.value?.networkKey || '',
@@ -27,7 +30,10 @@ function WifiSimpleWriter(props, ref) {
   };
 
   return (
-    <NdefWriterForm hint="Enter the network name and key to encode WiFi credentials." onWrite={writeNdef}>
+    <NdefWriterForm
+      hint={tr('Enter the network name and key to encode WiFi credentials.')}
+      onWrite={writeNdef}
+    >
       <TextInput
         mode="outlined"
         label="SSID"
@@ -38,7 +44,7 @@ function WifiSimpleWriter(props, ref) {
 
       <TextInput
         mode="outlined"
-        label="Network Key"
+        label={tr('Network Key')}
         value={networkKey}
         onChangeText={setNetworkKey}
         style={{marginBottom: spacing.lg, backgroundColor: colors.surface}}

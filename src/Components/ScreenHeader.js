@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import * as React from 'react';
 import {Appbar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,6 +10,7 @@ import {showToast} from './Toast';
 import {useVisualTheme} from '../visual/theme';
 
 function ScreenHeader(props) {
+  useTranslation();
   const {
     navigation,
     title,
@@ -42,25 +45,30 @@ function ScreenHeader(props) {
         <Appbar.Content title={title} titleStyle={{color: colors.text}} />
         {!!getRecordPayload && !readOnly && (
           <Appbar.Action
-            accessibilityLabel="Save record"
-            icon={() => <Icon name="content-save" size={24} color={colors.accent} />}
+            accessibilityLabel={tr('Save record')}
+            icon={() => (
+              <Icon name="content-save" size={24} color={colors.accent} />
+            )}
             onPress={() => {
               if (savedRecord && typeof savedRecordIdx === 'number') {
                 Alert.alert(
-                  'Confirm',
-                  'Do you want to override current record?',
+                  tr('Confirm'),
+                  tr('Do you want to override current record?'),
                   [
                     {
-                      text: 'YES',
+                      text: tr('YES'),
                       onPress: () => {
                         onPersistRecord(savedRecord.name, true);
                         showToast({
-                          message: `"${savedRecord.name}" has been updated successfully!`,
+                          message: tr(
+                            '“{{name}}” has been updated successfully!',
+                            {name: savedRecord.name},
+                          ),
                           type: 'success',
                         });
                       },
                     },
-                    {text: 'No'},
+                    {text: tr('No')},
                   ],
                 );
               } else {

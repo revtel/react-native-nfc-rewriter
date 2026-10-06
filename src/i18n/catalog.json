@@ -1,0 +1,2132 @@
+{
+  "common.cancel": [
+    "CANCEL",
+    "取消",
+    "キャンセル"
+  ],
+  "common.save": [
+    "SAVE",
+    "儲存",
+    "保存"
+  ],
+  "common.edit": [
+    "EDIT",
+    "編輯",
+    "編集"
+  ],
+  "common.delete": [
+    "DELETE",
+    "刪除",
+    "削除"
+  ],
+  "common.open": [
+    "OPEN",
+    "開啟",
+    "開く"
+  ],
+  "common.copy": [
+    "COPY",
+    "複製",
+    "コピー"
+  ],
+  "common.share": [
+    "SHARE",
+    "分享",
+    "共有"
+  ],
+  "common.confirm": [
+    "Confirm",
+    "確認",
+    "確認"
+  ],
+  "common.yes": [
+    "YES",
+    "是",
+    "はい"
+  ],
+  "common.no": [
+    "No",
+    "否",
+    "いいえ"
+  ],
+  "common.ok": [
+    "OK",
+    "確定",
+    "OK"
+  ],
+  "common.success": [
+    "Success",
+    "成功",
+    "成功"
+  ],
+  "common.failure": [
+    "Failure",
+    "失敗",
+    "失敗"
+  ],
+  "common.warning": [
+    "Warning",
+    "提醒",
+    "注意"
+  ],
+  "common.error": [
+    "ERROR",
+    "錯誤",
+    "エラー"
+  ],
+  "common.modify": [
+    "Modify",
+    "修改",
+    "変更"
+  ],
+  "common.add": [
+    "Add",
+    "新增",
+    "追加"
+  ],
+  "common.clear": [
+    "Clr",
+    "清除",
+    "クリア"
+  ],
+  "common.del": [
+    "Del",
+    "刪除",
+    "削除"
+  ],
+  "common.name": [
+    "Name",
+    "名稱",
+    "名前"
+  ],
+  "common.text": [
+    "Text",
+    "文字",
+    "テキスト"
+  ],
+  "common.number": [
+    "Number",
+    "號碼",
+    "番号"
+  ],
+  "common.email": [
+    "Email",
+    "電子郵件",
+    "メール"
+  ],
+  "common.org": [
+    "Org",
+    "組織",
+    "組織"
+  ],
+  "common.tel": [
+    "Tel",
+    "電話",
+    "電話"
+  ],
+  "common.network_key": [
+    "Network Key",
+    "網路密碼",
+    "ネットワークキー"
+  ],
+  "navigation.scan": [
+    "SCAN TAG",
+    "掃描標籤",
+    "タグをスキャン"
+  ],
+  "navigation.write": [
+    "WRITE NDEF",
+    "寫入 NDEF",
+    "NDEF 書き込み"
+  ],
+  "navigation.toolkit": [
+    "TOOLKIT",
+    "工具箱",
+    "ツールキット"
+  ],
+  "navigation.records": [
+    "MY RECORDS",
+    "我的紀錄",
+    "保存した記録"
+  ],
+  "navigation.tag_detail": [
+    "TAG DETAIL",
+    "標籤詳情",
+    "タグの詳細"
+  ],
+  "navigation.script_help": [
+    "FLOW SCRIPT HELP",
+    "流程腳本說明",
+    "フロースクリプトのヘルプ"
+  ],
+  "navigation.memory": [
+    "TYPE 2 MEMORY SCAN",
+    "Type 2 記憶體掃描",
+    "Type 2 メモリスキャン"
+  ],
+  "settings.title": [
+    "About This App",
+    "設定與關於",
+    "設定とアプリ情報"
+  ],
+  "settings.language": [
+    "Language",
+    "語言",
+    "言語"
+  ],
+  "settings.system": [
+    "Follow system",
+    "跟隨系統",
+    "システムに従う"
+  ],
+  "settings.unsaved": [
+    "The language could not be saved. It will apply for this session only.",
+    "無法儲存語言設定，僅在本次使用期間生效。",
+    "言語設定を保存できませんでした。今回の起動中のみ適用されます。"
+  ],
+  "settings.nfc_status": [
+    "NFC Status",
+    "NFC 狀態",
+    "NFC の状態"
+  ],
+  "settings.nfc_settings": [
+    "NFC Settings",
+    "NFC 設定",
+    "NFC 設定"
+  ],
+  "settings.jump": [
+    "Jump to System NFC Settings",
+    "開啟系統 NFC 設定",
+    "システムの NFC 設定を開く"
+  ],
+  "settings.on": [
+    "ON",
+    "已開啟",
+    "オン"
+  ],
+  "settings.off": [
+    "OFF",
+    "已關閉",
+    "オフ"
+  ],
+  "settings.version": [
+    "Version",
+    "版本",
+    "バージョン"
+  ],
+  "settings.repository": [
+    "Repository",
+    "原始碼",
+    "リポジトリ"
+  ],
+  "settings.creators": [
+    "Creators",
+    "開發者",
+    "開発者"
+  ],
+  "settings.contact": [
+    "Contact Us",
+    "聯絡我們",
+    "お問い合わせ"
+  ],
+  "home.app_repo": [
+    "Github Repo (App)",
+    "GitHub 原始碼（App）",
+    "GitHub リポジトリ（アプリ）"
+  ],
+  "home.library_repo": [
+    "Github Repo (Library)",
+    "GitHub 原始碼（函式庫）",
+    "GitHub リポジトリ（ライブラリ）"
+  ],
+  "home.reader": [
+    "NFC Reader/Writer",
+    "NFC 讀取／寫入",
+    "NFC 読み取り／書き込み"
+  ],
+  "home.settings": [
+    "Settings",
+    "設定",
+    "設定"
+  ],
+  "home.hint": [
+    "Hold your device near an NFC tag to read its contents.",
+    "將裝置靠近 NFC 標籤以讀取內容。",
+    "NFC タグに端末を近づけて内容を読み取ります。"
+  ],
+  "home.checking": [
+    "Checking NFC status…",
+    "正在檢查 NFC 狀態…",
+    "NFC の状態を確認中…"
+  ],
+  "home.scan": [
+    "SCAN NFC TAG",
+    "掃描 NFC 標籤",
+    "NFC タグをスキャン"
+  ],
+  "home.enabled": [
+    "NFC is enabled",
+    "NFC 已啟用",
+    "NFC は有効です"
+  ],
+  "home.disabled": [
+    "NFC is not enabled",
+    "NFC 尚未啟用",
+    "NFC は無効です"
+  ],
+  "home.enable_hint": [
+    "Enable NFC in device settings, then check again.",
+    "請在裝置設定中啟用 NFC，再重新檢查。",
+    "端末の設定で NFC を有効にしてから再確認してください。"
+  ],
+  "home.go_settings": [
+    "GO TO NFC SETTINGS",
+    "開啟 NFC 設定",
+    "NFC 設定を開く"
+  ],
+  "home.check_again": [
+    "CHECK AGAIN",
+    "重新檢查",
+    "再確認"
+  ],
+  "home.project": [
+    "PROJECT",
+    "專案",
+    "プロジェクト"
+  ],
+  "home.unsupported": [
+    "Your device doesn't support NFC",
+    "您的裝置不支援 NFC",
+    "この端末は NFC に対応していません"
+  ],
+  "home.init_error": [
+    "fail to init NFC",
+    "無法初始化 NFC",
+    "NFC を初期化できません"
+  ],
+  "ndef.choose": [
+    "Choose a record type to write to an NFC tag.",
+    "選擇要寫入 NFC 標籤的紀錄類型。",
+    "NFC タグに書き込む記録の種類を選択してください。"
+  ],
+  "ndef.writer": [
+    "NDEF WRITER",
+    "NDEF 寫入器",
+    "NDEF ライター"
+  ],
+  "ndef.prepare": [
+    "Prepare the record below, then hold an NFC tag near your device to write it.",
+    "填妥下方紀錄，再將 NFC 標籤靠近裝置以寫入。",
+    "以下の記録を入力し、NFC タグを端末に近づけて書き込みます。"
+  ],
+  "ndef.text_record": [
+    "Text record",
+    "文字紀錄",
+    "テキストレコード"
+  ],
+  "ndef.link_record": [
+    "Link record",
+    "連結紀錄",
+    "リンクレコード"
+  ],
+  "ndef.wifi_record": [
+    "WiFi Simple Record",
+    "WiFi 簡易紀錄",
+    "WiFi 簡易レコード"
+  ],
+  "ndef.vcard_record": [
+    "vCard record",
+    "vCard 紀錄",
+    "vCard レコード"
+  ],
+  "ndef.contact_shortcut": [
+    "Contact shortcut",
+    "聯絡捷徑",
+    "連絡先ショートカット"
+  ],
+  "ndef.record": [
+    "NDEF record",
+    "NDEF 紀錄",
+    "NDEF レコード"
+  ],
+  "ndef.write_accessibility": [
+    "Write record to NFC tag",
+    "將紀錄寫入 NFC 標籤",
+    "記録を NFC タグに書き込む"
+  ],
+  "ndef.write": [
+    "WRITE TO TAG",
+    "寫入標籤",
+    "タグに書き込む"
+  ],
+  "ndef.plain_hint": [
+    "Plain text is stored as an NDEF Text record.",
+    "純文字將儲存為 NDEF 文字紀錄。",
+    "テキストを NDEF テキストレコードとして保存します。"
+  ],
+  "ndef.shortcut_hint": [
+    "The shortcut prefix will be included in the record.",
+    "紀錄中會包含捷徑前綴。",
+    "ショートカットの接頭辞も記録に含まれます。"
+  ],
+  "ndef.uri_hint": [
+    "Choose a prefix, then enter the link or URI.",
+    "選擇前綴，再輸入連結或 URI。",
+    "接頭辞を選び、リンクまたは URI を入力してください。"
+  ],
+  "ndef.vcard_hint": [
+    "A name and at least one contact method are required.",
+    "請填寫姓名及至少一種聯絡方式。",
+    "名前と少なくとも一つの連絡方法が必要です。"
+  ],
+  "ndef.wifi_hint": [
+    "Enter the network name and key to encode WiFi credentials.",
+    "輸入網路名稱與密碼以建立 WiFi 連線資訊。",
+    "ネットワーク名とキーを入力して WiFi 接続情報を作成します。"
+  ],
+  "ndef.known": [
+    "Well Known",
+    "標準類型",
+    "標準タイプ"
+  ],
+  "ndef.link": [
+    "Link",
+    "連結",
+    "リンク"
+  ],
+  "ndef.text_description": [
+    "Write text into NFC tags",
+    "將文字寫入 NFC 標籤",
+    "NFC タグにテキストを書き込む"
+  ],
+  "ndef.link_description": [
+    "Write web link or uri into NFC tags",
+    "將網頁連結或 URI 寫入 NFC 標籤",
+    "NFC タグにリンクまたは URI を書き込む"
+  ],
+  "ndef.tel_description": [
+    "Write number into NFC tags to make phone call",
+    "寫入電話號碼以撥打電話",
+    "電話をかけるための番号を書き込む"
+  ],
+  "ndef.sms_description": [
+    "Write number into NFC tags to send SMS",
+    "寫入電話號碼以傳送簡訊",
+    "SMS を送るための番号を書き込む"
+  ],
+  "ndef.email_description": [
+    "Write email into NFC tags",
+    "將電子郵件地址寫入 NFC 標籤",
+    "NFC タグにメールアドレスを書き込む"
+  ],
+  "ndef.wifi_description": [
+    "Connect to your WiFi AP",
+    "連線至您的 WiFi 存取點",
+    "WiFi アクセスポイントに接続する"
+  ],
+  "ndef.vcard_description": [
+    "Write contact records. Please be aware vCard format is not supported by iOS natively",
+    "寫入聯絡人紀錄。請注意 iOS 原生不支援此 vCard 格式。",
+    "連絡先を書き込みます。iOS はこの vCard 形式に標準対応していません。"
+  ],
+  "records.save_label": [
+    "Save record",
+    "儲存紀錄",
+    "記録を保存"
+  ],
+  "records.override": [
+    "Do you want to override current record?",
+    "要覆寫目前的紀錄嗎？",
+    "現在の記録を上書きしますか？"
+  ],
+  "records.updated": [
+    "“{{name}}” has been updated successfully!",
+    "「{{name}}」已更新！",
+    "「{{name}}」を更新しました。"
+  ],
+  "records.clear": [
+    "CLEAR ALL RECORDS",
+    "清除所有紀錄",
+    "すべての記録を削除"
+  ],
+  "records.delete_title": [
+    "DELETE RECORD",
+    "刪除紀錄",
+    "記録を削除"
+  ],
+  "records.clear_confirmation": [
+    "Delete all saved records? This cannot be undone.",
+    "要刪除所有已儲存紀錄嗎？此操作無法復原。",
+    "保存した記録をすべて削除しますか？元に戻せません。"
+  ],
+  "records.delete_confirmation": [
+    "Delete “{{name}}”?",
+    "要刪除「{{name}}」嗎？",
+    "「{{name}}」を削除しますか？"
+  ],
+  "records.scripts": [
+    "NFC Scripts",
+    "NFC 腳本",
+    "NFC スクリプト"
+  ],
+  "records.intro": [
+    "Saved NFC workflows and tag records.",
+    "已儲存的 NFC 流程與標籤紀錄。",
+    "保存した NFC フローとタグの記録。"
+  ],
+  "records.empty": [
+    "No saved records yet",
+    "尚無已儲存紀錄",
+    "保存した記録はありません"
+  ],
+  "records.empty_hint": [
+    "Save a writer, transceive, or Flow Script to find it here.",
+    "儲存寫入、收發指令或流程腳本後，即可在此找到。",
+    "書き込み、送受信コマンド、フロースクリプトを保存すると、ここに表示されます。"
+  ],
+  "records.clear_label": [
+    "Clear all records",
+    "清除所有紀錄",
+    "すべての記録を削除"
+  ],
+  "records.copy_as": [
+    "COPY THIS RECORD AS",
+    "複製紀錄為",
+    "記録をコピーする形式"
+  ],
+  "records.my_record": [
+    "My NFC Record",
+    "我的 NFC 紀錄",
+    "私の NFC 記録"
+  ],
+  "scan.result": [
+    "SCAN RESULT",
+    "掃描結果",
+    "スキャン結果"
+  ],
+  "scan.identity": [
+    "Identity, technologies, and raw tag data.",
+    "識別資訊、技術類型與標籤原始資料。",
+    "識別情報、技術の種類、タグの生データ。"
+  ],
+  "scan.technologies": [
+    "TECHNOLOGIES",
+    "技術類型",
+    "技術の種類"
+  ],
+  "scan.no_ndef": [
+    "No NDEF message",
+    "無 NDEF 訊息",
+    "NDEF メッセージなし"
+  ],
+  "scan.tag_object": [
+    "TAG OBJECT",
+    "標籤物件",
+    "タグオブジェクト"
+  ],
+  "nfc.ready_scan": [
+    "Ready to scan NFC",
+    "準備掃描 NFC",
+    "NFC スキャンの準備ができました"
+  ],
+  "nfc.ready_write": [
+    "Ready to write some NDEF",
+    "準備寫入 NDEF",
+    "NDEF 書き込みの準備ができました"
+  ],
+  "nfc.found": [
+    "NDEF tag found",
+    "已找到 NDEF 標籤",
+    "NDEF タグが見つかりました"
+  ],
+  "nfc.timeout": [
+    "NFC Session Timeout",
+    "NFC 操作逾時",
+    "NFC セッションがタイムアウトしました"
+  ],
+  "nfc.error": [
+    "NFC Error",
+    "NFC 錯誤",
+    "NFC エラー"
+  ],
+  "nfc.unknown": [
+    "The operation failed. Technical details: {{details}}",
+    "操作失敗。技術細節：{{details}}",
+    "操作に失敗しました。技術情報：{{details}}"
+  ],
+  "toolkit.title": [
+    "NFC TOOLKIT",
+    "NFC 工具箱",
+    "NFC ツールキット"
+  ],
+  "toolkit.intro": [
+    "Advanced NFC tools for tag maintenance and testing.",
+    "用於標籤維護與測試的進階 NFC 工具。",
+    "タグの管理とテストのための高度な NFC ツール。"
+  ],
+  "toolkit.readonly": [
+    "Make Read Only",
+    "設為唯讀",
+    "読み取り専用にする"
+  ],
+  "toolkit.readonly_description": [
+    "Make the NFC tag readonly",
+    "將 NFC 標籤設為唯讀",
+    "NFC タグを読み取り専用にする"
+  ],
+  "toolkit.format": [
+    "NDEF Format",
+    "NDEF 格式化",
+    "NDEF フォーマット"
+  ],
+  "toolkit.format_description": [
+    "NDEF format",
+    "NDEF 格式化",
+    "NDEF フォーマット"
+  ],
+  "toolkit.transceive": [
+    "Custom Transceive",
+    "自訂收發指令",
+    "カスタム送受信"
+  ],
+  "toolkit.nfca_description": [
+    "Send custom NfcA command into your tag",
+    "向標籤傳送自訂 NfcA 指令",
+    "タグにカスタム NfcA コマンドを送信"
+  ],
+  "toolkit.nfcv_description": [
+    "Send custom NfcV command into your tag",
+    "向標籤傳送自訂 NfcV 指令",
+    "タグにカスタム NfcV コマンドを送信"
+  ],
+  "toolkit.apdu_description": [
+    "Send custom APDU command into your tag",
+    "向標籤傳送自訂 APDU 指令",
+    "タグにカスタム APDU コマンドを送信"
+  ],
+  "toolkit.flow": [
+    "Flow Script",
+    "流程腳本",
+    "フロースクリプト"
+  ],
+  "toolkit.flow_nfca": [
+    "Build a response-driven NFC-A workflow",
+    "建立依回應執行的 NFC-A 流程",
+    "応答に基づく NFC-A フローを作成"
+  ],
+  "toolkit.flow_iso": [
+    "Build a response-driven ISO-DEP workflow",
+    "建立依回應執行的 ISO-DEP 流程",
+    "応答に基づく ISO-DEP フローを作成"
+  ],
+  "toolkit.memory": [
+    "Type 2 Memory Scan",
+    "Type 2 記憶體掃描",
+    "Type 2 メモリスキャン"
+  ],
+  "toolkit.memory_description": [
+    "Inspect Type 2-compatible tag memory",
+    "檢視 Type 2 相容標籤記憶體",
+    "Type 2 対応タグのメモリを確認"
+  ],
+  "toolkit.erase": [
+    "Erase",
+    "清除",
+    "消去"
+  ],
+  "toolkit.erase_description": [
+    "Write all blocks to zero",
+    "將所有區塊寫入零",
+    "すべてのブロックにゼロを書き込む"
+  ],
+  "toolkit.erase_format": [
+    "Erase and NDEF format",
+    "清除並進行 NDEF 格式化",
+    "消去して NDEF フォーマット"
+  ],
+  "toolkit.signature": [
+    "Verify signature",
+    "驗證簽章",
+    "署名を検証"
+  ],
+  "toolkit.password_enable": [
+    "Enable password protection",
+    "啟用密碼保護",
+    "パスワード保護を有効にする"
+  ],
+  "toolkit.password": [
+    "Enable password",
+    "啟用密碼",
+    "パスワードを有効にする"
+  ],
+  "toolkit.password_verify": [
+    "Verify password",
+    "驗證密碼",
+    "パスワードを検証"
+  ],
+  "toolkit.rolling": [
+    "Verify rolling code",
+    "驗證滾動碼",
+    "ローリングコードを検証"
+  ],
+  "toolkit.tamper_enable": [
+    "Enable temper detection",
+    "啟用防拆偵測",
+    "改ざん検知を有効にする"
+  ],
+  "toolkit.tamper_verify": [
+    "Verify temper state",
+    "驗證防拆狀態",
+    "改ざん状態を確認"
+  ],
+  "toolkit.misc": [
+    "Misc",
+    "其他",
+    "その他"
+  ],
+  "toolkit.test": [
+    "Test registerTagEvent API",
+    "測試 registerTagEvent API",
+    "registerTagEvent API をテスト"
+  ],
+  "toolkit.test_description": [
+    "registerTagEvent use NDEF-only scan for iOS",
+    "iOS 的 registerTagEvent 僅掃描 NDEF",
+    "iOS の registerTagEvent は NDEF のみをスキャン"
+  ],
+  "toolkit.erases": [
+    "ERASES DATA",
+    "會清除資料",
+    "データを消去"
+  ],
+  "toolkit.permanent": [
+    "PERMANENT CHANGE",
+    "永久變更",
+    "変更は元に戻せません"
+  ],
+  "toolkit.changes": [
+    "CHANGES TAG",
+    "會變更標籤",
+    "タグを変更"
+  ],
+  "toolkit.sig_missing": [
+    "Fail to obtain NXP Signature",
+    "無法取得 NXP 簽章",
+    "NXP 署名を取得できません"
+  ],
+  "toolkit.sig_correct": [
+    "NXP signature is correct",
+    "NXP 簽章正確",
+    "NXP 署名は正しいです"
+  ],
+  "toolkit.sig_invalid": [
+    "NXP signature is invalid",
+    "NXP 簽章無效",
+    "NXP 署名は無効です"
+  ],
+  "toolkit.sig_unavailable": [
+    "cannot verify NXP signature right now, please try again later",
+    "目前無法驗證 NXP 簽章，請稍後再試。",
+    "現在 NXP 署名を検証できません。後でもう一度お試しください。"
+  ],
+  "toolkit.signature_correct": [
+    "Signature is correct",
+    "簽章正確",
+    "署名は正しいです"
+  ],
+  "toolkit.signature_wrong": [
+    "Signature is wrong",
+    "簽章錯誤",
+    "署名が正しくありません"
+  ],
+  "toolkit.rolling_match": [
+    "Rolling code match!!",
+    "滾動碼相符！",
+    "ローリングコードが一致しました！"
+  ],
+  "toolkit.rolling_mismatch": [
+    "Rolling code doesn't match!!",
+    "滾動碼不符！",
+    "ローリングコードが一致しません！"
+  ],
+  "transceive.title": [
+    "NFC WORKBENCH",
+    "NFC 工作台",
+    "NFC ワークベンチ"
+  ],
+  "transceive.intro": [
+    "Review commands and responses before running them against a tag.",
+    "在標籤上執行前，先檢查指令與回應。",
+    "タグで実行する前にコマンドと応答を確認してください。"
+  ],
+  "transceive.configurations": [
+    "CONFIGURATIONS",
+    "設定",
+    "設定"
+  ],
+  "transceive.description": [
+    "DESCRIPTION",
+    "說明",
+    "説明"
+  ],
+  "transceive.commands": [
+    "COMMANDS ·",
+    "指令 ·",
+    "コマンド ·"
+  ],
+  "transceive.empty": [
+    "No commands yet. Add one to begin.",
+    "尚無指令，請新增以開始。",
+    "コマンドがありません。追加して開始してください。"
+  ],
+  "transceive.add_label": [
+    "Add command",
+    "新增指令",
+    "コマンドを追加"
+  ],
+  "transceive.add": [
+    "ADD COMMAND",
+    "新增指令",
+    "コマンドを追加"
+  ],
+  "transceive.execute_label": [
+    "Execute commands",
+    "執行指令",
+    "コマンドを実行"
+  ],
+  "transceive.execute": [
+    "EXECUTE",
+    "執行",
+    "実行"
+  ],
+  "transceive.unfinished": [
+    "Commands Not Finished",
+    "指令尚未完成",
+    "コマンドが完了していません"
+  ],
+  "transceive.no_bytes": [
+    "No bytes",
+    "無位元組",
+    "バイトなし"
+  ],
+  "transceive.reorder": [
+    "Reorder command",
+    "重新排序指令",
+    "コマンドの順序を変更"
+  ],
+  "transceive.drag_hint": [
+    "Long press and drag to change the command order",
+    "長按並拖曳以變更指令順序",
+    "長押ししてドラッグするとコマンドの順序を変更できます"
+  ],
+  "transceive.up": [
+    "Move up",
+    "上移",
+    "上に移動"
+  ],
+  "transceive.down": [
+    "Move down",
+    "下移",
+    "下に移動"
+  ],
+  "transceive.response": [
+    "RESPONSE",
+    "回應",
+    "応答"
+  ],
+  "transceive.hex": [
+    "Add hex bytes",
+    "新增十六進位位元組",
+    "16 進数のバイトを追加"
+  ],
+  "transceive.type": [
+    "Type:",
+    "類型：",
+    "種類："
+  ],
+  "transceive.add_bytes": [
+    "ADD BYTES",
+    "新增位元組",
+    "バイトを追加"
+  ],
+  "script.insert_variable": [
+    "Insert variable",
+    "插入變數",
+    "変数を挿入"
+  ],
+  "script.variables_hint": [
+    "Only variables available before this command are shown. Select a format, then add the placeholder as the next command segment.",
+    "僅顯示此指令之前可用的變數。選擇格式，再將佔位符新增為下一個指令片段。",
+    "このコマンドの前で使える変数のみ表示します。形式を選び、次のコマンド部分としてプレースホルダーを追加してください。"
+  ],
+  "script.no_variables": [
+    "No variables yet. Add a SET or CAPTURE step before this command.",
+    "尚無變數，請在此指令之前加入 SET 或 CAPTURE 步驟。",
+    "変数がありません。このコマンドの前に SET または CAPTURE ステップを追加してください。"
+  ],
+  "script.output_format": [
+    "Output format",
+    "輸出格式",
+    "出力形式"
+  ],
+  "script.syntax_hint": [
+    "This adds syntax, not a fixed value. The bytes are resolved when the script runs.",
+    "此操作新增的是語法，並非固定值。位元組會在腳本執行時決定。",
+    "固定値ではなく構文を追加します。バイトはスクリプトの実行時に解決されます。"
+  ],
+  "script.add_variable": [
+    "ADD VARIABLE",
+    "新增變數",
+    "変数を追加"
+  ],
+  "script.command_bytes": [
+    "Command bytes",
+    "指令位元組",
+    "コマンドバイト"
+  ],
+  "script.builder_hint": [
+    "Add hex bytes or variables in send order. Use TEXT for arithmetic expressions or direct editing.",
+    "依傳送順序新增十六進位位元組或變數。運算式或直接編輯請使用文字模式。",
+    "送信順に 16 進数のバイトや変数を追加します。計算式や直接編集にはテキストモードを使います。"
+  ],
+  "script.no_segments": [
+    "No command segments yet.",
+    "尚無指令片段。",
+    "コマンド部分はまだありません。"
+  ],
+  "script.add_hex": [
+    "ADD HEX BYTES",
+    "新增十六進位位元組",
+    "16 進数のバイトを追加"
+  ],
+  "script.choose_variable": [
+    "CHOOSE VARIABLE",
+    "選擇變數",
+    "変数を選択"
+  ],
+  "script.delay": [
+    "Delay (ms, max 5000)",
+    "延遲（ms，最多 5000）",
+    "待機（ms、最大 5000）"
+  ],
+  "script.variable_name": [
+    "Variable name",
+    "變數名稱",
+    "変数名"
+  ],
+  "script.expression": [
+    "Numeric expression",
+    "數值運算式",
+    "数値式"
+  ],
+  "script.response_source": [
+    "Response source",
+    "回應來源",
+    "応答の参照元"
+  ],
+  "script.offset": [
+    "Byte offset (zero-based)",
+    "位元組偏移（從 0 起算）",
+    "バイト位置（0 から開始）"
+  ],
+  "script.interpret": [
+    "Interpret as",
+    "解讀格式",
+    "解釈する形式"
+  ],
+  "script.byte_count": [
+    "Byte count",
+    "位元組數",
+    "バイト数"
+  ],
+  "script.capture_hint": [
+    "Read from the latest response. Byte offset starts at 0.",
+    "讀取最近一次回應，位元組偏移從 0 起算。",
+    "直前の応答から読み取ります。バイト位置は 0 から始まります。"
+  ],
+  "script.left": [
+    "Left expression",
+    "左側運算式",
+    "左辺の式"
+  ],
+  "script.right": [
+    "Right expression",
+    "右側運算式",
+    "右辺の式"
+  ],
+  "script.true": [
+    "TRUE PATH",
+    "成立路徑",
+    "真の場合"
+  ],
+  "script.false": [
+    "FALSE PATH",
+    "不成立路徑",
+    "偽の場合"
+  ],
+  "script.count": [
+    "Count expression",
+    "次數運算式",
+    "回数の式"
+  ],
+  "script.max": [
+    "Maximum iterations (1–64)",
+    "最大重複次數（1–64）",
+    "最大繰り返し回数（1–64）"
+  ],
+  "script.repeat_hint": [
+    "The body can use zero-based variable index.",
+    "內部步驟可使用從 0 起算的變數 index。",
+    "繰り返し内では 0 から始まる変数 index を使えます。"
+  ],
+  "script.repeat": [
+    "REPEAT BODY",
+    "重複執行內容",
+    "繰り返す内容"
+  ],
+  "script.message": [
+    "Message",
+    "訊息",
+    "メッセージ"
+  ],
+  "script.unsupported": [
+    "Unsupported step. Remove it before running.",
+    "不支援的步驟，請在執行前移除。",
+    "未対応のステップです。実行前に削除してください。"
+  ],
+  "script.up": [
+    "Move step up",
+    "步驟上移",
+    "ステップを上に移動"
+  ],
+  "script.down": [
+    "Move step down",
+    "步驟下移",
+    "ステップを下に移動"
+  ],
+  "script.remove": [
+    "Remove step",
+    "移除步驟",
+    "ステップを削除"
+  ],
+  "script.trace_hint": [
+    "Run the script to see an execution trace.",
+    "執行腳本以查看執行紀錄。",
+    "スクリプトを実行すると実行履歴が表示されます。"
+  ],
+  "script.data": [
+    "Data:",
+    "資料：",
+    "データ："
+  ],
+  "script.branch": [
+    "Branch:",
+    "分支：",
+    "分岐："
+  ],
+  "script.iterations": [
+    "Iterations:",
+    "重複次數：",
+    "繰り返し回数："
+  ],
+  "script.delay_label": [
+    "Delay:",
+    "延遲：",
+    "待機："
+  ],
+  "script.title": [
+    "NFC FLOW SCRIPT",
+    "NFC 流程腳本",
+    "NFC フロースクリプト"
+  ],
+  "script.editor": [
+    "EDITOR",
+    "編輯器",
+    "エディター"
+  ],
+  "script.trace": [
+    "TRACE",
+    "執行紀錄",
+    "実行履歴"
+  ],
+  "script.running": [
+    "RUNNING",
+    "執行中",
+    "実行中"
+  ],
+  "script.run": [
+    "RUN",
+    "執行",
+    "実行"
+  ],
+  "script.technology": [
+    "Technology",
+    "技術類型",
+    "技術の種類"
+  ],
+  "script.session_hint": [
+    "One technology and one NFC session per run. Scripts run only when you tap RUN.",
+    "每次執行使用一種技術與一次 NFC 工作階段。僅在按下「執行」時執行腳本。",
+    "1 回の実行で一つの技術と一つの NFC セッションを使用します。「実行」を押したときだけ動作します。"
+  ],
+  "script.help_label": [
+    "Help: examples and formats",
+    "說明：範例與格式",
+    "ヘルプ：例と形式"
+  ],
+  "script.help": [
+    "HELP: EXAMPLES & FORMATS",
+    "說明：範例與格式",
+    "ヘルプ：例と形式"
+  ],
+  "script.steps": [
+    "Steps ·",
+    "步驟 ·",
+    "ステップ ·"
+  ],
+  "script.bytes_type": [
+    "byte array",
+    "位元組陣列",
+    "バイト配列"
+  ],
+  "script.number_type": [
+    "number",
+    "數值",
+    "数値"
+  ],
+  "script.builder": [
+    "BUILDER",
+    "組合模式",
+    "組み立て"
+  ],
+  "script.text_mode": [
+    "TEXT",
+    "文字模式",
+    "テキスト"
+  ],
+  "script.completed": [
+    "COMPLETED",
+    "已完成",
+    "完了"
+  ],
+  "script.failed": [
+    "FAILED",
+    "失敗",
+    "失敗"
+  ],
+  "memory.unreadable": [
+    "Unreadable",
+    "無法讀取",
+    "読み取り不可"
+  ],
+  "memory.not_scanned": [
+    "Not scanned",
+    "未掃描",
+    "未スキャン"
+  ],
+  "memory.free": [
+    "free",
+    "允許",
+    "許可"
+  ],
+  "memory.prohibited": [
+    "prohibited",
+    "禁止",
+    "禁止"
+  ],
+  "memory.unsupported": [
+    "UNSUPPORTED TAG",
+    "不支援的標籤",
+    "未対応のタグ"
+  ],
+  "memory.unidentified": [
+    "TAG NOT IDENTIFIED",
+    "未識別標籤",
+    "タグを識別できません"
+  ],
+  "memory.no_pages": [
+    "No readable Type 2 pages were confirmed. No memory size was inferred.",
+    "未確認任何可讀取的 Type 2 頁面，也未推定記憶體容量。",
+    "読み取り可能な Type 2 ページを確認できませんでした。メモリ容量は推定していません。"
+  ],
+  "memory.complete": [
+    "DATA AREA COMPLETE",
+    "資料區完整",
+    "データ領域を読み取り済み"
+  ],
+  "memory.partial": [
+    "PARTIAL",
+    "部分完成",
+    "一部のみ"
+  ],
+  "memory.preview": [
+    "TYPE 2 · LIMITED PREVIEW",
+    "Type 2 · 有限預覽",
+    "Type 2 · 限定プレビュー"
+  ],
+  "memory.unknown_capacity": [
+    "Capacity unknown. Only the initial four pages were read.",
+    "容量未知，僅讀取最初四頁。",
+    "容量不明のため、最初の 4 ページのみ読み取りました。"
+  ],
+  "memory.interrupted": [
+    "Scan interrupted.",
+    "掃描中斷。",
+    "スキャンが中断されました。"
+  ],
+  "memory.response_length": [
+    "Unexpected response length.",
+    "回應長度異常。",
+    "応答の長さが想定と異なります。"
+  ],
+  "memory.session_ended": [
+    "NFC session ended.",
+    "NFC 工作階段已結束。",
+    "NFC セッションが終了しました。"
+  ],
+  "memory.unknown_cause": [
+    "Cause unknown.",
+    "原因未知。",
+    "原因は不明です。"
+  ],
+  "memory.later": [
+    "Later pages were not scanned.",
+    "未掃描後續頁面。",
+    "後続のページはスキャンしていません。"
+  ],
+  "memory.intro": [
+    "Inspect Type 2-compatible tag memory in four-page rows.",
+    "以每列四頁檢視 Type 2 相容標籤記憶體。",
+    "Type 2 対応タグのメモリを 4 ページずつ確認します。"
+  ],
+  "memory.note": [
+    "This scan sends no write or authentication commands. An enabled NFC counter may advance during reading.",
+    "此掃描不傳送寫入或驗證指令。已啟用的 NFC 計數器可能在讀取時增加。",
+    "書き込みや認証のコマンドは送信しません。有効な NFC カウンターは読み取り中に進む場合があります。"
+  ],
+  "memory.again": [
+    "SCAN AGAIN",
+    "再次掃描",
+    "再スキャン"
+  ],
+  "memory.identifying": [
+    "Identifying tag...",
+    "正在識別標籤…",
+    "タグを識別中…"
+  ],
+  "memory.layout": [
+    "MEMORY LAYOUT",
+    "記憶體配置",
+    "メモリ構成"
+  ],
+  "memory.later_bytes": [
+    "later bytes unavailable",
+    "後續位元組無法取得",
+    "後続のバイトは取得できません"
+  ],
+  "memory.manufacturer": [
+    "Manufacturer / static lock",
+    "製造商／靜態鎖定",
+    "製造元／静的ロック"
+  ],
+  "memory.cc": [
+    "Capability Container",
+    "能力容器（CC）",
+    "能力コンテナー（CC）"
+  ],
+  "memory.user": [
+    "User memory",
+    "使用者記憶體",
+    "ユーザーメモリ"
+  ],
+  "memory.lock": [
+    "Dynamic lock",
+    "動態鎖定",
+    "動的ロック"
+  ],
+  "memory.configuration": [
+    "Configuration",
+    "組態",
+    "構成"
+  ],
+  "memory.data_area": [
+    "CC-declared data area",
+    "CC 宣告的資料區",
+    "CC が示すデータ領域"
+  ],
+  "memory.bcc": [
+    "BCC1 / internal / static lock",
+    "BCC1／內部／靜態鎖定",
+    "BCC1／内部／静的ロック"
+  ],
+  "memory.magic_error": [
+    "Unexpected Type 2 magic byte",
+    "Type 2 識別位元組異常",
+    "Type 2 の識別バイトが想定と異なります"
+  ],
+  "memory.zero_area": [
+    "Zero-sized NDEF data area",
+    "NDEF 資料區容量為零",
+    "NDEF データ領域のサイズがゼロです"
+  ],
+  "memory.access_error": [
+    "Reserved access bits",
+    "存取位元為保留值",
+    "アクセスビットが予約値です"
+  ],
+  "memory.lock_control": [
+    "Lock Control",
+    "鎖定控制",
+    "ロック制御"
+  ],
+  "memory.memory_control": [
+    "Memory Control",
+    "記憶體控制",
+    "メモリ制御"
+  ],
+  "memory.ndef_message": [
+    "NDEF Message",
+    "NDEF 訊息",
+    "NDEF メッセージ"
+  ],
+  "memory.proprietary": [
+    "Proprietary",
+    "專用資料",
+    "独自データ"
+  ],
+  "memory.terminator": [
+    "Terminator",
+    "結束標記",
+    "終端"
+  ],
+  "memory.invalid_tlv": [
+    "Invalid TLV",
+    "無效 TLV",
+    "無効な TLV"
+  ],
+  "memory.unknown_tlv": [
+    "Unknown TLV",
+    "未知 TLV",
+    "不明な TLV"
+  ],
+  "memory.invalid_bytes": [
+    "Invalid byte data",
+    "無效的位元組資料",
+    "無効なバイトデータ"
+  ],
+  "memory.invalid_type": [
+    "Invalid TLV type",
+    "無效的 TLV 類型",
+    "無効な TLV タイプ"
+  ],
+  "memory.missing_length": [
+    "Missing TLV length",
+    "缺少 TLV 長度",
+    "TLV の長さがありません"
+  ],
+  "memory.missing_extended": [
+    "Missing extended TLV length",
+    "缺少延伸 TLV 長度",
+    "拡張 TLV の長さがありません"
+  ],
+  "memory.beyond": [
+    "TLV extends beyond available bytes",
+    "TLV 超出可用位元組範圍",
+    "TLV が取得済みバイトの範囲を超えています"
+  ],
+  "settings.about": [
+    "NfcReWriter is an open source project built on react-native. Contributions and suggestions are welcome!",
+    "NfcReWriter 是以 react-native 建立的開源專案，歡迎貢獻與建議！",
+    "NfcReWriter は react-native で作られたオープンソースプロジェクトです。貢献やご提案を歓迎します！"
+  ],
+  "records.delete_all": [
+    "DELETE ALL",
+    "全部刪除",
+    "すべて削除"
+  ],
+  "records.save_title": [
+    "SAVE THIS RECORD",
+    "儲存此紀錄",
+    "この記録を保存"
+  ],
+  "records.open_name": [
+    "Open {{name}}",
+    "開啟 {{name}}",
+    "{{name}} を開く"
+  ],
+  "records.copy_name": [
+    "Copy {{name}}",
+    "複製 {{name}}",
+    "{{name}} をコピー"
+  ],
+  "records.share_name": [
+    "Share {{name}}",
+    "分享 {{name}}",
+    "{{name}} を共有"
+  ],
+  "records.delete_name": [
+    "Delete {{name}}",
+    "刪除 {{name}}",
+    "{{name}} を削除"
+  ],
+  "transceive.default_title": [
+    "CUSTOM TRANSCEIVE",
+    "自訂收發指令",
+    "カスタム送受信"
+  ],
+  "transceive.edit_name": [
+    "Edit {{name}}",
+    "編輯 {{name}}",
+    "{{name}} を編集"
+  ],
+  "transceive.update": [
+    "update",
+    "更新",
+    "更新"
+  ],
+  "transceive.no_description": [
+    "No description",
+    "無說明",
+    "説明なし"
+  ],
+  "transceive.command_type": [
+    "command",
+    "指令",
+    "コマンド"
+  ],
+  "transceive.delay_type": [
+    "delay",
+    "延遲",
+    "待機"
+  ],
+  "transceive.delay_kind": [
+    "DELAY",
+    "延遲",
+    "待機"
+  ],
+  "ndef.no_uri": [
+    "Cannot open uri",
+    "無法開啟 URI",
+    "URI を開けません"
+  ],
+  "ndef.required": [
+    "Missing fields",
+    "缺少欄位",
+    "未入力の項目"
+  ],
+  "ndef.contact_required": [
+    "Please provide a name and at least one contact method.",
+    "請填寫姓名及至少一種聯絡方式。",
+    "名前と少なくとも一つの連絡方法を入力してください。"
+  ],
+  "script.command_format": [
+    "Command bytes (hex and {{syntax}})",
+    "指令位元組（十六進位及 {{syntax}}）",
+    "コマンドバイト（16 進数と {{syntax}}）"
+  ],
+  "script.mode_error": [
+    "Fix command syntax in TEXT mode: {{error}}",
+    "請在文字模式修正指令語法：{{error}}",
+    "テキストモードでコマンド構文を修正してください：{{error}}"
+  ],
+  "script.example": [
+    "Example: 30 ${targetPage:u8}. See HELP for formats.",
+    "範例：30 ${targetPage:u8}。格式請參閱說明。",
+    "例：30 ${targetPage:u8}。形式はヘルプを参照してください。"
+  ],
+  "script.empty_command": [
+    "(empty command)",
+    "（空指令）",
+    "（空のコマンド）"
+  ],
+  "script.add_step": [
+    "ADD {{type}}",
+    "新增 {{type}}",
+    "{{type}} を追加"
+  ],
+  "script.step_error": [
+    "Step {{number}}:",
+    "步驟 {{number}}：",
+    "ステップ {{number}}："
+  ],
+  "script.stopped": [
+    "Stopped: {{error}}",
+    "已停止：{{error}}",
+    "停止：{{error}}"
+  ],
+  "script.complete": [
+    "Completed",
+    "已完成",
+    "完了"
+  ],
+  "script.variables": [
+    "Variables",
+    "變數",
+    "変数"
+  ],
+  "memory.reserved": [
+    "reserved ({{value}})",
+    "保留值（{{value}}）",
+    "予約値（{{value}}）"
+  ],
+  "memory.cc_unavailable": [
+    "CC unavailable; meaning unknown.",
+    "無法取得 CC，內容含義未知。",
+    "CC を取得できず、内容は不明です。"
+  ],
+  "memory.cc_invalid": [
+    "CC invalid: {{errors}}",
+    "CC 無效：{{errors}}",
+    "CC が無効です：{{errors}}"
+  ],
+  "memory.cc_summary": [
+    "{{address}} · Type 2 v{{version}} · {{bytes}} B NDEF area · Read {{read}} · Write {{write}}",
+    "{{address}} · Type 2 v{{version}} · {{bytes}} B NDEF 區 · 讀取 {{read}} · 寫入 {{write}}",
+    "{{address}} · Type 2 v{{version}} · NDEF 領域 {{bytes}} B · 読み取り {{read}} · 書き込み {{write}}"
+  ],
+  "memory.secret": [
+    "{{address}} · Readback does not reveal stored secret bytes.",
+    "{{address}} · 讀回資料不會顯示已儲存的秘密位元組。",
+    "{{address}} · 読み取ったデータには保存済みの秘密バイトは表示されません。"
+  ],
+  "memory.pages_read": [
+    "{{read}} / {{total}} pages read",
+    "已讀取 {{read}}／{{total}} 頁",
+    "{{read}}／{{total}} ページ読み取り済み"
+  ],
+  "memory.model_range": [
+    "Documented model range · {{bytes}} bytes",
+    "型號文件標示範圍 · {{bytes}} 位元組",
+    "モデルの仕様範囲 · {{bytes}} バイト"
+  ],
+  "memory.cc_range": [
+    "CC declares {{bytes}} B of data area. Vendor memory beyond it was not scanned.",
+    "CC 宣告 {{bytes}} B 資料區，未掃描其外的廠商記憶體。",
+    "CC は {{bytes}} B のデータ領域を示しています。その外の独自メモリはスキャンしていません。"
+  ],
+  "memory.unaddressable": [
+    "CC declares {{bytes}} B, but that range is not safely addressable. Only the initial four pages were read.",
+    "CC 宣告 {{bytes}} B，但無法安全定址該範圍，僅讀取最初四頁。",
+    "CC は {{bytes}} B を示していますが、安全にアドレス指定できないため最初の 4 ページのみ読み取りました。"
+  ],
+  "memory.failed_page": [
+    "Page {{address}} unreadable.",
+    "第 {{address}} 頁無法讀取。",
+    "ページ {{address}} を読み取れません。"
+  ],
+  "memory.progress": [
+    "{{model}}: {{read}} / {{total}} pages",
+    "{{model}}：{{read}}／{{total}} 頁",
+    "{{model}}：{{read}}／{{total}} ページ"
+  ],
+  "memory.region_label": [
+    "{{title}}, pages {{start}} to {{end}}",
+    "{{title}}，第 {{start}} 至 {{end}} 頁",
+    "{{title}}、ページ {{start}} から {{end}}"
+  ],
+  "memory.complete_status": [
+    "COMPLETE",
+    "完整",
+    "完了"
+  ],
+  "memory.unidentified_status": [
+    "UNIDENTIFIED",
+    "未識別",
+    "識別不可"
+  ],
+  "memory.malformed": [
+    "malformed",
+    "格式錯誤",
+    "形式不正"
+  ],
+  "memory.incomplete": [
+    "incomplete",
+    "不完整",
+    "未完了"
+  ],
+  "memory.truncated": [
+    "truncated",
+    "資料截斷",
+    "データ不足"
+  ],
+  "memory.valid": [
+    "valid",
+    "有效",
+    "有効"
+  ],
+  "memory.complete_lower": [
+    "complete",
+    "完整",
+    "完了"
+  ],
+  "toolkit.ntag2xx_verify_signature": [
+    "[NTAG2xx] Verify signature",
+    "[NTAG2xx] 驗證簽章",
+    "[NTAG2xx] 署名を検証"
+  ],
+  "toolkit.ntag213_enable_password": [
+    "[NTAG213] Enable password",
+    "[NTAG213] 啟用密碼",
+    "[NTAG213] パスワードを有効にする"
+  ],
+  "toolkit.ntag213_verify_password": [
+    "[NTAG213] Verify password",
+    "[NTAG213] 驗證密碼",
+    "[NTAG213] パスワードを検証"
+  ],
+  "toolkit.ntag215_enable_password": [
+    "[NTAG215] Enable password",
+    "[NTAG215] 啟用密碼",
+    "[NTAG215] パスワードを有効にする"
+  ],
+  "toolkit.ntag215_verify_password": [
+    "[NTAG215] Verify password",
+    "[NTAG215] 驗證密碼",
+    "[NTAG215] パスワードを検証"
+  ],
+  "toolkit.sic43nt_verify_rolling_code": [
+    "[SIC43NT] Verify rolling code",
+    "[SIC43NT] 驗證滾動碼",
+    "[SIC43NT] ローリングコードを検証"
+  ],
+  "toolkit.sic43nt_enable_password": [
+    "[SIC43NT] Enable password",
+    "[SIC43NT] 啟用密碼",
+    "[SIC43NT] パスワードを有効にする"
+  ],
+  "toolkit.sic43nt_verify_password": [
+    "[SIC43NT] Verify password",
+    "[SIC43NT] 驗證密碼",
+    "[SIC43NT] パスワードを検証"
+  ],
+  "toolkit.ntag424_dna_enable_temper_detection": [
+    "[NTAG424 DNA] Enable temper detection",
+    "[NTAG424 DNA] 啟用防拆偵測",
+    "[NTAG424 DNA] 改ざん検知を有効にする"
+  ],
+  "toolkit.ntag424_dna_verify_temper_state": [
+    "[NTAG424 DNA] Verify temper state",
+    "[NTAG424 DNA] 驗證防拆狀態",
+    "[NTAG424 DNA] 改ざん状態を確認"
+  ],
+  "toolkit.ntag424_dna_verify_signature": [
+    "[NTAG424 DNA] Verify signature",
+    "[NTAG424 DNA] 驗證簽章",
+    "[NTAG424 DNA] 署名を検証"
+  ],
+  "script.help_0": [
+    "A script runs only when you tap RUN. This page is an example; it does not communicate with a tag.",
+    "僅在按下「執行」時執行腳本。本頁為範例，不會與標籤通訊。",
+    "「実行」を押したときだけスクリプトが動作します。このページは例であり、タグとは通信しません。"
+  ],
+  "script.help_1": [
+    "Suppose a Type 2-compatible tag stores the page to read next in byte 1 of a response. That pointer location is only an example of a tag-specific format, not a standard NTAG field. Choose NfcA as the script technology and add these three steps in order:",
+    "假設 Type 2 相容標籤在回應的第 1 號位元組中儲存下一個要讀取的頁面。此指標位置只是特定標籤格式的範例，並非標準 NTAG 欄位。選擇 NfcA 技術，依序新增以下三個步驟：",
+    "Type 2 対応タグが応答のバイト位置 1 に次に読むページを保存している例です。この位置はタグ独自の形式の例で、標準 NTAG フィールドではありません。NfcA を選び、次の 3 ステップを順に追加します。"
+  ],
+  "script.help_2": [
+    "In this example, the tag returns 16 bytes. The first two are 04 10; byte offset 1 is 10 in hex.",
+    "此範例中，標籤回傳 16 個位元組。前兩個為 04 10；偏移 1 的位元組為十六進位 10。",
+    "この例ではタグが 16 バイトを返します。先頭の 2 バイトは 04 10 で、位置 1 のバイトは 16 進数の 10 です。"
+  ],
+  "script.help_3": [
+    "CAPTURE reads the latest TRANSCEIVE response. Offset is zero-based, so offset 1 selects the second byte, 10 in hex. As u8, targetPage becomes the number 16.",
+    "CAPTURE 讀取最近一次 TRANSCEIVE 回應。偏移從 0 起算，因此偏移 1 選取第二個位元組，即十六進位 10。以 u8 解讀後，targetPage 為數值 16。",
+    "CAPTURE は直前の TRANSCEIVE 応答を読み取ります。位置は 0 から始まるので、位置 1 は 2 番目のバイト（16 進数の 10）です。u8 では targetPage は数値 16 になります。"
+  ],
+  "script.help_4": [
+    "The placeholder evaluates targetPage and writes it as one byte. With the captured value 16, the actual command sent is:",
+    "佔位符會計算 targetPage 並輸出一個位元組。擷取值為 16 時，實際傳送指令為：",
+    "プレースホルダーは targetPage を評価し、1 バイトとして出力します。取得した値が 16 の場合、送信するコマンドは次のとおりです："
+  ],
+  "script.help_5": [
+    "The TRACE screen shows the captured value and resolved command bytes. If the byte is missing or the value does not fit u8, the run stops with an error instead of sending a guessed command.",
+    "執行紀錄會顯示擷取值及解析後的指令位元組。若缺少位元組或數值超出 u8 範圍，會停止並顯示錯誤，不會猜測指令。",
+    "実行履歴に取得した値と解決済みのコマンドバイトを表示します。バイトがない場合や u8 の範囲外の場合は、推測したコマンドを送らずエラーで停止します。"
+  ],
+  "script.help_6": [
+    "A TRANSCEIVE card has two editing modes. TEXT lets you edit the whole command directly. BUILDER uses the shared hex keypad and a variable picker to add segments in send order, without positioning a cursor. You can move or remove segments. Both modes edit the same command; switch to TEXT for arithmetic inside a placeholder.",
+    "TRANSCEIVE 有兩種編輯模式。文字模式可直接編輯整段指令；組合模式使用十六進位鍵盤與變數選擇器，依傳送順序新增片段，不需定位游標。片段可移動或移除。兩種模式編輯同一指令；佔位符中的運算請使用文字模式。",
+    "TRANSCEIVE には二つの編集モードがあります。テキストモードではコマンド全体を直接編集できます。組み立てモードでは 16 進数キーパッドと変数選択で送信順に部分を追加し、移動や削除もできます。どちらも同じコマンドを編集します。プレースホルダー内の計算にはテキストモードを使います。"
+  ],
+  "script.help_7": [
+    "Expressions accept decimal integers, 0x-prefixed hex integers, existing numeric variables, +, -, *, and parentheses. Division, bitwise operators, and arbitrary JavaScript are not supported.",
+    "運算式支援十進位整數、0x 前綴十六進位整數、已存在的數值變數、+、-、* 與括號。不支援除法、位元運算或任意 JavaScript。",
+    "式には 10 進整数、0x 付きの 16 進整数、既存の数値変数、+、-、*、括弧を使えます。除算、ビット演算、任意の JavaScript は使えません。"
+  ],
+  "script.help_8": [
+    "CAPTURE always reads the most recent response. On NfcA, data and raw contain the same bytes. On IsoDep, data excludes the final SW1/SW2 bytes, while raw includes them. After an IsoDep TRANSCEIVE, numeric sw holds those status bytes together.",
+    "CAPTURE 一律讀取最近一次回應。NfcA 的 data 與 raw 包含相同位元組；IsoDep 的 data 不含末尾 SW1/SW2，raw 則包含。IsoDep TRANSCEIVE 後，數值 sw 會合併保存這兩個狀態位元組。",
+    "CAPTURE は常に直前の応答を読み取ります。NfcA では data と raw は同じです。IsoDep では data は末尾の SW1/SW2 を除き、raw は含みます。IsoDep TRANSCEIVE 後、数値 sw は二つの状態バイトをまとめて保持します。"
+  ],
+  "script.help_9": [
+    "Your current script uses IsoDep. For CAPTURE, choose data unless you intentionally need the SW1/SW2 bytes in raw.",
+    "目前腳本使用 IsoDep。除非需要 raw 中的 SW1/SW2 位元組，CAPTURE 請選擇 data。",
+    "現在のスクリプトは IsoDep を使用しています。raw 内の SW1/SW2 が必要な場合を除き、CAPTURE では data を選んでください。"
+  ],
+  "script.help_10": [
+    "Define a variable with SET or CAPTURE before using it later. Names start with a letter or _ and then contain letters, digits, or _; names are case-sensitive. A variable created inside an IF path or REPEAT body can be referenced by later steps in that same path or body, not by steps after the path or repeat. REPEAT provides a zero-based index during each iteration.",
+    "使用變數前，先以 SET 或 CAPTURE 定義。名稱以字母或 _ 開頭，後續可含字母、數字或 _，且區分大小寫。在 IF 路徑或 REPEAT 內建立的變數僅能由同一路徑或內部後續步驟使用，無法在其外使用。REPEAT 每次重複提供從 0 起算的 index。",
+    "変数は使用前に SET または CAPTURE で定義します。名前は英字か _ で始まり、英字・数字・_ を含められ、大文字と小文字を区別します。IF 分岐や REPEAT 内の変数はその内部の後続ステップでのみ使えます。REPEAT は各回に 0 から始まる index を提供します。"
+  ],
+  "script.help_11": [
+    "Flow Script guide",
+    "流程腳本指南",
+    "フロースクリプトガイド"
+  ],
+  "script.help_12": [
+    "Complete example: read a dynamic Type 2 page",
+    "完整範例：讀取動態 Type 2 頁面",
+    "完全な例：動的な Type 2 ページを読む"
+  ],
+  "script.help_13": [
+    "TRANSCEIVE — read the fixed location",
+    "TRANSCEIVE — 讀取固定位置",
+    "TRANSCEIVE — 固定位置を読む"
+  ],
+  "script.help_14": [
+    "Command bytes:",
+    "指令位元組：",
+    "コマンドバイト："
+  ],
+  "script.help_15": [
+    "CAPTURE — save one response byte",
+    "CAPTURE — 儲存一個回應位元組",
+    "CAPTURE — 応答の 1 バイトを保存"
+  ],
+  "script.help_16": [
+    "TRANSCEIVE — use the variable",
+    "TRANSCEIVE — 使用變數",
+    "TRANSCEIVE — 変数を使う"
+  ],
+  "script.help_17": [
+    "Where expressions and placeholders go",
+    "運算式與佔位符的使用位置",
+    "式とプレースホルダーの使用場所"
+  ],
+  "script.help_18": [
+    "Command placeholder formats",
+    "指令佔位符格式",
+    "コマンドのプレースホルダー形式"
+  ],
+  "script.help_19": [
+    "Response source and ISO-DEP status",
+    "回應來源與 ISO-DEP 狀態",
+    "応答の参照元と ISO-DEP の状態"
+  ],
+  "script.help_20": [
+    "Variable lifetime and safety",
+    "變數範圍與安全性",
+    "変数の有効範囲と安全性"
+  ],
+  "script.help_syntax_0": [
+    "SET, IF, and REPEAT fields take a numeric expression directly. Only TRANSCEIVE Command bytes use the ${expression:format} wrapper. Literal command bytes must be two hex digits separated by spaces.",
+    "SET、IF 與 REPEAT 欄位直接使用數值運算式。僅 TRANSCEIVE 指令位元組使用 ${expression:format} 包裝。固定指令位元組必須是以空白分隔的兩位十六進位數字。",
+    "SET、IF、REPEAT の欄には数値式を直接入力します。${expression:format} は TRANSCEIVE コマンドバイトでのみ使います。固定バイトは空白で区切った 2 桁の 16 進数です。"
+  ],
+  "script.help_syntax_1": [
+    "u16be and u16le accept 0–65535. For bytes, use a single byte-array variable name, not arithmetic. For example, CAPTURE with Interpret as bytes and Byte count 4 creates a four-byte variable that can be inserted with ${payload:bytes}. Values are never silently truncated.",
+    "u16be 與 u16le 接受 0–65535。bytes 僅接受單一位元組陣列變數名稱，不接受運算。例：CAPTURE 選擇 bytes 格式且位元組數為 4，會建立四位元組變數，可用 ${payload:bytes} 插入。數值不會被靜默截斷。",
+    "u16be と u16le の範囲は 0–65535 です。bytes には計算式ではなく一つのバイト配列変数名を指定します。例えば CAPTURE で bytes とバイト数 4 を選ぶと、${payload:bytes} で挿入できる 4 バイトの変数ができます。値が黙って切り捨てられることはありません。"
+  ],
+  "errors.script_object": [
+    "Script must be an object",
+    "腳本必須為物件",
+    "スクリプトはオブジェクトである必要があります"
+  ],
+  "errors.kind": [
+    "Unknown script kind",
+    "未知腳本種類",
+    "不明なスクリプトの種類"
+  ],
+  "errors.version": [
+    "Unsupported script version",
+    "不支援的腳本版本",
+    "未対応のスクリプトバージョン"
+  ],
+  "errors.tech": [
+    "Unsupported NFC technology",
+    "不支援的 NFC 技術",
+    "未対応の NFC 技術"
+  ],
+  "errors.steps": [
+    "Steps must be an array",
+    "步驟必須為陣列",
+    "ステップは配列である必要があります"
+  ],
+  "errors.depth": [
+    "Script nesting is too deep",
+    "腳本巢狀層級過深",
+    "スクリプトの入れ子が深すぎます"
+  ],
+  "errors.invalid_step": [
+    "invalid step",
+    "無效步驟",
+    "無効なステップ"
+  ],
+  "errors.unknown_variable": [
+    "unknown variable {{value}}",
+    "未知變數 {{value}}",
+    "不明な変数 {{value}}"
+  ],
+  "errors.delay": [
+    "delay must be 0–5000 ms",
+    "延遲必須為 0–5000 ms",
+    "待機時間は 0–5000 ms にしてください"
+  ],
+  "errors.name": [
+    "invalid variable name",
+    "無效變數名稱",
+    "無効な変数名"
+  ],
+  "errors.no_response": [
+    "no previous response to capture",
+    "沒有先前回應可擷取",
+    "取得する直前の応答がありません"
+  ],
+  "errors.source": [
+    "invalid response source",
+    "無效回應來源",
+    "無効な応答の参照元"
+  ],
+  "errors.offset": [
+    "invalid capture offset",
+    "無效擷取偏移",
+    "無効な取得位置"
+  ],
+  "errors.format": [
+    "invalid capture format",
+    "無效擷取格式",
+    "無効な取得形式"
+  ],
+  "errors.length": [
+    "invalid capture length",
+    "無效擷取長度",
+    "無効な取得長さ"
+  ],
+  "errors.comparison": [
+    "invalid comparison",
+    "無效比較條件",
+    "無効な比較"
+  ],
+  "errors.branch": [
+    "missing branch",
+    "缺少分支",
+    "分岐がありません"
+  ],
+  "errors.maximum": [
+    "maximum must be 1–{{value}}",
+    "最大次數必須為 1–{{value}}",
+    "最大回数は 1–{{value}} にしてください"
+  ],
+  "errors.body": [
+    "missing repeat body",
+    "缺少重複執行內容",
+    "繰り返す内容がありません"
+  ],
+  "errors.outcome": [
+    "invalid stop outcome",
+    "無效停止結果",
+    "無効な停止結果"
+  ],
+  "errors.stop_message": [
+    "invalid stop message",
+    "無效停止訊息",
+    "無効な停止メッセージ"
+  ],
+  "errors.step_type": [
+    "unknown step type",
+    "未知步驟類型",
+    "不明なステップの種類"
+  ],
+  "errors.nodes": [
+    "Script exceeds {{value}} nodes",
+    "腳本超過 {{value}} 個節點",
+    "スクリプトが {{value}} ノードを超えています"
+  ],
+  "errors.expression_required": [
+    "Expression is required",
+    "請提供運算式",
+    "式が必要です"
+  ],
+  "errors.expression_invalid": [
+    "Invalid expression: {{value}}",
+    "無效運算式：{{value}}",
+    "無効な式：{{value}}"
+  ],
+  "errors.parenthesis": [
+    "Missing closing parenthesis",
+    "缺少右括號",
+    "閉じ括弧がありません"
+  ],
+  "errors.value": [
+    "Missing value",
+    "缺少數值",
+    "値がありません"
+  ],
+  "errors.undefined": [
+    "Undefined variable: {{value}}",
+    "未定義變數：{{value}}",
+    "未定義の変数：{{value}}"
+  ],
+  "errors.integer": [
+    "Variable is not an integer: {{value}}",
+    "變數不是整數：{{value}}",
+    "変数が整数ではありません：{{value}}"
+  ],
+  "errors.token": [
+    "Unexpected token: {{value}}",
+    "非預期語法元素：{{value}}",
+    "予期しないトークン：{{value}}"
+  ],
+  "errors.safe": [
+    "Expression must produce a safe integer",
+    "運算式必須產生安全整數",
+    "式の結果は安全な整数である必要があります"
+  ],
+  "errors.fit": [
+    "Value {{value}} does not fit {{format}}",
+    "數值 {{value}} 超出 {{format}} 範圍",
+    "値 {{value}} は {{format}} の範囲外です"
+  ],
+  "errors.bytes_required": [
+    "Command bytes are required",
+    "請提供指令位元組",
+    "コマンドバイトが必要です"
+  ],
+  "errors.byte": [
+    "Invalid command byte: {{value}}",
+    "無效指令位元組：{{value}}",
+    "無効なコマンドバイト：{{value}}"
+  ],
+  "errors.placeholder": [
+    "Byte-array placeholder needs one variable",
+    "位元組陣列佔位符需要單一變數",
+    "バイト配列のプレースホルダーには一つの変数が必要です"
+  ],
+  "errors.array": [
+    "Variable is not a byte array: {{value}}",
+    "變數不是位元組陣列：{{value}}",
+    "変数がバイト配列ではありません：{{value}}"
+  ],
+  "errors.empty": [
+    "Command cannot be empty",
+    "指令不可為空",
+    "コマンドは空にできません"
+  ],
+  "errors.response": [
+    "Invalid transceive response",
+    "無效收發回應",
+    "無効な送受信応答"
+  ],
+  "errors.sw": [
+    "ISO-DEP response is missing SW1/SW2",
+    "ISO-DEP 回應缺少 SW1/SW2",
+    "ISO-DEP 応答に SW1/SW2 がありません"
+  ],
+  "errors.capture_response": [
+    "No previous response to capture",
+    "沒有先前回應可擷取",
+    "取得する直前の応答がありません"
+  ],
+  "errors.capture_length": [
+    "Capture exceeds response length",
+    "擷取超出回應長度",
+    "取得範囲が応答の長さを超えています"
+  ],
+  "errors.invalid_comparison": [
+    "Invalid comparison",
+    "無效比較條件",
+    "無効な比較"
+  ],
+  "errors.transport": [
+    "Missing NFC transport",
+    "缺少 NFC 通訊介面",
+    "NFC 通信機能がありません"
+  ],
+  "errors.execution": [
+    "Execution exceeded {{value}} steps",
+    "執行超過 {{value}} 個步驟",
+    "実行が {{value}} ステップを超えました"
+  ],
+  "errors.repeat": [
+    "Repeat count {{value}} exceeds maximum {{maximum}}",
+    "重複次數 {{value}} 超過上限 {{maximum}}",
+    "繰り返し回数 {{value}} が上限 {{maximum}} を超えています"
+  ],
+  "errors.stop": [
+    "Script stopped",
+    "腳本已停止",
+    "スクリプトが停止しました"
+  ],
+  "errors.unknown_step": [
+    "Unknown step type",
+    "未知步驟類型",
+    "不明なステップの種類"
+  ],
+  "errors.invalid_input": [
+    "Invalid Input",
+    "輸入無效",
+    "無効な入力"
+  ],
+  "errors.contact": [
+    "Must provide \"Name\" and either \"Tel\" or \"Email\"",
+    "請填寫姓名，以及電話或電子郵件。",
+    "名前と、電話またはメールを入力してください。"
+  ],
+  "script.add_step_button": [
+    "+ ADD STEP",
+    "＋新增步驟",
+    "＋ステップを追加"
+  ],
+  "script.success_outcome": [
+    "success",
+    "成功",
+    "成功"
+  ],
+  "script.failure_outcome": [
+    "failure",
+    "失敗",
+    "失敗"
+  ],
+  "script.then": [
+    "then",
+    "成立",
+    "真の場合"
+  ],
+  "script.else": [
+    "else",
+    "不成立",
+    "偽の場合"
+  ],
+  "script.transceive": [
+    "transceive",
+    "收發指令",
+    "送受信"
+  ],
+  "script.set": [
+    "set",
+    "設定變數",
+    "変数を設定"
+  ],
+  "script.capture": [
+    "capture",
+    "擷取回應",
+    "応答を取得"
+  ],
+  "script.if": [
+    "if",
+    "條件分支",
+    "条件分岐"
+  ],
+  "script.repeat_type": [
+    "repeat",
+    "重複",
+    "繰り返し"
+  ],
+  "script.stop_type": [
+    "stop",
+    "停止",
+    "停止"
+  ],
+  "toolkit.password_description": [
+    "Enable Password When set the 4-byte PASSWORD and 2-byte PACK(Password Ack), the write access of memory will be protected.",
+    "啟用密碼：設定 4 位元組 PASSWORD 與 2 位元組 PACK（密碼確認碼）後，記憶體寫入存取將受到保護。",
+    "パスワードを有効にする：4 バイトの PASSWORD と 2 バイトの PACK（パスワード確認値）を設定すると、メモリへの書き込みが保護されます。"
+  ],
+  "toolkit.verify_description": [
+    "Verify Password When accessing to the protected memory, you should send password to make sure the authentication is successful.",
+    "驗證密碼：存取受保護記憶體時，請先傳送密碼以完成驗證。",
+    "パスワードを検証：保護されたメモリにアクセスする際は、パスワードを送信して認証を完了してください。"
+  ],
+  "toolkit.rolling_description": [
+    "Verify Rolling Code SIC43NT is a passive NFC-Forum Type 2 Tag. The response NDEF message can be automatically updated by a triggered event based on NFC field or tag tamper evident. A rolling code in the response NDEF message when there is NFC field or when the wire or trace of the tamper detection circuit has been disconnected. The 80 bits of KEY to generate the rolling code, which default format is 3-byte “Prefix” + its 7-byte UID.",
+    "驗證滾動碼：SIC43NT 是被動式 NFC Forum Type 2 標籤。NFC 場或防拆事件可觸發回應 NDEF 訊息自動更新。偵測到 NFC 場或防拆電路斷線時，回應訊息包含滾動碼。產生滾動碼的 KEY 為 80 位元，預設格式是 3 位元組 Prefix 加上 7 位元組 UID。",
+    "ローリングコードを検証：SIC43NT はパッシブ型 NFC Forum Type 2 タグです。NFC フィールドや改ざん検知のイベントで応答 NDEF メッセージを自動更新できます。NFC フィールドを検出した場合や検知回路が切断された場合、応答にローリングコードを含めます。生成用 KEY は 80 ビットで、既定値は 3 バイトの Prefix と 7 バイトの UID です。"
+  ],
+  "toolkit.password_parameter": [
+    "Password (4 bytes)",
+    "密碼（4 位元組）",
+    "パスワード（4 バイト）"
+  ],
+  "toolkit.pack_parameter": [
+    "Password Ack (2 bytes)",
+    "密碼確認碼（2 位元組）",
+    "パスワード確認値（2 バイト）"
+  ],
+  "toolkit.start_parameter": [
+    "Start Block (1 byte)",
+    "起始區塊（1 位元組）",
+    "開始ブロック（1 バイト）"
+  ],
+  "toolkit.prefix_parameter": [
+    "Prefix (3 bytes)",
+    "前綴（3 位元組）",
+    "接頭辞（3 バイト）"
+  ],
+  "ndef.network_label": [
+    "Network Key:",
+    "網路密碼：",
+    "ネットワークキー："
+  ],
+  "script.unknown_type": [
+    "unknown",
+    "未知",
+    "不明"
+  ],
+  "script.delay_upper": [
+    "DELAY",
+    "延遲",
+    "待機"
+  ],
+  "transceive.tech_label": [
+    "TECH /",
+    "技術／",
+    "技術／"
+  ],
+  "script.help_capture_code": [
+    "Variable name:  targetPage\nResponse source: data\nByte offset:    1\nInterpret as:   u8",
+    "變數名稱：targetPage\n回應來源：data\n位元組偏移：1\n解讀格式：u8",
+    "変数名：targetPage\n応答の参照元：data\nバイト位置：1\n解釈する形式：u8"
+  ],
+  "script.help_set_code": [
+    "SET Numeric expression: targetPage + 4",
+    "SET 數值運算式：targetPage + 4",
+    "SET 数値式：targetPage + 4"
+  ],
+  "script.help_command_code": [
+    "TRANSCEIVE Command bytes: 30 ${targetPage + 4:u8}",
+    "TRANSCEIVE 指令位元組：30 ${targetPage + 4:u8}",
+    "TRANSCEIVE コマンドバイト：30 ${targetPage + 4:u8}"
+  ],
+  "script.help_u8": [
+    "${value:u8}     1 byte, 0–255",
+    "${value:u8}     1 位元組，0–255",
+    "${value:u8}     1 バイト、0–255"
+  ],
+  "script.help_be": [
+    "${value:u16be}  2 bytes, high byte first",
+    "${value:u16be}  2 位元組，高位元組優先",
+    "${value:u16be}  2 バイト、上位バイトが先"
+  ],
+  "script.help_le": [
+    "${value:u16le}  2 bytes, low byte first",
+    "${value:u16le}  2 位元組，低位元組優先",
+    "${value:u16le}  2 バイト、下位バイトが先"
+  ],
+  "script.help_array": [
+    "${payload:bytes}  captured byte array",
+    "${payload:bytes}  擷取的位元組陣列",
+    "${payload:bytes}  取得したバイト配列"
+  ],
+  "script.help_response_code": [
+    "Example raw response: 6F 00 90 00\ndata: 6F 00\nsw: 0x9000",
+    "原始回應範例：6F 00 90 00\ndata: 6F 00\nsw: 0x9000",
+    "raw 応答の例：6F 00 90 00\ndata: 6F 00\nsw: 0x9000"
+  ],
+  "script.help_if_code": [
+    "IF Left expression: sw\nOperator: ==\nRight expression: 0x9000",
+    "IF 左側運算式：sw\n運算子：==\n右側運算式：0x9000",
+    "IF 左辺の式：sw\n演算子：==\n右辺の式：0x9000"
+  ]
+}

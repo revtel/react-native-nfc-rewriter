@@ -1,3 +1,5 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../i18n';
 import React from 'react';
 import {Text, View, Animated, StyleSheet, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
@@ -10,12 +12,16 @@ const CmdType = {
 };
 
 function CustomTransceiveModal(props) {
+  useTranslation();
   const {colors} = useVisualTheme();
-  const modalStyles = React.useMemo(() => ({
-    prompt: {backgroundColor: colors.surface},
-    text: {color: colors.text},
-    technical: {color: colors.technical},
-  }), [colors]);
+  const modalStyles = React.useMemo(
+    () => ({
+      prompt: {backgroundColor: colors.surface},
+      text: {color: colors.text},
+      technical: {color: colors.technical},
+    }),
+    [colors],
+  );
   const {
     visible: _visible,
     setVisible: _setVisible,
@@ -120,18 +126,27 @@ function CustomTransceiveModal(props) {
       <View style={[styles.wrapper]}>
         <View style={{flex: 1}} />
 
-        <Animated.View style={[styles.prompt, modalStyles.prompt, promptAnimStyle]}>
-          {isByteInsert && <Text style={[styles.title, modalStyles.text]}>Add hex bytes</Text>}
+        <Animated.View
+          style={[styles.prompt, modalStyles.prompt, promptAnimStyle]}
+        >
+          {isByteInsert && (
+            <Text style={[styles.title, modalStyles.text]}>
+              {tr('Add hex bytes')}
+            </Text>
+          )}
           {!props.cmdType && !isByteInsert && (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={[modalStyles.text, {marginRight: 10}]}>Type: </Text>
+              <Text style={[modalStyles.text, {marginRight: 10}]}>
+                {tr('Type:')}
+              </Text>
               {Object.values(CmdType).map((type) => (
                 <Button
                   key={type}
                   mode={type === cmdType ? 'outlined' : 'text'}
                   onPress={() => setCmdType(type)}
-                  style={{flex: 1}}>
-                  {type}
+                  style={{flex: 1}}
+                >
+                  {tr(type)}
                 </Button>
               ))}
             </View>
@@ -139,8 +154,14 @@ function CustomTransceiveModal(props) {
 
           {cmdType === CmdType.COMMAND && (
             <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={[modalStyles.technical, {textAlign: 'center', letterSpacing: 1.2}]}>
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Text
+                style={[
+                  modalStyles.technical,
+                  {textAlign: 'center', letterSpacing: 1.2},
+                ]}
+              >
                 {cmdBytes.length === 0 && '--'}
                 {cmdBytes.reduce((acc, byte, idx) => {
                   const hexChar = (
@@ -152,9 +173,9 @@ function CustomTransceiveModal(props) {
               </Text>
               <View style={{flexDirection: 'row'}}>
                 <Button onPress={() => setCmdBytes(cmdBytes.slice(0, -1))}>
-                  Del
+                  {tr('Del')}
                 </Button>
-                <Button onPress={() => setCmdBytes([])}>Clr</Button>
+                <Button onPress={() => setCmdBytes([])}>{tr('Clr')}</Button>
               </View>
               <HexBytePad key={padKey} onByte={addByteToCmd} />
             </View>
@@ -162,13 +183,15 @@ function CustomTransceiveModal(props) {
 
           {cmdType === CmdType.DELAY && (
             <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+            >
               {[100, 200, 300, 400, 500, 600].map((ms) => (
                 <Button
                   key={ms}
                   mode={ms === delayMs ? 'outlined' : 'text'}
                   onPress={() => setDelayMs(ms)}
-                  style={{margin: 5}}>
+                  style={{margin: 5}}
+                >
                   {ms} ms
                 </Button>
               ))}
@@ -180,12 +203,17 @@ function CustomTransceiveModal(props) {
               mode="contained"
               onPress={doAddCommand}
               disabled={isByteInsert && cmdBytes.length === 0}
-              style={{flex: 1}}>
-              {isByteInsert ? 'ADD BYTES' : isEditing ? 'Modify' : 'Add'}
+              style={{flex: 1}}
+            >
+              {isByteInsert
+                ? tr('ADD BYTES')
+                : isEditing
+                ? tr('Modify')
+                : tr('Add')}
             </Button>
 
             <Button onPress={doCancel} style={{flex: 1}}>
-              CANCEL
+              {tr('CANCEL')}
             </Button>
           </View>
         </Animated.View>

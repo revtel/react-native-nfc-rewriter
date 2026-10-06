@@ -1,11 +1,11 @@
+import {useTranslation} from 'react-i18next';
+import {translateText as tr} from '../../i18n';
 import React from 'react';
+import {Alert, StyleSheet, View, Text} from 'react-native';
 import {
-  Alert,
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native';
-import {NestableDraggableFlatList, NestableScrollContainer} from 'react-native-draggable-flatlist';
+  NestableDraggableFlatList,
+  NestableScrollContainer,
+} from 'react-native-draggable-flatlist';
 import {SafeAreaView} from 'react-native-screens/experimental';
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
@@ -23,6 +23,7 @@ import {
 import {useVisualTheme} from '../../visual/theme';
 
 function CustomTransceiveScreen(props) {
+  useTranslation();
   const {colors, spacing, type} = useVisualTheme();
   const styles = createStyles(colors, spacing, type);
   const {params} = props.route;
@@ -142,8 +143,8 @@ function CustomTransceiveScreen(props) {
     const [success, resps] = result;
 
     if (!success) {
-      Alert.alert('Commands Not Finished', '', [
-        {text: 'OK', onPress: () => 0},
+      Alert.alert(tr('Commands Not Finished'), '', [
+        {text: tr('OK'), onPress: () => 0},
       ]);
     }
 
@@ -160,7 +161,13 @@ function CustomTransceiveScreen(props) {
   return (
     <>
       <ScreenHeader
-        title={title || params.savedRecord?.name || 'CUSTOM TRANSCEIVE'}
+        title={
+          title
+            ? readOnly
+              ? tr(title)
+              : title
+            : params.savedRecord?.name || tr('CUSTOM TRANSCEIVE')
+        }
         navigation={props.navigation}
         getRecordPayload={getRecordPayload}
         savedRecord={params.savedRecord}
@@ -169,52 +176,72 @@ function CustomTransceiveScreen(props) {
       />
       <SafeAreaView edges={{bottom: true}} style={styles.wrapper}>
         <NestableScrollContainer contentContainerStyle={styles.content}>
-          <Text style={styles.eyebrow}>NFC WORKBENCH</Text>
-          <Text style={styles.heading}>Custom Transceive</Text>
+          <Text style={styles.eyebrow}>{tr('NFC WORKBENCH')}</Text>
+          <Text style={styles.heading}>{tr('Custom Transceive')}</Text>
           <Text style={styles.intro}>
-            Review commands and responses before running them against a tag.
+            {tr(
+              'Review commands and responses before running them against a tag.',
+            )}
           </Text>
           <View style={styles.techBadge}>
-            <Text style={styles.techBadgeText}>TECH / {nfcTech}</Text>
+            <Text style={styles.techBadgeText}>
+              {tr('TECH /')}
+              {nfcTech}
+            </Text>
           </View>
 
           {editableParameters ? (
             <>
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>CONFIGURATIONS</Text>
+                <Text style={styles.sectionTitle}>{tr('CONFIGURATIONS')}</Text>
                 {editableParameters.map((p, idx) => {
                   const hexString = p.payload
                     .map((b) => ('00' + b.toString(16)).slice(-2))
                     .join(' ');
                   return (
-                    <View key={`${p.name}-${idx}`} style={styles.parameterRow}>
-                      <Text style={styles.parameterName}>{p.name}</Text>
+                    <View
+                      key={`${readOnly ? p.name : p.name}-${idx}`}
+                      style={styles.parameterRow}
+                    >
+                      <Text style={styles.parameterName}>
+                        {readOnly ? tr(p.name) : p.name}
+                      </Text>
                       <Button
                         mode="outlined"
-                        accessibilityLabel={`Edit ${p.name}`}
+                        accessibilityLabel={`Edit ${
+                          readOnly ? tr(p.name) : p.name
+                        }`}
                         disabled={readOnly}
                         onPress={() => {
                           setShowCommandModal(true);
                           setCurrEditParamIdx(idx);
-                        }}>
-                        {hexString || 'update'}
+                        }}
+                      >
+                        {hexString || tr('update')}
                       </Button>
                     </View>
                   );
                 })}
               </View>
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>DESCRIPTION</Text>
+                <Text style={styles.sectionTitle}>{tr('DESCRIPTION')}</Text>
                 <Text style={styles.description}>
-                  {params.savedRecord?.description || 'No description'}
+                  {(readOnly
+                    ? tr(params.savedRecord?.description)
+                    : params.savedRecord?.description) || tr('No description')}
                 </Text>
               </View>
             </>
           ) : (
             <View style={styles.commandSection}>
-              <Text style={styles.sectionTitle}>COMMANDS · {commands.length}</Text>
+              <Text style={styles.sectionTitle}>
+                {tr('COMMANDS ·')}
+                {commands.length}
+              </Text>
               {commands.length === 0 ? (
-                <Text style={styles.emptyText}>No commands yet. Add one to begin.</Text>
+                <Text style={styles.emptyText}>
+                  {tr('No commands yet. Add one to begin.')}
+                </Text>
               ) : (
                 <NestableDraggableFlatList
                   data={commands}
@@ -237,7 +264,9 @@ function CustomTransceiveScreen(props) {
                         onDrag={drag}
                         isActive={isActive}
                         onMoveUp={
-                          commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
+                          commands.length > 1 &&
+                          idx > 0 &&
+                          (() => moveCommandUp(idx))
                         }
                         onMoveDown={
                           commands.length > 1 &&
@@ -264,18 +293,20 @@ function CustomTransceiveScreen(props) {
                 mode="outlined"
                 style={styles.addButton}
                 contentStyle={styles.actionContent}
-                accessibilityLabel="Add command"
-                onPress={() => setShowCommandModal(true)}>
-                ADD COMMAND
+                accessibilityLabel={tr('Add command')}
+                onPress={() => setShowCommandModal(true)}
+              >
+                {tr('ADD COMMAND')}
               </Button>
             )}
             <Button
               mode="contained"
               disabled={commands.length === 0 && !hasCustomExecuteFunc}
               contentStyle={styles.actionContent}
-              accessibilityLabel="Execute commands"
-              onPress={executeCommands}>
-              EXECUTE
+              accessibilityLabel={tr('Execute commands')}
+              onPress={executeCommands}
+            >
+              {tr('EXECUTE')}
             </Button>
           </View>
         </NestableScrollContainer>
@@ -301,19 +332,76 @@ function CustomTransceiveScreen(props) {
 function createStyles(colors, spacing, type) {
   return StyleSheet.create({
     wrapper: {flex: 1, backgroundColor: colors.background},
-    content: {paddingHorizontal: spacing.lg, paddingTop: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
-    eyebrow: {color: colors.accent, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.sm},
-    heading: {color: colors.text, fontSize: type.hero, fontWeight: '700', marginBottom: spacing.sm},
-    intro: {color: colors.textMuted, fontSize: type.label, lineHeight: 22, marginBottom: spacing.lg},
-    techBadge: {alignSelf: 'flex-start', backgroundColor: colors.surfaceMuted, borderRadius: 8, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, marginBottom: spacing.xl},
-    techBadgeText: {color: colors.accent, fontSize: type.caption, fontWeight: '700'},
-    section: {backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 16, padding: spacing.lg, marginBottom: spacing.lg},
+    content: {
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.xl,
+      paddingBottom: spacing.xxl + spacing.xl,
+    },
+    eyebrow: {
+      color: colors.accent,
+      fontSize: type.caption,
+      fontWeight: '700',
+      letterSpacing: 1,
+      marginBottom: spacing.sm,
+    },
+    heading: {
+      color: colors.text,
+      fontSize: type.hero,
+      fontWeight: '700',
+      marginBottom: spacing.sm,
+    },
+    intro: {
+      color: colors.textMuted,
+      fontSize: type.label,
+      lineHeight: 22,
+      marginBottom: spacing.lg,
+    },
+    techBadge: {
+      alignSelf: 'flex-start',
+      backgroundColor: colors.surfaceMuted,
+      borderRadius: 8,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      marginBottom: spacing.xl,
+    },
+    techBadgeText: {
+      color: colors.accent,
+      fontSize: type.caption,
+      fontWeight: '700',
+    },
+    section: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 16,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+    },
     commandSection: {marginBottom: spacing.lg},
-    sectionTitle: {color: colors.textMuted, fontSize: type.caption, fontWeight: '700', letterSpacing: 1, marginBottom: spacing.md},
-    parameterRow: {flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm},
+    sectionTitle: {
+      color: colors.textMuted,
+      fontSize: type.caption,
+      fontWeight: '700',
+      letterSpacing: 1,
+      marginBottom: spacing.md,
+    },
+    parameterRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: spacing.sm,
+      marginBottom: spacing.sm,
+    },
     parameterName: {color: colors.text, fontSize: type.body},
     description: {color: colors.text, fontSize: type.body, lineHeight: 22},
-    emptyText: {color: colors.textMuted, fontSize: type.body, padding: spacing.lg, borderColor: colors.border, borderWidth: 1, borderRadius: 12},
+    emptyText: {
+      color: colors.textMuted,
+      fontSize: type.body,
+      padding: spacing.lg,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 12,
+    },
     actionBar: {gap: spacing.md, marginTop: spacing.sm},
     addButton: {borderColor: colors.accent},
     actionContent: {minHeight: 48},
