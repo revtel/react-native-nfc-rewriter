@@ -1426,7 +1426,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-nfc-manager (4.0.0-beta.9):
+  - react-native-nfc-manager (4.0.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2549,7 +2549,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 3c805ea54675b00ef1755f23b3c1fccf34962b93
   React-microtasksnativemodule: 97a771dbbb4315c71579995b53e4e3e351a99d89
   React-mutationobservernativemodule: 530bff1bba9511a5133e3cf8170e3b2c0df49e89
-  react-native-nfc-manager: d1d074fb6bb46bb65de78634d48f5fcf20e93255
+  react-native-nfc-manager: 3bc3d413a1ae606a2e6a008805f4f56657d060b1
   react-native-safe-area-context: 3836dc43241ba89903508a442029e57f7491539f
   React-NativeModulesApple: 2b658272ca69df0694cf5d54f9510aa7c33977bc
   React-networking: 6be0b80e18e710dd30e77b04838ec46666a7bb78

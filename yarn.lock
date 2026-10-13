@@ -5843,10 +5843,10 @@ react-native-localize@3.7.2:
   resolved "https://registry.npmjs.org/react-native-localize/-/react-native-localize-3.7.2.tgz"
   integrity sha512-TAd1IbE+ida/ZqGEL1tZ2nPhOd3tLq3pSL/rgFDEVIA3hUzEhA/Eb3CXgWdqHTQn3UCiOYvRK7BtxapGgg8ySg==
 
-react-native-nfc-manager@4.0.0-beta.9:
-  version "4.0.0-beta.9"
-  resolved "https://registry.npmjs.org/react-native-nfc-manager/-/react-native-nfc-manager-4.0.0-beta.9.tgz"
-  integrity sha512-Yol6NNYU1bLLVXUAdhVlZMXUpJe7eu2SL3JtgOBaemHYzNlhQugfT7ggkF2UXVKn1JUqjbSeopdZ+1Wlqwo8SQ==
+react-native-nfc-manager@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/react-native-nfc-manager/-/react-native-nfc-manager-4.0.0.tgz"
+  integrity sha512-l1vcxDQ/qeVbY432mLwJfPRtZfRQeHe8Al7sXumFX6DQWynm97WGY2c6queMpwSYXx4xP5Eqe5DBR7ErLL8QQg==
 
 react-native-paper@^5.12.3:
   version "5.13.3"
