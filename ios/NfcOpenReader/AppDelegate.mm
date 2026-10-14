@@ -28,6 +28,7 @@
 @end
 
 @interface AppDelegate ()
+@property (nonatomic, copy, readwrite) NSDictionary *launchOptions;
 @property (nonatomic, strong) ReactNativeDelegate *reactNativeDelegate;
 @property (nonatomic, strong) RCTReactNativeFactory *reactNativeFactory;
 @end
@@ -54,15 +55,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.launchOptions = launchOptions ?: @{};
     self.reactNativeDelegate = [ReactNativeDelegate new];
     self.reactNativeDelegate.dependencyProvider = [RCTAppDependencyProvider new];
     self.reactNativeFactory = [[RCTReactNativeFactory alloc] initWithDelegate:self.reactNativeDelegate];
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    return YES;
+}
+
+- (void)startReactNativeInWindow:(UIWindow *)window launchOptions:(NSDictionary *)launchOptions
+{
     [self.reactNativeFactory startReactNativeWithModuleName:@"NfcOpenReader"
-                                                  inWindow:self.window
+                                                  inWindow:window
                                          initialProperties:@{}
                                              launchOptions:launchOptions];
-    return YES;
 }
 
 @end

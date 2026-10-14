@@ -82,6 +82,13 @@ if [[ "${ARCHIVED_VERSION}" != "${APP_VERSION}" || "${ARCHIVED_BUILD}" != "${BUI
   exit 1
 fi
 
+ARCHIVED_APP_PLIST="${ARCHIVE_PATH}/Products/Applications/${SCHEME}.app/Info.plist"
+SCENE_DELEGATE="$(/usr/libexec/PlistBuddy -c 'Print :UIApplicationSceneManifest:UISceneConfigurations:UIWindowSceneSessionRoleApplication:0:UISceneDelegateClassName' "${ARCHIVED_APP_PLIST}" 2>/dev/null || true)"
+if [[ "${SCENE_DELEGATE}" != "SceneDelegate" ]]; then
+  echo "Archive is missing the expected UIScene configuration; refusing to upload a build that may fail to launch on iOS 27." >&2
+  exit 1
+fi
+
 plutil -create xml1 "${EXPORT_OPTIONS}"
 plutil -insert destination -string upload "${EXPORT_OPTIONS}"
 plutil -insert method -string app-store-connect "${EXPORT_OPTIONS}"

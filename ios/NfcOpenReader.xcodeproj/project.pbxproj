@@ -16,6 +16,7 @@
 		CE84735E1E3E4B0E641002B8 /* libPods-NfcOpenReader-NfcOpenReaderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6F1D18DDC279D4CAD47C46 /* libPods-NfcOpenReader-NfcOpenReaderTests.a */; };
 		D606E5272C1941EB000053FC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D606E5262C1941EB000053FC /* PrivacyInfo.xcprivacy */; };
 		D62564F3292363F30067F29D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = D62564F2292363F30067F29D /* AppDelegate.mm */; };
+		F00120261014000100000001 /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = F00120261014000100000002 /* SceneDelegate.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		D61F666F271420FC0083FB8E /* NfcOpenReader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NfcOpenReader.entitlements; path = NfcOpenReader/NfcOpenReader.entitlements; sourceTree = "<group>"; };
 		D62564F2292363F30067F29D /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = NfcOpenReader/AppDelegate.mm; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F00120261014000100000002 /* SceneDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = SceneDelegate.mm; path = NfcOpenReader/SceneDelegate.mm; sourceTree = "<group>"; };
+		F00120261014000100000003 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SceneDelegate.h; path = NfcOpenReader/SceneDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,8 @@
 				D61F666F271420FC0083FB8E /* NfcOpenReader.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				D62564F2292363F30067F29D /* AppDelegate.mm */,
+				F00120261014000100000002 /* SceneDelegate.mm */,
+				F00120261014000100000003 /* SceneDelegate.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -425,6 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D62564F3292363F30067F29D /* AppDelegate.mm in Sources */,
+				F00120261014000100000001 /* SceneDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,7 +517,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NfcOpenReader/NfcOpenReader.entitlements;
-				CURRENT_PROJECT_VERSION = 202610130908;
+				CURRENT_PROJECT_VERSION = 202610141139;
 				DEVELOPMENT_TEAM = HE7MCCDHL4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NfcOpenReader/Info.plist;
@@ -519,7 +525,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.5.8;
+				MARKETING_VERSION = 0.5.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -540,14 +546,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NfcOpenReader/NfcOpenReader.entitlements;
-				CURRENT_PROJECT_VERSION = 202610130908;
+				CURRENT_PROJECT_VERSION = 202610141139;
 				DEVELOPMENT_TEAM = HE7MCCDHL4;
 				INFOPLIST_FILE = NfcOpenReader/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.5.8;
+				MARKETING_VERSION = 0.5.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
