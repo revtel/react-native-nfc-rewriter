@@ -60,18 +60,42 @@ describe('toolkit actions', () => {
     );
 
     action.onPress();
-    expect(navigation.navigate).toHaveBeenCalledWith('Ntag21xMemoryScan', undefined);
+    expect(navigation.navigate).toHaveBeenCalledWith(
+      'Ntag21xMemoryScan',
+      undefined,
+    );
   });
 
   it('offers a flow script for NFC-A and ISO-DEP', () => {
     const navigation = {navigate: jest.fn()};
     const groups = getToolkitActionGroups({navigation, nfc: {}});
-    for (const [groupIndex, tech] of [[1, 'NfcA'], [3, 'IsoDep']]) {
-      const action = groups[groupIndex].actions.find(({title}) => title === 'Flow Script');
+    for (const [groupIndex, tech] of [
+      [1, 'NfcA'],
+      [3, 'IsoDep'],
+    ]) {
+      const action = groups[groupIndex].actions.find(
+        ({title}) => title === 'Flow Script',
+      );
       action.onPress();
       expect(navigation.navigate).toHaveBeenLastCalledWith('NfcScriptEditor', {
         nfcTech: tech,
       });
     }
+  });
+
+  it('opens the ISO15693 inspector without starting RF or adding an NFC-V script', () => {
+    const navigation = {navigate: jest.fn()};
+    const nfc = {scanType5Memory: jest.fn()};
+    const groups = getToolkitActionGroups({navigation, nfc});
+    const actions = groups.find(({title}) => title === 'NfcV').actions;
+    actions
+      .find(({title}) => title === 'ISO 15693 / NFC-V Inspector')
+      .onPress();
+    expect(navigation.navigate).toHaveBeenCalledWith(
+      'Type5MemoryScan',
+      undefined,
+    );
+    expect(nfc.scanType5Memory).not.toHaveBeenCalled();
+    expect(actions.some(({title}) => title === 'Flow Script')).toBe(false);
   });
 });

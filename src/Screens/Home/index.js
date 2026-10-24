@@ -21,6 +21,8 @@ import {SafeAreaView} from 'react-native-screens/experimental';
 import {parseShareDeepLink} from '../../features/home/deepLink';
 import {useNfcAvailability} from '../../features/home/useNfcAvailability';
 import {useTagScan} from '../../features/home/useTagScan';
+import {useTagExplore} from '../../features/home/useTagExplore';
+import {useTagActions} from '../../features/home/useTagActions';
 import {useVisualTheme} from '../../visual/theme';
 
 const resourceLinks = [
@@ -42,6 +44,8 @@ function HomeScreen(props) {
   const {navigation} = props;
   const {enabled, refresh: refreshNfcAvailability} = useNfcAvailability();
   const scanTag = useTagScan(navigation);
+  const {explore, exploring, cancel: cancelExplore} = useTagExplore(navigation);
+  const {busy, run: runTagAction} = useTagActions(navigation);
   const {colors, spacing, type, isDark} = useVisualTheme();
   const styles = React.useMemo(
     () => makeStyles(colors, spacing, type),
@@ -143,10 +147,35 @@ function HomeScreen(props) {
                   icon="nfc"
                   style={styles.primaryButton}
                   contentStyle={styles.buttonContent}
-                  onPress={scanTag}
+                  onPress={() => runTagAction(scanTag)}
+                  disabled={busy || exploring}
                 >
                   {tr('SCAN NFC TAG')}
                 </Button>
+                <Button
+                  mode="outlined"
+                  icon="radar"
+                  style={styles.secondaryButton}
+                  contentStyle={styles.buttonContent}
+                  accessibilityLabel={tr('Explore Tag')}
+                  loading={exploring}
+                  disabled={busy || exploring}
+                  onPress={() => runTagAction(explore)}
+                >
+                  {tr(exploring ? 'Exploring tag…' : 'Explore Tag')}
+                </Button>
+                <Text style={styles.statusText}>
+                  {tr('Discover native tag technologies without requiring NDEF.')}
+                </Text>
+                {exploring && (
+                  <Button
+                    mode="text"
+                    accessibilityLabel={tr('Cancel tag exploration')}
+                    onPress={cancelExplore}
+                  >
+                    {tr('CANCEL')}
+                  </Button>
+                )}
                 <Text style={styles.statusText}>{tr('NFC is enabled')}</Text>
               </>
             ) : (

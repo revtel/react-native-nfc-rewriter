@@ -2128,5 +2128,395 @@
     "IF Left expression: sw\nOperator: ==\nRight expression: 0x9000",
     "IF 左側運算式：sw\n運算子：==\n右側運算式：0x9000",
     "IF 左辺の式：sw\n演算子：==\n右辺の式：0x9000"
+  ],
+  "type5.iso_15693_nfc_v_inspector": [
+    "ISO 15693 / NFC-V Inspector",
+    "ISO 15693／NFC-V 檢視器",
+    "ISO 15693 / NFC-V インスペクター"
+  ],
+  "type5.read_system_information_and_bounded_memory_blocks": [
+    "Read system information and bounded memory blocks",
+    "讀取系統資訊與範圍內的記憶區塊",
+    "システム情報と範囲内のメモリブロックを読み取る"
+  ],
+  "type5.reported_range_complete": [
+    "Reported range complete",
+    "已讀完系統回報範圍",
+    "報告された範囲の読み取り完了"
+  ],
+  "type5.partial_inspection": [
+    "Partial inspection",
+    "部分檢視結果",
+    "部分的な検査結果"
+  ],
+  "type5.limited_inspection": [
+    "Limited inspection",
+    "有限範圍檢視",
+    "限定範囲の検査"
+  ],
+  "type5.no_verified_memory": [
+    "No verified memory",
+    "沒有已驗證的記憶資料",
+    "検証済みメモリなし"
+  ],
+  "type5.available": [
+    "Available",
+    "可取得",
+    "取得済み"
+  ],
+  "type5.unavailable": [
+    "Unavailable",
+    "無法取得",
+    "取得不可"
+  ],
+  "type5.malformed": [
+    "Malformed",
+    "格式錯誤",
+    "不正な形式"
+  ],
+  "type5.unsupported_interpretation": [
+    "Unsupported interpretation",
+    "不支援此格式的解析",
+    "この形式の解析には未対応"
+  ],
+  "type5.supported_type_5_cc": [
+    "Supported Type 5 CC",
+    "支援的 Type 5 CC",
+    "対応する Type 5 CC"
+  ],
+  "type5.incomplete": [
+    "Incomplete",
+    "資料不完整",
+    "データが不完全"
+  ],
+  "type5.type_5_format_not_established": [
+    "Type 5 format not established",
+    "尚未確認 Type 5 格式",
+    "Type 5 形式は未確認"
+  ],
+  "type5.cc_conflicts_with_reported_geometry": [
+    "CC conflicts with reported geometry",
+    "CC 與系統回報的記憶範圍不一致",
+    "CC と報告されたメモリ構成が不一致"
+  ],
+  "type5.decoded": [
+    "Decoded",
+    "已解碼",
+    "デコード済み"
+  ],
+  "type5.empty_ndef_message": [
+    "Empty NDEF message",
+    "空的 NDEF 訊息",
+    "空の NDEF メッセージ"
+  ],
+  "type5.no_ndef_tlv_in_the_verified_data_area": [
+    "No NDEF TLV in the verified data area",
+    "已驗證的資料區中沒有 NDEF TLV",
+    "検証済みデータ領域に NDEF TLV なし"
+  ],
+  "type5.system_reported_range": [
+    "System-reported range",
+    "系統回報的範圍",
+    "システムが報告した範囲"
+  ],
+  "type5.bounded_range": [
+    "Bounded range",
+    "受限的範圍",
+    "制限された範囲"
+  ],
+  "type5.block_zero_preview_capacity_unknown": [
+    "Block zero preview · capacity unknown",
+    "僅預覽區塊 0・容量未知",
+    "ブロック 0 のプレビュー・容量不明"
+  ],
+  "type5.no_memory_read": [
+    "No memory read",
+    "未讀取記憶資料",
+    "メモリ未読み取り"
+  ],
+  "type5.the_identifier_cannot_safely_address_this_tag": [
+    "The identifier cannot safely address this tag.",
+    "無法使用此識別碼安全地定址標籤。",
+    "この識別子ではタグを安全に指定できません。"
+  ],
+  "type5.system_information_returned_a_different_uid_reading_stopped": [
+    "System information returned a different UID. Reading stopped.",
+    "系統資訊回傳不同的 UID，已停止讀取。",
+    "システム情報の UID が異なるため、読み取りを停止しました。"
+  ],
+  "type5.the_tag_returned_an_error_its_cause_is_not_inferred": [
+    "The tag returned an error. Its cause is not inferred.",
+    "標籤回傳錯誤，無法據此判斷原因。",
+    "タグがエラーを返しました。原因は推測しません。"
+  ],
+  "type5.communication_failed_its_cause_is_unknown": [
+    "Communication failed. Its cause is unknown.",
+    "通訊失敗，原因未知。",
+    "通信に失敗しました。原因は不明です。"
+  ],
+  "type5.the_response_was_malformed_reading_stopped": [
+    "The response was malformed. Reading stopped.",
+    "回應格式錯誤，已停止讀取。",
+    "応答形式が不正なため、読み取りを停止しました。"
+  ],
+  "type5.the_block_length_changed_reading_stopped": [
+    "The block length changed. Reading stopped.",
+    "區塊長度改變，已停止讀取。",
+    "ブロック長が変化したため、読み取りを停止しました。"
+  ],
+  "type5.unknown": [
+    "Unknown",
+    "未知",
+    "不明"
+  ],
+  "type5.read_planned_blocks_bytes_bytes_verified": [
+    "{{read}} / {{planned}} blocks · {{bytes}} bytes verified",
+    "已驗證 {{read}}／{{planned}} 個區塊・{{bytes}} 位元組",
+    "{{read}} / {{planned}} ブロック・{{bytes}} バイト検証済み"
+  ],
+  "type5.cancelled_verified_bytes_retained": [
+    "Cancelled; verified bytes retained.",
+    "已取消；保留已驗證的位元組。",
+    "キャンセル済み。検証済みバイトは保持されています。"
+  ],
+  "type5.scan_limits": [
+    "Scan limits",
+    "掃描限制",
+    "スキャン制限"
+  ],
+  "type5.platform_identifier": [
+    "Platform identifier",
+    "平台識別碼",
+    "プラットフォーム識別子"
+  ],
+  "type5.wire_uid_le": [
+    "Wire UID (LE)",
+    "通訊 UID（小端序）",
+    "通信 UID（リトルエンディアン）"
+  ],
+  "type5.failed_block": [
+    "Failed block",
+    "失敗的區塊",
+    "失敗したブロック"
+  ],
+  "type5.response_flags": [
+    "Response flags",
+    "回應旗標",
+    "応答フラグ"
+  ],
+  "type5.tag_error_code": [
+    "Tag error code",
+    "標籤錯誤碼",
+    "タグエラーコード"
+  ],
+  "type5.native_diagnostic": [
+    "Native diagnostic",
+    "原生診斷資訊",
+    "ネイティブ診断情報"
+  ],
+  "type5.raw_response": [
+    "Raw response",
+    "原始回應",
+    "未加工の応答"
+  ],
+  "type5.later_blocks_were_not_read": [
+    "Later blocks were not read.",
+    "後續區塊未讀取。",
+    "後続のブロックは読み取っていません。"
+  ],
+  "type5.system_information": [
+    "SYSTEM INFORMATION",
+    "系統資訊",
+    "システム情報"
+  ],
+  "type5.ic_reference": [
+    "IC reference",
+    "IC 參考值",
+    "IC 参照値"
+  ],
+  "type5.reported_blocks": [
+    "Reported blocks",
+    "回報的區塊數",
+    "報告されたブロック数"
+  ],
+  "type5.reported_block_size_bytes": [
+    "Reported block size (bytes)",
+    "回報的區塊大小（位元組）",
+    "報告されたブロックサイズ（バイト）"
+  ],
+  "type5.observed_block_size_bytes": [
+    "Observed block size (bytes)",
+    "實際觀測的區塊大小（位元組）",
+    "観測されたブロックサイズ（バイト）"
+  ],
+  "type5.technical_reason": [
+    "Technical reason",
+    "技術原因",
+    "技術的な理由"
+  ],
+  "type5.type_5_capability_container": [
+    "TYPE 5 CAPABILITY CONTAINER",
+    "TYPE 5 能力容器",
+    "TYPE 5 ケイパビリティコンテナ"
+  ],
+  "type5.cc_bytes": [
+    "CC bytes",
+    "CC 位元組",
+    "CC バイト"
+  ],
+  "type5.mapping_version": [
+    "Mapping version",
+    "映射版本",
+    "マッピングバージョン"
+  ],
+  "type5.read_access_bits": [
+    "Read access bits",
+    "讀取權限位元",
+    "読み取りアクセスビット"
+  ],
+  "type5.write_access_bits": [
+    "Write access bits",
+    "寫入權限位元",
+    "書き込みアクセスビット"
+  ],
+  "type5.cc_declared_data_area_start_end_bytes_bytes": [
+    "CC-declared data area: [{{start}}, {{end}}) · {{bytes}} bytes",
+    "CC 宣告的資料區：[{{start}}, {{end}})・{{bytes}} 位元組",
+    "CC 宣言のデータ領域：[{{start}}, {{end}})・{{bytes}} バイト"
+  ],
+  "type5.ndef_record_number": [
+    "NDEF record {{number}}",
+    "NDEF 紀錄 {{number}}",
+    "NDEF レコード {{number}}"
+  ],
+  "type5.verified_memory_blocks": [
+    "VERIFIED MEMORY BLOCKS",
+    "已驗證的記憶區塊",
+    "検証済みメモリブロック"
+  ],
+  "type5.block_address_bytes_bytes": [
+    "Block {{address}} · {{bytes}} bytes",
+    "區塊 {{address}}・{{bytes}} 位元組",
+    "ブロック {{address}}・{{bytes}} バイト"
+  ],
+  "type5.read_only_inspection_unknown_geometry_permits_only_block_zero_type_5_f": [
+    "Read-only inspection. Unknown geometry permits only block zero. Type 5 formatting requires a supported CC.",
+    "唯讀檢視。記憶配置未知時僅讀取區塊 0；需有支援的 CC 才能確認 Type 5 格式。",
+    "読み取り専用の検査です。メモリ構成が不明な場合はブロック 0 のみを読み取ります。Type 5 形式の確認には対応する CC が必要です。"
+  ],
+  "type5.start_iso_15693_inspection": [
+    "Start ISO 15693 inspection",
+    "開始 ISO 15693 檢視",
+    "ISO 15693 検査を開始"
+  ],
+  "type5.read_planned_blocks_read": [
+    "{{read}} / {{planned}} blocks read",
+    "已讀取 {{read}}／{{planned}} 個區塊",
+    "{{read}} / {{planned}} ブロック読み取り済み"
+  ],
+  "type5.reading_tag_information": [
+    "Reading tag information...",
+    "正在讀取標籤資訊…",
+    "タグ情報を読み取り中…"
+  ],
+  "type5.cancel_iso_15693_inspection": [
+    "Cancel ISO 15693 inspection",
+    "取消 ISO 15693 檢視",
+    "ISO 15693 検査をキャンセル"
+  ],
+  "type5.share_json": [
+    "SHARE JSON",
+    "分享 JSON",
+    "JSON を共有"
+  ],
+  "type5.technical_details_details": [
+    "Technical details: {{details}}",
+    "技術資訊：{{details}}",
+    "技術情報：{{details}}"
+  ],
+  "discovery.explore_tag": [
+    "Explore Tag",
+    "探索標籤",
+    "タグを探索"
+  ],
+  "discovery.discover_native_tag_technologies_without_requiring_ndef": [
+    "Discover native tag technologies without requiring NDEF.",
+    "探索平台可辨識的標籤技術，無須具備 NDEF。",
+    "NDEF を必要とせず、プラットフォームが検出できるタグ技術を探索します。"
+  ],
+  "discovery.exploring_tag": [
+    "Exploring tag…",
+    "正在探索標籤…",
+    "タグを探索中…"
+  ],
+  "discovery.cancel_tag_exploration": [
+    "Cancel tag exploration",
+    "取消標籤探索",
+    "タグ探索をキャンセル"
+  ],
+  "discovery.identifiers": [
+    "Identifiers",
+    "識別碼",
+    "識別子"
+  ],
+  "discovery.ndef_data_was_not_available_in_this_scan_its_absence_does_not_identify": [
+    "NDEF data was not available in this scan. Its absence does not identify the cause.",
+    "此次掃描未取得 NDEF 資料，無法據此判斷原因。",
+    "今回のスキャンでは NDEF データを取得できませんでした。データがない理由は判断できません。"
+  ],
+  "discovery.no_ndef_records_were_supplied_by_this_scan": [
+    "No NDEF records were supplied by this scan.",
+    "此次掃描未提供 NDEF 紀錄。",
+    "今回のスキャンでは NDEF レコードが提供されませんでした。"
+  ],
+  "discovery.available_tools": [
+    "AVAILABLE TOOLS",
+    "可用工具",
+    "利用可能なツール"
+  ],
+  "discovery.no_compatible_tool_is_available_for_the_observed_technologies": [
+    "No compatible tool is available for the observed technologies.",
+    "目前沒有適用於已觀測技術的工具。",
+    "観測された技術に対応するツールはありません。"
+  ],
+  "discovery.type_5_formatting_is_unconfirmed_the_inspector_checks_available_cc_evi": [
+    "Type 5 formatting is unconfirmed. The inspector checks available CC evidence.",
+    "Type 5 格式尚未確認，檢視器會檢查可取得的 CC 證據。",
+    "Type 5 形式は未確認です。インスペクターで取得できた CC を確認します。"
+  ],
+  "discovery.ios_discovery_is_limited_by_the_app_s_configured_iso_dep_application_i": [
+    "iOS discovery is limited by the app’s configured ISO-DEP application identifiers and FeliCa system codes.",
+    "iOS 探索範圍受 App 設定的 ISO-DEP 應用程式識別碼與 FeliCa 系統碼限制。",
+    "iOS での探索範囲は、アプリに設定された ISO-DEP アプリケーション識別子と FeliCa システムコードによって制限されます。"
+  ],
+  "discovery.custom_nfc_a_transceive": [
+    "Custom NFC-A Transceive",
+    "自訂 NFC-A 收發",
+    "カスタム NFC-A 通信"
+  ],
+  "discovery.custom_iso_dep_transceive": [
+    "Custom ISO-DEP Transceive",
+    "自訂 ISO-DEP 收發",
+    "カスタム ISO-DEP 通信"
+  ],
+  "discovery.custom_nfc_v_transceive": [
+    "Custom NFC-V Transceive",
+    "自訂 NFC-V 收發",
+    "カスタム NFC-V 通信"
+  ],
+  "discovery.nfc_a_flow_script": [
+    "NFC-A Flow Script",
+    "NFC-A 流程腳本",
+    "NFC-A フロースクリプト"
+  ],
+  "discovery.iso_dep_flow_script": [
+    "ISO-DEP Flow Script",
+    "ISO-DEP 流程腳本",
+    "ISO-DEP フロースクリプト"
+  ],
+  "type5.ios_metadata_read_notice": [
+    "iOS may read NDEF while obtaining the tag identifier. The block limits apply only to this inspector’s raw reads.",
+    "iOS 在取得標籤識別碼時可能會讀取 NDEF。區塊限制僅適用於此檢視器發送的原始讀取指令。",
+    "iOS はタグ識別子の取得時に NDEF を読み取る場合があります。ブロック制限は、このインスペクターが送信する未加工の読み取りコマンドにのみ適用されます。"
   ]
 }

@@ -8,6 +8,7 @@ import {
   readNdefOnce,
   readNxpSigNtag2xx,
   readTag,
+  exploreTag,
 } from './services/nfc/tagService';
 import {
   customTransceiveIsoDep,
@@ -16,6 +17,7 @@ import {
   eraseNfcA,
 } from './services/nfc/transceiveService';
 import {scanType2Memory} from './services/nfc/type2ScanService';
+import {scanType5Memory} from './services/nfc/type5ScanService';
 import {runNfcScript} from './services/nfc/scriptService';
 
 class ErrSuccess extends Error {}
@@ -37,6 +39,8 @@ class NfcProxy {
 
   readTag = readTag;
 
+  exploreTag = exploreTag;
+
   writeNdef = writeNdef;
 
   customTransceiveNfcA = customTransceiveNfcA;
@@ -54,6 +58,8 @@ class NfcProxy {
   readNxpSigNtag2xx = readNxpSigNtag2xx;
 
   scanType2Memory = scanType2Memory;
+
+  scanType5Memory = scanType5Memory;
 
   runNfcScript = runNfcScript;
 }

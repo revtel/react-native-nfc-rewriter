@@ -190,6 +190,12 @@ function getToolkitActionGroups({
           left: NfcIcons.TransceiveIcon,
           onPress: () => navigate(customTransceiveRoute('NfcV')),
         },
+        {
+          title: 'ISO 15693 / NFC-V Inspector',
+          description: 'Read system information and bounded memory blocks',
+          left: NfcIcons.NfcIcon,
+          onPress: () => navigate({screen: 'Type5MemoryScan'}),
+        },
       ],
     },
     {

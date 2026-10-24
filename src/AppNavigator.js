@@ -15,6 +15,7 @@ import CustomTransceiveScreen from './Screens/CustomTransceive';
 import NfcScriptEditorScreen from './Screens/NfcScriptEditor';
 import NfcScriptHelpScreen from './Screens/NfcScriptHelp';
 import Ntag21xMemoryScanScreen from './Screens/Ntag21xMemoryScan';
+import Type5MemoryScanScreen from './Screens/Type5MemoryScan';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
@@ -107,6 +108,11 @@ function Root() {
         name="Ntag21xMemoryScan"
         component={Ntag21xMemoryScanScreen}
         options={{title: tr('TYPE 2 MEMORY SCAN')}}
+      />
+      <RootStack.Screen
+        name="Type5MemoryScan"
+        component={Type5MemoryScanScreen}
+        options={{title: tr('ISO 15693 / NFC-V Inspector')}}
       />
     </RootStack.Navigator>
   );
