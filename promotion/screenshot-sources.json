@@ -1,0 +1,316 @@
+{
+  "capturedOn": "2026-10-24",
+  "releaseStatus": "Development snapshot; app-store versions may differ.",
+  "evidenceType": "Simulator UI previews with deterministic demo tag data; not physical NFC results.",
+  "processing": "Proportional downscaling to 720 px width and lossless PNG optimization only. No UI or text retouching.",
+  "captureEntry": "promotion/capture/entry.js",
+  "captureEntrySha256": "836356ad2fbfed05af72f4eef20691e3cf0a31d76975bd85472294b26097a3fe",
+  "assets": [
+    {
+      "file": "docs/assets/screenshots/en/scan.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/en/scan.png",
+      "sourceSha256": "e52a1dccdcf1af5e83e24da3d03f9125560afcc6b252976818e12891a5a4df17",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "en",
+      "scene": "scan",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/en/write.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/en/write.png",
+      "sourceSha256": "fe38d146588271f77c2fdb4398fc571457b82d586da6dba8f400de13ae338bf0",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "en",
+      "scene": "write",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/en/toolkit.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/en/toolkit.png",
+      "sourceSha256": "217c31970b03db542bf8855b0a55fe4cab7e2367f39463b13207cbbca8d427c3",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "en",
+      "scene": "toolkit",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/en/flow-editor.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/en/flow-editor.png",
+      "sourceSha256": "41a7157024f71bb68e81f6b69213a0d2cc2982b0f9adb4af76e07bfe4bf9814a",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "en",
+      "scene": "flow-editor",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/en/flow-trace.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/en/flow-trace.png",
+      "sourceSha256": "815de76b0c9c441ba68839781b6064345960f05f5cfd88f571e974dc44cd6a6d",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "en",
+      "scene": "flow-trace",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/en/memory.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/en/memory.png",
+      "sourceSha256": "ccd5ddd0de4f210d7ffe2095df8d6e16c4d3ceb67b35190573d4a88937199414",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "en",
+      "scene": "memory",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/zh-Hant/scan.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/zh-Hant/scan.png",
+      "sourceSha256": "ec847b3f4a13a8b5e9088c5e82862627ccb749296c467ea14075a52aaf77d8b5",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "zh-Hant",
+      "scene": "scan",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/zh-Hant/write.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/zh-Hant/write.png",
+      "sourceSha256": "815ef6917e261c1d1492d241a3523656c59186b536b3e97f0e056472c2700901",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "zh-Hant",
+      "scene": "write",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/zh-Hant/toolkit.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/zh-Hant/toolkit.png",
+      "sourceSha256": "12e8a38ab991e9dab650d2b4979050609482bc29cef2bc7c6b3de1219034c2a8",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "zh-Hant",
+      "scene": "toolkit",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/zh-Hant/flow-editor.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/zh-Hant/flow-editor.png",
+      "sourceSha256": "9659ccd837e5b5a917d12d740eccb1f8c48f120f62a736727fdca34e88ad6f44",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "zh-Hant",
+      "scene": "flow-editor",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/zh-Hant/flow-trace.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/zh-Hant/flow-trace.png",
+      "sourceSha256": "e67f2e5ffe0e85c34bdf1fa7a69d85b856f5ca5983752b88bc978b18bade1844",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "zh-Hant",
+      "scene": "flow-trace",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/zh-Hant/memory.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/zh-Hant/memory.png",
+      "sourceSha256": "970dfeb766ec78908bc8e321a101015c45522a108cd6683ed1ac134500eb3a2b",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "zh-Hant",
+      "scene": "memory",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/ja/scan.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/ja/scan.png",
+      "sourceSha256": "24d8a0e698aefe90226c6a49fb522de88919560f1fbf5c7be2c2dc8c50a400bb",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "ja",
+      "scene": "scan",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/ja/write.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/ja/write.png",
+      "sourceSha256": "cfdfaeb409d5de4707d14a9cd540647d3c9a9a10a780dd43d065ea1197d54f95",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "ja",
+      "scene": "write",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/ja/toolkit.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/ja/toolkit.png",
+      "sourceSha256": "4a072e595dd8dc7b082c910ba66c11b8a368042b48f3a7ae911333019899e9f6",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "ja",
+      "scene": "toolkit",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/ja/flow-editor.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/ja/flow-editor.png",
+      "sourceSha256": "6fa9b39c30ac4d05d5223e7ffee1435d1a399e1171ea7df24b396f32fb1199e9",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "ja",
+      "scene": "flow-editor",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/ja/flow-trace.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/ja/flow-trace.png",
+      "sourceSha256": "ddd5f7a13264d54769f82e6c7aed50d25959980b8dd4b657f6e10ae24dcf174e",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "ja",
+      "scene": "flow-trace",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    },
+    {
+      "file": "docs/assets/screenshots/ja/memory.png",
+      "localSource": "/private/tmp/nfc-promotion-capture/ja/memory.png",
+      "sourceSha256": "fd8a6ac9689258f917fdfe0adec2745b7abc93a5b0c28f59a5fd8d826cf8f6de",
+      "originalDimensions": [
+        1206,
+        2622
+      ],
+      "dimensions": [
+        720,
+        1565
+      ],
+      "device": "iPhone 17 Pro simulator",
+      "language": "ja",
+      "scene": "memory",
+      "scope": "Production UI with demo data. No physical NFC communication occurred."
+    }
+  ]
+}
