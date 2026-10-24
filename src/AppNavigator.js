@@ -71,7 +71,7 @@ function Root() {
       <RootStack.Screen
         name="MainTabs"
         component={HomeTabNav}
-        options={{headerShown: false}}
+        options={{headerShown: false, title: tr('NFC Reader/Writer')}}
       />
       <RootStack.Screen
         name="Settings"
