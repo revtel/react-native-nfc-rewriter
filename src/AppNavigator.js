@@ -59,7 +59,10 @@ function HomeTabNav() {
 function Root() {
   useTranslation();
   return (
-    <RootStack.Navigator initialRouteName="Landing">
+    <RootStack.Navigator
+      initialRouteName="Landing"
+      screenOptions={{headerBackButtonDisplayMode: 'minimal'}}
+    >
       <RootStack.Screen
         name="Landing"
         component={LandingScreen}
