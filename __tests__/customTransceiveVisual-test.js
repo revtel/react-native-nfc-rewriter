@@ -3,19 +3,23 @@ import {ScrollView, Text} from 'react-native';
 import renderer, {act} from 'react-test-renderer';
 import CustomTransceiveScreen from '../src/Screens/CustomTransceive';
 import CommandItem from '../src/Components/CustomCommandItem';
-import {NestableDraggableFlatList} from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import NfcProxy from '../src/NfcProxy';
 
 jest.mock('react-native-draggable-flatlist', () => {
   const {ScrollView: MockScrollView, View} = require('react-native');
   return {
-    NestableScrollContainer: MockScrollView,
-    NestableDraggableFlatList: ({data, renderItem, keyExtractor}) => (
-      <View>{data.map((item, index) => (
-        <View key={keyExtractor(item)}>
-          {renderItem({item, getIndex: () => index, drag: jest.fn(), isActive: false})}
-        </View>
-      ))}</View>
+    __esModule: true,
+    default: ({data, renderItem, keyExtractor, ListHeaderComponent, ListEmptyComponent}) => (
+      <MockScrollView>
+        {ListHeaderComponent}
+        {data.length === 0 && ListEmptyComponent}
+        {data.map((item, index) => (
+          <View key={keyExtractor(item)}>
+            {renderItem({item, getIndex: () => index, drag: jest.fn(), isActive: false})}
+          </View>
+        ))}
+      </MockScrollView>
     ),
   };
 });
@@ -79,6 +83,62 @@ test('Custom Transceive keeps Add and Execute controls and scrollable command li
   await act(async () => tree.unmount());
 });
 
+test('long command lists and responses keep execution controls outside scrolling content', async () => {
+  const commands = Array.from({length: 40}, (_, index) => ({
+    type: 'command',
+    payload: [0x30, index],
+  }));
+  const responses = commands.map(() => Array(256).fill(0xaa));
+  NfcProxy.customTransceiveNfcA.mockResolvedValue([true, responses]);
+  const tree = await render(
+    <CustomTransceiveScreen
+      route={{params: {savedRecord: {payload: {tech: 'NfcA', value: commands}}}}}
+      navigation={{goBack: jest.fn()}}
+    />,
+  );
+  const execute = () => tree.root.findAllByType('Button').find(
+    (node) => node.props.accessibilityLabel === 'Execute commands',
+  );
+  const scroll = tree.root.findAllByType(ScrollView).find(
+    (node) => !node.props.horizontal,
+  );
+  expect(scroll.findAllByType(CommandItem)).toHaveLength(40);
+  expect(scroll.findAllByType('Button')).toHaveLength(0);
+  expect(execute().props.disabled).toBe(false);
+
+  await act(async () => execute().props.onPress());
+  expect(NfcProxy.customTransceiveNfcA.mock.calls.at(-1)[0]).toEqual(commands);
+  expect(scroll.findAllByType(CommandItem).map((node) => node.props.resp)).toEqual(responses);
+  expect(scroll.findAllByType('Button')).toHaveLength(0);
+  await act(async () => tree.unmount());
+});
+
+test('long read-only configurations keep custom Execute outside scrolling content', async () => {
+  const onExecute = jest.fn();
+  const savedRecord = {
+    payload: {tech: 'NfcA', value: []},
+    parameters: Array.from({length: 30}, (_, index) => ({name: `Parameter ${index}`})),
+    description: 'Long workflow description. '.repeat(100),
+    onExecute,
+  };
+  const tree = await render(
+    <CustomTransceiveScreen
+      route={{params: {savedRecord, readOnly: true}}}
+      navigation={{goBack: jest.fn()}}
+    />,
+  );
+  const scroll = tree.root.findByType(ScrollView);
+  const execute = tree.root.findAllByType('Button').find(
+    (node) => node.props.accessibilityLabel === 'Execute commands',
+  );
+  expect(scroll.findAllByType('Button')).toHaveLength(30);
+  expect(scroll.findAllByType('Button')).not.toContain(execute);
+  expect(execute.props.disabled).toBe(false);
+  await act(async () => execute.props.onPress());
+  expect(onExecute).toHaveBeenCalledTimes(1);
+  await act(async () => tree.unmount());
+});
+
 test('read-only saved workflow retains command data and Execute but hides Add', async () => {
   const savedRecord = {name: 'Example', payload: {tech: 'NfcA', value: [{type: 'command', payload: [0x30, 0x00]}]}};
   const tree = await render(<CustomTransceiveScreen route={{params: {savedRecord, readOnly: true}}} navigation={{goBack: jest.fn()}} />);
@@ -100,7 +160,7 @@ test('drag reorder changes execution and saved order and clears stale responses'
   const savedRecord = {name: 'Reorder', payload: {tech: 'NfcA', value: commands}};
   NfcProxy.customTransceiveNfcA.mockResolvedValue([true, [[0xaa], [], [0xbb]]]);
   const tree = await render(<CustomTransceiveScreen route={{params: {savedRecord}}} navigation={{goBack: jest.fn()}} />);
-  const list = () => tree.root.findByType(NestableDraggableFlatList);
+  const list = () => tree.root.findByType(DraggableFlatList);
   const originalKeys = commands.map(list().props.keyExtractor);
   expect(new Set(originalKeys).size).toBe(3);
   const execute = () => tree.root.findAllByType('Button').find((node) => node.props.accessibilityLabel === 'Execute commands');

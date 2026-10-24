@@ -2,10 +2,7 @@ import {useTranslation} from 'react-i18next';
 import {translateText as tr} from '../../i18n';
 import React from 'react';
 import {Alert, StyleSheet, View, Text} from 'react-native';
-import {
-  NestableDraggableFlatList,
-  NestableScrollContainer,
-} from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import {SafeAreaView} from 'react-native-screens/experimental';
 import {Button} from 'react-native-paper';
 import CustomTransceiveModal from '../../Components/CustomTransceiveModal';
@@ -175,141 +172,147 @@ function CustomTransceiveScreen(props) {
         readOnly={readOnly}
       />
       <SafeAreaView edges={{bottom: true}} style={styles.wrapper}>
-        <NestableScrollContainer contentContainerStyle={styles.content}>
-          <Text style={styles.eyebrow}>{tr('NFC WORKBENCH')}</Text>
-          <Text style={styles.heading}>{tr('Custom Transceive')}</Text>
-          <Text style={styles.intro}>
-            {tr(
-              'Review commands and responses before running them against a tag.',
-            )}
-          </Text>
-          <View style={styles.techBadge}>
-            <Text style={styles.techBadgeText}>
-              {tr('TECH /')}
-              {nfcTech}
-            </Text>
-          </View>
-
-          {editableParameters ? (
+        <DraggableFlatList
+          containerStyle={styles.scroll}
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          data={editableParameters ? [] : commands}
+          ListHeaderComponent={
             <>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{tr('CONFIGURATIONS')}</Text>
-                {editableParameters.map((p, idx) => {
-                  const hexString = p.payload
-                    .map((b) => ('00' + b.toString(16)).slice(-2))
-                    .join(' ');
-                  return (
-                    <View
-                      key={`${readOnly ? p.name : p.name}-${idx}`}
-                      style={styles.parameterRow}
-                    >
-                      <Text style={styles.parameterName}>
-                        {readOnly ? tr(p.name) : p.name}
-                      </Text>
-                      <Button
-                        mode="outlined"
-                        accessibilityLabel={`Edit ${
-                          readOnly ? tr(p.name) : p.name
-                        }`}
-                        disabled={readOnly}
-                        onPress={() => {
-                          setShowCommandModal(true);
-                          setCurrEditParamIdx(idx);
-                        }}
-                      >
-                        {hexString || tr('update')}
-                      </Button>
-                    </View>
-                  );
-                })}
-              </View>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{tr('DESCRIPTION')}</Text>
-                <Text style={styles.description}>
-                  {(readOnly
-                    ? tr(params.savedRecord?.description)
-                    : params.savedRecord?.description) || tr('No description')}
-                </Text>
-              </View>
-            </>
-          ) : (
-            <View style={styles.commandSection}>
-              <Text style={styles.sectionTitle}>
-                {tr('COMMANDS ·')}
-                {commands.length}
+              <Text style={styles.eyebrow}>{tr('NFC WORKBENCH')}</Text>
+              <Text style={styles.heading}>{tr('Custom Transceive')}</Text>
+              <Text style={styles.intro}>
+                {tr(
+                  'Review commands and responses before running them against a tag.',
+                )}
               </Text>
-              {commands.length === 0 ? (
-                <Text style={styles.emptyText}>
-                  {tr('No commands yet. Add one to begin.')}
+              <View style={styles.techBadge}>
+                <Text style={styles.techBadgeText}>
+                  {tr('TECH /')}
+                  {nfcTech}
                 </Text>
-              ) : (
-                <NestableDraggableFlatList
-                  data={commands}
-                  keyExtractor={commandKey}
-                  onDragEnd={({from, to}) => {
-                    if (from !== to) {
-                      setCommands((current) => moveCommand(current, from, to));
-                      setResponses([]);
-                    }
-                  }}
-                  renderItem={({item: cmd, getIndex, drag, isActive}) => {
-                    const idx = getIndex();
-                    if (idx === undefined) {
-                      return null;
-                    }
-                    return (
-                      <CommandItem
-                        cmd={cmd}
-                        resp={responses[idx]}
-                        onDrag={drag}
-                        isActive={isActive}
-                        onMoveUp={
-                          commands.length > 1 &&
-                          idx > 0 &&
-                          (() => moveCommandUp(idx))
-                        }
-                        onMoveDown={
-                          commands.length > 1 &&
-                          idx < commands.length - 1 &&
-                          (() => moveCommandDown(idx))
-                        }
-                        onDelete={() => deleteCommand(idx)}
-                        onEdit={() => {
-                          setShowCommandModal(true);
-                          setCurrEditIdx(idx);
-                        }}
-                        readOnly={readOnly}
-                      />
-                    );
-                  }}
-                />
-              )}
-            </View>
-          )}
+              </View>
 
-          <View style={styles.actionBar}>
-            {!readOnly && (
-              <Button
-                mode="outlined"
-                style={styles.addButton}
-                contentStyle={styles.actionContent}
-                accessibilityLabel={tr('Add command')}
-                onPress={() => setShowCommandModal(true)}
-              >
-                {tr('ADD COMMAND')}
-              </Button>
-            )}
+              {editableParameters ? (
+                <>
+                  <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>
+                      {tr('CONFIGURATIONS')}
+                    </Text>
+                    {editableParameters.map((p, idx) => {
+                      const hexString = p.payload
+                        .map((b) => ('00' + b.toString(16)).slice(-2))
+                        .join(' ');
+                      return (
+                        <View
+                          key={`${readOnly ? p.name : p.name}-${idx}`}
+                          style={styles.parameterRow}
+                        >
+                          <Text style={styles.parameterName}>
+                            {readOnly ? tr(p.name) : p.name}
+                          </Text>
+                          <Button
+                            mode="outlined"
+                            accessibilityLabel={`Edit ${
+                              readOnly ? tr(p.name) : p.name
+                            }`}
+                            disabled={readOnly}
+                            onPress={() => {
+                              setShowCommandModal(true);
+                              setCurrEditParamIdx(idx);
+                            }}
+                          >
+                            {hexString || tr('update')}
+                          </Button>
+                        </View>
+                      );
+                    })}
+                  </View>
+                  <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{tr('DESCRIPTION')}</Text>
+                    <Text style={styles.description}>
+                      {(readOnly
+                        ? tr(params.savedRecord?.description)
+                        : params.savedRecord?.description) ||
+                        tr('No description')}
+                    </Text>
+                  </View>
+                </>
+              ) : (
+                <View style={styles.commandSection}>
+                  <Text style={styles.sectionTitle}>
+                    {tr('COMMANDS ·')}
+                    {commands.length}
+                  </Text>
+                </View>
+              )}
+            </>
+          }
+          ListEmptyComponent={
+            !editableParameters ? (
+              <Text style={styles.emptyText}>
+                {tr('No commands yet. Add one to begin.')}
+              </Text>
+            ) : null
+          }
+          keyExtractor={commandKey}
+          onDragEnd={({from, to}) => {
+            if (from !== to) {
+              setCommands((current) => moveCommand(current, from, to));
+              setResponses([]);
+            }
+          }}
+          renderItem={({item: cmd, getIndex, drag, isActive}) => {
+            const idx = getIndex();
+            if (idx === undefined) {
+              return null;
+            }
+            return (
+              <CommandItem
+                cmd={cmd}
+                resp={responses[idx]}
+                onDrag={drag}
+                isActive={isActive}
+                onMoveUp={
+                  commands.length > 1 && idx > 0 && (() => moveCommandUp(idx))
+                }
+                onMoveDown={
+                  commands.length > 1 &&
+                  idx < commands.length - 1 &&
+                  (() => moveCommandDown(idx))
+                }
+                onDelete={() => deleteCommand(idx)}
+                onEdit={() => {
+                  setShowCommandModal(true);
+                  setCurrEditIdx(idx);
+                }}
+                readOnly={readOnly}
+              />
+            );
+          }}
+        />
+        <View style={styles.actionBar}>
+          {!readOnly && (
             <Button
-              mode="contained"
-              disabled={commands.length === 0 && !hasCustomExecuteFunc}
+              mode="outlined"
+              style={styles.addButton}
               contentStyle={styles.actionContent}
-              accessibilityLabel={tr('Execute commands')}
-              onPress={executeCommands}
+              accessibilityLabel={tr('Add command')}
+              onPress={() => setShowCommandModal(true)}
             >
-              {tr('EXECUTE')}
+              {tr('ADD COMMAND')}
             </Button>
-          </View>
-        </NestableScrollContainer>
+          )}
+          <Button
+            mode="contained"
+            disabled={commands.length === 0 && !hasCustomExecuteFunc}
+            contentStyle={styles.actionContent}
+            accessibilityLabel={tr('Execute commands')}
+            onPress={executeCommands}
+          >
+            {tr('EXECUTE')}
+          </Button>
+        </View>
       </SafeAreaView>
 
       <CustomTransceiveModal
@@ -332,10 +335,11 @@ function CustomTransceiveScreen(props) {
 function createStyles(colors, spacing, type) {
   return StyleSheet.create({
     wrapper: {flex: 1, backgroundColor: colors.background},
+    scroll: {flex: 1, minHeight: 0},
     content: {
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xl,
-      paddingBottom: spacing.xxl + spacing.xl,
+      paddingBottom: spacing.lg,
     },
     eyebrow: {
       color: colors.accent,
@@ -402,7 +406,15 @@ function createStyles(colors, spacing, type) {
       borderWidth: 1,
       borderRadius: 12,
     },
-    actionBar: {gap: spacing.md, marginTop: spacing.sm},
+    actionBar: {
+      flexShrink: 0,
+      gap: spacing.md,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.background,
+      borderTopColor: colors.border,
+      borderTopWidth: StyleSheet.hairlineWidth,
+    },
     addButton: {borderColor: colors.accent},
     actionContent: {minHeight: 48},
   });
