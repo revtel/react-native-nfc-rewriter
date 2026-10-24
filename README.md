@@ -58,6 +58,27 @@
 The NFC library is powered by <a href="https://github.com/facebook/react-native">react-native</a> as well as <a href="https://github.com/whitedogg13/react-native-nfc-manager">react-native-nfc-manager</a>
 </p>
 
+## Development
+
+Use Node.js 22.11 or newer and npm 10.9.7. `package-lock.json` is the
+project's only dependency lockfile; install with `npm ci`.
+
+The postinstall script repairs the Node-only React DevTools standalone bundle
+to load the patched npm versions of `ws` and `shell-quote`. The React Native
+backend stays on 6.1.5. Source and output hashes guard this compatibility patch;
+review or remove it when upgrading `react-devtools-core`. Do not skip install
+scripts when using standalone DevTools.
+
+The dependency fixes follow the upstream [shell-quote advisory](https://github.com/advisories/GHSA-pqg4-j6r4-53mv)
+and [ws advisory](https://github.com/advisories/GHSA-96hv-2xvq-fx4p).
+
+Run `npm test` for unit tests and `npm start` for Metro. Use `npm run ios` or
+`npm run android` to build and launch the app locally.
+
+Run `npm run test:dependency-security` after changing the DevTools compatibility
+patch or its dependencies. It checks shell escaping and bounded WebSocket input
+using the dependency exports from the patched standalone bundle.
+
 ## Features
 
 - Read NFC tags

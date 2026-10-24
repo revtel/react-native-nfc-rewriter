@@ -1,0 +1,108 @@
+{
+  "version": "6.1.5",
+  "codeSha256": "83ee56e2e867720123418336f83f1aea6c40a5d8c582da22f09e07d58d8bbce0",
+  "mapSha256": "8679428cfa8dcd725fb5a5d837d44a9078c6fe27c01dfddffc9e808f9f405bae",
+  "patchedCodeSha256": "b7f2f70c5fcaa2d8e759e602279b665d36e72b852e7b18986c2087245f9ce231",
+  "patchedMapSha256": "f79dfa03fdb69951b86032490be6eb6da5761695280308c644890b41429e3a4a",
+  "sourceIndices": [33, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52],
+  "modules": [
+    {
+      "id": 8923,
+      "start": 438021,
+      "end": 439926,
+      "source": "webpack://react-devtools-core/../../node_modules/shell-quote/index.js",
+      "external": "shell-quote"
+    },
+    {
+      "id": 7198,
+      "start": 449532,
+      "end": 449667,
+      "source": "webpack://react-devtools-core/./node_modules/ws/index.js",
+      "external": "ws"
+    },
+    {
+      "id": 8240,
+      "start": 449673,
+      "end": 450650,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/buffer-util.js",
+      "external": null
+    },
+    {
+      "id": 3647,
+      "start": 450656,
+      "end": 450889,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/constants.js",
+      "external": null
+    },
+    {
+      "id": 2700,
+      "start": 450895,
+      "end": 451894,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/event-target.js",
+      "external": null
+    },
+    {
+      "id": 4238,
+      "start": 451900,
+      "end": 454298,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/extension.js",
+      "external": null
+    },
+    {
+      "id": 4947,
+      "start": 454304,
+      "end": 454634,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/limiter.js",
+      "external": null
+    },
+    {
+      "id": 5339,
+      "start": 454640,
+      "end": 460212,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/permessage-deflate.js",
+      "external": null
+    },
+    {
+      "id": 1613,
+      "start": 460218,
+      "end": 466311,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/receiver.js",
+      "external": null
+    },
+    {
+      "id": 4675,
+      "start": 466317,
+      "end": 469674,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/sender.js",
+      "external": null
+    },
+    {
+      "id": 5033,
+      "start": 469680,
+      "end": 471237,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/stream.js",
+      "external": null
+    },
+    {
+      "id": 6096,
+      "start": 471243,
+      "end": 472036,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/validation.js",
+      "external": null
+    },
+    {
+      "id": 629,
+      "start": 472041,
+      "end": 476387,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/websocket-server.js",
+      "external": null
+    },
+    {
+      "id": 8754,
+      "start": 476393,
+      "end": 487668,
+      "source": "webpack://react-devtools-core/./node_modules/ws/lib/websocket.js",
+      "external": null
+    }
+  ]
+}
