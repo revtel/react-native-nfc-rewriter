@@ -45,7 +45,10 @@ test('does not infer an NFC Forum format from observed transports or a UID', () 
   expect(isoDep.tools).toEqual([
     {id: 'iso-dep-transceive', screen: 'CustomTransceive', params: {nfcTech: 'IsoDep'}},
     {id: 'iso-dep-script', screen: 'NfcScriptEditor', params: {nfcTech: 'IsoDep'}},
+    {id: 'type4-ndef-inspector', screen: 'Type4NdefScan'},
   ]);
+  expect(isoDep.limitations).toContain('type4-format-unconfirmed');
+  expect(isoDep.capabilities).not.toContain('type4');
 });
 
 test('Type 2 inspector requires exact positive Android metadata', () => {

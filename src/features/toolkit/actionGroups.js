@@ -208,6 +208,12 @@ function getToolkitActionGroups({
           onPress: () => navigate(customTransceiveRoute('IsoDep')),
         },
         {
+          title: 'Type 4 NDEF / APDU Inspector',
+          description: 'Inspect the standard NDEF application, files, and APDU evidence',
+          left: NfcIcons.NfcIcon,
+          onPress: () => navigate({screen: 'Type4NdefScan'}),
+        },
+        {
           title: 'Flow Script',
           description: 'Build a response-driven ISO-DEP workflow',
           left: NfcIcons.TransceiveIcon,

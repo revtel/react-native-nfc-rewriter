@@ -16,6 +16,7 @@ import NfcScriptEditorScreen from './Screens/NfcScriptEditor';
 import NfcScriptHelpScreen from './Screens/NfcScriptHelp';
 import Ntag21xMemoryScanScreen from './Screens/Ntag21xMemoryScan';
 import Type5MemoryScanScreen from './Screens/Type5MemoryScan';
+import Type4NdefScanScreen from './Screens/Type4NdefScan';
 import SettingsScreen from './Screens/Settings';
 import SavedRecordScreen from './Screens/SavedRecord';
 import NfcPromptAndroid from './Components/NfcPromptAndroid';
@@ -113,6 +114,11 @@ function Root() {
         name="Type5MemoryScan"
         component={Type5MemoryScanScreen}
         options={{title: tr('ISO 15693 / NFC-V Inspector')}}
+      />
+      <RootStack.Screen
+        name="Type4NdefScan"
+        component={Type4NdefScanScreen}
+        options={{title: tr('Type 4 NDEF / APDU Inspector')}}
       />
     </RootStack.Navigator>
   );

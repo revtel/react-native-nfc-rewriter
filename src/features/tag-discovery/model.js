@@ -36,6 +36,8 @@ function createTagDiscovery(tag, platform) {
     capabilities.push('iso-dep');
     tools.push(transportTool('iso-dep-transceive', 'CustomTransceive', 'IsoDep'));
     tools.push(transportTool('iso-dep-script', 'NfcScriptEditor', 'IsoDep'));
+    tools.push({id: 'type4-ndef-inspector', screen: 'Type4NdefScan'});
+    limitations.push('type4-format-unconfirmed');
   }
   if (has('NfcV')) {
     capabilities.push('iso15693');

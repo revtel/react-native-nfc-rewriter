@@ -13,6 +13,15 @@ jest.mock('../src/Components/NfcIcons', () => ({
 import {getToolkitActionGroups} from '../src/features/toolkit/actionGroups';
 
 describe('toolkit actions', () => {
+  it('opens Type4 inspection from ISO-DEP without executing NFC', () => {
+    const navigation = {navigate: jest.fn()};
+    const nfc = {scanType4Ndef: jest.fn()};
+    const actions = getToolkitActionGroups({navigation, nfc}).find(({title}) => title === 'IsoDep').actions;
+    actions.find(({title}) => title === 'Type 4 NDEF / APDU Inspector').onPress();
+    expect(navigation.navigate).toHaveBeenCalledWith('Type4NdefScan', undefined);
+    expect(nfc.scanType4Ndef).not.toHaveBeenCalled();
+    expect(actions.map(({title}) => title)).toContain('Flow Script');
+  });
   it('keeps groups declarative and Android-only format conditional', () => {
     const navigation = {navigate: jest.fn()};
     const iosGroups = getToolkitActionGroups({

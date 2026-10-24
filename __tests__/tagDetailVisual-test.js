@@ -22,6 +22,18 @@ async function render(tag) {
   return tree;
 }
 
+test('ISO-DEP offers Type4 inspection without claiming its format or passing discovery data', async () => {
+  const navigation = {navigate: jest.fn()};
+  let tree;
+  await act(async () => { tree = renderer.create(<TagDetailScreen navigation={navigation} route={{params: {tag: {tech: 'IsoDep', id: 'stale-id'}}}} />); });
+  const tool = tree.root.findAllByType(TouchableOpacity).find((node) => node.props.accessibilityLabel === 'Type 4 NDEF / APDU Inspector');
+  expect(navigation.navigate).not.toHaveBeenCalled();
+  await act(async () => tool.props.onPress());
+  expect(navigation.navigate).toHaveBeenCalledWith('Type4NdefScan', undefined);
+  expect(tree.root.findAllByType(Text).map((node) => node.props.children)).toContain('ISO-DEP alone does not confirm Type 4 formatting. The inspector checks NDEF application and file evidence.');
+  await act(async () => tree.unmount());
+});
+
 test('Tag Detail presents selectable long UID and raw data in grouped scrollable sections', async () => {
   const tag = {
     id: 'AABBCCDDEEFF00112233445566778899',

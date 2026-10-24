@@ -22,12 +22,14 @@ const TOOL_LABELS = {
   'nfc-a-script': 'NFC-A Flow Script',
   'iso-dep-transceive': 'Custom ISO-DEP Transceive',
   'iso-dep-script': 'ISO-DEP Flow Script',
+  'type4-ndef-inspector': 'Type 4 NDEF / APDU Inspector',
   'nfc-v-transceive': 'Custom NFC-V Transceive',
   'iso15693-inspector': 'ISO 15693 / NFC-V Inspector',
   'type2-memory': 'Type 2 Memory Scan',
 };
 
 const LIMITATION_TEXT = {
+  'type4-format-unconfirmed': 'ISO-DEP alone does not confirm Type 4 formatting. The inspector checks NDEF application and file evidence.',
   'ios-detection-allowlists': 'iOS discovery is limited by the app’s configured ISO-DEP application identifiers and FeliCa system codes.',
   'type5-format-unconfirmed': 'Type 5 formatting is unconfirmed. The inspector checks available CC evidence.',
 };

@@ -18,6 +18,7 @@ import {
 } from './services/nfc/transceiveService';
 import {scanType2Memory} from './services/nfc/type2ScanService';
 import {scanType5Memory} from './services/nfc/type5ScanService';
+import {scanType4Ndef} from './services/nfc/type4ScanService';
 import {runNfcScript} from './services/nfc/scriptService';
 
 class ErrSuccess extends Error {}
@@ -60,6 +61,8 @@ class NfcProxy {
   scanType2Memory = scanType2Memory;
 
   scanType5Memory = scanType5Memory;
+
+  scanType4Ndef = scanType4Ndef;
 
   runNfcScript = runNfcScript;
 }

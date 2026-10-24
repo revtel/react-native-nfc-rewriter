@@ -2518,5 +2518,395 @@
     "iOS may read NDEF while obtaining the tag identifier. The block limits apply only to this inspector’s raw reads.",
     "iOS 在取得標籤識別碼時可能會讀取 NDEF。區塊限制僅適用於此檢視器發送的原始讀取指令。",
     "iOS はタグ識別子の取得時に NDEF を読み取る場合があります。ブロック制限は、このインスペクターが送信する未加工の読み取りコマンドにのみ適用されます。"
+  ],
+  "type4.type_4_ndef_apdu_inspector": [
+    "Type 4 NDEF / APDU Inspector",
+    "Type 4 NDEF／APDU 檢視器",
+    "Type 4 NDEF / APDU インスペクター"
+  ],
+  "type4.inspect_the_standard_ndef_application_files_and_apdu_evidence": [
+    "Inspect the standard NDEF application, files, and APDU evidence",
+    "檢視標準 NDEF 應用程式、檔案與 APDU 證據",
+    "標準 NDEF アプリケーション、ファイル、APDU の証拠を検査"
+  ],
+  "type4.iso_dep_alone_does_not_confirm_type_4_formatting_the_inspector_checks_ndef_application_and": [
+    "ISO-DEP alone does not confirm Type 4 formatting. The inspector checks NDEF application and file evidence.",
+    "僅有 ISO-DEP 無法確認 Type 4 格式；檢視器會檢查 NDEF 應用程式與檔案證據。",
+    "ISO-DEP だけでは Type 4 形式を確認できません。インスペクターで NDEF アプリケーションとファイルの証拠を確認します。"
+  ],
+  "type4.ios_can_automatically_select_configured_applications_before_this_inspector_sends_its_first": [
+    "iOS can automatically SELECT configured applications before this inspector sends its first APDU.",
+    "在檢視器發送第一個 APDU 之前，iOS 可能已自動 SELECT 設定的應用程式。",
+    "インスペクターが最初の APDU を送信する前に、iOS が設定されたアプリケーションを自動 SELECT する場合があります。"
+  ],
+  "type4.the_transcript_contains_app_controlled_apdus_only_it_is_not_a_complete_rf_trace": [
+    "The transcript contains app-controlled APDUs only; it is not a complete RF trace.",
+    "此紀錄僅包含 App 控制的 APDU，並非完整的 RF 通訊追蹤。",
+    "この記録にはアプリが制御する APDU のみが含まれ、完全な RF 通信トレースではありません。"
+  ],
+  "type4.reads_are_sequential_equal_initial_and_final_nlen_confirms_only_equal_lengths_not_an_atomi": [
+    "Reads are sequential. Equal initial and final NLEN confirms only equal lengths, not an atomic snapshot, unchanged content, or authenticity.",
+    "資料依序讀取。前後 NLEN 相等僅確認長度相同，不代表原子快照、內容未變或真實性驗證。",
+    "読み取りは順次行われます。最初と最後の NLEN が同じでも、長さが等しいことだけを示し、アトミックなスナップショット、内容の不変性、真正性を保証しません。"
+  ],
+  "type4.declared_ndef_bytes_acquired": [
+    "Declared NDEF bytes acquired",
+    "已取得宣告的 NDEF 位元組",
+    "宣言された NDEF バイトを取得済み"
+  ],
+  "type4.supported_cc": [
+    "Supported CC",
+    "支援的 CC",
+    "対応する CC"
+  ],
+  "type4.selected": [
+    "Selected",
+    "已選擇",
+    "選択済み"
+  ],
+  "type4.rejected": [
+    "Rejected",
+    "遭拒絕",
+    "拒否"
+  ],
+  "type4.not_attempted": [
+    "Not attempted",
+    "尚未嘗試",
+    "未試行"
+  ],
+  "type4.not_checked": [
+    "Not checked",
+    "尚未檢查",
+    "未確認"
+  ],
+  "type4.initial_and_final_lengths_are_equal": [
+    "Initial and final lengths are equal",
+    "前後長度相同",
+    "最初と最後の長さが一致"
+  ],
+  "type4.nlen_changed_during_inspection": [
+    "NLEN changed during inspection",
+    "檢視期間 NLEN 改變",
+    "検査中に NLEN が変化"
+  ],
+  "type4.length_recheck_failed": [
+    "Length recheck failed",
+    "長度複查失敗",
+    "長さの再確認に失敗"
+  ],
+  "type4.no_file_bytes_read": [
+    "No file bytes read",
+    "未讀取檔案位元組",
+    "ファイルバイト未読み取り"
+  ],
+  "type4.cc_evidence_only": [
+    "CC evidence only",
+    "僅有 CC 證據",
+    "CC の証拠のみ"
+  ],
+  "type4.standard_ndef_file": [
+    "Standard NDEF file",
+    "標準 NDEF 檔案",
+    "標準 NDEF ファイル"
+  ],
+  "type4.connecting": [
+    "Connecting...",
+    "正在連線…",
+    "接続中…"
+  ],
+  "type4.selecting_ndef_application": [
+    "Selecting NDEF application...",
+    "正在選擇 NDEF 應用程式…",
+    "NDEF アプリケーションを選択中…"
+  ],
+  "type4.selecting_cc_file": [
+    "Selecting CC file...",
+    "正在選擇 CC 檔案…",
+    "CC ファイルを選択中…"
+  ],
+  "type4.reading_cc": [
+    "Reading CC...",
+    "正在讀取 CC…",
+    "CC を読み取り中…"
+  ],
+  "type4.selecting_ndef_file": [
+    "Selecting NDEF file...",
+    "正在選擇 NDEF 檔案…",
+    "NDEF ファイルを選択中…"
+  ],
+  "type4.reading_nlen": [
+    "Reading NLEN...",
+    "正在讀取 NLEN…",
+    "NLEN を読み取り中…"
+  ],
+  "type4.reading_ndef_payload": [
+    "Reading NDEF payload...",
+    "正在讀取 NDEF 負載…",
+    "NDEF ペイロードを読み取り中…"
+  ],
+  "type4.comparing_final_nlen": [
+    "Comparing final NLEN...",
+    "正在比較最終 NLEN…",
+    "最終 NLEN を比較中…"
+  ],
+  "type4.terminal_status_word": [
+    "Terminal status word",
+    "終止流程的狀態字",
+    "処理を終了するステータスワード"
+  ],
+  "type4.communication_failure": [
+    "Communication failure",
+    "通訊失敗",
+    "通信失敗"
+  ],
+  "type4.malformed_response": [
+    "Malformed response",
+    "回應格式錯誤",
+    "不正な応答"
+  ],
+  "type4.nlen_exceeds_the_file_capacity": [
+    "NLEN exceeds the file capacity",
+    "NLEN 超過檔案容量",
+    "NLEN がファイル容量を超過"
+  ],
+  "type4.read_planned_ndef_bytes_verified_commands_app_apdus": [
+    "{{read}} / {{planned}} NDEF bytes verified · {{commands}} app APDUs",
+    "已驗證 {{read}}／{{planned}} 個 NDEF 位元組・{{commands}} 個 App APDU",
+    "{{read}} / {{planned}} NDEF バイト検証済み・{{commands}} アプリ APDU"
+  ],
+  "type4.limits_bytes_payload_bytes_cc_cc_bytes_commands_apdus_chunk_bytes_per_read": [
+    "Limits: {{bytes}} payload bytes · {{cc}} CC bytes · {{commands}} APDUs · {{chunk}} bytes per read",
+    "限制：{{bytes}} 個負載位元組・{{cc}} 個 CC 位元組・{{commands}} 個 APDU・每次讀取 {{chunk}} 位元組",
+    "制限：ペイロード {{bytes}} バイト・CC {{cc}} バイト・{{commands}} APDU・1 回 {{chunk}} バイト"
+  ],
+  "type4.verified_cc_bytes": [
+    "Verified CC bytes",
+    "已驗證的 CC 位元組",
+    "検証済み CC バイト"
+  ],
+  "type4.verified_file_bytes_cc_nlen_payload": [
+    "Verified file bytes (CC + NLEN + payload)",
+    "已驗證的檔案位元組（CC＋NLEN＋負載）",
+    "検証済みファイルバイト（CC + NLEN + ペイロード）"
+  ],
+  "type4.failed_phase": [
+    "Failed phase",
+    "失敗階段",
+    "失敗した段階"
+  ],
+  "type4.file_identifier": [
+    "File identifier",
+    "檔案識別碼",
+    "ファイル識別子"
+  ],
+  "type4.file_offset": [
+    "File offset",
+    "檔案位移",
+    "ファイルオフセット"
+  ],
+  "type4.the_cause_is_not_inferred_no_later_apdu_was_sent": [
+    "The cause is not inferred. No later APDU was sent.",
+    "無法據此推斷原因；未發送後續 APDU。",
+    "原因は推測しません。後続の APDU は送信していません。"
+  ],
+  "type4.ndef_application_cc": [
+    "NDEF APPLICATION / CC",
+    "NDEF 應用程式／CC",
+    "NDEF アプリケーション / CC"
+  ],
+  "type4.application_selection": [
+    "Application selection",
+    "應用程式選擇",
+    "アプリケーション選択"
+  ],
+  "type4.cc_interpretation": [
+    "CC interpretation",
+    "CC 解析",
+    "CC 解析結果"
+  ],
+  "type4.file_descriptor_number": [
+    "File descriptor {{number}}",
+    "檔案描述項 {{number}}",
+    "ファイル記述子 {{number}}"
+  ],
+  "type4.ndef_file_length_comparison": [
+    "NDEF FILE / LENGTH COMPARISON",
+    "NDEF 檔案／長度比較",
+    "NDEF ファイル / 長さ比較"
+  ],
+  "type4.file_selected": [
+    "File selected",
+    "檔案已選擇",
+    "ファイル選択済み"
+  ],
+  "type4.yes": [
+    "Yes",
+    "是",
+    "はい"
+  ],
+  "type4.maximum_file_size_including_nlen": [
+    "Maximum file size (including NLEN)",
+    "檔案大小上限（含 NLEN）",
+    "最大ファイルサイズ（NLEN を含む）"
+  ],
+  "type4.read_access_byte": [
+    "Read access byte",
+    "讀取權限位元組",
+    "読み取りアクセスバイト"
+  ],
+  "type4.write_access_byte": [
+    "Write access byte",
+    "寫入權限位元組",
+    "書き込みアクセスバイト"
+  ],
+  "type4.initial_nlen": [
+    "Initial NLEN",
+    "初始 NLEN",
+    "最初の NLEN"
+  ],
+  "type4.initial_nlen_bytes": [
+    "Initial NLEN bytes",
+    "初始 NLEN 位元組",
+    "最初の NLEN バイト"
+  ],
+  "type4.final_nlen": [
+    "Final NLEN",
+    "最終 NLEN",
+    "最終 NLEN"
+  ],
+  "type4.final_nlen_bytes": [
+    "Final NLEN bytes",
+    "最終 NLEN 位元組",
+    "最終 NLEN バイト"
+  ],
+  "type4.length_comparison": [
+    "Length comparison",
+    "長度比較",
+    "長さ比較"
+  ],
+  "type4.ndef_interpretation": [
+    "NDEF INTERPRETATION",
+    "NDEF 解析",
+    "NDEF 解析結果"
+  ],
+  "type4.interpretation": [
+    "Interpretation",
+    "解析結果",
+    "解析結果"
+  ],
+  "type4.verified_ndef_payload": [
+    "VERIFIED NDEF PAYLOAD",
+    "已驗證的 NDEF 負載",
+    "検証済み NDEF ペイロード"
+  ],
+  "type4.no_verified_payload_bytes": [
+    "No verified payload bytes",
+    "沒有已驗證的負載位元組",
+    "検証済みペイロードバイトなし"
+  ],
+  "type4.file_offset_offset_bytes_bytes": [
+    "File offset {{offset}} · {{bytes}} bytes",
+    "檔案位移 {{offset}}・{{bytes}} 位元組",
+    "ファイルオフセット {{offset}}・{{bytes}} バイト"
+  ],
+  "type4.apdu_number_phase_outcome_show_or_hide_full_exchange": [
+    "APDU {{number}}: {{phase}}; {{outcome}}. Show or hide full exchange.",
+    "APDU {{number}}：{{phase}}；{{outcome}}。顯示或隱藏完整通訊。",
+    "APDU {{number}}：{{phase}}、{{outcome}}。通信の詳細を表示または非表示にします。"
+  ],
+  "type4.command_apdu": [
+    "Command APDU",
+    "指令 APDU",
+    "コマンド APDU"
+  ],
+  "type4.response_data": [
+    "Response data",
+    "回應資料",
+    "応答データ"
+  ],
+  "type4.requested_bytes": [
+    "Requested bytes",
+    "要求的位元組數",
+    "要求バイト数"
+  ],
+  "type4.original_response_length": [
+    "Original response length",
+    "原始回應長度",
+    "元の応答長"
+  ],
+  "type4.inspect_mapping_2_0_ndef_application_and_file_evidence_with_bounded_select_read_binary_com": [
+    "Inspect mapping 2.0 NDEF application and file evidence with bounded SELECT / READ BINARY commands.",
+    "使用範圍受限的 SELECT／READ BINARY 指令，檢視映射 2.0 NDEF 應用程式與檔案證據。",
+    "範囲を制限した SELECT / READ BINARY コマンドで、マッピング 2.0 の NDEF アプリケーションとファイルの証拠を検査します。"
+  ],
+  "type4.start_type_4_ndef_inspection": [
+    "Start Type 4 NDEF inspection",
+    "開始 Type 4 NDEF 檢視",
+    "Type 4 NDEF 検査を開始"
+  ],
+  "type4.cancel_type_4_ndef_inspection": [
+    "Cancel Type 4 NDEF inspection",
+    "取消 Type 4 NDEF 檢視",
+    "Type 4 NDEF 検査をキャンセル"
+  ],
+  "type4.bytes_ndef_bytes_verified_commands_app_apdus": [
+    "{{bytes}} NDEF bytes verified · {{commands}} app APDUs",
+    "已驗證 {{bytes}} 個 NDEF 位元組・{{commands}} 個 App APDU",
+    "{{bytes}} NDEF バイト検証済み・{{commands}} アプリ APDU"
+  ],
+  "type4.app_apdu_transcript": [
+    "APP APDU TRANSCRIPT",
+    "APP APDU 通訊紀錄",
+    "アプリ APDU 通信記録"
+  ],
+  "type4.tap_each_exchange_to_inspect_its_full_command_response_status_word_and_diagnostic": [
+    "Tap each exchange to inspect its full command, response, status word, and diagnostic.",
+    "點擊各筆通訊以檢視完整指令、回應、狀態字與診斷資訊。",
+    "各通信をタップすると、コマンド、応答、ステータスワード、診断情報の全体を確認できます。"
+  ],
+  "type4.diagnostic_shortened_from_length_characters": [
+    "Diagnostic shortened from {{length}} characters.",
+    "診斷資訊已從 {{length}} 個字元縮短。",
+    "診断情報は元の {{length}} 文字から短縮されています。"
+  ],
+  "type4.show_all_payload_bytes": [
+    "SHOW ALL PAYLOAD BYTES",
+    "顯示所有負載位元組",
+    "すべてのペイロードバイトを表示"
+  ],
+  "type4.hide_payload_bytes": [
+    "HIDE PAYLOAD BYTES",
+    "隱藏負載位元組",
+    "ペイロードバイトを非表示"
+  ],
+  "type4.incomplete_response_evidence": [
+    "Incomplete response evidence; only the available bounded prefix is retained.",
+    "回應證據不完整；僅保留可取得且在限制內的前綴。",
+    "応答の証拠が不完全です。取得できた制限内の先頭部分のみを保持しています。"
+  ],
+  "type4.show_all_ndef_records": [
+    "SHOW ALL NDEF RECORDS",
+    "顯示所有 NDEF 紀錄",
+    "すべての NDEF レコードを表示"
+  ],
+  "type4.hide_ndef_records": [
+    "HIDE NDEF RECORDS",
+    "隱藏 NDEF 紀錄",
+    "NDEF レコードを非表示"
+  ],
+  "type4.read_only_effects_short": [
+    "Read-only commands may change selection, session state, or read counters.",
+    "唯讀指令仍可能改變選擇狀態、工作階段或讀取計數器。",
+    "読み取り専用コマンドでも、選択状態、セッション状態、読み取りカウンターが変わる場合があります。"
+  ],
+  "type4.platform_and_trace_details": [
+    "Platform and trace details",
+    "平台與通訊紀錄說明",
+    "プラットフォームと通信記録の詳細"
+  ],
+  "type4.no_sdm_validation": [
+    "This inspection does not validate SDM.",
+    "此檢視不驗證 SDM。",
+    "この検査は SDM を検証しません。"
   ]
 }
