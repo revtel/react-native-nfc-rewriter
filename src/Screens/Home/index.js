@@ -20,7 +20,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SafeAreaView} from 'react-native-screens/experimental';
 import {parseShareDeepLink} from '../../features/home/deepLink';
 import {useNfcAvailability} from '../../features/home/useNfcAvailability';
-import {useTagScan} from '../../features/home/useTagScan';
 import {useTagExplore} from '../../features/home/useTagExplore';
 import {useTagActions} from '../../features/home/useTagActions';
 import {useVisualTheme} from '../../visual/theme';
@@ -43,7 +42,6 @@ function HomeScreen(props) {
   useTranslation();
   const {navigation} = props;
   const {enabled, refresh: refreshNfcAvailability} = useNfcAvailability();
-  const scanTag = useTagScan(navigation);
   const {explore, exploring, cancel: cancelExplore} = useTagExplore(navigation);
   const {busy, run: runTagAction} = useTagActions(navigation);
   const {colors, spacing, type, isDark} = useVisualTheme();
@@ -128,7 +126,9 @@ function HomeScreen(props) {
           <View style={styles.hero}>
             <Text style={styles.title}>{tr('SCAN TAG')}</Text>
             <Text style={styles.subtitle}>
-              {tr('Hold your device near an NFC tag to read its contents.')}
+              {tr(
+                'Hold your device near an NFC tag to see its identity and available content.',
+              )}
             </Text>
             <View style={styles.signal} accessibilityElementsHidden>
               <Icon name="nfc" size={72} color={colors.accent} />
@@ -147,30 +147,22 @@ function HomeScreen(props) {
                   icon="nfc"
                   style={styles.primaryButton}
                   contentStyle={styles.buttonContent}
-                  onPress={() => runTagAction(scanTag)}
+                  accessibilityLabel={tr('SCAN NFC TAG')}
+                  onPress={() => runTagAction(explore)}
+                  loading={exploring}
                   disabled={busy || exploring}
                 >
                   {tr('SCAN NFC TAG')}
                 </Button>
-                <Button
-                  mode="outlined"
-                  icon="radar"
-                  style={styles.secondaryButton}
-                  contentStyle={styles.buttonContent}
-                  accessibilityLabel={tr('Explore Tag')}
-                  loading={exploring}
-                  disabled={busy || exploring}
-                  onPress={() => runTagAction(explore)}
-                >
-                  {tr(exploring ? 'Exploring tag…' : 'Explore Tag')}
-                </Button>
                 <Text style={styles.statusText}>
-                  {tr('Discover native tag technologies without requiring NDEF.')}
+                  {tr(
+                    'NDEF is not required. Displays available tag identity and content.',
+                  )}
                 </Text>
                 {exploring && (
                   <Button
                     mode="text"
-                    accessibilityLabel={tr('Cancel tag exploration')}
+                    accessibilityLabel={tr('Cancel tag scan')}
                     onPress={cancelExplore}
                   >
                     {tr('CANCEL')}

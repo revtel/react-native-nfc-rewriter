@@ -3413,5 +3413,20 @@
     "Raw tag JSON",
     "原始標籤 JSON",
     "元のタグ JSON"
+  ],
+  "home.available_content_subtitle": [
+    "Hold your device near an NFC tag to see its identity and available content.",
+    "將裝置靠近 NFC 標籤，查看其識別資訊與可取得的內容。",
+    "NFC タグに端末を近づけて、識別情報と取得できる内容を確認します。"
+  ],
+  "home.available_content_hint": [
+    "NDEF is not required. Displays available tag identity and content.",
+    "不需要 NDEF；顯示可取得的標籤識別資訊與內容。",
+    "NDEF は必須ではありません。取得できるタグの識別情報と内容を表示します。"
+  ],
+  "home.cancel_tag_scan": [
+    "Cancel tag scan",
+    "取消標籤掃描",
+    "タグのスキャンをキャンセル"
   ]
 }

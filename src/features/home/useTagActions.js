@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-// Both Home actions share the reader; lock synchronously before React renders.
+// Lock reader work synchronously before React renders.
 function useTagActions(navigation) {
   const [busy, setBusy] = React.useState(false);
   const inFlight = React.useRef(false);
