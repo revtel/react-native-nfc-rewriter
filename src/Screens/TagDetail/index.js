@@ -1,22 +1,22 @@
 import {useTranslation} from 'react-i18next';
 import {translateText as tr} from '../../i18n';
 import React from 'react';
-import {Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-screens/experimental';
+import Clipboard from '@react-native-clipboard/clipboard';
 import NdefMessage from '../../Components/NdefMessage';
 import {createTagDiscovery} from '../../features/tag-discovery/model';
+import {buildTagPresentation} from '../../features/tag-result-presentation/model';
 import {useVisualTheme} from '../../visual/theme';
 
-function DetailSection({title, children, styles}) {
-  useTranslation();
-  return (
-    <View style={styles.section}>
-      <Text style={styles.sectionLabel}>{title}</Text>
-      {children}
-    </View>
-  );
-}
-
+const EMPTY_TAG = Object.freeze({});
 const TOOL_LABELS = {
   'nfc-a-transceive': 'Custom NFC-A Transceive',
   'nfc-a-script': 'NFC-A Flow Script',
@@ -27,130 +27,363 @@ const TOOL_LABELS = {
   'iso15693-inspector': 'ISO 15693 / NFC-V Inspector',
   'type2-memory': 'Type 2 Memory Scan',
 };
-
 const LIMITATION_TEXT = {
-  'type4-format-unconfirmed': 'ISO-DEP alone does not confirm Type 4 formatting. The inspector checks NDEF application and file evidence.',
-  'ios-detection-allowlists': 'iOS discovery is limited by the app’s configured ISO-DEP application identifiers and FeliCa system codes.',
-  'type5-format-unconfirmed': 'Type 5 formatting is unconfirmed. The inspector checks available CC evidence.',
+  'type4-format-unconfirmed':
+    'ISO-DEP alone does not confirm Type 4 formatting. The inspector checks NDEF application and file evidence.',
+  'ios-detection-allowlists':
+    'iOS discovery is limited by the app’s configured ISO-DEP application identifiers and FeliCa system codes.',
+  'type5-format-unconfirmed':
+    'Type 5 formatting is unconfirmed. The inspector checks available CC evidence.',
+};
+const RECORD_STATES = {
+  'not-provided': 'No NDEF records were supplied by this scan.',
+  unavailable:
+    'NDEF data was not available in this scan. Its absence does not identify the cause.',
+  invalid:
+    'The supplied NDEF records field is invalid. Original data remains in Raw tag JSON.',
+};
+const NDEF_STATES = {
+  'system-readwrite': 'System reports NDEF read/write',
+  'system-readonly': 'System reports NDEF read-only',
+  unconfirmed: 'NDEF support is unconfirmed',
+  unknown: 'NDEF status is unavailable',
 };
 
-// A malformed native NDEF record must not hide the rest of the observations.
-class RecordPreview extends React.Component {
-  state = {failed: false};
-
-  static getDerivedStateFromError() {
-    return {failed: true};
-  }
-
-  render() {
-    const {record, colors} = this.props;
-    const bytes = (value) => Array.isArray(value) && value.every((byte) => Number.isInteger(byte) && byte >= 0 && byte <= 255);
-    if (this.state.failed || !record || !Number.isInteger(record.tnf) || !bytes(record.type) || !bytes(record.payload)) {
-      return null;
+function DetailSection({title, children, styles}) {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionLabel}>{title}</Text>
+      {children}
+    </View>
+  );
+}
+function Disclosure({title, expanded, onPress, styles, children}) {
+  return (
+    <View style={styles.section}>
+      <TouchableOpacity
+        accessibilityRole="button"
+        accessibilityLabel={title}
+        accessibilityState={{expanded}}
+        onPress={onPress}
+        style={styles.disclosure}
+      >
+        <Text style={styles.disclosureLabel}>
+          {expanded ? '▾' : '▸'} {title}
+        </Text>
+      </TouchableOpacity>
+      {expanded && children}
+    </View>
+  );
+}
+function technicalValue(value) {
+  if (Array.isArray(value)) {
+    let byteArray = true;
+    for (let i = 0; i < value.length; i++) {
+      if (
+        !Object.prototype.hasOwnProperty.call(value, i) ||
+        !Number.isInteger(value[i]) ||
+        value[i] < 0 ||
+        value[i] > 255
+      ) {
+        byteArray = false;
+        break;
+      }
     }
-    return <NdefMessage ndef={record} colors={colors} />;
+    return byteArray
+      ? value.length === 0
+        ? tr('(empty bytes)')
+        : value
+            .map((byte) => byte.toString(16).padStart(2, '0').toUpperCase())
+            .join(' ')
+      : tr('Array: {{count}} items', {count: value.length});
   }
+  if (value !== null && typeof value === 'object') {
+    return tr('Object: {{count}} fields', {count: Object.keys(value).length});
+  }
+  if (typeof value === 'function' || typeof value === 'symbol') {
+    return tr('Value type: {{type}}', {type: typeof value});
+  }
+  return String(value);
+}
+function RawTagData({tag, styles, onCopy, feedback}) {
+  const serialized = React.useMemo(() => {
+    try {
+      return {value: JSON.stringify(tag, null, 2), failed: false};
+    } catch (_) {
+      return {value: null, failed: true};
+    }
+  }, [tag]);
+  return (
+    <>
+      <TouchableOpacity
+        accessibilityRole="button"
+        accessibilityLabel={tr('Copy raw tag JSON')}
+        style={styles.action}
+        onPress={() => onCopy('raw', serialized.value)}
+      >
+        <Text style={styles.actionLabel}>{tr('Copy raw tag JSON')}</Text>
+      </TouchableOpacity>
+      {feedback?.target === 'raw' && (
+        <CopyFeedback state={feedback.state} styles={styles} />
+      )}
+      {serialized.failed ? (
+        <Text style={styles.notice}>
+          {tr('Raw tag JSON could not be displayed.')}
+        </Text>
+      ) : (
+        <Text selectable style={styles.rawData}>
+          {serialized.value}
+        </Text>
+      )}
+    </>
+  );
+}
+function CopyFeedback({state, styles}) {
+  return (
+    <Text
+      accessibilityLiveRegion="polite"
+      style={state === 'copied' ? styles.success : styles.error}
+    >
+      {tr(
+        state === 'copied'
+          ? 'Copied to clipboard.'
+          : 'Could not copy. Try again.',
+      )}
+    </Text>
+  );
 }
 
-function TagDetailScreen({route, navigation}) {
+function TagScanResult({tag, discovery, navigation}) {
   useTranslation();
-  const tag = route?.params?.tag || {};
-  const discovery = route?.params?.discovery || createTagDiscovery(tag, Platform.OS);
   const {colors, spacing, type} = useVisualTheme();
   const styles = createStyles(colors, spacing, type);
-  const {technologies: techs, identifiers, ndef, tools, limitations} = discovery;
-
+  const presentation = React.useMemo(
+    () => buildTagPresentation(tag, discovery),
+    [tag, discovery],
+  );
+  const [technicalExpanded, setTechnicalExpanded] = React.useState(false);
+  const [rawExpanded, setRawExpanded] = React.useState(false);
+  const [feedback, setFeedback] = React.useState(null);
+  const mounted = React.useRef(false);
+  const generation = React.useRef(0);
+  React.useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      generation.current += 1;
+    };
+  }, []);
+  async function copy(target, value) {
+    const token = ++generation.current;
+    setFeedback(null);
+    try {
+      if (typeof value !== 'string') {
+        throw new Error('No copyable string');
+      }
+      await Clipboard.setString(value);
+      if (mounted.current && generation.current === token) {
+        setFeedback({target, state: 'copied'});
+      }
+    } catch (_) {
+      if (mounted.current && generation.current === token) {
+        setFeedback({target, state: 'failed'});
+      }
+    }
+  }
+  const {tools, limitations} = discovery;
   return (
     <SafeAreaView edges={{bottom: true}} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.eyebrow}>{tr('SCAN RESULT')}</Text>
-        <Text style={styles.intro}>
-          {tr('Identity, technologies, and raw tag data.')}
-        </Text>
-
-        <DetailSection title={tr('Identifiers')} styles={styles}>
-          {identifiers.length ? identifiers.map(({kind, value}) => (
-            <View key={kind} style={styles.identifier}>
-              <Text style={styles.sectionLabel}>{kind === 'idm' ? 'IDm' : 'UID'}</Text>
-              <Text selectable style={styles.technicalValue}>{value}</Text>
-            </View>
-          )) : <Text style={styles.emptyValue}>{tr('Unavailable')}</Text>}
-        </DetailSection>
-
-        <DetailSection title={tr('TECHNOLOGIES')} styles={styles}>
-          {techs.length > 0 ? (
-            <View style={styles.techList}>
-              {techs.map((tech) => (
-                <View key={tech} style={styles.techChip}>
-                  <Text style={styles.techText}>{tech}</Text>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <Text style={styles.emptyValue}>{tr('Unavailable')}</Text>
+        {presentation.recordsState === 'provided' ? (
+          presentation.records.map((record) => (
+            <NdefMessage
+              key={record.index}
+              presentation={record}
+              colors={colors}
+            />
+          ))
+        ) : (
+          <DetailSection title="NDEF" styles={styles}>
+            <Text style={styles.notice}>
+              {tr(RECORD_STATES[presentation.recordsState])}
+            </Text>
+          </DetailSection>
+        )}
+        <DetailSection title={tr('SCAN SUMMARY')} styles={styles}>
+          {presentation.identifiers.length === 0 && (
+            <Text style={styles.notice}>{tr('Identifier unavailable')}</Text>
+          )}
+          {presentation.identifiers.map(({kind, value}, index) => {
+            const identifierKind = kind === 'idm' ? 'IDm' : 'UID';
+            const target = `${kind}:${index}`;
+            return (
+              <View key={target} style={styles.identifier}>
+                <Text style={styles.fieldLabel}>{identifierKind}</Text>
+                <Text selectable style={styles.technicalValue}>
+                  {value}
+                </Text>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityLabel={tr('Copy {{kind}}', {
+                    kind: identifierKind,
+                  })}
+                  onPress={() => copy(target, value)}
+                  style={styles.action}
+                >
+                  <Text style={styles.actionLabel}>
+                    {tr('Copy {{kind}}', {kind: identifierKind})}
+                  </Text>
+                </TouchableOpacity>
+                {feedback?.target === target && (
+                  <CopyFeedback state={feedback.state} styles={styles} />
+                )}
+              </View>
+            );
+          })}
+          <Text style={styles.fieldLabel}>{tr('Observed technologies')}</Text>
+          <Text selectable style={styles.summaryValue}>
+            {presentation.technologies.length
+              ? presentation.technologies.join(' · ')
+              : tr('Unavailable')}
+          </Text>
+          <Text style={styles.summaryValue}>
+            {presentation.recordCount === null
+              ? tr('Record count unavailable')
+              : tr('Records supplied: {{count}}', {
+                  count: presentation.recordCount,
+                })}
+          </Text>
+          <Text style={styles.summaryValue}>
+            {tr(NDEF_STATES[presentation.ndef.status])}
+          </Text>
+          {presentation.ndef.capacity !== null && (
+            <Text style={styles.summaryValue}>
+              {tr('System-reported capacity: {{bytes}} bytes', {
+                bytes: presentation.ndef.capacity,
+              })}
+            </Text>
           )}
         </DetailSection>
-
-        <DetailSection title="NDEF" styles={styles}>
-          {ndef.records.length > 0 ? (
-            ndef.records.map((record, index) => (
-              <View key={index} style={styles.record}>
-                <Text style={styles.sectionLabel}>{tr('NDEF record {{number}}', {number: index + 1})}</Text>
-                <RecordPreview record={record} colors={colors} />
-                <Text selectable style={styles.rawData}>{JSON.stringify(record, null, 2)}</Text>
-              </View>
+        <DetailSection title={tr('AVAILABLE TOOLS')} styles={styles}>
+          {limitations.map((reason) =>
+            LIMITATION_TEXT[reason] ? (
+              <Text key={reason} style={styles.notice}>
+                {tr(LIMITATION_TEXT[reason])}
+              </Text>
+            ) : null,
+          )}
+          {tools.length ? (
+            tools.map((tool) => (
+              <TouchableOpacity
+                key={tool.id}
+                accessibilityRole="button"
+                accessibilityLabel={tr(TOOL_LABELS[tool.id])}
+                style={styles.toolButton}
+                onPress={() => navigation?.navigate(tool.screen, tool.params)}
+              >
+                <Text style={styles.actionLabel}>
+                  {tr(TOOL_LABELS[tool.id])}
+                </Text>
+              </TouchableOpacity>
             ))
           ) : (
-            <Text style={styles.emptyValue}>{tr(ndef.status === 'unknown'
-              ? 'NDEF data was not available in this scan. Its absence does not identify the cause.'
-              : 'No NDEF records were supplied by this scan.')}</Text>
+            <Text style={styles.notice}>
+              {tr(
+                'No compatible tool is available for the observed technologies.',
+              )}
+            </Text>
           )}
         </DetailSection>
-
-        <DetailSection title={tr('AVAILABLE TOOLS')} styles={styles}>
-          {limitations.map((reason) => LIMITATION_TEXT[reason] ? (
-            <Text key={reason} style={styles.notice}>{tr(LIMITATION_TEXT[reason])}</Text>
-          ) : null)}
-          {tools.length ? tools.map((tool) => (
-            <TouchableOpacity
-              key={tool.id}
-              accessibilityRole="button"
-              accessibilityLabel={tr(TOOL_LABELS[tool.id])}
-              style={styles.toolButton}
-              onPress={() => navigation?.navigate(tool.screen, tool.params)}
-            >
-              <Text style={styles.toolLabel}>{tr(TOOL_LABELS[tool.id])}</Text>
-            </TouchableOpacity>
-          )) : (
-            <Text style={styles.emptyValue}>{tr('No compatible tool is available for the observed technologies.')}</Text>
+        <Disclosure
+          title={tr('Technical details')}
+          expanded={technicalExpanded}
+          onPress={() => setTechnicalExpanded((current) => !current)}
+          styles={styles}
+        >
+          {technicalExpanded && (
+            <>
+              {presentation.tagFields.map(({name, value}, index) => (
+                <View key={index} style={styles.technicalField}>
+                  <Text style={styles.fieldLabel}>{name}</Text>
+                  <Text selectable style={styles.technicalValue}>
+                    {technicalValue(value)}
+                  </Text>
+                </View>
+              ))}
+              {presentation.records.map((record) => (
+                <NdefMessage
+                  key={record.index}
+                  presentation={record}
+                  technical
+                  colors={colors}
+                />
+              ))}
+            </>
           )}
-        </DetailSection>
-
-        <DetailSection title={tr('TAG OBJECT')} styles={styles}>
-          <Text selectable style={styles.rawData}>
-            {JSON.stringify(tag, null, 2)}
-          </Text>
-        </DetailSection>
+        </Disclosure>
+        <Disclosure
+          title={tr('Raw tag JSON')}
+          expanded={rawExpanded}
+          onPress={() => setRawExpanded((current) => !current)}
+          styles={styles}
+        >
+          {rawExpanded && (
+            <RawTagData
+              tag={tag}
+              styles={styles}
+              onCopy={copy}
+              feedback={feedback}
+            />
+          )}
+        </Disclosure>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function TagDetailScreen({route, navigation}) {
+  const tag = route?.params?.tag || EMPTY_TAG;
+  const suppliedDiscovery = route?.params?.discovery;
+  const routeKey = route?.key;
+  const discovery = React.useMemo(
+    () => suppliedDiscovery || createTagDiscovery(tag, Platform.OS),
+    [tag, suppliedDiscovery],
+  );
+  // Key the whole result by incoming scan object identities, never UID or locale.
+  const [scan, setScan] = React.useState({
+    tag,
+    suppliedDiscovery,
+    routeKey,
+    revision: 0,
+  });
+  if (
+    scan.tag !== tag ||
+    scan.suppliedDiscovery !== suppliedDiscovery ||
+    scan.routeKey !== routeKey
+  ) {
+    setScan({tag, suppliedDiscovery, routeKey, revision: scan.revision + 1});
+  }
+  return (
+    <TagScanResult
+      key={scan.revision}
+      tag={tag}
+      discovery={discovery}
+      navigation={navigation}
+    />
   );
 }
 
 function createStyles(colors, spacing, type) {
   return StyleSheet.create({
     safeArea: {flex: 1, backgroundColor: colors.background},
-    content: {padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl},
+    content: {padding: spacing.lg, paddingBottom: spacing.xxl + spacing.lg},
     eyebrow: {
       color: colors.accent,
       fontSize: type.caption,
       fontWeight: '700',
       letterSpacing: 1,
-      marginBottom: spacing.sm,
-    },
-    intro: {
-      color: colors.textMuted,
-      fontSize: type.label,
-      marginBottom: spacing.xl,
+      marginBottom: spacing.md,
     },
     section: {
       backgroundColor: colors.surface,
@@ -164,35 +397,71 @@ function createStyles(colors, spacing, type) {
       color: colors.textMuted,
       fontSize: type.caption,
       fontWeight: '700',
-      letterSpacing: 1,
       marginBottom: spacing.md,
+    },
+    disclosure: {minHeight: 48, justifyContent: 'center'},
+    disclosureLabel: {
+      color: colors.accent,
+      fontSize: type.label,
+      fontWeight: '700',
+    },
+    fieldLabel: {
+      color: colors.textMuted,
+      fontSize: type.caption,
+      marginBottom: spacing.xs,
     },
     technicalValue: {
       color: colors.technical,
-      fontSize: type.label,
+      fontSize: type.body,
       lineHeight: 23,
       fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'}),
     },
-    techList: {flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm},
-    techChip: {
-      backgroundColor: colors.surfaceMuted,
-      borderRadius: 8,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
+    summaryValue: {
+      color: colors.text,
+      fontSize: type.body,
+      lineHeight: 23,
+      marginTop: spacing.sm,
     },
-    techText: {color: colors.accent, fontSize: type.body, fontWeight: '600'},
-    emptyValue: {color: colors.textMuted, fontSize: type.body},
-    identifier: {marginBottom: spacing.sm},
-    record: {marginBottom: spacing.md},
-    notice: {color: colors.textMuted, fontSize: type.body, marginBottom: spacing.md},
-    toolButton: {minHeight: 48, padding: spacing.md, marginBottom: spacing.sm, borderWidth: 1, borderColor: colors.border, borderRadius: 8},
-    toolLabel: {color: colors.accent, fontSize: type.label, fontWeight: '600'},
+    identifier: {marginBottom: spacing.md},
+    notice: {
+      color: colors.textMuted,
+      fontSize: type.body,
+      lineHeight: 22,
+      marginBottom: spacing.sm,
+    },
+    action: {
+      minHeight: 48,
+      alignSelf: 'flex-start',
+      justifyContent: 'center',
+      padding: spacing.md,
+      marginTop: spacing.sm,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+    },
+    actionLabel: {color: colors.accent, fontSize: type.body, fontWeight: '600'},
+    toolButton: {
+      minHeight: 48,
+      justifyContent: 'center',
+      padding: spacing.md,
+      marginBottom: spacing.sm,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+    },
+    technicalField: {marginTop: spacing.md, marginBottom: spacing.md},
     rawData: {
       color: colors.technical,
       fontSize: type.body,
-      lineHeight: 21,
+      lineHeight: 22,
       fontFamily: Platform.select({ios: 'Menlo', default: 'monospace'}),
     },
+    success: {
+      color: colors.success,
+      fontSize: type.body,
+      marginTop: spacing.sm,
+    },
+    error: {color: colors.danger, fontSize: type.body, marginTop: spacing.sm},
   });
 }
 

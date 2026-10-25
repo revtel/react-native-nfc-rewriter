@@ -3138,5 +3138,280 @@
     "Response bytes do not match expected bytes",
     "回應位元組與預期不符",
     "応答バイト列が期待値と一致しません"
+  ],
+  "tag_result.unknown_record": [
+    "Unknown record",
+    "未知紀錄",
+    "不明なレコード"
+  ],
+  "tag_result.malformed_record": [
+    "Malformed record",
+    "格式錯誤的紀錄",
+    "不正な形式のレコード"
+  ],
+  "tag_result.unsupported_record": [
+    "Unsupported record",
+    "不支援的紀錄",
+    "未対応のレコード"
+  ],
+  "tag_result.wi_fi_data": [
+    "Wi-Fi data",
+    "Wi-Fi 資料",
+    "Wi-Fi データ"
+  ],
+  "tag_result.contact_data": [
+    "Contact data",
+    "聯絡人資料",
+    "連絡先データ"
+  ],
+  "tag_result.mime_data": [
+    "MIME data",
+    "MIME 資料",
+    "MIME データ"
+  ],
+  "tag_result.the_supplied_record_is_invalid": [
+    "The supplied record is invalid.",
+    "提供的紀錄無效。",
+    "提供されたレコードは無効です。"
+  ],
+  "tag_result.the_record_tnf_is_invalid": [
+    "The record TNF is invalid.",
+    "紀錄的 TNF 無效。",
+    "レコードの TNF が無効です。"
+  ],
+  "tag_result.the_record_type_bytes_are_invalid": [
+    "The record type bytes are invalid.",
+    "紀錄的類型位元組無效。",
+    "レコードの種別バイト列が無効です。"
+  ],
+  "tag_result.the_record_payload_bytes_are_invalid": [
+    "The record payload bytes are invalid.",
+    "紀錄的負載位元組無效。",
+    "レコードのペイロードバイト列が無効です。"
+  ],
+  "tag_result.the_record_id_bytes_are_invalid": [
+    "The record ID bytes are invalid.",
+    "紀錄的 ID 位元組無效。",
+    "レコードの ID バイト列が無効です。"
+  ],
+  "tag_result.the_text_record_could_not_be_decoded_as_valid_utf_8": [
+    "The Text record could not be decoded as valid UTF-8.",
+    "文字紀錄無法解碼為有效的 UTF-8。",
+    "テキストレコードを有効な UTF-8 としてデコードできません。"
+  ],
+  "tag_result.the_uri_record_does_not_contain_a_valid_link": [
+    "The URI record does not contain a valid link.",
+    "URI 紀錄未包含有效連結。",
+    "URI レコードに有効なリンクが含まれていません。"
+  ],
+  "tag_result.utf_16_text_is_not_decoded_its_original_bytes_are_preserved": [
+    "UTF-16 text is not decoded. Its original bytes are preserved.",
+    "尚未解碼 UTF-16 文字，原始位元組已保留。",
+    "UTF-16 テキストはデコードしません。元のバイト列は保持されています。"
+  ],
+  "tag_result.this_record_type_has_no_readable_preview_its_original_bytes_are_preserved": [
+    "This record type has no readable preview. Its original bytes are preserved.",
+    "此紀錄類型沒有可讀預覽，原始位元組已保留。",
+    "このレコード種別には読みやすいプレビューがありません。元のバイト列は保持されています。"
+  ],
+  "tag_result.empty_value": [
+    "(empty value)",
+    "（空值）",
+    "（空の値）"
+  ],
+  "tag_result.empty_text": [
+    "(empty text)",
+    "（空文字）",
+    "（空のテキスト）"
+  ],
+  "tag_result.record_number_kind": [
+    "Record {{number}} · {{kind}}",
+    "紀錄 {{number}}・{{kind}}",
+    "レコード {{number}}・{{kind}}"
+  ],
+  "tag_result.record_type": [
+    "Record type",
+    "紀錄類型",
+    "レコード種別"
+  ],
+  "tag_result.encoding": [
+    "Encoding",
+    "編碼",
+    "エンコーディング"
+  ],
+  "tag_result.payload_byte_count": [
+    "Payload byte count",
+    "負載位元組數",
+    "ペイロードのバイト数"
+  ],
+  "tag_result.type_hex": [
+    "Type hex",
+    "類型十六進位",
+    "種別の16進表示"
+  ],
+  "tag_result.id_hex": [
+    "ID hex",
+    "ID 十六進位",
+    "ID の16進表示"
+  ],
+  "tag_result.payload_hex": [
+    "Payload hex",
+    "負載十六進位",
+    "ペイロードの16進表示"
+  ],
+  "tag_result.full_content_for_record_number": [
+    "Full content for record {{number}}",
+    "紀錄 {{number}} 的完整內容",
+    "レコード {{number}} の全内容"
+  ],
+  "tag_result.show_less": [
+    "Show less",
+    "收合內容",
+    "折りたたむ"
+  ],
+  "tag_result.show_full_content": [
+    "Show full content",
+    "顯示完整內容",
+    "内容をすべて表示"
+  ],
+  "tag_result.copy_content_for_record_number": [
+    "Copy content for record {{number}}",
+    "複製紀錄 {{number}} 的內容",
+    "レコード {{number}} の内容をコピー"
+  ],
+  "tag_result.copy_content": [
+    "Copy content",
+    "複製內容",
+    "内容をコピー"
+  ],
+  "tag_result.open_link_for_record_number": [
+    "Open link for record {{number}}",
+    "開啟紀錄 {{number}} 的連結",
+    "レコード {{number}} のリンクを開く"
+  ],
+  "tag_result.open_link": [
+    "Open link",
+    "開啟連結",
+    "リンクを開く"
+  ],
+  "tag_result.mime_payload_is_preserved_without_decoding_its_contents": [
+    "MIME payload is preserved without decoding its contents.",
+    "MIME 負載已保留，未解碼其內容。",
+    "MIME ペイロードは内容をデコードせず保持しています。"
+  ],
+  "tag_result.available_bytes_remain_in_technical_details_and_raw_tag_json": [
+    "Available bytes remain in Technical details and Raw tag JSON.",
+    "可取得的位元組保留在「技術資訊」與「原始標籤 JSON」中。",
+    "取得できたバイト列は「技術情報」と「元のタグ JSON」で確認できます。"
+  ],
+  "tag_result.copied_to_clipboard": [
+    "Copied to clipboard.",
+    "已複製到剪貼簿。",
+    "クリップボードにコピーしました。"
+  ],
+  "tag_result.could_not_copy_try_again": [
+    "Could not copy. Try again.",
+    "無法複製，請再試一次。",
+    "コピーできませんでした。もう一度お試しください。"
+  ],
+  "tag_result.could_not_open_this_link_you_can_still_copy_the_target": [
+    "Could not open this link. You can still copy the target.",
+    "無法開啟此連結，仍可複製完整目標。",
+    "このリンクを開けませんでした。リンク先のコピーは可能です。"
+  ],
+  "tag_result.the_supplied_ndef_records_field_is_invalid_original_data_remains_in_raw_tag_json": [
+    "The supplied NDEF records field is invalid. Original data remains in Raw tag JSON.",
+    "提供的 NDEF 紀錄欄位無效，原始資料保留在「原始標籤 JSON」中。",
+    "提供された NDEF レコード欄が無効です。元のデータは「元のタグ JSON」で確認できます。"
+  ],
+  "tag_result.system_reports_ndef_read_write": [
+    "System reports NDEF read/write",
+    "系統回報 NDEF 可讀寫",
+    "システム報告：NDEF 読み書き可能"
+  ],
+  "tag_result.system_reports_ndef_read_only": [
+    "System reports NDEF read-only",
+    "系統回報 NDEF 唯讀",
+    "システム報告：NDEF 読み取り専用"
+  ],
+  "tag_result.ndef_support_is_unconfirmed": [
+    "NDEF support is unconfirmed",
+    "NDEF 支援狀態尚未確認",
+    "NDEF 対応は未確認"
+  ],
+  "tag_result.ndef_status_is_unavailable": [
+    "NDEF status is unavailable",
+    "無法取得 NDEF 狀態",
+    "NDEF の状態は取得できません"
+  ],
+  "tag_result.array_count_items": [
+    "Array: {{count}} items",
+    "陣列：{{count}} 個項目",
+    "配列：{{count}} 項目"
+  ],
+  "tag_result.object_count_fields": [
+    "Object: {{count}} fields",
+    "物件：{{count}} 個欄位",
+    "オブジェクト：{{count}} フィールド"
+  ],
+  "tag_result.value_type_type": [
+    "Value type: {{type}}",
+    "值類型：{{type}}",
+    "値の型：{{type}}"
+  ],
+  "tag_result.raw_tag_json_could_not_be_displayed": [
+    "Raw tag JSON could not be displayed.",
+    "無法顯示原始標籤 JSON。",
+    "元のタグ JSON を表示できません。"
+  ],
+  "tag_result.copy_raw_tag_json": [
+    "Copy raw tag JSON",
+    "複製原始標籤 JSON",
+    "元のタグ JSON をコピー"
+  ],
+  "tag_result.scan_summary": [
+    "SCAN SUMMARY",
+    "掃描摘要",
+    "スキャン概要"
+  ],
+  "tag_result.identifier_unavailable": [
+    "Identifier unavailable",
+    "無法取得識別碼",
+    "識別子は取得できません"
+  ],
+  "tag_result.copy_kind": [
+    "Copy {{kind}}",
+    "複製 {{kind}}",
+    "{{kind}} をコピー"
+  ],
+  "tag_result.observed_technologies": [
+    "Observed technologies",
+    "觀測到的技術",
+    "観測された技術"
+  ],
+  "tag_result.record_count_unavailable": [
+    "Record count unavailable",
+    "無法取得紀錄數",
+    "レコード数は取得できません"
+  ],
+  "tag_result.records_supplied_count": [
+    "Records supplied: {{count}}",
+    "提供的紀錄數：{{count}}",
+    "提供されたレコード数：{{count}}"
+  ],
+  "tag_result.system_reported_capacity_bytes_bytes": [
+    "System-reported capacity: {{bytes}} bytes",
+    "系統回報容量：{{bytes}} 位元組",
+    "システム報告の容量：{{bytes}} バイト"
+  ],
+  "tag_result.technical_details": [
+    "Technical details",
+    "技術資訊",
+    "技術情報"
+  ],
+  "tag_result.raw_tag_json": [
+    "Raw tag JSON",
+    "原始標籤 JSON",
+    "元のタグ JSON"
   ]
 }
