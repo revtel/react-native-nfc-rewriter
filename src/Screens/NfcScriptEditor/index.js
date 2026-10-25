@@ -10,6 +10,7 @@ import {
   View,
   Platform,
   Pressable,
+  Switch,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button, IconButton} from 'react-native-paper';
@@ -32,6 +33,7 @@ import {useVisualTheme} from '../../visual/theme';
 
 const STEP_TYPES = [
   'transceive',
+  'assert-response',
   'delay',
   'set',
   'capture',
@@ -50,7 +52,14 @@ function useEditorStyles() {
   );
 }
 
-function Field({label, value, onChange, numeric = false, multiline = false}) {
+function Field({
+  label,
+  value,
+  onChange,
+  numeric = false,
+  multiline = false,
+  preserveBlank = false,
+}) {
   useTranslation();
   const styles = useEditorStyles();
   return (
@@ -59,7 +68,15 @@ function Field({label, value, onChange, numeric = false, multiline = false}) {
       <TextInput
         style={[styles.input, multiline && styles.multilineInput]}
         value={String(value ?? '')}
-        onChangeText={(text) => onChange(numeric ? Number(text) : text)}
+        onChangeText={(text) =>
+          onChange(
+            numeric
+              ? preserveBlank && text.trim() === ''
+                ? ''
+                : Number(text)
+              : text,
+          )
+        }
         keyboardType={numeric ? 'number-pad' : 'default'}
         autoCapitalize="none"
         autoCorrect={false}
@@ -253,6 +270,100 @@ function StepFields({step, change, depth, available, tech}) {
           available={available}
         />
       );
+    case 'assert-response': {
+      const hasBytes = Object.prototype.hasOwnProperty.call(
+        step,
+        'expectedHex',
+      );
+      const hasSw = Object.prototype.hasOwnProperty.call(step, 'expectedSw');
+      const remove = (property) =>
+        change((current) => {
+          const next = {...current};
+          delete next[property];
+          return next;
+        });
+      return (
+        <>
+          <Text style={styles.fieldLabel}>{tr('Response source')}</Text>
+          <Choice
+            values={['data', 'raw']}
+            selected={step.source}
+            onSelect={(source) => change({source})}
+          />
+          <Field
+            label={tr('Exact byte length (0–4096)')}
+            value={step.length}
+            onChange={(length) => change({length})}
+            numeric
+            preserveBlank
+          />
+          <Text style={styles.hint}>
+            {tr(
+              'Checks the latest TRANSCEIVE without sending a command. On IsoDep, data excludes SW1/SW2; raw includes them.',
+            )}
+          </Text>
+          <View style={styles.assertionToggle}>
+            <Text style={styles.assertionToggleLabel}>
+              {tr('Check exact bytes')}
+            </Text>
+            <Switch
+              accessibilityLabel={tr('Check exact bytes')}
+              value={hasBytes}
+              onValueChange={(enabled) =>
+                enabled ? change({expectedHex: ''}) : remove('expectedHex')
+              }
+            />
+          </View>
+          {hasBytes && (
+            <>
+              <Field
+                label={tr('Expected literal hex bytes')}
+                value={step.expectedHex}
+                onChange={(expectedHex) => change({expectedHex})}
+                multiline
+              />
+              <Text style={styles.hint}>
+                {tr(
+                  'An enabled empty field means exactly zero bytes and requires length 0. Turn off the check to omit it.',
+                )}
+              </Text>
+            </>
+          )}
+          {(tech === 'IsoDep' || hasSw) && (
+            <>
+              <View style={styles.assertionToggle}>
+                <Text style={styles.assertionToggleLabel}>
+                  {tr('Check status word')}
+                </Text>
+                <Switch
+                  accessibilityLabel={tr('Check status word')}
+                  value={hasSw}
+                  onValueChange={(enabled) =>
+                    enabled
+                      ? change({expectedSw: '9000'})
+                      : remove('expectedSw')
+                  }
+                />
+              </View>
+              {hasSw && (
+                <Field
+                  label={tr('Expected SW (four hex digits)')}
+                  value={step.expectedSw}
+                  onChange={(expectedSw) => change({expectedSw})}
+                />
+              )}
+              {tech !== 'IsoDep' && (
+                <Text style={styles.error}>
+                  {tr(
+                    'Status checks require IsoDep. Disable this check or change the script technology.',
+                  )}
+                </Text>
+              )}
+            </>
+          )}
+        </>
+      );
+    }
     case 'delay':
       return (
         <Field
@@ -426,7 +537,11 @@ function StepList({
   const update = (idx, patch) =>
     onChange(
       steps.map((step, position) =>
-        position === idx ? {...step, ...patch} : step,
+        position === idx
+          ? typeof patch === 'function'
+            ? patch(step)
+            : {...step, ...patch}
+          : step,
       ),
     );
   const move = (idx, direction) => {
@@ -525,6 +640,68 @@ function formatBytes(bytes) {
     : '';
 }
 
+function AssertionTrace({assertion}) {
+  useTranslation();
+  const styles = useEditorStyles();
+  const check = (outcome) =>
+    tr(outcome == null ? 'Not checked' : outcome ? 'PASS' : 'FAIL');
+  const bytes = (value) => (value === '' ? tr('(empty bytes)') : value);
+  return (
+    <View>
+      <Text style={assertion.passed ? styles.success : styles.error}>
+        {tr(assertion.passed ? 'ASSERTION PASSED' : 'ASSERTION FAILED')}
+      </Text>
+      <Text selectable style={styles.technicalText}>
+        {tr('Source: {{source}}', {source: assertion.source})}
+      </Text>
+      <Text selectable style={styles.technicalText}>
+        {tr('Expected length: {{expected}} · Actual length: {{actual}}', {
+          expected: assertion.expectedLength,
+          actual: assertion.actualLength,
+        })}
+      </Text>
+      <Text style={styles.traceText}>
+        {tr('Length check: {{result}}', {
+          result: check(assertion.checks.length),
+        })}
+      </Text>
+      <Text style={styles.traceText}>
+        {tr('Exact bytes check: {{result}}', {
+          result: check(assertion.checks.bytes),
+        })}
+      </Text>
+      {assertion.expectedHex !== null && (
+        <Text selectable style={styles.technicalText}>
+          {tr('Expected bytes:')} {bytes(assertion.expectedHex)}
+        </Text>
+      )}
+      <Text selectable style={styles.technicalText}>
+        {tr('Actual bytes:')} {bytes(assertion.actualHex)}
+      </Text>
+      {assertion.actualHexTruncated && (
+        <Text style={styles.hint}>
+          {tr(
+            'Assertion preview shows only the first 4096 bytes. Checks used the complete response; the preceding TRANSCEIVE retains its full raw bytes.',
+          )}
+        </Text>
+      )}
+      <Text style={styles.traceText}>
+        {tr('Status check: {{result}}', {result: check(assertion.checks.sw)})}
+      </Text>
+      {assertion.expectedSw !== null && (
+        <Text selectable style={styles.technicalText}>
+          {tr('Expected SW:')} {assertion.expectedSw}
+        </Text>
+      )}
+      {assertion.actualSw !== null && (
+        <Text selectable style={styles.technicalText}>
+          {tr('Actual SW:')} {assertion.actualSw}
+        </Text>
+      )}
+    </View>
+  );
+}
+
 function TraceView({result}) {
   useTranslation();
   const styles = useEditorStyles();
@@ -538,7 +715,13 @@ function TraceView({result}) {
   return (
     <View>
       <Text style={result.success ? styles.success : styles.error}>
-        {result.success ? tr('Completed') : `Stopped: ${result.error}`}
+        {result.success
+          ? tr('Completed')
+          : tr('Stopped: {{error}}', {
+              error: result.userMessage
+                ? result.error
+                : translateError(result.error),
+            })}
       </Text>
       {result.trace.map((entry, idx) => (
         <View key={idx} style={styles.stepCard}>
@@ -588,6 +771,7 @@ function TraceView({result}) {
               {entry.count}
             </Text>
           )}
+          {entry.assertion && <AssertionTrace assertion={entry.assertion} />}
           {entry.ms !== undefined && (
             <Text style={styles.traceText}>
               {tr('Delay:')}
@@ -836,6 +1020,19 @@ function makeStyles(colors, spacing, type) {
       fontSize: type.label,
     },
     field: {marginVertical: spacing.sm},
+    assertionToggle: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+      marginVertical: spacing.sm,
+      minHeight: 48,
+    },
+    assertionToggleLabel: {
+      flex: 1,
+      flexShrink: 1,
+      color: colors.text,
+      fontSize: type.body,
+    },
     fieldLabel: {
       color: colors.textMuted,
       fontSize: type.body,

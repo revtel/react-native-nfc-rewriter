@@ -152,6 +152,53 @@ function NfcScriptHelpScreen({route}) {
           )}
         </Section>
 
+        <Section title={tr('ASSERT RESPONSE — require exact response values')}>
+          <Text style={styles.body}>
+            {tr(
+              'Add assert-response immediately after a TRANSCEIVE to check its latest complete response without sending another command. A failed check stops the run before any later command.',
+            )}
+          </Text>
+          <Text style={styles.body}>
+            {tr(
+              'Non-writing example: an IsoDep command is expected to return only status 9100. Its raw response is 91 00 and its data is empty. Add this assertion:',
+            )}
+          </Text>
+          <Code>
+            {tr(
+              'Response source: data\nExact byte length: 0\nCheck exact bytes: on, leave bytes empty\nCheck status word: on, expected SW 9100',
+            )}
+          </Code>
+          <Text style={styles.body}>
+            {tr(
+              'The empty byte field means an exact zero-byte expectation. Turning off a check omits that optional condition; leaving the required length blank is invalid. Literal bytes must be two-digit hex pairs, without variables or placeholders.',
+            )}
+          </Text>
+          <Text style={styles.body}>
+            {tr(
+              'If the actual raw response is 00 91 00, data contains one byte. The assertion fails on length 1 versus 0 even though status 9100 matches, and the next command is not sent.',
+            )}
+          </Text>
+          <Code>
+            91 00 → data: [] · raw: [91 00]{'\n'}00 91 00 → data: [00] · raw:
+            [00 91 00]
+          </Code>
+          <Text style={styles.body}>
+            {tr(
+              'On IsoDep, raw length includes SW1/SW2 and must be at least 2. A raw byte expectation and expected SW must agree. On NfcA, raw and data are the same bytes and status checking is unavailable.',
+            )}
+          </Text>
+          <Text style={styles.body}>
+            {tr(
+              'TRACE shows each enabled comparison and expected/actual values. The assertion preview is limited to 4096 bytes, but matching uses the complete response and the preceding TRANSCEIVE keeps its full raw evidence.',
+            )}
+          </Text>
+          <Text style={styles.body}>
+            {tr(
+              'Assertions verify response structure and values, not card authenticity or an atomic snapshot. Older app versions that do not support assert-response reject the script before running it.',
+            )}
+          </Text>
+        </Section>
+
         <Section title={tr('Variable lifetime and safety')}>
           <Text style={styles.body}>
             {tr(

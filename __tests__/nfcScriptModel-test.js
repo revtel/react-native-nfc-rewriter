@@ -1,6 +1,9 @@
 import {
   makeStep,
+  MAX_EXECUTED_STEPS,
+  MAX_REPEAT,
   newScript,
+  SCRIPT_VERSION,
   updateStepList,
   validateScript,
 } from '../src/features/nfc-script/model';
@@ -42,6 +45,61 @@ describe('NFC script model', () => {
         steps: [{type: 'transceive', template: '30 ${missing:u8}'}],
       }),
     ).toContain('Step 1: unknown variable missing');
+  });
+});
+
+describe('response assertion model', () => {
+  const read = {type: 'transceive', template: '90 6A 00 00 00'};
+  const check = makeStep('assert-response');
+  const branch = (then, otherwise = []) => ({
+    ...makeStep('if'), then, else: otherwise,
+  });
+  const repeat = (steps) => ({...makeStep('repeat'), steps});
+  const validate = (steps) => validateScript({...newScript('IsoDep'), steps});
+
+  test('provides an opt-in default without changing version or limits', () => {
+    expect(check).toEqual({type: 'assert-response', source: 'data', length: 0});
+    expect(SCRIPT_VERSION).toBe(1);
+    expect(MAX_REPEAT).toBe(64);
+    expect(MAX_EXECUTED_STEPS).toBe(500);
+    expect(validate(Array.from({length: 24}, () => [read, check]).flat())).toEqual([]);
+  });
+
+  test.each([
+    [branch([read]), check],
+    [branch([read], [read]), check],
+    [repeat([read]), check],
+    [branch([read], [check])],
+    [repeat([check, read])],
+  ])('rejects responses available only on another lexical path: %p', (...steps) => {
+    expect(validate(steps)).toEqual(
+      expect.arrayContaining([expect.stringMatching(/no previous response to assert$/)]),
+    );
+  });
+
+  test.each([
+    [read, check],
+    [branch([read, check])],
+    [repeat([read, check])],
+    [read, branch([check], [check]), repeat([check])],
+  ])('accepts an earlier or inherited response in the same scope: %p', (...steps) => {
+    expect(validate(steps)).toEqual([]);
+  });
+
+  test('a legacy __response user variable never impersonates a prior exchange', () => {
+    const set = {type: 'set', name: '__response', expression: '7'};
+    const capture = {...makeStep('capture'), name: '__response'};
+    expect(validate([set])).toEqual([]);
+    expect(validate([set, check])).toContain('Step 2: no previous response to assert');
+    // Keep the old CAPTURE namespace behavior, while assertions use a separate flag.
+    expect(validate([set, capture, check])).toContain('Step 3: no previous response to assert');
+    expect(validate([read, capture, check])).toEqual([]);
+  });
+
+  test('validates assertions inside unexecuted branches and retains step labels', () => {
+    expect(validate([read, branch([], [{...check, expectedHex: null}])])).toEqual([
+      'Step 1: assertion bytes must be literal hex pairs',
+    ]);
   });
 });
 

@@ -2908,5 +2908,235 @@
     "This inspection does not validate SDM.",
     "此檢視不驗證 SDM。",
     "この検査は SDM を検証しません。"
+  ],
+  "script_assertion.assert_response": [
+    "assert-response",
+    "驗證回應",
+    "応答を検証"
+  ],
+  "script_assertion.exact_byte_length_0_4096": [
+    "Exact byte length (0–4096)",
+    "精確位元組長度（0–4096）",
+    "正確なバイト長（0–4096）"
+  ],
+  "script_assertion.checks_the_latest_transceive_without_sending_a_command_on_isodep_data_excludes_sw1_sw2_raw": [
+    "Checks the latest TRANSCEIVE without sending a command. On IsoDep, data excludes SW1/SW2; raw includes them.",
+    "檢查最新的 TRANSCEIVE 回應，不發送指令。IsoDep 的 data 不含 SW1/SW2；raw 則包含。",
+    "コマンドを送信せず、直前の TRANSCEIVE 応答を確認します。IsoDep の data は SW1/SW2 を除き、raw は含みます。"
+  ],
+  "script_assertion.check_exact_bytes": [
+    "Check exact bytes",
+    "驗證完整位元組",
+    "全バイトの一致を確認"
+  ],
+  "script_assertion.expected_literal_hex_bytes": [
+    "Expected literal hex bytes",
+    "預期的十六進位位元組常值",
+    "期待するリテラルの16進バイト列"
+  ],
+  "script_assertion.an_enabled_empty_field_means_exactly_zero_bytes_and_requires_length_0_turn_off_the_check_t": [
+    "An enabled empty field means exactly zero bytes and requires length 0. Turn off the check to omit it.",
+    "啟用時空白欄位代表精確的零位元組，長度需為 0。關閉驗證才會省略此條件。",
+    "有効な空欄は正確にゼロバイトを意味し、長さは 0 が必要です。条件を省くには確認を無効にします。"
+  ],
+  "script_assertion.check_status_word": [
+    "Check status word",
+    "驗證狀態字",
+    "ステータスワードを確認"
+  ],
+  "script_assertion.expected_sw_four_hex_digits": [
+    "Expected SW (four hex digits)",
+    "預期 SW（四位十六進位數字）",
+    "期待する SW（16進数4桁）"
+  ],
+  "script_assertion.status_checks_require_isodep_disable_this_check_or_change_the_script_technology": [
+    "Status checks require IsoDep. Disable this check or change the script technology.",
+    "狀態字驗證需要 IsoDep。請關閉此驗證或變更腳本技術。",
+    "ステータス確認には IsoDep が必要です。この確認を無効にするか、スクリプトの技術を変更してください。"
+  ],
+  "script_assertion.pass": [
+    "PASS",
+    "通過",
+    "一致"
+  ],
+  "script_assertion.fail": [
+    "FAIL",
+    "失敗",
+    "不一致"
+  ],
+  "script_assertion.empty_bytes": [
+    "(empty bytes)",
+    "（空位元組）",
+    "（空のバイト列）"
+  ],
+  "script_assertion.assertion_passed": [
+    "ASSERTION PASSED",
+    "回應驗證通過",
+    "応答の検証に成功"
+  ],
+  "script_assertion.assertion_failed": [
+    "ASSERTION FAILED",
+    "回應驗證失敗",
+    "応答の検証に失敗"
+  ],
+  "script_assertion.source_source": [
+    "Source: {{source}}",
+    "來源：{{source}}",
+    "ソース：{{source}}"
+  ],
+  "script_assertion.expected_length_expected_actual_length_actual": [
+    "Expected length: {{expected}} · Actual length: {{actual}}",
+    "預期長度：{{expected}}・實際長度：{{actual}}",
+    "期待する長さ：{{expected}}・実際の長さ：{{actual}}"
+  ],
+  "script_assertion.length_check_result": [
+    "Length check: {{result}}",
+    "長度驗證：{{result}}",
+    "長さの確認：{{result}}"
+  ],
+  "script_assertion.exact_bytes_check_result": [
+    "Exact bytes check: {{result}}",
+    "完整位元組驗證：{{result}}",
+    "全バイトの一致確認：{{result}}"
+  ],
+  "script_assertion.expected_bytes": [
+    "Expected bytes:",
+    "預期位元組：",
+    "期待するバイト列："
+  ],
+  "script_assertion.actual_bytes": [
+    "Actual bytes:",
+    "實際位元組：",
+    "実際のバイト列："
+  ],
+  "script_assertion.assertion_preview_shows_only_the_first_4096_bytes_checks_used_the_complete_response_the_pr": [
+    "Assertion preview shows only the first 4096 bytes. Checks used the complete response; the preceding TRANSCEIVE retains its full raw bytes.",
+    "驗證預覽僅顯示前 4096 位元組。比對使用完整回應；前一筆 TRANSCEIVE 保留完整原始位元組。",
+    "検証プレビューは先頭の4096バイトのみを表示します。確認には完全な応答を使い、直前の TRANSCEIVE は未加工の全バイトを保持しています。"
+  ],
+  "script_assertion.status_check_result": [
+    "Status check: {{result}}",
+    "狀態字驗證：{{result}}",
+    "ステータス確認：{{result}}"
+  ],
+  "script_assertion.expected_sw": [
+    "Expected SW:",
+    "預期 SW：",
+    "期待する SW："
+  ],
+  "script_assertion.actual_sw": [
+    "Actual SW:",
+    "實際 SW：",
+    "実際の SW："
+  ],
+  "script_assertion.assert_response_require_exact_response_values": [
+    "ASSERT RESPONSE — require exact response values",
+    "驗證回應 — 要求精確的回應值",
+    "応答を検証 — 正確な応答値を要求"
+  ],
+  "script_assertion.add_assert_response_immediately_after_a_transceive_to_check_its_latest_complete_response_w": [
+    "Add assert-response immediately after a TRANSCEIVE to check its latest complete response without sending another command. A failed check stops the run before any later command.",
+    "在 TRANSCEIVE 後加入「驗證回應」，即可檢查最新的完整回應而不發送新指令。驗證失敗會在任何後續指令前停止執行。",
+    "TRANSCEIVE の直後に assert-response を追加すると、新しいコマンドを送信せず直前の完全な応答を確認できます。確認に失敗すると、後続のコマンドを送信する前に実行を停止します。"
+  ],
+  "script_assertion.non_writing_example_an_isodep_command_is_expected_to_return_only_status_9100_its_raw_respo": [
+    "Non-writing example: an IsoDep command is expected to return only status 9100. Its raw response is 91 00 and its data is empty. Add this assertion:",
+    "非寫入範例：預期 IsoDep 指令僅回傳狀態 9100。其原始回應為 91 00，data 為空。加入以下驗證：",
+    "書き込みを行わない例：IsoDep コマンドがステータス 9100 のみを返すことを期待します。raw 応答は 91 00、data は空です。次の検証を追加します："
+  ],
+  "script_assertion.response_source_data_exact_byte_length_0_check_exact_bytes_on_leave_bytes_empty_check_stat": [
+    "Response source: data\nExact byte length: 0\nCheck exact bytes: on, leave bytes empty\nCheck status word: on, expected SW 9100",
+    "回應來源：data\n精確位元組長度：0\n完整位元組驗證：開啟，位元組欄位留空\n狀態字驗證：開啟，預期 SW 為 9100",
+    "応答ソース：data\n正確なバイト長：0\n全バイト一致確認：有効、バイト欄は空\nステータス確認：有効、期待する SW は 9100"
+  ],
+  "script_assertion.the_empty_byte_field_means_an_exact_zero_byte_expectation_turning_off_a_check_omits_that_o": [
+    "The empty byte field means an exact zero-byte expectation. Turning off a check omits that optional condition; leaving the required length blank is invalid. Literal bytes must be two-digit hex pairs, without variables or placeholders.",
+    "空的位元組欄位表示精確的零位元組預期。關閉驗證會省略該選填條件；必填的長度不可留空。位元組常值需為兩位十六進位配對，不能使用變數或佔位符。",
+    "空のバイト欄は正確にゼロバイトを期待することを意味します。確認を無効にするとその任意条件を省略できますが、必須の長さは空欄にできません。バイト列には16進数2桁のペアのみを使い、変数やプレースホルダーは使えません。"
+  ],
+  "script_assertion.if_the_actual_raw_response_is_00_91_00_data_contains_one_byte_the_assertion_fails_on_lengt": [
+    "If the actual raw response is 00 91 00, data contains one byte. The assertion fails on length 1 versus 0 even though status 9100 matches, and the next command is not sent.",
+    "若實際原始回應為 00 91 00，data 含一位元組。即使狀態 9100 相符，長度 1 與預期 0 不同仍會失敗，且不發送下一個指令。",
+    "実際の raw 応答が 00 91 00 なら、data は1バイトです。ステータス 9100 が一致しても長さが期待する0と異なる1なので検証に失敗し、次のコマンドは送信しません。"
+  ],
+  "script_assertion.on_isodep_raw_length_includes_sw1_sw2_and_must_be_at_least_2_a_raw_byte_expectation_and_ex": [
+    "On IsoDep, raw length includes SW1/SW2 and must be at least 2. A raw byte expectation and expected SW must agree. On NfcA, raw and data are the same bytes and status checking is unavailable.",
+    "IsoDep 的 raw 長度包含 SW1/SW2，至少需為 2。預期原始位元組與預期 SW 必須相符。NfcA 的 raw 與 data 相同，且不能驗證狀態字。",
+    "IsoDep の raw の長さは SW1/SW2 を含み、最低2が必要です。期待する raw バイト列と SW は一致する必要があります。NfcA の raw と data は同じで、ステータス確認は利用できません。"
+  ],
+  "script_assertion.trace_shows_each_enabled_comparison_and_expected_actual_values_the_assertion_preview_is_li": [
+    "TRACE shows each enabled comparison and expected/actual values. The assertion preview is limited to 4096 bytes, but matching uses the complete response and the preceding TRANSCEIVE keeps its full raw evidence.",
+    "TRACE 顯示每個啟用的比對與預期／實際值。驗證預覽上限為 4096 位元組，但比對使用完整回應，且前一筆 TRANSCEIVE 會保留完整原始證據。",
+    "TRACE は有効な各比較と期待値／実際の値を表示します。検証プレビューの上限は4096バイトですが、比較には完全な応答を使い、直前の TRANSCEIVE は未加工の全データを保持します。"
+  ],
+  "script_assertion.assertions_verify_response_structure_and_values_not_card_authenticity_or_an_atomic_snapsho": [
+    "Assertions verify response structure and values, not card authenticity or an atomic snapshot. Older app versions that do not support assert-response reject the script before running it.",
+    "驗證回應可確認結構與數值，不能證明卡片真實性或原子快照。不支援 assert-response 的舊版 App 會在執行前拒絕該腳本。",
+    "検証は応答の構造と値を確認しますが、カードの真正性やアトミックなスナップショットを保証しません。assert-response に未対応の旧版アプリは実行前にスクリプトを拒否します。"
+  ],
+  "errors.assertion_missing_response": [
+    "no previous response to assert",
+    "沒有可供驗證的先前回應",
+    "検証できる直前の応答がありません"
+  ],
+  "errors.assertion_source": [
+    "invalid assertion source",
+    "驗證回應來源無效",
+    "検証の応答ソースが無効です"
+  ],
+  "errors.assertion_length": [
+    "assertion length must be 0–4096",
+    "驗證長度必須為 0–4096",
+    "検証の長さは0–4096でなければなりません"
+  ],
+  "errors.assertion_hex": [
+    "assertion bytes must be literal hex pairs",
+    "驗證位元組必須為十六進位常值配對",
+    "検証バイト列は16進数2桁のリテラルのペアが必要です"
+  ],
+  "errors.assertion_byte_count": [
+    "assertion bytes must match the expected length",
+    "驗證位元組數必須符合預期長度",
+    "検証バイト数は期待する長さと一致する必要があります"
+  ],
+  "errors.assertion_sw_format": [
+    "assertion status must be four hex digits",
+    "驗證狀態字必須為四位十六進位數字",
+    "検証ステータスは16進数4桁が必要です"
+  ],
+  "errors.assertion_sw_tech": [
+    "assertion status requires IsoDep",
+    "狀態字驗證需要 IsoDep",
+    "ステータスの検証には IsoDep が必要です"
+  ],
+  "errors.assertion_raw_length": [
+    "ISO-DEP raw assertion length must include SW1/SW2",
+    "ISO-DEP 原始回應驗證長度必須包含 SW1/SW2",
+    "ISO-DEP の raw 検証長は SW1/SW2 を含む必要があります"
+  ],
+  "errors.assertion_contradiction": [
+    "assertion bytes conflict with expected status",
+    "驗證位元組與預期狀態字衝突",
+    "検証バイト列が期待するステータスと矛盾しています"
+  ],
+  "errors.assertion_runtime_missing": [
+    "No previous response to assert",
+    "沒有可供驗證的先前回應",
+    "検証できる直前の応答がありません"
+  ],
+  "errors.assertion_runtime_length": [
+    "Response length mismatch: expected {{expected}}, received {{actual}}",
+    "回應長度不符：預期 {{expected}}，收到 {{actual}}",
+    "応答の長さが不一致：期待値 {{expected}}、受信値 {{actual}}"
+  ],
+  "errors.assertion_runtime_status": [
+    "Response status mismatch: expected {{expected}}, received {{actual}}",
+    "回應狀態字不符：預期 {{expected}}，收到 {{actual}}",
+    "応答ステータスが不一致：期待値 {{expected}}、受信値 {{actual}}"
+  ],
+  "errors.assertion_runtime_bytes": [
+    "Response bytes do not match expected bytes",
+    "回應位元組與預期不符",
+    "応答バイト列が期待値と一致しません"
   ]
 }
