@@ -1,0 +1,240 @@
+{
+  "status": "partial",
+  "cancelled": false,
+  "platform": "android",
+  "tag": {
+    "platformTagIdRaw": "06050403020104E0",
+    "uidDisplayBE": "E004010203040506",
+    "uidWireLE": [
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      4,
+      224
+    ],
+    "uidSource": "platform"
+  },
+  "systemInfo": {
+    "status": "valid",
+    "rawResponse": [
+      0,
+      4,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      4,
+      224,
+      2,
+      31
+    ],
+    "informationFlags": 4,
+    "uidWireLE": [
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      4,
+      224
+    ],
+    "dsfid": null,
+    "afi": null,
+    "icReference": null,
+    "blockCount": 3,
+    "blockSize": 32,
+    "geometryTrusted": true,
+    "reason": null
+  },
+  "scope": {
+    "kind": "reported-range",
+    "reportedBlocks": 3,
+    "blockSize": 32,
+    "plannedBlocks": 3,
+    "readBlocks": 2,
+    "readBytes": 64,
+    "maxBlocks": 256,
+    "maxBytes": 8192,
+    "limits": []
+  },
+  "blocks": [
+    {
+      "address": 0,
+      "bytes": [
+        225,
+        64,
+        10,
+        0,
+        3,
+        10,
+        145,
+        1,
+        1,
+        84,
+        0,
+        81,
+        1,
+        1,
+        84,
+        0,
+        254,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ]
+    },
+    {
+      "address": 1,
+      "bytes": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ]
+    }
+  ],
+  "failure": {
+    "kind": "transport-error",
+    "phase": "read-block",
+    "blockAddress": 2,
+    "responseFlags": null,
+    "tagErrorCode": null,
+    "rawResponse": null,
+    "message": "Tag was removed. Native diagnostic: 123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
+  },
+  "cc": {
+    "status": "supported",
+    "rawBytes": [
+      225,
+      64,
+      10,
+      0
+    ],
+    "magic": 225,
+    "length": 4,
+    "mappingVersion": {
+      "major": 1,
+      "minor": 0
+    },
+    "readAccess": 0,
+    "writeAccess": 0,
+    "features": 0,
+    "mlen": 10,
+    "dataStart": 4,
+    "dataLength": 80,
+    "dataEnd": 84,
+    "reason": null
+  },
+  "ndef": {
+    "status": "decoded",
+    "tlvs": [
+      {
+        "type": 3,
+        "offset": 4,
+        "declaredLength": 10,
+        "bytes": [
+          145,
+          1,
+          1,
+          84,
+          0,
+          81,
+          1,
+          1,
+          84,
+          0
+        ],
+        "complete": true
+      },
+      {
+        "type": 254,
+        "offset": 16,
+        "declaredLength": 0,
+        "bytes": [],
+        "complete": true
+      }
+    ],
+    "rawBytes": [
+      145,
+      1,
+      1,
+      84,
+      0,
+      81,
+      1,
+      1,
+      84,
+      0
+    ],
+    "records": [
+      {
+        "tnf": 1,
+        "type": "T",
+        "id": [],
+        "payload": [
+          0
+        ]
+      },
+      {
+        "tnf": 1,
+        "type": "T",
+        "id": [],
+        "payload": [
+          0
+        ]
+      }
+    ],
+    "reason": null
+  },
+  "metadataRead": {
+    "method": "getTag",
+    "mayReadNdef": false,
+    "includedInRawReadBounds": false
+  }
+}

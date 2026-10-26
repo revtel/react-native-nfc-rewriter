@@ -4,6 +4,7 @@ import {
   parseTemplate,
   templateNames,
 } from './expressions';
+import {validateResponseAssertion} from './responseAssertions';
 
 const SCRIPT_KIND = 'nfc-script';
 const SCRIPT_VERSION = 1;
@@ -24,6 +25,8 @@ function makeStep(type) {
   switch (type) {
     case 'transceive':
       return {type, template: ''};
+    case 'assert-response':
+      return {type, source: 'data', length: 0};
     case 'delay':
       return {type, ms: 100};
     case 'set':
@@ -98,7 +101,7 @@ function validateScript(script) {
     }
   }
 
-  function walk(steps, depth, available) {
+  function walk(steps, depth, available, hasResponse = false) {
     if (depth > MAX_DEPTH) {
       errors.push('Script nesting is too deep');
     }
@@ -122,9 +125,15 @@ function validateScript(script) {
             errors.push(`${label}: ${error.message}`);
           }
           available.add('__response');
+          hasResponse = true;
           if (script.tech === 'IsoDep') {
             available.add('sw');
           }
+          break;
+        case 'assert-response':
+          validateResponseAssertion(step, script.tech, hasResponse).forEach(
+            (error) => errors.push(`${label}: ${error}`),
+          );
           break;
         case 'delay':
           if (!Number.isInteger(step.ms) || step.ms < 0 || step.ms > 5000) {
@@ -185,8 +194,8 @@ function validateScript(script) {
           if (!Array.isArray(step.then) || !Array.isArray(step.else)) {
             errors.push(`${label}: missing branch`);
           } else {
-            walk(step.then, depth + 1, new Set(available));
-            walk(step.else, depth + 1, new Set(available));
+            walk(step.then, depth + 1, new Set(available), hasResponse);
+            walk(step.else, depth + 1, new Set(available), hasResponse);
           }
           break;
         }
@@ -202,7 +211,12 @@ function validateScript(script) {
           if (!Array.isArray(step.steps)) {
             errors.push(`${label}: missing repeat body`);
           } else {
-            walk(step.steps, depth + 1, new Set([...available, 'index']));
+            walk(
+              step.steps,
+              depth + 1,
+              new Set([...available, 'index']),
+              hasResponse,
+            );
           }
           break;
         }

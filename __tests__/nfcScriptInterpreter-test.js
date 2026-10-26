@@ -35,6 +35,83 @@ test('captures dynamic NFC-A page and resolves a later command', async () => {
   expect(result.trace[2].command).toEqual([0x30, 0x28]);
 });
 
+describe('response assertion execution', () => {
+  const check = (fields = {}) => ({type: 'assert-response', source: 'data', length: 0, ...fields});
+  const read = {type: 'transceive', template: '90 60 00 00 00'};
+  const later = {type: 'transceive', template: '90 CA 00 00 00'};
+  const script = (steps, tech = 'IsoDep') => ({...newScript(tech), steps});
+
+  test.each([
+    {raw: [1, 2, 0x91, 0], check: check({length: 1, expectedHex: '01'}), failure: 'length'},
+    {raw: [0x04, 0x40, 0x29, 0x6a, 0x5d, 0x6b, 0x81, 0x91, 0],
+      check: check({length: 7, expectedHex: '04 40 29 6A 5D 6B 80', expectedSw: '9100'}), failure: 'bytes'},
+    {raw: [0x6a, 0x82], check: check({expectedHex: '', expectedSw: '9100'}), failure: 'status'},
+  ])('stops before a later mocked write on $failure mismatch', async ({raw, check: guard, failure}) => {
+    const send = jest.fn().mockResolvedValue(raw);
+    const result = await executeScript(script([read, guard, later]), {transceive: send});
+    expect(result.success).toBe(false);
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(result.trace).toHaveLength(2);
+    expect(result.trace[0].response.raw).toEqual(raw);
+    expect(result.trace[1].assertion.failure).toBe(failure);
+    expect(result.trace[1].error).toBeTruthy();
+    expect(result.error).toBe(`1: ${result.trace[1].error}`);
+  });
+
+  test('passing assertions preserve variables and latest response for capture/branch', async () => {
+    const send = jest.fn().mockResolvedValue([0x04, 0x91, 0]);
+    const result = await executeScript(script([
+      {type: 'set', name: '__response', expression: '9'}, read,
+      check({length: 1, expectedHex: '04', expectedSw: '9100'}),
+      {type: 'capture', name: 'value', source: 'data', offset: 0, format: 'u8'},
+      {type: 'if', left: 'sw', operator: '==', right: '0x9100', then: [check({source: 'raw', length: 3})], else: []},
+    ]), {transceive: send});
+    expect(result.success).toBe(true);
+    expect(result.variables).toEqual({__response: 9, sw: 0x9100, value: 4});
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(result.trace[2].assertion.passed).toBe(true);
+    expect(result.trace[5]).toMatchObject({location: '4/then/0', type: 'assert-response', assertion: {passed: true}});
+  });
+
+  test('empty data passes and consumes one step without invoking transport or delay', async () => {
+    const send = jest.fn().mockResolvedValue([0x91, 0]);
+    const delay = jest.fn();
+    const result = await executeScript(script([read, check({expectedHex: '', expectedSw: '9100'}), later]), {transceive: send, delay, maxSteps: 2});
+    expect(result.trace[1].assertion.passed).toBe(true);
+    expect(result.trace[2].error).toBe('Execution exceeded 2 steps');
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(delay).not.toHaveBeenCalled();
+  });
+
+  test('repeated assertions use the latest exchange in each iteration', async () => {
+    const send = jest.fn().mockResolvedValueOnce([4]).mockResolvedValueOnce([5]);
+    const result = await executeScript(script([{
+      type: 'repeat', count: '3', maxIterations: 3,
+      steps: [read, check({length: 1, expectedHex: '04'})],
+    }, later], 'NfcA'), {transceive: send});
+    expect(result.success).toBe(false);
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(result.trace[result.trace.length - 1]).toMatchObject({location: '0/repeat:1/1', assertion: {actualHex: '05', failure: 'bytes'}});
+    expect(result.variables.index).toBeUndefined();
+  });
+
+  test('full prevalidation prevents even an earlier command on invalid unreachable assertions', async () => {
+    const send = jest.fn();
+    const result = await executeScript(script([read, {type: 'if', left: '0', operator: '==', right: '1', then: [check({expectedSw: null})], else: []}]), {transceive: send});
+    expect(result.success).toBe(false);
+    expect(result.trace).toEqual([]);
+    expect(send).not.toHaveBeenCalled();
+  });
+
+  test('preview truncation never truncates the preceding transport evidence', async () => {
+    const raw = [...Array(4096).fill(0xaa), 0xbb, 0x91, 0];
+    const result = await executeScript(script([read, check({length: 4096}), later]), {transceive: async () => raw});
+    expect(result.trace[1].assertion).toMatchObject({actualLength: 4097, actualHexTruncated: true, passed: false});
+    expect(result.trace[0].response.raw).toEqual(raw);
+    expect(result.trace[0].response.data).toHaveLength(4097);
+  });
+});
+
 test('repeats a response-derived count with scoped index', async () => {
   const sent = [];
   const script = {

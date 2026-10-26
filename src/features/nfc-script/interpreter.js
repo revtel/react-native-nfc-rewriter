@@ -1,5 +1,9 @@
 import {parseExpression, resolveTemplate} from './expressions';
 import {MAX_EXECUTED_STEPS, validateScript} from './model';
+import {
+  assertionFailureMessage,
+  evaluateResponseAssertion,
+} from './responseAssertions';
 
 function normalizeResponse(tech, raw) {
   if (
@@ -106,6 +110,14 @@ async function executeScript(
             entry.response = lastResponse;
             if (script.tech === 'IsoDep') {
               variables.sw = lastResponse.sw;
+            }
+            break;
+          }
+          case 'assert-response': {
+            entry.assertion = evaluateResponseAssertion(step, lastResponse);
+            const failure = assertionFailureMessage(entry.assertion);
+            if (failure) {
+              throw new Error(failure);
             }
             break;
           }

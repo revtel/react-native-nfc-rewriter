@@ -190,6 +190,12 @@ function getToolkitActionGroups({
           left: NfcIcons.TransceiveIcon,
           onPress: () => navigate(customTransceiveRoute('NfcV')),
         },
+        {
+          title: 'ISO 15693 / NFC-V Inspector',
+          description: 'Read system information and bounded memory blocks',
+          left: NfcIcons.NfcIcon,
+          onPress: () => navigate({screen: 'Type5MemoryScan'}),
+        },
       ],
     },
     {
@@ -200,6 +206,12 @@ function getToolkitActionGroups({
           description: 'Send custom APDU command into your tag',
           left: NfcIcons.TransceiveIcon,
           onPress: () => navigate(customTransceiveRoute('IsoDep')),
+        },
+        {
+          title: 'Type 4 NDEF / APDU Inspector',
+          description: 'Inspect the standard NDEF application, files, and APDU evidence',
+          left: NfcIcons.NfcIcon,
+          onPress: () => navigate({screen: 'Type4NdefScan'}),
         },
         {
           title: 'Flow Script',

@@ -2,6 +2,40 @@ import {sessionTranslator} from '../../i18n';
 import {Platform} from 'react-native';
 import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
 import {handleNfcException, runNfcSession, withAndroidPrompt} from './session';
+import {createTagDiscovery} from '../../features/tag-discovery/model';
+
+async function exploreTag({shouldContinue = () => true} = {}) {
+  if (!shouldContinue()) {
+    return null;
+  }
+  const platform = Platform.OS;
+  const translate = sessionTranslator();
+  const result = await runNfcSession({
+    technology: platform === 'ios'
+      ? [NfcTech.MifareIOS, NfcTech.IsoDep, NfcTech.Iso15693IOS, NfcTech.FelicaIOS]
+      : [NfcTech.NfcA, NfcTech.NfcB, NfcTech.NfcF, NfcTech.NfcV, NfcTech.IsoDep],
+    silent: true,
+    successMessage: '',
+    operation: async () => {
+      if (!shouldContinue()) {
+        return null;
+      }
+      const tag = await NfcManager.getTag();
+      if (!shouldContinue() || !tag) {
+        return null;
+      }
+      return {tag, discovery: createTagDiscovery(tag, platform)};
+    },
+  });
+  if (!shouldContinue()) {
+    return null;
+  }
+  if (!result.success) {
+    handleNfcException(result.error, translate);
+    return null;
+  }
+  return result.value;
+}
 
 async function readTag() {
   const result = await runNfcSession({
@@ -68,4 +102,4 @@ function readNdefOnce() {
   );
 }
 
-export {readNdefOnce, readNxpSigNtag2xx, readTag};
+export {exploreTag, readNdefOnce, readNxpSigNtag2xx, readTag};

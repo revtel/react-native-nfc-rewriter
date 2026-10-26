@@ -2128,5 +2128,1305 @@
     "IF Left expression: sw\nOperator: ==\nRight expression: 0x9000",
     "IF 左側運算式：sw\n運算子：==\n右側運算式：0x9000",
     "IF 左辺の式：sw\n演算子：==\n右辺の式：0x9000"
+  ],
+  "type5.iso_15693_nfc_v_inspector": [
+    "ISO 15693 / NFC-V Inspector",
+    "ISO 15693／NFC-V 檢視器",
+    "ISO 15693 / NFC-V インスペクター"
+  ],
+  "type5.read_system_information_and_bounded_memory_blocks": [
+    "Read system information and bounded memory blocks",
+    "讀取系統資訊與範圍內的記憶區塊",
+    "システム情報と範囲内のメモリブロックを読み取る"
+  ],
+  "type5.reported_range_complete": [
+    "Reported range complete",
+    "已讀完系統回報範圍",
+    "報告された範囲の読み取り完了"
+  ],
+  "type5.partial_inspection": [
+    "Partial inspection",
+    "部分檢視結果",
+    "部分的な検査結果"
+  ],
+  "type5.limited_inspection": [
+    "Limited inspection",
+    "有限範圍檢視",
+    "限定範囲の検査"
+  ],
+  "type5.no_verified_memory": [
+    "No verified memory",
+    "沒有已驗證的記憶資料",
+    "検証済みメモリなし"
+  ],
+  "type5.available": [
+    "Available",
+    "可取得",
+    "取得済み"
+  ],
+  "type5.unavailable": [
+    "Unavailable",
+    "無法取得",
+    "取得不可"
+  ],
+  "type5.malformed": [
+    "Malformed",
+    "格式錯誤",
+    "不正な形式"
+  ],
+  "type5.unsupported_interpretation": [
+    "Unsupported interpretation",
+    "不支援此格式的解析",
+    "この形式の解析には未対応"
+  ],
+  "type5.supported_type_5_cc": [
+    "Supported Type 5 CC",
+    "支援的 Type 5 CC",
+    "対応する Type 5 CC"
+  ],
+  "type5.incomplete": [
+    "Incomplete",
+    "資料不完整",
+    "データが不完全"
+  ],
+  "type5.type_5_format_not_established": [
+    "Type 5 format not established",
+    "尚未確認 Type 5 格式",
+    "Type 5 形式は未確認"
+  ],
+  "type5.cc_conflicts_with_reported_geometry": [
+    "CC conflicts with reported geometry",
+    "CC 與系統回報的記憶範圍不一致",
+    "CC と報告されたメモリ構成が不一致"
+  ],
+  "type5.decoded": [
+    "Decoded",
+    "已解碼",
+    "デコード済み"
+  ],
+  "type5.empty_ndef_message": [
+    "Empty NDEF message",
+    "空的 NDEF 訊息",
+    "空の NDEF メッセージ"
+  ],
+  "type5.no_ndef_tlv_in_the_verified_data_area": [
+    "No NDEF TLV in the verified data area",
+    "已驗證的資料區中沒有 NDEF TLV",
+    "検証済みデータ領域に NDEF TLV なし"
+  ],
+  "type5.system_reported_range": [
+    "System-reported range",
+    "系統回報的範圍",
+    "システムが報告した範囲"
+  ],
+  "type5.bounded_range": [
+    "Bounded range",
+    "受限的範圍",
+    "制限された範囲"
+  ],
+  "type5.block_zero_preview_capacity_unknown": [
+    "Block zero preview · capacity unknown",
+    "僅預覽區塊 0・容量未知",
+    "ブロック 0 のプレビュー・容量不明"
+  ],
+  "type5.no_memory_read": [
+    "No memory read",
+    "未讀取記憶資料",
+    "メモリ未読み取り"
+  ],
+  "type5.the_identifier_cannot_safely_address_this_tag": [
+    "The identifier cannot safely address this tag.",
+    "無法使用此識別碼安全地定址標籤。",
+    "この識別子ではタグを安全に指定できません。"
+  ],
+  "type5.system_information_returned_a_different_uid_reading_stopped": [
+    "System information returned a different UID. Reading stopped.",
+    "系統資訊回傳不同的 UID，已停止讀取。",
+    "システム情報の UID が異なるため、読み取りを停止しました。"
+  ],
+  "type5.the_tag_returned_an_error_its_cause_is_not_inferred": [
+    "The tag returned an error. Its cause is not inferred.",
+    "標籤回傳錯誤，無法據此判斷原因。",
+    "タグがエラーを返しました。原因は推測しません。"
+  ],
+  "type5.communication_failed_its_cause_is_unknown": [
+    "Communication failed. Its cause is unknown.",
+    "通訊失敗，原因未知。",
+    "通信に失敗しました。原因は不明です。"
+  ],
+  "type5.the_response_was_malformed_reading_stopped": [
+    "The response was malformed. Reading stopped.",
+    "回應格式錯誤，已停止讀取。",
+    "応答形式が不正なため、読み取りを停止しました。"
+  ],
+  "type5.the_block_length_changed_reading_stopped": [
+    "The block length changed. Reading stopped.",
+    "區塊長度改變，已停止讀取。",
+    "ブロック長が変化したため、読み取りを停止しました。"
+  ],
+  "type5.unknown": [
+    "Unknown",
+    "未知",
+    "不明"
+  ],
+  "type5.read_planned_blocks_bytes_bytes_verified": [
+    "{{read}} / {{planned}} blocks · {{bytes}} bytes verified",
+    "已驗證 {{read}}／{{planned}} 個區塊・{{bytes}} 位元組",
+    "{{read}} / {{planned}} ブロック・{{bytes}} バイト検証済み"
+  ],
+  "type5.cancelled_verified_bytes_retained": [
+    "Cancelled; verified bytes retained.",
+    "已取消；保留已驗證的位元組。",
+    "キャンセル済み。検証済みバイトは保持されています。"
+  ],
+  "type5.scan_limits": [
+    "Scan limits",
+    "掃描限制",
+    "スキャン制限"
+  ],
+  "type5.platform_identifier": [
+    "Platform identifier",
+    "平台識別碼",
+    "プラットフォーム識別子"
+  ],
+  "type5.wire_uid_le": [
+    "Wire UID (LE)",
+    "通訊 UID（小端序）",
+    "通信 UID（リトルエンディアン）"
+  ],
+  "type5.failed_block": [
+    "Failed block",
+    "失敗的區塊",
+    "失敗したブロック"
+  ],
+  "type5.response_flags": [
+    "Response flags",
+    "回應旗標",
+    "応答フラグ"
+  ],
+  "type5.tag_error_code": [
+    "Tag error code",
+    "標籤錯誤碼",
+    "タグエラーコード"
+  ],
+  "type5.native_diagnostic": [
+    "Native diagnostic",
+    "原生診斷資訊",
+    "ネイティブ診断情報"
+  ],
+  "type5.raw_response": [
+    "Raw response",
+    "原始回應",
+    "未加工の応答"
+  ],
+  "type5.later_blocks_were_not_read": [
+    "Later blocks were not read.",
+    "後續區塊未讀取。",
+    "後続のブロックは読み取っていません。"
+  ],
+  "type5.system_information": [
+    "SYSTEM INFORMATION",
+    "系統資訊",
+    "システム情報"
+  ],
+  "type5.ic_reference": [
+    "IC reference",
+    "IC 參考值",
+    "IC 参照値"
+  ],
+  "type5.reported_blocks": [
+    "Reported blocks",
+    "回報的區塊數",
+    "報告されたブロック数"
+  ],
+  "type5.reported_block_size_bytes": [
+    "Reported block size (bytes)",
+    "回報的區塊大小（位元組）",
+    "報告されたブロックサイズ（バイト）"
+  ],
+  "type5.observed_block_size_bytes": [
+    "Observed block size (bytes)",
+    "實際觀測的區塊大小（位元組）",
+    "観測されたブロックサイズ（バイト）"
+  ],
+  "type5.technical_reason": [
+    "Technical reason",
+    "技術原因",
+    "技術的な理由"
+  ],
+  "type5.type_5_capability_container": [
+    "TYPE 5 CAPABILITY CONTAINER",
+    "TYPE 5 能力容器",
+    "TYPE 5 ケイパビリティコンテナ"
+  ],
+  "type5.cc_bytes": [
+    "CC bytes",
+    "CC 位元組",
+    "CC バイト"
+  ],
+  "type5.mapping_version": [
+    "Mapping version",
+    "映射版本",
+    "マッピングバージョン"
+  ],
+  "type5.read_access_bits": [
+    "Read access bits",
+    "讀取權限位元",
+    "読み取りアクセスビット"
+  ],
+  "type5.write_access_bits": [
+    "Write access bits",
+    "寫入權限位元",
+    "書き込みアクセスビット"
+  ],
+  "type5.cc_declared_data_area_start_end_bytes_bytes": [
+    "CC-declared data area: [{{start}}, {{end}}) · {{bytes}} bytes",
+    "CC 宣告的資料區：[{{start}}, {{end}})・{{bytes}} 位元組",
+    "CC 宣言のデータ領域：[{{start}}, {{end}})・{{bytes}} バイト"
+  ],
+  "type5.ndef_record_number": [
+    "NDEF record {{number}}",
+    "NDEF 紀錄 {{number}}",
+    "NDEF レコード {{number}}"
+  ],
+  "type5.verified_memory_blocks": [
+    "VERIFIED MEMORY BLOCKS",
+    "已驗證的記憶區塊",
+    "検証済みメモリブロック"
+  ],
+  "type5.block_address_bytes_bytes": [
+    "Block {{address}} · {{bytes}} bytes",
+    "區塊 {{address}}・{{bytes}} 位元組",
+    "ブロック {{address}}・{{bytes}} バイト"
+  ],
+  "type5.read_only_inspection_unknown_geometry_permits_only_block_zero_type_5_f": [
+    "Read-only inspection. Unknown geometry permits only block zero. Type 5 formatting requires a supported CC.",
+    "唯讀檢視。記憶配置未知時僅讀取區塊 0；需有支援的 CC 才能確認 Type 5 格式。",
+    "読み取り専用の検査です。メモリ構成が不明な場合はブロック 0 のみを読み取ります。Type 5 形式の確認には対応する CC が必要です。"
+  ],
+  "type5.start_iso_15693_inspection": [
+    "Start ISO 15693 inspection",
+    "開始 ISO 15693 檢視",
+    "ISO 15693 検査を開始"
+  ],
+  "type5.read_planned_blocks_read": [
+    "{{read}} / {{planned}} blocks read",
+    "已讀取 {{read}}／{{planned}} 個區塊",
+    "{{read}} / {{planned}} ブロック読み取り済み"
+  ],
+  "type5.reading_tag_information": [
+    "Reading tag information...",
+    "正在讀取標籤資訊…",
+    "タグ情報を読み取り中…"
+  ],
+  "type5.cancel_iso_15693_inspection": [
+    "Cancel ISO 15693 inspection",
+    "取消 ISO 15693 檢視",
+    "ISO 15693 検査をキャンセル"
+  ],
+  "type5.share_json": [
+    "SHARE JSON",
+    "分享 JSON",
+    "JSON を共有"
+  ],
+  "type5.technical_details_details": [
+    "Technical details: {{details}}",
+    "技術資訊：{{details}}",
+    "技術情報：{{details}}"
+  ],
+  "discovery.explore_tag": [
+    "Explore Tag",
+    "探索標籤",
+    "タグを探索"
+  ],
+  "discovery.discover_native_tag_technologies_without_requiring_ndef": [
+    "Discover native tag technologies without requiring NDEF.",
+    "探索平台可辨識的標籤技術，無須具備 NDEF。",
+    "NDEF を必要とせず、プラットフォームが検出できるタグ技術を探索します。"
+  ],
+  "discovery.exploring_tag": [
+    "Exploring tag…",
+    "正在探索標籤…",
+    "タグを探索中…"
+  ],
+  "discovery.cancel_tag_exploration": [
+    "Cancel tag exploration",
+    "取消標籤探索",
+    "タグ探索をキャンセル"
+  ],
+  "discovery.identifiers": [
+    "Identifiers",
+    "識別碼",
+    "識別子"
+  ],
+  "discovery.ndef_data_was_not_available_in_this_scan_its_absence_does_not_identify": [
+    "NDEF data was not available in this scan. Its absence does not identify the cause.",
+    "此次掃描未取得 NDEF 資料，無法據此判斷原因。",
+    "今回のスキャンでは NDEF データを取得できませんでした。データがない理由は判断できません。"
+  ],
+  "discovery.no_ndef_records_were_supplied_by_this_scan": [
+    "No NDEF records were supplied by this scan.",
+    "此次掃描未提供 NDEF 紀錄。",
+    "今回のスキャンでは NDEF レコードが提供されませんでした。"
+  ],
+  "discovery.available_tools": [
+    "AVAILABLE TOOLS",
+    "可用工具",
+    "利用可能なツール"
+  ],
+  "discovery.no_compatible_tool_is_available_for_the_observed_technologies": [
+    "No compatible tool is available for the observed technologies.",
+    "目前沒有適用於已觀測技術的工具。",
+    "観測された技術に対応するツールはありません。"
+  ],
+  "discovery.type_5_formatting_is_unconfirmed_the_inspector_checks_available_cc_evi": [
+    "Type 5 formatting is unconfirmed. The inspector checks available CC evidence.",
+    "Type 5 格式尚未確認，檢視器會檢查可取得的 CC 證據。",
+    "Type 5 形式は未確認です。インスペクターで取得できた CC を確認します。"
+  ],
+  "discovery.ios_discovery_is_limited_by_the_app_s_configured_iso_dep_application_i": [
+    "iOS discovery is limited by the app’s configured ISO-DEP application identifiers and FeliCa system codes.",
+    "iOS 探索範圍受 App 設定的 ISO-DEP 應用程式識別碼與 FeliCa 系統碼限制。",
+    "iOS での探索範囲は、アプリに設定された ISO-DEP アプリケーション識別子と FeliCa システムコードによって制限されます。"
+  ],
+  "discovery.custom_nfc_a_transceive": [
+    "Custom NFC-A Transceive",
+    "自訂 NFC-A 收發",
+    "カスタム NFC-A 通信"
+  ],
+  "discovery.custom_iso_dep_transceive": [
+    "Custom ISO-DEP Transceive",
+    "自訂 ISO-DEP 收發",
+    "カスタム ISO-DEP 通信"
+  ],
+  "discovery.custom_nfc_v_transceive": [
+    "Custom NFC-V Transceive",
+    "自訂 NFC-V 收發",
+    "カスタム NFC-V 通信"
+  ],
+  "discovery.nfc_a_flow_script": [
+    "NFC-A Flow Script",
+    "NFC-A 流程腳本",
+    "NFC-A フロースクリプト"
+  ],
+  "discovery.iso_dep_flow_script": [
+    "ISO-DEP Flow Script",
+    "ISO-DEP 流程腳本",
+    "ISO-DEP フロースクリプト"
+  ],
+  "type5.ios_metadata_read_notice": [
+    "iOS may read NDEF while obtaining the tag identifier. The block limits apply only to this inspector’s raw reads.",
+    "iOS 在取得標籤識別碼時可能會讀取 NDEF。區塊限制僅適用於此檢視器發送的原始讀取指令。",
+    "iOS はタグ識別子の取得時に NDEF を読み取る場合があります。ブロック制限は、このインスペクターが送信する未加工の読み取りコマンドにのみ適用されます。"
+  ],
+  "type4.type_4_ndef_apdu_inspector": [
+    "Type 4 NDEF / APDU Inspector",
+    "Type 4 NDEF／APDU 檢視器",
+    "Type 4 NDEF / APDU インスペクター"
+  ],
+  "type4.inspect_the_standard_ndef_application_files_and_apdu_evidence": [
+    "Inspect the standard NDEF application, files, and APDU evidence",
+    "檢視標準 NDEF 應用程式、檔案與 APDU 證據",
+    "標準 NDEF アプリケーション、ファイル、APDU の証拠を検査"
+  ],
+  "type4.iso_dep_alone_does_not_confirm_type_4_formatting_the_inspector_checks_ndef_application_and": [
+    "ISO-DEP alone does not confirm Type 4 formatting. The inspector checks NDEF application and file evidence.",
+    "僅有 ISO-DEP 無法確認 Type 4 格式；檢視器會檢查 NDEF 應用程式與檔案證據。",
+    "ISO-DEP だけでは Type 4 形式を確認できません。インスペクターで NDEF アプリケーションとファイルの証拠を確認します。"
+  ],
+  "type4.ios_can_automatically_select_configured_applications_before_this_inspector_sends_its_first": [
+    "iOS can automatically SELECT configured applications before this inspector sends its first APDU.",
+    "在檢視器發送第一個 APDU 之前，iOS 可能已自動 SELECT 設定的應用程式。",
+    "インスペクターが最初の APDU を送信する前に、iOS が設定されたアプリケーションを自動 SELECT する場合があります。"
+  ],
+  "type4.the_transcript_contains_app_controlled_apdus_only_it_is_not_a_complete_rf_trace": [
+    "The transcript contains app-controlled APDUs only; it is not a complete RF trace.",
+    "此紀錄僅包含 App 控制的 APDU，並非完整的 RF 通訊追蹤。",
+    "この記録にはアプリが制御する APDU のみが含まれ、完全な RF 通信トレースではありません。"
+  ],
+  "type4.reads_are_sequential_equal_initial_and_final_nlen_confirms_only_equal_lengths_not_an_atomi": [
+    "Reads are sequential. Equal initial and final NLEN confirms only equal lengths, not an atomic snapshot, unchanged content, or authenticity.",
+    "資料依序讀取。前後 NLEN 相等僅確認長度相同，不代表原子快照、內容未變或真實性驗證。",
+    "読み取りは順次行われます。最初と最後の NLEN が同じでも、長さが等しいことだけを示し、アトミックなスナップショット、内容の不変性、真正性を保証しません。"
+  ],
+  "type4.declared_ndef_bytes_acquired": [
+    "Declared NDEF bytes acquired",
+    "已取得宣告的 NDEF 位元組",
+    "宣言された NDEF バイトを取得済み"
+  ],
+  "type4.supported_cc": [
+    "Supported CC",
+    "支援的 CC",
+    "対応する CC"
+  ],
+  "type4.selected": [
+    "Selected",
+    "已選擇",
+    "選択済み"
+  ],
+  "type4.rejected": [
+    "Rejected",
+    "遭拒絕",
+    "拒否"
+  ],
+  "type4.not_attempted": [
+    "Not attempted",
+    "尚未嘗試",
+    "未試行"
+  ],
+  "type4.not_checked": [
+    "Not checked",
+    "尚未檢查",
+    "未確認"
+  ],
+  "type4.initial_and_final_lengths_are_equal": [
+    "Initial and final lengths are equal",
+    "前後長度相同",
+    "最初と最後の長さが一致"
+  ],
+  "type4.nlen_changed_during_inspection": [
+    "NLEN changed during inspection",
+    "檢視期間 NLEN 改變",
+    "検査中に NLEN が変化"
+  ],
+  "type4.length_recheck_failed": [
+    "Length recheck failed",
+    "長度複查失敗",
+    "長さの再確認に失敗"
+  ],
+  "type4.no_file_bytes_read": [
+    "No file bytes read",
+    "未讀取檔案位元組",
+    "ファイルバイト未読み取り"
+  ],
+  "type4.cc_evidence_only": [
+    "CC evidence only",
+    "僅有 CC 證據",
+    "CC の証拠のみ"
+  ],
+  "type4.standard_ndef_file": [
+    "Standard NDEF file",
+    "標準 NDEF 檔案",
+    "標準 NDEF ファイル"
+  ],
+  "type4.connecting": [
+    "Connecting...",
+    "正在連線…",
+    "接続中…"
+  ],
+  "type4.selecting_ndef_application": [
+    "Selecting NDEF application...",
+    "正在選擇 NDEF 應用程式…",
+    "NDEF アプリケーションを選択中…"
+  ],
+  "type4.selecting_cc_file": [
+    "Selecting CC file...",
+    "正在選擇 CC 檔案…",
+    "CC ファイルを選択中…"
+  ],
+  "type4.reading_cc": [
+    "Reading CC...",
+    "正在讀取 CC…",
+    "CC を読み取り中…"
+  ],
+  "type4.selecting_ndef_file": [
+    "Selecting NDEF file...",
+    "正在選擇 NDEF 檔案…",
+    "NDEF ファイルを選択中…"
+  ],
+  "type4.reading_nlen": [
+    "Reading NLEN...",
+    "正在讀取 NLEN…",
+    "NLEN を読み取り中…"
+  ],
+  "type4.reading_ndef_payload": [
+    "Reading NDEF payload...",
+    "正在讀取 NDEF 負載…",
+    "NDEF ペイロードを読み取り中…"
+  ],
+  "type4.comparing_final_nlen": [
+    "Comparing final NLEN...",
+    "正在比較最終 NLEN…",
+    "最終 NLEN を比較中…"
+  ],
+  "type4.terminal_status_word": [
+    "Terminal status word",
+    "終止流程的狀態字",
+    "処理を終了するステータスワード"
+  ],
+  "type4.communication_failure": [
+    "Communication failure",
+    "通訊失敗",
+    "通信失敗"
+  ],
+  "type4.malformed_response": [
+    "Malformed response",
+    "回應格式錯誤",
+    "不正な応答"
+  ],
+  "type4.nlen_exceeds_the_file_capacity": [
+    "NLEN exceeds the file capacity",
+    "NLEN 超過檔案容量",
+    "NLEN がファイル容量を超過"
+  ],
+  "type4.read_planned_ndef_bytes_verified_commands_app_apdus": [
+    "{{read}} / {{planned}} NDEF bytes verified · {{commands}} app APDUs",
+    "已驗證 {{read}}／{{planned}} 個 NDEF 位元組・{{commands}} 個 App APDU",
+    "{{read}} / {{planned}} NDEF バイト検証済み・{{commands}} アプリ APDU"
+  ],
+  "type4.limits_bytes_payload_bytes_cc_cc_bytes_commands_apdus_chunk_bytes_per_read": [
+    "Limits: {{bytes}} payload bytes · {{cc}} CC bytes · {{commands}} APDUs · {{chunk}} bytes per read",
+    "限制：{{bytes}} 個負載位元組・{{cc}} 個 CC 位元組・{{commands}} 個 APDU・每次讀取 {{chunk}} 位元組",
+    "制限：ペイロード {{bytes}} バイト・CC {{cc}} バイト・{{commands}} APDU・1 回 {{chunk}} バイト"
+  ],
+  "type4.verified_cc_bytes": [
+    "Verified CC bytes",
+    "已驗證的 CC 位元組",
+    "検証済み CC バイト"
+  ],
+  "type4.verified_file_bytes_cc_nlen_payload": [
+    "Verified file bytes (CC + NLEN + payload)",
+    "已驗證的檔案位元組（CC＋NLEN＋負載）",
+    "検証済みファイルバイト（CC + NLEN + ペイロード）"
+  ],
+  "type4.failed_phase": [
+    "Failed phase",
+    "失敗階段",
+    "失敗した段階"
+  ],
+  "type4.file_identifier": [
+    "File identifier",
+    "檔案識別碼",
+    "ファイル識別子"
+  ],
+  "type4.file_offset": [
+    "File offset",
+    "檔案位移",
+    "ファイルオフセット"
+  ],
+  "type4.the_cause_is_not_inferred_no_later_apdu_was_sent": [
+    "The cause is not inferred. No later APDU was sent.",
+    "無法據此推斷原因；未發送後續 APDU。",
+    "原因は推測しません。後続の APDU は送信していません。"
+  ],
+  "type4.ndef_application_cc": [
+    "NDEF APPLICATION / CC",
+    "NDEF 應用程式／CC",
+    "NDEF アプリケーション / CC"
+  ],
+  "type4.application_selection": [
+    "Application selection",
+    "應用程式選擇",
+    "アプリケーション選択"
+  ],
+  "type4.cc_interpretation": [
+    "CC interpretation",
+    "CC 解析",
+    "CC 解析結果"
+  ],
+  "type4.file_descriptor_number": [
+    "File descriptor {{number}}",
+    "檔案描述項 {{number}}",
+    "ファイル記述子 {{number}}"
+  ],
+  "type4.ndef_file_length_comparison": [
+    "NDEF FILE / LENGTH COMPARISON",
+    "NDEF 檔案／長度比較",
+    "NDEF ファイル / 長さ比較"
+  ],
+  "type4.file_selected": [
+    "File selected",
+    "檔案已選擇",
+    "ファイル選択済み"
+  ],
+  "type4.yes": [
+    "Yes",
+    "是",
+    "はい"
+  ],
+  "type4.maximum_file_size_including_nlen": [
+    "Maximum file size (including NLEN)",
+    "檔案大小上限（含 NLEN）",
+    "最大ファイルサイズ（NLEN を含む）"
+  ],
+  "type4.read_access_byte": [
+    "Read access byte",
+    "讀取權限位元組",
+    "読み取りアクセスバイト"
+  ],
+  "type4.write_access_byte": [
+    "Write access byte",
+    "寫入權限位元組",
+    "書き込みアクセスバイト"
+  ],
+  "type4.initial_nlen": [
+    "Initial NLEN",
+    "初始 NLEN",
+    "最初の NLEN"
+  ],
+  "type4.initial_nlen_bytes": [
+    "Initial NLEN bytes",
+    "初始 NLEN 位元組",
+    "最初の NLEN バイト"
+  ],
+  "type4.final_nlen": [
+    "Final NLEN",
+    "最終 NLEN",
+    "最終 NLEN"
+  ],
+  "type4.final_nlen_bytes": [
+    "Final NLEN bytes",
+    "最終 NLEN 位元組",
+    "最終 NLEN バイト"
+  ],
+  "type4.length_comparison": [
+    "Length comparison",
+    "長度比較",
+    "長さ比較"
+  ],
+  "type4.ndef_interpretation": [
+    "NDEF INTERPRETATION",
+    "NDEF 解析",
+    "NDEF 解析結果"
+  ],
+  "type4.interpretation": [
+    "Interpretation",
+    "解析結果",
+    "解析結果"
+  ],
+  "type4.verified_ndef_payload": [
+    "VERIFIED NDEF PAYLOAD",
+    "已驗證的 NDEF 負載",
+    "検証済み NDEF ペイロード"
+  ],
+  "type4.no_verified_payload_bytes": [
+    "No verified payload bytes",
+    "沒有已驗證的負載位元組",
+    "検証済みペイロードバイトなし"
+  ],
+  "type4.file_offset_offset_bytes_bytes": [
+    "File offset {{offset}} · {{bytes}} bytes",
+    "檔案位移 {{offset}}・{{bytes}} 位元組",
+    "ファイルオフセット {{offset}}・{{bytes}} バイト"
+  ],
+  "type4.apdu_number_phase_outcome_show_or_hide_full_exchange": [
+    "APDU {{number}}: {{phase}}; {{outcome}}. Show or hide full exchange.",
+    "APDU {{number}}：{{phase}}；{{outcome}}。顯示或隱藏完整通訊。",
+    "APDU {{number}}：{{phase}}、{{outcome}}。通信の詳細を表示または非表示にします。"
+  ],
+  "type4.command_apdu": [
+    "Command APDU",
+    "指令 APDU",
+    "コマンド APDU"
+  ],
+  "type4.response_data": [
+    "Response data",
+    "回應資料",
+    "応答データ"
+  ],
+  "type4.requested_bytes": [
+    "Requested bytes",
+    "要求的位元組數",
+    "要求バイト数"
+  ],
+  "type4.original_response_length": [
+    "Original response length",
+    "原始回應長度",
+    "元の応答長"
+  ],
+  "type4.inspect_mapping_2_0_ndef_application_and_file_evidence_with_bounded_select_read_binary_com": [
+    "Inspect mapping 2.0 NDEF application and file evidence with bounded SELECT / READ BINARY commands.",
+    "使用範圍受限的 SELECT／READ BINARY 指令，檢視映射 2.0 NDEF 應用程式與檔案證據。",
+    "範囲を制限した SELECT / READ BINARY コマンドで、マッピング 2.0 の NDEF アプリケーションとファイルの証拠を検査します。"
+  ],
+  "type4.start_type_4_ndef_inspection": [
+    "Start Type 4 NDEF inspection",
+    "開始 Type 4 NDEF 檢視",
+    "Type 4 NDEF 検査を開始"
+  ],
+  "type4.cancel_type_4_ndef_inspection": [
+    "Cancel Type 4 NDEF inspection",
+    "取消 Type 4 NDEF 檢視",
+    "Type 4 NDEF 検査をキャンセル"
+  ],
+  "type4.bytes_ndef_bytes_verified_commands_app_apdus": [
+    "{{bytes}} NDEF bytes verified · {{commands}} app APDUs",
+    "已驗證 {{bytes}} 個 NDEF 位元組・{{commands}} 個 App APDU",
+    "{{bytes}} NDEF バイト検証済み・{{commands}} アプリ APDU"
+  ],
+  "type4.app_apdu_transcript": [
+    "APP APDU TRANSCRIPT",
+    "APP APDU 通訊紀錄",
+    "アプリ APDU 通信記録"
+  ],
+  "type4.tap_each_exchange_to_inspect_its_full_command_response_status_word_and_diagnostic": [
+    "Tap each exchange to inspect its full command, response, status word, and diagnostic.",
+    "點擊各筆通訊以檢視完整指令、回應、狀態字與診斷資訊。",
+    "各通信をタップすると、コマンド、応答、ステータスワード、診断情報の全体を確認できます。"
+  ],
+  "type4.diagnostic_shortened_from_length_characters": [
+    "Diagnostic shortened from {{length}} characters.",
+    "診斷資訊已從 {{length}} 個字元縮短。",
+    "診断情報は元の {{length}} 文字から短縮されています。"
+  ],
+  "type4.show_all_payload_bytes": [
+    "SHOW ALL PAYLOAD BYTES",
+    "顯示所有負載位元組",
+    "すべてのペイロードバイトを表示"
+  ],
+  "type4.hide_payload_bytes": [
+    "HIDE PAYLOAD BYTES",
+    "隱藏負載位元組",
+    "ペイロードバイトを非表示"
+  ],
+  "type4.incomplete_response_evidence": [
+    "Incomplete response evidence; only the available bounded prefix is retained.",
+    "回應證據不完整；僅保留可取得且在限制內的前綴。",
+    "応答の証拠が不完全です。取得できた制限内の先頭部分のみを保持しています。"
+  ],
+  "type4.show_all_ndef_records": [
+    "SHOW ALL NDEF RECORDS",
+    "顯示所有 NDEF 紀錄",
+    "すべての NDEF レコードを表示"
+  ],
+  "type4.hide_ndef_records": [
+    "HIDE NDEF RECORDS",
+    "隱藏 NDEF 紀錄",
+    "NDEF レコードを非表示"
+  ],
+  "type4.read_only_effects_short": [
+    "Read-only commands may change selection, session state, or read counters.",
+    "唯讀指令仍可能改變選擇狀態、工作階段或讀取計數器。",
+    "読み取り専用コマンドでも、選択状態、セッション状態、読み取りカウンターが変わる場合があります。"
+  ],
+  "type4.platform_and_trace_details": [
+    "Platform and trace details",
+    "平台與通訊紀錄說明",
+    "プラットフォームと通信記録の詳細"
+  ],
+  "type4.no_sdm_validation": [
+    "This inspection does not validate SDM.",
+    "此檢視不驗證 SDM。",
+    "この検査は SDM を検証しません。"
+  ],
+  "script_assertion.assert_response": [
+    "assert-response",
+    "驗證回應",
+    "応答を検証"
+  ],
+  "script_assertion.exact_byte_length_0_4096": [
+    "Exact byte length (0–4096)",
+    "精確位元組長度（0–4096）",
+    "正確なバイト長（0–4096）"
+  ],
+  "script_assertion.checks_the_latest_transceive_without_sending_a_command_on_isodep_data_excludes_sw1_sw2_raw": [
+    "Checks the latest TRANSCEIVE without sending a command. On IsoDep, data excludes SW1/SW2; raw includes them.",
+    "檢查最新的 TRANSCEIVE 回應，不發送指令。IsoDep 的 data 不含 SW1/SW2；raw 則包含。",
+    "コマンドを送信せず、直前の TRANSCEIVE 応答を確認します。IsoDep の data は SW1/SW2 を除き、raw は含みます。"
+  ],
+  "script_assertion.check_exact_bytes": [
+    "Check exact bytes",
+    "驗證完整位元組",
+    "全バイトの一致を確認"
+  ],
+  "script_assertion.expected_literal_hex_bytes": [
+    "Expected literal hex bytes",
+    "預期的十六進位位元組常值",
+    "期待するリテラルの16進バイト列"
+  ],
+  "script_assertion.an_enabled_empty_field_means_exactly_zero_bytes_and_requires_length_0_turn_off_the_check_t": [
+    "An enabled empty field means exactly zero bytes and requires length 0. Turn off the check to omit it.",
+    "啟用時空白欄位代表精確的零位元組，長度需為 0。關閉驗證才會省略此條件。",
+    "有効な空欄は正確にゼロバイトを意味し、長さは 0 が必要です。条件を省くには確認を無効にします。"
+  ],
+  "script_assertion.check_status_word": [
+    "Check status word",
+    "驗證狀態字",
+    "ステータスワードを確認"
+  ],
+  "script_assertion.expected_sw_four_hex_digits": [
+    "Expected SW (four hex digits)",
+    "預期 SW（四位十六進位數字）",
+    "期待する SW（16進数4桁）"
+  ],
+  "script_assertion.status_checks_require_isodep_disable_this_check_or_change_the_script_technology": [
+    "Status checks require IsoDep. Disable this check or change the script technology.",
+    "狀態字驗證需要 IsoDep。請關閉此驗證或變更腳本技術。",
+    "ステータス確認には IsoDep が必要です。この確認を無効にするか、スクリプトの技術を変更してください。"
+  ],
+  "script_assertion.pass": [
+    "PASS",
+    "通過",
+    "一致"
+  ],
+  "script_assertion.fail": [
+    "FAIL",
+    "失敗",
+    "不一致"
+  ],
+  "script_assertion.empty_bytes": [
+    "(empty bytes)",
+    "（空位元組）",
+    "（空のバイト列）"
+  ],
+  "script_assertion.assertion_passed": [
+    "ASSERTION PASSED",
+    "回應驗證通過",
+    "応答の検証に成功"
+  ],
+  "script_assertion.assertion_failed": [
+    "ASSERTION FAILED",
+    "回應驗證失敗",
+    "応答の検証に失敗"
+  ],
+  "script_assertion.source_source": [
+    "Source: {{source}}",
+    "來源：{{source}}",
+    "ソース：{{source}}"
+  ],
+  "script_assertion.expected_length_expected_actual_length_actual": [
+    "Expected length: {{expected}} · Actual length: {{actual}}",
+    "預期長度：{{expected}}・實際長度：{{actual}}",
+    "期待する長さ：{{expected}}・実際の長さ：{{actual}}"
+  ],
+  "script_assertion.length_check_result": [
+    "Length check: {{result}}",
+    "長度驗證：{{result}}",
+    "長さの確認：{{result}}"
+  ],
+  "script_assertion.exact_bytes_check_result": [
+    "Exact bytes check: {{result}}",
+    "完整位元組驗證：{{result}}",
+    "全バイトの一致確認：{{result}}"
+  ],
+  "script_assertion.expected_bytes": [
+    "Expected bytes:",
+    "預期位元組：",
+    "期待するバイト列："
+  ],
+  "script_assertion.actual_bytes": [
+    "Actual bytes:",
+    "實際位元組：",
+    "実際のバイト列："
+  ],
+  "script_assertion.assertion_preview_shows_only_the_first_4096_bytes_checks_used_the_complete_response_the_pr": [
+    "Assertion preview shows only the first 4096 bytes. Checks used the complete response; the preceding TRANSCEIVE retains its full raw bytes.",
+    "驗證預覽僅顯示前 4096 位元組。比對使用完整回應；前一筆 TRANSCEIVE 保留完整原始位元組。",
+    "検証プレビューは先頭の4096バイトのみを表示します。確認には完全な応答を使い、直前の TRANSCEIVE は未加工の全バイトを保持しています。"
+  ],
+  "script_assertion.status_check_result": [
+    "Status check: {{result}}",
+    "狀態字驗證：{{result}}",
+    "ステータス確認：{{result}}"
+  ],
+  "script_assertion.expected_sw": [
+    "Expected SW:",
+    "預期 SW：",
+    "期待する SW："
+  ],
+  "script_assertion.actual_sw": [
+    "Actual SW:",
+    "實際 SW：",
+    "実際の SW："
+  ],
+  "script_assertion.assert_response_require_exact_response_values": [
+    "ASSERT RESPONSE — require exact response values",
+    "驗證回應 — 要求精確的回應值",
+    "応答を検証 — 正確な応答値を要求"
+  ],
+  "script_assertion.add_assert_response_immediately_after_a_transceive_to_check_its_latest_complete_response_w": [
+    "Add assert-response immediately after a TRANSCEIVE to check its latest complete response without sending another command. A failed check stops the run before any later command.",
+    "在 TRANSCEIVE 後加入「驗證回應」，即可檢查最新的完整回應而不發送新指令。驗證失敗會在任何後續指令前停止執行。",
+    "TRANSCEIVE の直後に assert-response を追加すると、新しいコマンドを送信せず直前の完全な応答を確認できます。確認に失敗すると、後続のコマンドを送信する前に実行を停止します。"
+  ],
+  "script_assertion.non_writing_example_an_isodep_command_is_expected_to_return_only_status_9100_its_raw_respo": [
+    "Non-writing example: an IsoDep command is expected to return only status 9100. Its raw response is 91 00 and its data is empty. Add this assertion:",
+    "非寫入範例：預期 IsoDep 指令僅回傳狀態 9100。其原始回應為 91 00，data 為空。加入以下驗證：",
+    "書き込みを行わない例：IsoDep コマンドがステータス 9100 のみを返すことを期待します。raw 応答は 91 00、data は空です。次の検証を追加します："
+  ],
+  "script_assertion.response_source_data_exact_byte_length_0_check_exact_bytes_on_leave_bytes_empty_check_stat": [
+    "Response source: data\nExact byte length: 0\nCheck exact bytes: on, leave bytes empty\nCheck status word: on, expected SW 9100",
+    "回應來源：data\n精確位元組長度：0\n完整位元組驗證：開啟，位元組欄位留空\n狀態字驗證：開啟，預期 SW 為 9100",
+    "応答ソース：data\n正確なバイト長：0\n全バイト一致確認：有効、バイト欄は空\nステータス確認：有効、期待する SW は 9100"
+  ],
+  "script_assertion.the_empty_byte_field_means_an_exact_zero_byte_expectation_turning_off_a_check_omits_that_o": [
+    "The empty byte field means an exact zero-byte expectation. Turning off a check omits that optional condition; leaving the required length blank is invalid. Literal bytes must be two-digit hex pairs, without variables or placeholders.",
+    "空的位元組欄位表示精確的零位元組預期。關閉驗證會省略該選填條件；必填的長度不可留空。位元組常值需為兩位十六進位配對，不能使用變數或佔位符。",
+    "空のバイト欄は正確にゼロバイトを期待することを意味します。確認を無効にするとその任意条件を省略できますが、必須の長さは空欄にできません。バイト列には16進数2桁のペアのみを使い、変数やプレースホルダーは使えません。"
+  ],
+  "script_assertion.if_the_actual_raw_response_is_00_91_00_data_contains_one_byte_the_assertion_fails_on_lengt": [
+    "If the actual raw response is 00 91 00, data contains one byte. The assertion fails on length 1 versus 0 even though status 9100 matches, and the next command is not sent.",
+    "若實際原始回應為 00 91 00，data 含一位元組。即使狀態 9100 相符，長度 1 與預期 0 不同仍會失敗，且不發送下一個指令。",
+    "実際の raw 応答が 00 91 00 なら、data は1バイトです。ステータス 9100 が一致しても長さが期待する0と異なる1なので検証に失敗し、次のコマンドは送信しません。"
+  ],
+  "script_assertion.on_isodep_raw_length_includes_sw1_sw2_and_must_be_at_least_2_a_raw_byte_expectation_and_ex": [
+    "On IsoDep, raw length includes SW1/SW2 and must be at least 2. A raw byte expectation and expected SW must agree. On NfcA, raw and data are the same bytes and status checking is unavailable.",
+    "IsoDep 的 raw 長度包含 SW1/SW2，至少需為 2。預期原始位元組與預期 SW 必須相符。NfcA 的 raw 與 data 相同，且不能驗證狀態字。",
+    "IsoDep の raw の長さは SW1/SW2 を含み、最低2が必要です。期待する raw バイト列と SW は一致する必要があります。NfcA の raw と data は同じで、ステータス確認は利用できません。"
+  ],
+  "script_assertion.trace_shows_each_enabled_comparison_and_expected_actual_values_the_assertion_preview_is_li": [
+    "TRACE shows each enabled comparison and expected/actual values. The assertion preview is limited to 4096 bytes, but matching uses the complete response and the preceding TRANSCEIVE keeps its full raw evidence.",
+    "TRACE 顯示每個啟用的比對與預期／實際值。驗證預覽上限為 4096 位元組，但比對使用完整回應，且前一筆 TRANSCEIVE 會保留完整原始證據。",
+    "TRACE は有効な各比較と期待値／実際の値を表示します。検証プレビューの上限は4096バイトですが、比較には完全な応答を使い、直前の TRANSCEIVE は未加工の全データを保持します。"
+  ],
+  "script_assertion.assertions_verify_response_structure_and_values_not_card_authenticity_or_an_atomic_snapsho": [
+    "Assertions verify response structure and values, not card authenticity or an atomic snapshot. Older app versions that do not support assert-response reject the script before running it.",
+    "驗證回應可確認結構與數值，不能證明卡片真實性或原子快照。不支援 assert-response 的舊版 App 會在執行前拒絕該腳本。",
+    "検証は応答の構造と値を確認しますが、カードの真正性やアトミックなスナップショットを保証しません。assert-response に未対応の旧版アプリは実行前にスクリプトを拒否します。"
+  ],
+  "errors.assertion_missing_response": [
+    "no previous response to assert",
+    "沒有可供驗證的先前回應",
+    "検証できる直前の応答がありません"
+  ],
+  "errors.assertion_source": [
+    "invalid assertion source",
+    "驗證回應來源無效",
+    "検証の応答ソースが無効です"
+  ],
+  "errors.assertion_length": [
+    "assertion length must be 0–4096",
+    "驗證長度必須為 0–4096",
+    "検証の長さは0–4096でなければなりません"
+  ],
+  "errors.assertion_hex": [
+    "assertion bytes must be literal hex pairs",
+    "驗證位元組必須為十六進位常值配對",
+    "検証バイト列は16進数2桁のリテラルのペアが必要です"
+  ],
+  "errors.assertion_byte_count": [
+    "assertion bytes must match the expected length",
+    "驗證位元組數必須符合預期長度",
+    "検証バイト数は期待する長さと一致する必要があります"
+  ],
+  "errors.assertion_sw_format": [
+    "assertion status must be four hex digits",
+    "驗證狀態字必須為四位十六進位數字",
+    "検証ステータスは16進数4桁が必要です"
+  ],
+  "errors.assertion_sw_tech": [
+    "assertion status requires IsoDep",
+    "狀態字驗證需要 IsoDep",
+    "ステータスの検証には IsoDep が必要です"
+  ],
+  "errors.assertion_raw_length": [
+    "ISO-DEP raw assertion length must include SW1/SW2",
+    "ISO-DEP 原始回應驗證長度必須包含 SW1/SW2",
+    "ISO-DEP の raw 検証長は SW1/SW2 を含む必要があります"
+  ],
+  "errors.assertion_contradiction": [
+    "assertion bytes conflict with expected status",
+    "驗證位元組與預期狀態字衝突",
+    "検証バイト列が期待するステータスと矛盾しています"
+  ],
+  "errors.assertion_runtime_missing": [
+    "No previous response to assert",
+    "沒有可供驗證的先前回應",
+    "検証できる直前の応答がありません"
+  ],
+  "errors.assertion_runtime_length": [
+    "Response length mismatch: expected {{expected}}, received {{actual}}",
+    "回應長度不符：預期 {{expected}}，收到 {{actual}}",
+    "応答の長さが不一致：期待値 {{expected}}、受信値 {{actual}}"
+  ],
+  "errors.assertion_runtime_status": [
+    "Response status mismatch: expected {{expected}}, received {{actual}}",
+    "回應狀態字不符：預期 {{expected}}，收到 {{actual}}",
+    "応答ステータスが不一致：期待値 {{expected}}、受信値 {{actual}}"
+  ],
+  "errors.assertion_runtime_bytes": [
+    "Response bytes do not match expected bytes",
+    "回應位元組與預期不符",
+    "応答バイト列が期待値と一致しません"
+  ],
+  "tag_result.unknown_record": [
+    "Unknown record",
+    "未知紀錄",
+    "不明なレコード"
+  ],
+  "tag_result.malformed_record": [
+    "Malformed record",
+    "格式錯誤的紀錄",
+    "不正な形式のレコード"
+  ],
+  "tag_result.unsupported_record": [
+    "Unsupported record",
+    "不支援的紀錄",
+    "未対応のレコード"
+  ],
+  "tag_result.wi_fi_data": [
+    "Wi-Fi data",
+    "Wi-Fi 資料",
+    "Wi-Fi データ"
+  ],
+  "tag_result.contact_data": [
+    "Contact data",
+    "聯絡人資料",
+    "連絡先データ"
+  ],
+  "tag_result.mime_data": [
+    "MIME data",
+    "MIME 資料",
+    "MIME データ"
+  ],
+  "tag_result.the_supplied_record_is_invalid": [
+    "The supplied record is invalid.",
+    "提供的紀錄無效。",
+    "提供されたレコードは無効です。"
+  ],
+  "tag_result.the_record_tnf_is_invalid": [
+    "The record TNF is invalid.",
+    "紀錄的 TNF 無效。",
+    "レコードの TNF が無効です。"
+  ],
+  "tag_result.the_record_type_bytes_are_invalid": [
+    "The record type bytes are invalid.",
+    "紀錄的類型位元組無效。",
+    "レコードの種別バイト列が無効です。"
+  ],
+  "tag_result.the_record_payload_bytes_are_invalid": [
+    "The record payload bytes are invalid.",
+    "紀錄的負載位元組無效。",
+    "レコードのペイロードバイト列が無効です。"
+  ],
+  "tag_result.the_record_id_bytes_are_invalid": [
+    "The record ID bytes are invalid.",
+    "紀錄的 ID 位元組無效。",
+    "レコードの ID バイト列が無効です。"
+  ],
+  "tag_result.the_text_record_could_not_be_decoded_as_valid_utf_8": [
+    "The Text record could not be decoded as valid UTF-8.",
+    "文字紀錄無法解碼為有效的 UTF-8。",
+    "テキストレコードを有効な UTF-8 としてデコードできません。"
+  ],
+  "tag_result.the_uri_record_does_not_contain_a_valid_link": [
+    "The URI record does not contain a valid link.",
+    "URI 紀錄未包含有效連結。",
+    "URI レコードに有効なリンクが含まれていません。"
+  ],
+  "tag_result.utf_16_text_is_not_decoded_its_original_bytes_are_preserved": [
+    "UTF-16 text is not decoded. Its original bytes are preserved.",
+    "尚未解碼 UTF-16 文字，原始位元組已保留。",
+    "UTF-16 テキストはデコードしません。元のバイト列は保持されています。"
+  ],
+  "tag_result.this_record_type_has_no_readable_preview_its_original_bytes_are_preserved": [
+    "This record type has no readable preview. Its original bytes are preserved.",
+    "此紀錄類型沒有可讀預覽，原始位元組已保留。",
+    "このレコード種別には読みやすいプレビューがありません。元のバイト列は保持されています。"
+  ],
+  "tag_result.empty_value": [
+    "(empty value)",
+    "（空值）",
+    "（空の値）"
+  ],
+  "tag_result.empty_text": [
+    "(empty text)",
+    "（空文字）",
+    "（空のテキスト）"
+  ],
+  "tag_result.record_number_kind": [
+    "Record {{number}} · {{kind}}",
+    "紀錄 {{number}}・{{kind}}",
+    "レコード {{number}}・{{kind}}"
+  ],
+  "tag_result.record_type": [
+    "Record type",
+    "紀錄類型",
+    "レコード種別"
+  ],
+  "tag_result.encoding": [
+    "Encoding",
+    "編碼",
+    "エンコーディング"
+  ],
+  "tag_result.payload_byte_count": [
+    "Payload byte count",
+    "負載位元組數",
+    "ペイロードのバイト数"
+  ],
+  "tag_result.type_hex": [
+    "Type hex",
+    "類型十六進位",
+    "種別の16進表示"
+  ],
+  "tag_result.id_hex": [
+    "ID hex",
+    "ID 十六進位",
+    "ID の16進表示"
+  ],
+  "tag_result.payload_hex": [
+    "Payload hex",
+    "負載十六進位",
+    "ペイロードの16進表示"
+  ],
+  "tag_result.full_content_for_record_number": [
+    "Full content for record {{number}}",
+    "紀錄 {{number}} 的完整內容",
+    "レコード {{number}} の全内容"
+  ],
+  "tag_result.show_less": [
+    "Show less",
+    "收合內容",
+    "折りたたむ"
+  ],
+  "tag_result.show_full_content": [
+    "Show full content",
+    "顯示完整內容",
+    "内容をすべて表示"
+  ],
+  "tag_result.copy_content_for_record_number": [
+    "Copy content for record {{number}}",
+    "複製紀錄 {{number}} 的內容",
+    "レコード {{number}} の内容をコピー"
+  ],
+  "tag_result.copy_content": [
+    "Copy content",
+    "複製內容",
+    "内容をコピー"
+  ],
+  "tag_result.open_link_for_record_number": [
+    "Open link for record {{number}}",
+    "開啟紀錄 {{number}} 的連結",
+    "レコード {{number}} のリンクを開く"
+  ],
+  "tag_result.open_link": [
+    "Open link",
+    "開啟連結",
+    "リンクを開く"
+  ],
+  "tag_result.mime_payload_is_preserved_without_decoding_its_contents": [
+    "MIME payload is preserved without decoding its contents.",
+    "MIME 負載已保留，未解碼其內容。",
+    "MIME ペイロードは内容をデコードせず保持しています。"
+  ],
+  "tag_result.available_bytes_remain_in_technical_details_and_raw_tag_json": [
+    "Available bytes remain in Technical details and Raw tag JSON.",
+    "可取得的位元組保留在「技術資訊」與「原始標籤 JSON」中。",
+    "取得できたバイト列は「技術情報」と「元のタグ JSON」で確認できます。"
+  ],
+  "tag_result.copied_to_clipboard": [
+    "Copied to clipboard.",
+    "已複製到剪貼簿。",
+    "クリップボードにコピーしました。"
+  ],
+  "tag_result.could_not_copy_try_again": [
+    "Could not copy. Try again.",
+    "無法複製，請再試一次。",
+    "コピーできませんでした。もう一度お試しください。"
+  ],
+  "tag_result.could_not_open_this_link_you_can_still_copy_the_target": [
+    "Could not open this link. You can still copy the target.",
+    "無法開啟此連結，仍可複製完整目標。",
+    "このリンクを開けませんでした。リンク先のコピーは可能です。"
+  ],
+  "tag_result.the_supplied_ndef_records_field_is_invalid_original_data_remains_in_raw_tag_json": [
+    "The supplied NDEF records field is invalid. Original data remains in Raw tag JSON.",
+    "提供的 NDEF 紀錄欄位無效，原始資料保留在「原始標籤 JSON」中。",
+    "提供された NDEF レコード欄が無効です。元のデータは「元のタグ JSON」で確認できます。"
+  ],
+  "tag_result.system_reports_ndef_read_write": [
+    "System reports NDEF read/write",
+    "系統回報 NDEF 可讀寫",
+    "システム報告：NDEF 読み書き可能"
+  ],
+  "tag_result.system_reports_ndef_read_only": [
+    "System reports NDEF read-only",
+    "系統回報 NDEF 唯讀",
+    "システム報告：NDEF 読み取り専用"
+  ],
+  "tag_result.ndef_support_is_unconfirmed": [
+    "NDEF support is unconfirmed",
+    "NDEF 支援狀態尚未確認",
+    "NDEF 対応は未確認"
+  ],
+  "tag_result.ndef_status_is_unavailable": [
+    "NDEF status is unavailable",
+    "無法取得 NDEF 狀態",
+    "NDEF の状態は取得できません"
+  ],
+  "tag_result.array_count_items": [
+    "Array: {{count}} items",
+    "陣列：{{count}} 個項目",
+    "配列：{{count}} 項目"
+  ],
+  "tag_result.object_count_fields": [
+    "Object: {{count}} fields",
+    "物件：{{count}} 個欄位",
+    "オブジェクト：{{count}} フィールド"
+  ],
+  "tag_result.value_type_type": [
+    "Value type: {{type}}",
+    "值類型：{{type}}",
+    "値の型：{{type}}"
+  ],
+  "tag_result.raw_tag_json_could_not_be_displayed": [
+    "Raw tag JSON could not be displayed.",
+    "無法顯示原始標籤 JSON。",
+    "元のタグ JSON を表示できません。"
+  ],
+  "tag_result.copy_raw_tag_json": [
+    "Copy raw tag JSON",
+    "複製原始標籤 JSON",
+    "元のタグ JSON をコピー"
+  ],
+  "tag_result.scan_summary": [
+    "SCAN SUMMARY",
+    "掃描摘要",
+    "スキャン概要"
+  ],
+  "tag_result.identifier_unavailable": [
+    "Identifier unavailable",
+    "無法取得識別碼",
+    "識別子は取得できません"
+  ],
+  "tag_result.copy_kind": [
+    "Copy {{kind}}",
+    "複製 {{kind}}",
+    "{{kind}} をコピー"
+  ],
+  "tag_result.observed_technologies": [
+    "Observed technologies",
+    "觀測到的技術",
+    "観測された技術"
+  ],
+  "tag_result.record_count_unavailable": [
+    "Record count unavailable",
+    "無法取得紀錄數",
+    "レコード数は取得できません"
+  ],
+  "tag_result.records_supplied_count": [
+    "Records supplied: {{count}}",
+    "提供的紀錄數：{{count}}",
+    "提供されたレコード数：{{count}}"
+  ],
+  "tag_result.system_reported_capacity_bytes_bytes": [
+    "System-reported capacity: {{bytes}} bytes",
+    "系統回報容量：{{bytes}} 位元組",
+    "システム報告の容量：{{bytes}} バイト"
+  ],
+  "tag_result.technical_details": [
+    "Technical details",
+    "技術資訊",
+    "技術情報"
+  ],
+  "tag_result.raw_tag_json": [
+    "Raw tag JSON",
+    "原始標籤 JSON",
+    "元のタグ JSON"
+  ],
+  "home.available_content_subtitle": [
+    "Hold your device near an NFC tag to see its identity and available content.",
+    "將裝置靠近 NFC 標籤，查看其識別資訊與可取得的內容。",
+    "NFC タグに端末を近づけて、識別情報と取得できる内容を確認します。"
+  ],
+  "home.available_content_hint": [
+    "NDEF is not required. Displays available tag identity and content.",
+    "不需要 NDEF；顯示可取得的標籤識別資訊與內容。",
+    "NDEF は必須ではありません。取得できるタグの識別情報と内容を表示します。"
+  ],
+  "home.cancel_tag_scan": [
+    "Cancel tag scan",
+    "取消標籤掃描",
+    "タグのスキャンをキャンセル"
   ]
 }
