@@ -82,8 +82,8 @@ android {
         applicationId "com.washow.nfcopenrewriter"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6000
-        versionName "0.6.0"
+        versionCode 7000
+        versionName "0.7.0"
     }
     signingConfigs {
         debug {
