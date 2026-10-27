@@ -73,3 +73,9 @@ test.each([
   expect(mockWrite).toHaveBeenLastCalledWith(expected);
   await act(async () => tree.unmount());
 });
+
+test('saved NDEF editor forwards the captured library revision', async () => {
+  const tree = await render(<NdefWriteScreen route={{params: {ndefType: 'TEXT', savedRecordIdx: 4, savedRecordRevision: 17}}} navigation={{goBack: jest.fn()}} />);
+  expect(tree.root.findByType('ScreenHeader').props).toMatchObject({savedRecordIdx: 4, savedRecordRevision: 17});
+  await act(async () => tree.unmount());
+});

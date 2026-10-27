@@ -169,6 +169,7 @@ function CustomTransceiveScreen(props) {
         getRecordPayload={getRecordPayload}
         savedRecord={params.savedRecord}
         savedRecordIdx={params.savedRecordIdx}
+        savedRecordRevision={params.savedRecordRevision}
         readOnly={readOnly}
       />
       <SafeAreaView edges={{bottom: true}} style={styles.wrapper}>

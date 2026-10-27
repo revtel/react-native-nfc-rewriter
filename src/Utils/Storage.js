@@ -1,18 +1,39 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+class RecordStorageError extends Error {
+  constructor(code) {
+    super(code);
+    this.name = 'RecordStorageError';
+    this.code = code;
+  }
+}
+
+function parseRecordList(value) {
+  if (value === null) return [];
+  let records;
+  try {
+    records = JSON.parse(value);
+  } catch (_) {
+    throw new RecordStorageError('STORAGE_INVALID_JSON');
+  }
+  if (!Array.isArray(records)) {
+    throw new RecordStorageError('STORAGE_INVALID_ROOT');
+  }
+  return records;
+}
+
 function createStorage(key) {
   let cache = null;
 
   async function invalidateCache() {
-    let nextList = [];
+    let stored;
     try {
-      nextList = JSON.parse(await AsyncStorage.getItem(key)) || [];
-    } catch (ex) {
-      console.warn('fail to parse');
+      stored = await AsyncStorage.getItem(key);
+    } catch (_) {
+      throw new RecordStorageError('STORAGE_READ_FAILED');
     }
-    console.warn(nextList);
-    console.log(JSON.stringify(nextList));
-    cache = nextList;
+    // Publish only a trustworthy read; failed reads never become empty data.
+    cache = parseRecordList(stored);
   }
 
   async function get(force = false) {
@@ -24,11 +45,19 @@ function createStorage(key) {
   }
 
   async function set(data) {
-    if (typeof data !== 'string') {
-      data = JSON.stringify(data);
+    let serialized;
+    try {
+      serialized = typeof data === 'string' ? data : JSON.stringify(data);
+    } catch (_) {
+      throw new RecordStorageError('STORAGE_SERIALIZE_FAILED');
     }
-    await AsyncStorage.setItem(key, data);
-    await invalidateCache();
+    parseRecordList(serialized);
+    try {
+      await AsyncStorage.setItem(key, serialized);
+    } catch (_) {
+      throw new RecordStorageError('STORAGE_WRITE_FAILED');
+    }
+    // Repository forces readback before publishing cache or success.
   }
 
   return {
@@ -37,4 +66,4 @@ function createStorage(key) {
   };
 }
 
-export {createStorage};
+export {createStorage, RecordStorageError};

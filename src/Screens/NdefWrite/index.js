@@ -84,6 +84,7 @@ function NdefWriteScreen(props) {
         getRecordPayload={getRecordPayload}
         savedRecord={params.savedRecord}
         savedRecordIdx={params.savedRecordIdx}
+        savedRecordRevision={params.savedRecordRevision}
       />
       <SafeAreaView edges={{bottom: true}} style={styles.safeArea}>
         <ScrollView

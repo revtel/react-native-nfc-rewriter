@@ -8,6 +8,7 @@ import * as AppContext from './AppContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {createPaperTheme} from './visual/theme';
+import {cleanupAbandonedExports} from './services/records/documentService';
 
 function ThemedApp() {
   const isDark = useColorScheme() === 'dark';
@@ -29,6 +30,12 @@ class App extends React.Component {
     ) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+  }
+
+  componentDidMount() {
+    // Cleanup is best effort at startup. File actions independently await the
+    // same cleanup promise and report a safe error if native IO is unavailable.
+    cleanupAbandonedExports().catch(() => {});
   }
 
   render() {

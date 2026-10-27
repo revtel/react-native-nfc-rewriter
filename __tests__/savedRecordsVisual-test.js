@@ -23,7 +23,7 @@ jest.mock('../src/visual/theme', () => ({
 
 function makeApp(storageCache) {
   return {
-    state: {storageCache},
+    state: {storageCache, storageStatus: 'ready', storageRevision: 7},
     actions: {appendRecord: jest.fn(), removeRecord: jest.fn(), setStorage: jest.fn()},
   };
 }
@@ -59,8 +59,8 @@ test('empty My Records explains the state and hides Clear All', async () => {
 
 test('record groups, long names, and actions preserve targets and payloads', async () => {
   const longName = 'A very long saved NDEF record name with a dynamic target and many bytes';
-  const record = {name: longName, payload: {tech: 'Ndef', value: {text: 'hello'}}};
-  const script = {name: 'Flow', payload: {kind: 'nfc-script', tech: 'NfcA', steps: []}};
+  const record = {name: longName, payload: {tech: 'Ndef', tnf: 1, rtd: 'T', value: 'hello'}};
+  const script = {name: 'Flow', payload: {kind: 'nfc-script', version: 1, tech: 'NfcA', name: '', description: '', steps: []}};
   const app = makeApp([script, record]);
   const {tree, navigation} = await renderScreen(app);
   const text = visibleText(tree);
@@ -74,6 +74,7 @@ test('record groups, long names, and actions preserve targets and payloads', asy
   expect(navigation.navigate).toHaveBeenCalledWith('NdefWrite', {
     savedRecord: record,
     savedRecordIdx: 1,
+    savedRecordRevision: 7,
   });
 
   await act(async () => action(tree, `Copy ${longName}`).props.onPress());
@@ -97,18 +98,18 @@ test('record groups, long names, and actions preserve targets and payloads', asy
   expect(app.actions.removeRecord).not.toHaveBeenCalled();
   expect(alertSpy).toHaveBeenLastCalledWith('DELETE RECORD', expect.stringContaining(longName), expect.any(Array));
   await act(async () => alertSpy.mock.calls.at(-1)[2][0].onPress());
-  expect(app.actions.removeRecord).toHaveBeenCalledWith(1);
+  expect(app.actions.removeRecord).toHaveBeenCalledWith(1, {expectedRecord: record, expectedRevision: 7});
 
   await act(async () => action(tree, 'Clear all records').props.onPress());
   expect(app.actions.setStorage).not.toHaveBeenCalled();
   await act(async () => alertSpy.mock.calls.at(-1)[2][0].onPress());
-  expect(app.actions.setStorage).toHaveBeenCalledWith([]);
+  expect(app.actions.setStorage).toHaveBeenCalledWith([], {expectedRevision: 7});
   alertSpy.mockRestore();
   await act(async () => tree.unmount());
 });
 
 test.each(['share rejection', 'serialization failure'])('%s shows retry feedback without saving or executing the record', async (failure) => {
-  const record = {name: 'Example', payload: {tech: 'Ndef'}};
+  const record = {name: 'Example', payload: {tech: 'Ndef', tnf: 1, rtd: 'T', value: 'hello'}};
   if (failure === 'serialization failure') {
     record.self = record;
   }
@@ -127,6 +128,49 @@ test.each(['share rejection', 'serialization failure'])('%s shows retry feedback
     expect(shareSpy).not.toHaveBeenCalled();
   }
   shareSpy.mockRestore();
+  alertSpy.mockRestore();
+  await act(async () => tree.unmount());
+});
+
+test('failed loading is never rendered as an empty library and Retry handles failure', async () => {
+  const app = makeApp([]);
+  app.state.storageStatus = 'failed';
+  app.actions.initStorage = jest.fn().mockRejectedValue(new Error('PRIVATE'));
+  const {tree} = await renderScreen(app);
+  expect(visibleText(tree)).toContain('Could not load saved records');
+  expect(visibleText(tree)).not.toContain('No saved records yet');
+  expect(action(tree, 'Import file').props.disabled).toBe(true);
+  expect(action(tree, 'Export all').props.disabled).toBe(true);
+  await act(async () => action(tree, 'Retry').props.onPress());
+  expect(app.actions.initStorage).toHaveBeenCalledTimes(1);
+  expect(visibleText(tree)).not.toContain('PRIVATE');
+  await act(async () => tree.unmount());
+});
+
+test('unsupported entries remain inert while supported navigation retains the complete library index', async () => {
+  const record = {name: 'Supported', payload: {tech: 'Ndef', tnf: 1, rtd: 'T', value: 'hello'}};
+  const unknown = {name: 'Future private name', payload: {kind: 'future'}};
+  const {tree, navigation} = await renderScreen(makeApp([null, unknown, record]));
+  expect(visibleText(tree)).toContain('Other records');
+  expect(visibleText(tree)).toContain('Future private name');
+  expect(visibleText(tree)).toContain('Record 1');
+  expect(action(tree, 'Open Future private name')).toBeUndefined();
+  expect(action(tree, 'Share Future private name')).toBeUndefined();
+  await act(async () => action(tree, 'Open Supported').props.onPress());
+  expect(navigation.navigate).toHaveBeenCalledWith('NdefWrite', {savedRecord: record, savedRecordIdx: 2, savedRecordRevision: 7});
+  await act(async () => tree.unmount());
+});
+
+test('a stale delete is caught without a false mutation success', async () => {
+  const record = {name: 'A', payload: {tech: 'Ndef', tnf: 1, rtd: 'T', value: 'hello'}};
+  const app = makeApp([record]);
+  app.actions.removeRecord.mockRejectedValue(Object.assign(new Error('PRIVATE'), {code: 'RECORD_STALE'}));
+  const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  const {tree} = await renderScreen(app);
+  await act(async () => action(tree, 'Delete A').props.onPress());
+  await act(async () => alertSpy.mock.calls.at(-1)[2][0].onPress());
+  expect(alertSpy.mock.calls.at(-1)).toEqual(['Could not change saved records', 'Saved records changed. Please review the list and try again.']);
+  expect(JSON.stringify(alertSpy.mock.calls)).not.toContain('PRIVATE');
   alertSpy.mockRestore();
   await act(async () => tree.unmount());
 });

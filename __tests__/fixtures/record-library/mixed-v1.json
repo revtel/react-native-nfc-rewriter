@@ -1,0 +1,20 @@
+{
+  "format": "nfc-open-rewriter-records",
+  "version": 1,
+  "exportedAt": "2026-10-27T00:00:00.000Z",
+  "appVersion": "0.6.0",
+  "records": [
+    {"name":"Text 繁中 日本語 🏷️ & #","payload":{"tech":"Ndef","tnf":1,"rtd":"T","value":"hello & + # % ?"},"legacy":{"keep":true}},
+    {"name":"URI","payload":{"tech":"Ndef","tnf":1,"rtd":"U","value":{"value":"https://example.com/a?b=1&c=2#x","prefix":"---"}}},
+    {"name":"Read NFC-A","payload":{"tech":"NfcA","value":[{"type":"command","payload":[48,4]},{"type":"delay","payload":100}]}},
+    {"name":"Read NFC-V","payload":{"tech":"NfcV","value":[{"type":"command","payload":[34,32,99,103,202,23,8,1,4,224,0]}]}},
+    {"name":"Read ISO-DEP","payload":{"tech":"IsoDep","value":[{"type":"command","payload":[0,164,4,0]}]}},
+    {"name":"Script","payload":{"kind":"nfc-script","version":1,"tech":"NfcA","steps":[{"type":"stop","outcome":"success","message":"Review only"}]}},
+    {"name":"Future script","payload":{"kind":"nfc-script","version":999,"tech":"NfcA","steps":[]},"future":{"x":[1,null,false]}},
+    {"name":"Unknown","payload":{"tech":"Unknown","secret":"synthetic-private-marker"},"__proto__":{"keep":"own key"},"constructor":{"prototype":{"keep":true}}},
+    null,
+    17,
+    ["opaque",{"value":"preserve"}],
+    {"name":"Text 繁中 日本語 🏷️ & #","payload":{"tech":"Ndef","tnf":1,"rtd":"T","value":"hello & + # % ?"},"legacy":{"keep":true}}
+  ]
+}

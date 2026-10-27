@@ -350,3 +350,12 @@ test('localized step fields retain protocol types and variable metadata', async 
   }
   await act(async () => i18n.changeLanguage('en'));
 });
+
+test('saved script editor forwards the captured library revision', async () => {
+  let tree;
+  await act(async () => {
+    tree = renderer.create(<NfcScriptEditorScreen route={{params: {savedRecord: {name: 'saved', payload: newScript()}, savedRecordIdx: 4, savedRecordRevision: 17}}} navigation={{goBack: jest.fn()}} />);
+  });
+  expect(tree.root.findByType('ScreenHeader').props).toMatchObject({savedRecordIdx: 4, savedRecordRevision: 17});
+  await act(async () => tree.unmount());
+});

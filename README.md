@@ -72,7 +72,7 @@ All screenshots use the app’s UI with demo tag data in an iOS simulator. They 
 | --- | --- |
 | Read | Tag UID, available technologies, and NDEF messages |
 | Write NDEF | Text, URI / custom schemes, telephone, SMS, email, Wi-Fi Simple Record, and vCard |
-| Saved records | Save, open, copy, and share NDEF records, custom commands, and flow scripts |
+| Saved records | Save, open, copy, and share NDEF records, custom commands, and flow scripts; export the library to JSON and preview additive imports |
 | Custom commands | NFC-A and NFC-V transceive, and ISO-DEP APDU commands, subject to platform and tag support |
 | Flow Script | One NFC-A or ISO-DEP technology per run; variables, response capture, dynamic commands, conditions, bounded repeats, delays, and per-step trace |
 | Type 2 Memory Scan | Model-specific page ranges for identified NTAG213 / 215 / 216; bounded CC-declared data-area scans for other compatible Type 2 tags |
@@ -82,6 +82,19 @@ All screenshots use the app’s UI with demo tag data in an iOS simulator. They 
 An NFC-capable device and a compatible tag are required. Available technologies and operations depend on the platform, device, and tag.
 
 How a written record is opened depends on the receiving device. iOS does not natively open NFC vCard records. Generic Type 2 scans are not complete physical-memory dumps: unreadable or unverified pages remain unavailable, and incomplete results do not establish the reason for a read failure. Memory scanning sends identification and read commands only; tag-side read counters may still advance.
+
+## Back up My Records
+
+Use **Export all** to save a JSON backup through the system file picker. Use
+**Import file** to review a backup before adding missing records. Existing records
+and their order stay intact; importing the same backup again does not keep adding
+copies. Unknown entries are preserved for backup and shown as unavailable to open.
+
+Backups are unencrypted and may contain Wi-Fi credentials or command data. Your
+chosen storage service may synchronize the file. Supported limits are a 5 MiB
+backup file, a 1 MiB record library, and 10,000 records, with a JSON depth limit of
+64 levels and 100,000 values. Files beyond these limits are rejected without
+truncation.
 
 ## Build something with us
 

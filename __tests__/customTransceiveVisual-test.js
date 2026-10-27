@@ -178,3 +178,9 @@ test('drag reorder changes execution and saved order and clears stale responses'
   expect(tree.root.findAllByType(CommandItem)[0].props.resp).toEqual([0xaa]);
   await act(async () => tree.unmount());
 });
+
+test('saved transceive editor forwards the captured library revision', async () => {
+  const tree = await render(<CustomTransceiveScreen route={{params: {nfcTech: 'NfcA', savedRecordIdx: 4, savedRecordRevision: 17}}} navigation={{goBack: jest.fn()}} />);
+  expect(tree.root.findByType('ScreenHeader').props).toMatchObject({savedRecordIdx: 4, savedRecordRevision: 17});
+  await act(async () => tree.unmount());
+});

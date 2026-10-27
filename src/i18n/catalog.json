@@ -3458,5 +3458,270 @@
     "Additional read evidence",
     "額外讀取證據",
     "追加読み取りの記録"
+  ],
+  "records.retry": [
+    "Retry",
+    "重試",
+    "再試行"
+  ],
+  "records.load_error": [
+    "Could not load saved records",
+    "無法載入已儲存的紀錄",
+    "保存済みの記録を読み込めませんでした"
+  ],
+  "records.load_retry": [
+    "Your records could not be read. Retry loading before making changes.",
+    "無法讀取紀錄。請先重試載入，再進行變更。",
+    "記録を読み込めませんでした。変更する前に読み込みを再試行してください。"
+  ],
+  "records.save_error": [
+    "Could not save record",
+    "無法儲存紀錄",
+    "記録を保存できませんでした"
+  ],
+  "records.stale_update": [
+    "Saved records changed. Reopen the record before updating it.",
+    "已儲存的紀錄已變更。請重新開啟紀錄後再更新。",
+    "保存済みの記録が変更されました。記録を開き直してから更新してください。"
+  ],
+  "records.reload_required": [
+    "Saved records could not be read or saved reliably. Reload them before making changes.",
+    "無法確認紀錄已正確讀取或儲存。請重新載入後再進行變更。",
+    "記録を正しく読み込み・保存できたか確認できませんでした。変更する前に読み込み直してください。"
+  ],
+  "records.save_retry": [
+    "The record could not be saved. Please try again.",
+    "無法儲存這筆紀錄，請再試一次。",
+    "記録を保存できませんでした。もう一度お試しください。"
+  ],
+  "records.archive_export_all": [
+    "Export all",
+    "匯出全部",
+    "すべてエクスポート"
+  ],
+  "records.archive_import_file": [
+    "Import file",
+    "匯入檔案",
+    "ファイルをインポート"
+  ],
+  "records.archive_export_title": [
+    "Export all records",
+    "匯出全部紀錄",
+    "すべての記録をエクスポート"
+  ],
+  "records.archive_import_title": [
+    "Import records",
+    "匯入紀錄",
+    "記録をインポート"
+  ],
+  "records.archive_privacy": [
+    "Backup contains {{count}} records. The file is not encrypted. Your selected storage service may sync it.",
+    "備份包含 {{count}} 筆紀錄。檔案未加密；你選擇的儲存服務可能會同步檔案。",
+    "バックアップには {{count}} 件の記録が含まれます。ファイルは暗号化されていません。選択した保存サービスで同期される場合があります。"
+  ],
+  "records.archive_choose_location": [
+    "Choose location",
+    "選擇儲存位置",
+    "保存先を選択"
+  ],
+  "records.archive_preparing": [
+    "Preparing backup…",
+    "正在準備備份…",
+    "バックアップを準備中…"
+  ],
+  "records.archive_save_dialog": [
+    "Choose a location in the system save dialog.",
+    "請在系統儲存視窗中選擇位置。",
+    "システムの保存画面で保存先を選択してください。"
+  ],
+  "records.archive_pick_file": [
+    "Choose a backup file.",
+    "請選擇備份檔案。",
+    "バックアップファイルを選択してください。"
+  ],
+  "records.archive_reading": [
+    "Reading backup…",
+    "正在讀取備份…",
+    "バックアップを読み込み中…"
+  ],
+  "records.archive_saved": [
+    "Backup saved.",
+    "備份已儲存。",
+    "バックアップを保存しました。"
+  ],
+  "records.archive_cleanup_pending": [
+    "Backup saved. Temporary backup data will be cleaned up later.",
+    "備份已儲存。暫存備份資料將於稍後清理。",
+    "バックアップを保存しました。一時バックアップデータは後で削除されます。"
+  ],
+  "records.archive_preview": [
+    "Import preview",
+    "匯入預覽",
+    "インポートのプレビュー"
+  ],
+  "records.archive_file": [
+    "File: {{name}}",
+    "檔案：{{name}}",
+    "ファイル：{{name}}"
+  ],
+  "records.archive_time": [
+    "Backup time: {{time}}",
+    "備份時間：{{time}}",
+    "バックアップ日時：{{time}}"
+  ],
+  "records.archive_current_count": [
+    "Current records: {{count}}",
+    "目前紀錄：{{count}} 筆",
+    "現在の記録：{{count}} 件"
+  ],
+  "records.archive_incoming_count": [
+    "Records in file: {{count}}",
+    "檔案內紀錄：{{count}} 筆",
+    "ファイル内の記録：{{count}} 件"
+  ],
+  "records.archive_new_count": [
+    "New records: {{count}}",
+    "新增紀錄：{{count}} 筆",
+    "追加する記録：{{count}} 件"
+  ],
+  "records.archive_existing_count": [
+    "Already present: {{count}}",
+    "已存在：{{count}} 筆",
+    "既存の記録：{{count}} 件"
+  ],
+  "records.archive_unsupported_count": [
+    "Unsupported records: {{count}}",
+    "未支援的紀錄：{{count}} 筆",
+    "未対応の記録：{{count}} 件"
+  ],
+  "records.archive_final_count": [
+    "After import: {{count}}",
+    "匯入後：{{count}} 筆",
+    "インポート後：{{count}} 件"
+  ],
+  "records.archive_add": [
+    "Add {{count}} records",
+    "新增 {{count}} 筆紀錄",
+    "{{count}} 件の記録を追加"
+  ],
+  "records.archive_adding": [
+    "Adding records…",
+    "正在新增紀錄…",
+    "記録を追加中…"
+  ],
+  "records.archive_added": [
+    "Added {{count}} records.",
+    "已新增 {{count}} 筆紀錄。",
+    "{{count}} 件の記録を追加しました。"
+  ],
+  "records.archive_empty": [
+    "This backup has no records.",
+    "這份備份沒有紀錄。",
+    "このバックアップには記録がありません。"
+  ],
+  "records.archive_no_new": [
+    "All records in this backup are already present.",
+    "這份備份中的紀錄都已存在。",
+    "このバックアップの記録はすべて既に存在します。"
+  ],
+  "records.archive_stale_preview": [
+    "Existing records changed. Review the updated import counts before confirming again.",
+    "現有紀錄已變更。請檢視更新後的匯入筆數，再次確認。",
+    "既存の記録が変更されました。更新されたインポート件数を確認してから、もう一度確定してください。"
+  ],
+  "records.archive_show_names": [
+    "Show record names",
+    "顯示紀錄名稱",
+    "記録名を表示"
+  ],
+  "records.archive_hide_names": [
+    "Hide record names",
+    "隱藏紀錄名稱",
+    "記録名を非表示"
+  ],
+  "records.archive_unnamed": [
+    "Record {{index}}",
+    "紀錄 {{index}}",
+    "記録 {{index}}"
+  ],
+  "records.archive_other": [
+    "Other records",
+    "其他紀錄",
+    "その他の記録"
+  ],
+  "records.archive_inert": [
+    "Preserved for backup. This version cannot open this record.",
+    "已保留供備份使用；此版本無法開啟這筆紀錄。",
+    "バックアップ用に保持されています。このバージョンでは開けません。"
+  ],
+  "records.archive_loading": [
+    "Loading saved records…",
+    "正在載入已儲存的紀錄…",
+    "保存済みの記録を読み込み中…"
+  ],
+  "records.archive_export_error": [
+    "Could not export records",
+    "無法匯出紀錄",
+    "記録をエクスポートできませんでした"
+  ],
+  "records.archive_import_error": [
+    "Could not import records",
+    "無法匯入紀錄",
+    "記録をインポートできませんでした"
+  ],
+  "records.archive_change_error": [
+    "Could not change saved records",
+    "無法變更已儲存的紀錄",
+    "保存済みの記録を変更できませんでした"
+  ],
+  "records.archive_invalid_file": [
+    "Invalid backup file. Choose a backup created by NFC Open ReWriter.",
+    "備份檔案無效。請選擇由 NFC Open ReWriter 建立的備份。",
+    "無効なバックアップです。NFC Open ReWriter で作成したバックアップを選択してください。"
+  ],
+  "records.archive_version_error": [
+    "This backup version is not supported by this app.",
+    "此 App 不支援這個備份版本。",
+    "このアプリは、このバックアップのバージョンに対応していません。"
+  ],
+  "records.archive_size_error": [
+    "The backup exceeds the supported limits: 5 MiB file, 1 MiB library, 10,000 records.",
+    "備份超過支援上限：檔案 5 MiB、紀錄庫 1 MiB、10,000 筆紀錄。",
+    "バックアップが上限を超えています：ファイル 5 MiB、記録ライブラリ 1 MiB、10,000 件。"
+  ],
+  "records.archive_complexity_error": [
+    "The backup exceeds supported complexity limits (64 levels or 100,000 values).",
+    "備份超過支援的結構上限（64 層或 100,000 個值）。",
+    "バックアップが構造の上限を超えています（64 階層または 100,000 個の値）。"
+  ],
+  "records.archive_value_error": [
+    "The backup contains values that cannot be preserved safely.",
+    "備份包含無法安全保留的資料值。",
+    "バックアップに安全に保持できない値が含まれています。"
+  ],
+  "records.archive_access_error": [
+    "Could not access the file. Please choose it again.",
+    "無法存取檔案，請重新選擇。",
+    "ファイルにアクセスできませんでした。選択し直してください。"
+  ],
+  "records.archive_file_save_error": [
+    "The file could not be saved. Please try again.",
+    "無法儲存檔案，請再試一次。",
+    "ファイルを保存できませんでした。もう一度お試しください。"
+  ],
+  "records.archive_unavailable": [
+    "This action is unavailable in the installed app.",
+    "目前安裝的 App 無法使用此操作。",
+    "インストールされているアプリでは、この操作を利用できません。"
+  ],
+  "records.archive_expired": [
+    "Import preview expired. Please select the backup again.",
+    "匯入預覽已失效，請重新選擇備份。",
+    "インポートのプレビューが期限切れです。バックアップを選択し直してください。"
+  ],
+  "records.archive_stale_list": [
+    "Saved records changed. Please review the list and try again.",
+    "已儲存的紀錄已變更。請檢視清單後再試一次。",
+    "保存済みの記録が変更されました。一覧を確認してから、もう一度お試しください。"
   ]
 }

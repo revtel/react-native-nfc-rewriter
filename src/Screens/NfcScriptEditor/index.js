@@ -837,6 +837,7 @@ function NfcScriptEditorScreen({navigation, route}) {
         getRecordPayload={() => script}
         savedRecord={params.savedRecord}
         savedRecordIdx={params.savedRecordIdx}
+        savedRecordRevision={params.savedRecordRevision}
       />
       <View style={styles.container}>
         <View style={styles.toolbar}>

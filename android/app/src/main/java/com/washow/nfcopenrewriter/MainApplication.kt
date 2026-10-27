@@ -6,13 +6,14 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
 import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.washow.nfcopenrewriter.archive.RecordDocumentIOPackage
  
 class MainApplication : Application(), ReactApplication {
  
   override val reactHost: ReactHost by lazy {
     getDefaultReactHost(
       context = applicationContext,
-      packageList = PackageList(this).packages,
+      packageList = PackageList(this).packages.apply { add(RecordDocumentIOPackage()) },
     )
   }
  
