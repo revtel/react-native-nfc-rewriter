@@ -1,9 +1,10 @@
 import {useTranslation} from 'react-i18next';
 import {translateText as tr} from '../../i18n';
 import * as React from 'react';
-import {Pressable, Share, StyleSheet, Text, View} from 'react-native';
+import {Alert, Platform, Pressable, Share, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useVisualTheme} from '../../visual/theme';
+import {createRecordShareContent} from '../../features/records/shareLink';
 
 function RecordAction({
   label,
@@ -46,13 +47,17 @@ function RecordItem({record, removeIdx, goToHandler, onCopy, idx}) {
     [colors, spacing, type],
   );
 
-  function shareRecord() {
-    Share.share({
-      title: 'My NFC Record',
-      url: `com.revteltech.nfcopenrewriter://share?data=${encodeURIComponent(
-        JSON.stringify(record),
-      )}`,
-    });
+  async function shareRecord() {
+    try {
+      await Share.share(
+        createRecordShareContent(record, Platform.OS, tr('My NFC Record')),
+      );
+    } catch (_) {
+      Alert.alert(
+        tr('Could not share record'),
+        tr('Please try sharing this record again.'),
+      );
+    }
   }
 
   return (

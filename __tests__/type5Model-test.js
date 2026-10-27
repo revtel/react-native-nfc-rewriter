@@ -4,7 +4,7 @@ import {createType5Report} from '../src/features/type5-memory/report';
 
 function analyze(
   bytes,
-  {blockSize = 1, reportedBlocks = 8192, geometryTrusted = true} = {},
+  {blockSize = 1, reportedBlocks = 8192, geometryTrusted = true, stopAfterNdef = false} = {},
 ) {
   const blocks = [];
   for (let i = 0; i + blockSize <= bytes.length; i += blockSize) {
@@ -15,6 +15,7 @@ function analyze(
     blockSize,
     reportedBlocks,
     geometryTrusted,
+    stopAfterNdef,
   });
 }
 
@@ -280,4 +281,14 @@ describe('portable Type5 report', () => {
     report.blocks[0].bytes[0] = 255;
     expect(result.blocks[0].bytes).toEqual([1, 2]);
   });
+});
+
+test('Home stops at a complete NDEF envelope while Inspector continues checking trailing TLVs', () => {
+  const message = Ndef.encodeMessage([Ndef.textRecord('complete')]);
+  const memory = [0xe1, 0x40, 32, 0, 3, message.length, ...message, 3, 0xff];
+  expect(analyze(memory).ndef.status).toBe('incomplete');
+  expect(analyze(memory, {stopAfterNdef: true}).ndef).toMatchObject({status: 'decoded', records: Ndef.decodeMessage(message)});
+  const incompleteEnvelope = message.slice();
+  incompleteEnvelope[0] -= 0x40;
+  expect(analyze([0xe1, 0x40, 32, 0, 3, incompleteEnvelope.length, ...incompleteEnvelope], {stopAfterNdef: true}).ndef.status).toBe('malformed');
 });

@@ -240,3 +240,15 @@ describe('scan observation summary', () => {
     expect(result.technologies).not.toBe(observed.technologies);
   });
 });
+
+test('fresh and raw records take precedence over unavailable native records while retaining native fields', () => {
+  const native = Object.freeze({id: 'RAW', ndefMessage: null});
+  for (const source of ['android-ndef-read', 'type5-raw-read']) {
+    const records = [text('acquired')];
+    const acquisition = {source, status: 'available', records, evidence: {scope: 'limited'}};
+    const result = buildTagPresentation(native, {ndef: {status: 'available', records}, ndefAcquisition: acquisition});
+    expect(result).toMatchObject({recordsState: 'provided', recordCount: 1, ndefAcquisition: acquisition});
+    expect(result.records[0].content).toBe('acquired');
+    expect(native.ndefMessage).toBeNull();
+  }
+});

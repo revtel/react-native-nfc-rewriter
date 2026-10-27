@@ -69,3 +69,18 @@ test('NFC-V opens the inspector without a Type 5 format assertion or NFC-V scrip
 test('an explicitly supplied empty NDEF list is preserved without claiming an empty tag', () => {
   expect(createTagDiscovery({ndefMessage: []}, 'ios').ndef).toEqual({status: 'available', records: []});
 });
+
+test('normalizes Type5 display identity on both platforms without mutating raw values', () => {
+  const android = Object.freeze({id: '6367CA17080104E0', techTypes: ['android.nfc.tech.NfcV']});
+  const ios = Object.freeze({id: 'E004010817CA6763', tech: 'iso15693'});
+  for (const [tag, platform] of [[android, 'android'], [ios, 'ios']]) {
+    const result = createTagDiscovery(tag, platform);
+    expect(result.identifiers).toEqual([{kind: 'id', value: 'E004010817CA6763'}]);
+    expect(result.type5Uid.platformTagIdRaw).toBe(tag.id);
+  }
+  expect(android.id).toBe('6367CA17080104E0');
+  expect(createTagDiscovery({...android, techTypes: ['android.nfc.tech.NfcA']}, 'android').identifiers[0].value).toBe(android.id);
+  for (const id of ['E004010817CA67E0', 'invalid']) {
+    expect(createTagDiscovery({...android, id}, 'android').identifiers[0].value).toBe(id);
+  }
+});

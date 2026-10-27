@@ -2,6 +2,7 @@ import {
   createIncomingIntentController,
   MAX_PENDING_INTENTS,
 } from '../src/features/home/incomingIntentController';
+import {createRecordShareLink} from '../src/features/records/shareLink';
 
 const tag = {ndefMessage: [{tnf: 1, type: [85], payload: [4, 97]}]};
 const promotion = 'https://revtel.github.io/react-native-nfc-rewriter/';
@@ -127,6 +128,24 @@ test('URL events during the initial read are delivered once and sharing only ope
   expect(x.navigate.mock.calls).toEqual([['NdefWrite', {savedRecord: record}]]);
   x.url(url);
   expect(x.navigate).toHaveBeenCalledTimes(2);
+});
+
+test('cold custom-link import waits for readiness and repeated warm delivery opens the editor again', async () => {
+  const record = {
+    name: 'Read & inspect 日本語',
+    payload: {kind: 'nfc-script', version: 1, tech: 'NfcA', steps: [{type: 'stop', outcome: 'success'}]},
+  };
+  const url = createRecordShareLink(record);
+  const x = setup({getInitialURL: jest.fn().mockResolvedValue(url)});
+  await tick();
+  expect(x.navigate).not.toHaveBeenCalled();
+  x.owner.setReady(true);
+  expect(x.navigate.mock.calls).toEqual([['NfcScriptEditor', {savedRecord: record}]]);
+  x.url(url);
+  x.url(url);
+  expect(x.navigate).toHaveBeenCalledTimes(3);
+  // Each parse creates an equivalent record; the controller only requests editor navigation.
+  expect(x.navigate.mock.calls).toEqual(Array(3).fill(['NfcScriptEditor', {savedRecord: record}]));
 });
 
 test('disposal removes subscriptions and prevents late initial work from navigating or clearing cache', async () => {

@@ -64,13 +64,16 @@ async function runNfcSession({
   const translate = sessionTranslator();
   return withAndroidPrompt(async () => {
     try {
-      await NfcManager.requestTechnology(technology, {
-        ...requestOptions,
-        alertMessage: translate(
-          requestOptions?.alertMessage || 'Ready to scan NFC',
-        ),
-      });
-      const value = await operation();
+      const connectedTechnology = await NfcManager.requestTechnology(
+        technology,
+        {
+          ...requestOptions,
+          alertMessage: translate(
+            requestOptions?.alertMessage || 'Ready to scan NFC',
+          ),
+        },
+      );
+      const value = await operation(connectedTechnology);
       if (Platform.OS === 'ios' && successMessage) {
         await NfcManager.setAlertMessageIOS(translate(successMessage));
       }

@@ -116,8 +116,14 @@ async function sendRequest(frame, platform) {
   return NfcManager.nfcVHandler.transceive(frame);
 }
 
-async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
-  const platform = Platform.OS;
+// Shared read core: the inspector owns a session; Home supplies its connected tag.
+async function readType5Memory({
+  onProgress,
+  shouldContinue = () => true,
+  connectedTag,
+  platform = Platform.OS,
+  mode = 'memory',
+} = {}) {
   const result = {
     status: 'unidentified',
     cancelled: false,
@@ -142,6 +148,9 @@ async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
     },
     blocks: [],
     failure: null,
+    ...(mode === 'ndef-only'
+      ? {readMode: mode, stopReason: null, rawResponses: []}
+      : {}),
   };
   const check = () => {
     if (!shouldContinue()) {
@@ -161,7 +170,7 @@ async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
     check();
   };
   const finish = () => {
-    if (result.cancelled && result.blocks.length === 0) {
+    if (mode === 'memory' && result.cancelled && result.blocks.length === 0) {
       return null;
     }
     if (result.blocks.length === 0) {
@@ -170,7 +179,9 @@ async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
       result.status = 'partial';
     } else {
       result.status =
-        result.scope.kind === 'reported-range' ? 'complete' : 'limited';
+        mode === 'memory' && result.scope.kind === 'reported-range'
+          ? 'complete'
+          : 'limited';
     }
     return {
       ...result,
@@ -179,6 +190,7 @@ async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
         blockSize: result.scope.blockSize,
         reportedBlocks: result.scope.reportedBlocks,
         geometryTrusted: result.systemInfo.geometryTrusted,
+        stopAfterNdef: mode === 'ndef-only',
       }),
     };
   };
@@ -186,132 +198,185 @@ async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
     check();
     progress('connecting');
     check();
-    const session = await runNfcSession({
-      technology: [NfcTech.NfcV],
-      silent: true,
-      successMessage: null,
-      operation: async () => {
-        // requestTechnology is awaited by the wrapper before entering operation.
+    const operation = async () => {
+      // requestTechnology is awaited by the wrapper before entering operation.
+      check();
+      let tag;
+      try {
         check();
-        let tag;
+        tag =
+          connectedTag === undefined ? await NfcManager.getTag() : connectedTag;
+        check();
+      } catch (error) {
+        check();
+        if (isCancellation(error)) {
+          throw error;
+        }
+        result.failure = makeFailure('transport-error', 'identity', {
+          message: nativeMessage(error),
+        });
+        return;
+      }
+      result.tag = normalizeType5Uid(tag?.id, platform);
+      if (!result.tag.uidWireLE) {
+        result.failure = makeFailure('uid-unusable', 'identity', {
+          message: 'uid-unusable',
+        });
+        return;
+      }
+      const uid = result.tag.uidWireLE;
+      progress('system-info');
+      let rawInfo;
+      try {
+        check();
+        rawInfo = await sendRequest(buildType5Frame(0x2b, uid), platform);
+        check();
+        result.systemInfo = parseType5SystemInfo(rawInfo);
+      } catch (error) {
+        check();
+        if (isCancellation(error)) {
+          throw error;
+        }
+        result.systemInfo = {
+          ...emptySystemInfo(),
+          status:
+            error instanceof MalformedNativeResponse
+              ? 'malformed'
+              : 'unavailable',
+          reason: nativeMessage(error),
+        };
+      }
+      // Optional parsing errors must never hide complete conflicting identity.
+      if (mode === 'ndef-only') {
+        result.rawResponses.push({
+          command: 0x2b,
+          rawResponse: Array.isArray(rawInfo) ? rawInfo.slice() : null,
+        });
+      }
+      const returnedUid = result.systemInfo.uidWireLE;
+      if (returnedUid && returnedUid.some((byte, i) => byte !== uid[i])) {
+        result.failure = makeFailure('identity-mismatch', 'system-info', {
+          rawResponse: result.systemInfo.rawResponse,
+          responseFlags: rawInfo?.[0] ?? null,
+          message: 'system-info-uid-mismatch',
+        });
+        return;
+      }
+      result.scope = createType5ScanPlan(result.systemInfo);
+      for (let address = 0; address < result.scope.plannedBlocks; address++) {
+        progress('reading');
+        let raw;
         try {
           check();
-          tag = await NfcManager.getTag();
+          raw = await sendRequest(
+            buildType5Frame(0x20, uid, [address]),
+            platform,
+          );
           check();
         } catch (error) {
           check();
           if (isCancellation(error)) {
             throw error;
           }
-          result.failure = makeFailure('transport-error', 'identity', {
-            message: nativeMessage(error),
+          result.failure = makeFailure(
+            error instanceof MalformedNativeResponse
+              ? 'malformed-response'
+              : 'transport-error',
+            'read-block',
+            {blockAddress: address, message: nativeMessage(error)},
+          );
+          return;
+        }
+        if (mode === 'ndef-only') {
+          result.rawResponses.push({
+            command: 0x20,
+            blockAddress: address,
+            rawResponse: Array.isArray(raw) ? raw.slice() : null,
+          });
+        }
+        const response = parseType5Response(raw);
+        if (response.kind) {
+          result.failure = makeFailure(response.kind, 'read-block', {
+            blockAddress: address,
+            responseFlags: response.responseFlags,
+            tagErrorCode: response.tagErrorCode,
+            rawResponse: response.rawResponse,
+            message: response.reason,
           });
           return;
         }
-        result.tag = normalizeType5Uid(tag?.id, platform);
-        if (!result.tag.uidWireLE) {
-          result.failure = makeFailure('uid-unusable', 'identity', {
-            message: 'uid-unusable',
-          });
-          return;
-        }
-        const uid = result.tag.uidWireLE;
-        progress('system-info');
-        let rawInfo;
-        try {
-          check();
-          rawInfo = await sendRequest(buildType5Frame(0x2b, uid), platform);
-          check();
-          result.systemInfo = parseType5SystemInfo(rawInfo);
-        } catch (error) {
-          check();
-          if (isCancellation(error)) {
-            throw error;
-          }
-          result.systemInfo = {
-            ...emptySystemInfo(),
-            status:
-              error instanceof MalformedNativeResponse
-                ? 'malformed'
-                : 'unavailable',
-            reason: nativeMessage(error),
-          };
-        }
-        // Optional parsing errors must never hide complete conflicting identity.
-        const returnedUid = result.systemInfo.uidWireLE;
-        if (returnedUid && returnedUid.some((byte, i) => byte !== uid[i])) {
-          result.failure = makeFailure('identity-mismatch', 'system-info', {
-            rawResponse: result.systemInfo.rawResponse,
-            responseFlags: rawInfo?.[0] ?? null,
-            message: 'system-info-uid-mismatch',
-          });
-          return;
-        }
-        result.scope = createType5ScanPlan(result.systemInfo);
-        for (let address = 0; address < result.scope.plannedBlocks; address++) {
-          progress('reading');
-          let raw;
-          try {
-            check();
-            raw = await sendRequest(
-              buildType5Frame(0x20, uid, [address]),
-              platform,
-            );
-            check();
-          } catch (error) {
-            check();
-            if (isCancellation(error)) {
-              throw error;
-            }
-            result.failure = makeFailure(
-              error instanceof MalformedNativeResponse
-                ? 'malformed-response'
-                : 'transport-error',
-              'read-block',
-              {blockAddress: address, message: nativeMessage(error)},
-            );
-            return;
-          }
-          const response = parseType5Response(raw);
-          if (response.kind) {
-            result.failure = makeFailure(response.kind, 'read-block', {
-              blockAddress: address,
-              responseFlags: response.responseFlags,
-              tagErrorCode: response.tagErrorCode,
-              rawResponse: response.rawResponse,
-              message: response.reason,
-            });
-            return;
-          }
-          const bytes = response.payload;
-          if (result.scope.blockSize === null) {
-            if (bytes.length < 1 || bytes.length > 32) {
-              result.failure = makeFailure('malformed-response', 'read-block', {
-                blockAddress: address,
-                responseFlags: response.responseFlags,
-                rawResponse: response.rawResponse,
-                message: 'invalid-observed-block-size',
-              });
-              return;
-            }
-            result.scope.blockSize = bytes.length;
-          }
-          if (bytes.length !== result.scope.blockSize) {
-            result.failure = makeFailure('block-size-mismatch', 'read-block', {
+        const bytes = response.payload;
+        if (result.scope.blockSize === null) {
+          if (bytes.length < 1 || bytes.length > 32) {
+            result.failure = makeFailure('malformed-response', 'read-block', {
               blockAddress: address,
               responseFlags: response.responseFlags,
               rawResponse: response.rawResponse,
-              message: 'block-size-mismatch',
+              message: 'invalid-observed-block-size',
             });
             return;
           }
-          result.blocks.push({address, bytes: bytes.slice()});
-          result.scope.readBlocks = result.blocks.length;
-          result.scope.readBytes += bytes.length;
-          progress('reading');
+          result.scope.blockSize = bytes.length;
         }
-      },
-    });
+        if (bytes.length !== result.scope.blockSize) {
+          result.failure = makeFailure('block-size-mismatch', 'read-block', {
+            blockAddress: address,
+            responseFlags: response.responseFlags,
+            rawResponse: response.rawResponse,
+            message: 'block-size-mismatch',
+          });
+          return;
+        }
+        result.blocks.push({address, bytes: bytes.slice()});
+        result.scope.readBlocks = result.blocks.length;
+        result.scope.readBytes += bytes.length;
+        progress('reading');
+        if (mode === 'ndef-only') {
+          const {cc, ndef} = analyzeType5Memory({
+            blocks: result.blocks,
+            blockSize: result.scope.blockSize,
+            reportedBlocks: result.scope.reportedBlocks,
+            geometryTrusted: result.systemInfo.geometryTrusted,
+            stopAfterNdef: mode === 'ndef-only',
+          });
+          if (['decoded', 'empty'].includes(ndef.status)) {
+            result.stopReason = 'ndef-complete';
+            break;
+          }
+          if (
+            ndef.status === 'absent' &&
+            ndef.tlvs.some((tlv) => tlv.type === 0xfe)
+          ) {
+            result.stopReason = 'terminator';
+            break;
+          }
+          if (
+            ['not-type5', 'malformed', 'unsupported', 'inconsistent'].includes(
+              cc.status,
+            )
+          ) {
+            result.stopReason = 'cc-unavailable';
+            break;
+          }
+          if (
+            ['malformed', 'unavailable'].includes(ndef.status) &&
+            cc.status === 'supported'
+          ) {
+            result.stopReason = 'ndef-unavailable';
+            break;
+          }
+        }
+      }
+    };
+    const session =
+      connectedTag === undefined
+        ? await runNfcSession({
+            technology: [NfcTech.NfcV],
+            silent: true,
+            successMessage: null,
+            operation,
+          })
+        : {success: true, value: await operation()};
     check();
     if (!session.success) {
       if (isCancellation(session.error)) {
@@ -338,4 +403,12 @@ async function scanType5Memory({onProgress, shouldContinue = () => true} = {}) {
   return finish();
 }
 
-export {scanType5Memory, createType5ScanPlan};
+function scanType5Memory(options) {
+  return readType5Memory(options);
+}
+
+function readConnectedType5Memory(tag, options) {
+  return readType5Memory({...options, connectedTag: tag ?? null, mode: 'ndef-only'});
+}
+
+export {scanType5Memory, readConnectedType5Memory, createType5ScanPlan};

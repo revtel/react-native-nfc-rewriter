@@ -147,7 +147,7 @@ function ndefEnvelopeIssue(bytes) {
   return 'malformed-ndef-message';
 }
 
-function parseTlvs(bytes, cc) {
+function parseTlvs(bytes, cc, stopAfterNdef) {
   const ndef = {...emptyNdef(), status: 'absent'};
   const availableEnd = Math.min(bytes.length, cc.dataEnd);
   let cursor = cc.dataStart;
@@ -229,6 +229,9 @@ function parseTlvs(bytes, cc) {
           return fail('malformed', 'malformed-ndef-message');
         }
       }
+      if (stopAfterNdef) {
+        return ndef;
+      }
     }
   }
   // A complete NDEF message is useful even when later memory was not read.
@@ -242,6 +245,7 @@ function analyzeType5Memory({
   blockSize = null,
   reportedBlocks = null,
   geometryTrusted = false,
+  stopAfterNdef = false,
 } = {}) {
   const bytes = [];
   if (Number.isInteger(blockSize) && blockSize >= 1 && blockSize <= 32) {
@@ -267,7 +271,7 @@ function analyzeType5Memory({
   const cc = parseCc(bytes, physicalBytes);
   const ndef =
     cc.status === 'supported'
-      ? parseTlvs(bytes, cc)
+      ? parseTlvs(bytes, cc, stopAfterNdef)
       : {...emptyNdef(), reason: 'cc-not-supported'};
   return {cc, ndef};
 }

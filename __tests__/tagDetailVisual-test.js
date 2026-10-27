@@ -15,6 +15,7 @@ import TagDetailScreen from '../src/Screens/TagDetail';
 import NdefMessage from '../src/Components/NdefMessage';
 import {i18n, translateText as tr} from '../src/i18n';
 import {visualColors} from '../src/visual/theme';
+import {createTagDiscovery} from '../src/features/tag-discovery/model';
 
 jest.mock('react-native-screens/experimental', () => ({
   SafeAreaView: 'SafeAreaView',
@@ -429,3 +430,26 @@ test.each(['en', 'zh-Hant', 'ja'])(
     }
   },
 );
+
+test.each(['en', 'zh-Hant', 'ja'].flatMap((language) => ['light', 'dark'].map((theme) => [language, theme])))('acquired Type5 content and normalized UID copy retain raw data in %s/%s', async (language, theme) => {
+  await i18n.changeLanguage(language);
+  useColorScheme.mockReturnValue(theme);
+  const tag = Object.freeze({id: '6367CA17080104E0', techTypes: ['android.nfc.tech.NfcV'], ndefMessage: null});
+  const records = [record('Acquired Type 5 content')];
+  const acquisition = {source: 'type5-raw-read', status: 'available', records, evidence: {status: 'limited', cc: {status: 'supported'}, ndef: {status: 'decoded'}, scope: {readBlocks: 3}}};
+  const discovery = createTagDiscovery(tag, 'android', acquisition);
+  let tree;
+  await act(async () => { tree = renderer.create(<TagDetailScreen route={{params: {tag, discovery}}} />); });
+  expect(text(tree)).toContain('Acquired Type 5 content');
+  expect(text(tree)).toContain('E004010817CA6763');
+  expect(discovery.limitations).not.toContain('type5-format-unconfirmed');
+  await act(async () => action(tree, tr('Copy {{kind}}', {kind: 'UID'})).props.onPress());
+  expect(Clipboard.setString).toHaveBeenCalledWith('E004010817CA6763');
+  expect(text(tree)).not.toContain(JSON.stringify(acquisition, null, 2));
+  await act(async () => action(tree, tr('Technical details')).props.onPress());
+  expect(text(tree)).toContain(tr('Bounded Type 5 read'));
+  expect(text(tree)).toContain(JSON.stringify(acquisition, null, 2));
+  await act(async () => action(tree, tr('Raw tag JSON')).props.onPress());
+  expect(text(tree)).toContain(JSON.stringify(tag, null, 2));
+  await act(async () => tree.unmount());
+});

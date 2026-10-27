@@ -3428,5 +3428,35 @@
     "Cancel tag scan",
     "取消標籤掃描",
     "タグのスキャンをキャンセル"
+  ],
+  "records.share_error": [
+    "Could not share record",
+    "無法分享紀錄",
+    "記録を共有できませんでした"
+  ],
+  "records.share_retry": [
+    "Please try sharing this record again.",
+    "請再試一次分享這筆紀錄。",
+    "この記録の共有をもう一度お試しください。"
+  ],
+  "tag_result.additional_ndef_read": [
+    "Additional NDEF read",
+    "額外 NDEF 讀取",
+    "追加の NDEF 読み取り"
+  ],
+  "tag_result.android_fresh_ndef": [
+    "Fresh Android NDEF read",
+    "Android 即時 NDEF 讀取",
+    "Android の NDEF 再読み取り"
+  ],
+  "tag_result.bounded_type5": [
+    "Bounded Type 5 read",
+    "有限範圍 Type 5 讀取",
+    "範囲を制限した Type 5 読み取り"
+  ],
+  "tag_result.additional_read_evidence": [
+    "Additional read evidence",
+    "額外讀取證據",
+    "追加読み取りの記録"
   ]
 }

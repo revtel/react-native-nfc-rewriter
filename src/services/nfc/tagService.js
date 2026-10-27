@@ -1,8 +1,73 @@
 import {sessionTranslator} from '../../i18n';
 import {Platform} from 'react-native';
-import NfcManager, {NfcEvents, NfcTech} from 'react-native-nfc-manager';
+import NfcManager, {
+  NfcEvents,
+  NfcTech,
+  NfcError,
+} from 'react-native-nfc-manager';
 import {handleNfcException, runNfcSession, withAndroidPrompt} from './session';
-import {createTagDiscovery} from '../../features/tag-discovery/model';
+import {
+  createTagDiscovery,
+  getObservedTechnologies,
+} from '../../features/tag-discovery/model';
+import {readConnectedType5Memory} from './type5ScanService';
+
+async function acquireAndroidType5Ndef(
+  tag,
+  connectedTechnology,
+  shouldContinue,
+) {
+  if (
+    !getObservedTechnologies(tag).includes('NfcV') ||
+    (Array.isArray(tag.ndefMessage) && tag.ndefMessage.length > 0)
+  ) {
+    return null;
+  }
+  if (connectedTechnology === NfcTech.Ndef) {
+    try {
+      if (!shouldContinue()) return null;
+      const response = await NfcManager.ndefHandler.getNdefMessage();
+      if (!shouldContinue()) return null;
+      const records = response?.ndefMessage;
+      return {
+        source: 'android-ndef-read',
+        status: Array.isArray(records) ? 'available' : 'unavailable',
+        records: Array.isArray(records) ? records.slice() : [],
+        response,
+      };
+    } catch (error) {
+      if (NfcError?.UserCancel && error instanceof NfcError.UserCancel)
+        throw error;
+      return {
+        source: 'android-ndef-read',
+        status: 'unavailable',
+        records: [],
+        failure: {
+          kind: 'native-read-error',
+          message: error?.message ?? String(error),
+        },
+      };
+    }
+  }
+  if (connectedTechnology === NfcTech.NfcV && shouldContinue()) {
+    const evidence = await readConnectedType5Memory(tag, {
+      platform: 'android',
+      shouldContinue,
+    });
+    if (evidence?.cancelled) {
+      // Preserve the shared Home cancellation contract: no stale navigation.
+      throw new NfcError.UserCancel();
+    }
+    const available = ['decoded', 'empty'].includes(evidence?.ndef?.status);
+    return {
+      source: 'type5-raw-read',
+      status: available ? 'available' : 'unavailable',
+      records: available ? evidence.ndef.records.slice() : [],
+      evidence,
+    };
+  }
+  return null;
+}
 
 async function exploreTag({shouldContinue = () => true} = {}) {
   if (!shouldContinue()) {
@@ -11,12 +76,25 @@ async function exploreTag({shouldContinue = () => true} = {}) {
   const platform = Platform.OS;
   const translate = sessionTranslator();
   const result = await runNfcSession({
-    technology: platform === 'ios'
-      ? [NfcTech.MifareIOS, NfcTech.IsoDep, NfcTech.Iso15693IOS, NfcTech.FelicaIOS]
-      : [NfcTech.NfcA, NfcTech.NfcB, NfcTech.NfcF, NfcTech.NfcV, NfcTech.IsoDep],
+    technology:
+      platform === 'ios'
+        ? [
+            NfcTech.MifareIOS,
+            NfcTech.IsoDep,
+            NfcTech.Iso15693IOS,
+            NfcTech.FelicaIOS,
+          ]
+        : [
+            NfcTech.Ndef,
+            NfcTech.NfcA,
+            NfcTech.NfcB,
+            NfcTech.NfcF,
+            NfcTech.NfcV,
+            NfcTech.IsoDep,
+          ],
     silent: true,
     successMessage: '',
-    operation: async () => {
+    operation: async (connectedTechnology) => {
       if (!shouldContinue()) {
         return null;
       }
@@ -24,7 +102,16 @@ async function exploreTag({shouldContinue = () => true} = {}) {
       if (!shouldContinue() || !tag) {
         return null;
       }
-      return {tag, discovery: createTagDiscovery(tag, platform)};
+      const acquisition =
+        platform === 'android'
+          ? await acquireAndroidType5Ndef(
+              tag,
+              connectedTechnology,
+              shouldContinue,
+            )
+          : null;
+      if (!shouldContinue()) return null;
+      return {tag, discovery: createTagDiscovery(tag, platform, acquisition)};
     },
   });
   if (!shouldContinue()) {

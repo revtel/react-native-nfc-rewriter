@@ -1,8 +1,9 @@
 import React from 'react';
-import {Alert, Share, Text} from 'react-native';
+import {Alert, Platform, Share, Text} from 'react-native';
 import renderer, {act} from 'react-test-renderer';
 import * as AppContext from '../src/AppContext';
 import SavedRecordScreen from '../src/Screens/SavedRecord';
+import {createRecordShareLink} from '../src/features/records/shareLink';
 
 jest.mock('../src/AppContext', () => ({Context: require('react').createContext(null)}));
 jest.mock('react-native-screens/experimental', () => ({SafeAreaView: 'SafeAreaView'}));
@@ -85,7 +86,9 @@ test('record groups, long names, and actions preserve targets and payloads', asy
   await act(async () => action(tree, `Share ${longName}`).props.onPress());
   expect(shareSpy).toHaveBeenCalledWith({
     title: 'My NFC Record',
-    url: `com.revteltech.nfcopenrewriter://share?data=${encodeURIComponent(JSON.stringify(record))}`,
+    ...(Platform.OS === 'android'
+      ? {message: createRecordShareLink(record)}
+      : {url: createRecordShareLink(record)}),
   });
   shareSpy.mockRestore();
 
@@ -100,6 +103,30 @@ test('record groups, long names, and actions preserve targets and payloads', asy
   expect(app.actions.setStorage).not.toHaveBeenCalled();
   await act(async () => alertSpy.mock.calls.at(-1)[2][0].onPress());
   expect(app.actions.setStorage).toHaveBeenCalledWith([]);
+  alertSpy.mockRestore();
+  await act(async () => tree.unmount());
+});
+
+test.each(['share rejection', 'serialization failure'])('%s shows retry feedback without saving or executing the record', async (failure) => {
+  const record = {name: 'Example', payload: {tech: 'Ndef'}};
+  if (failure === 'serialization failure') {
+    record.self = record;
+  }
+  const app = makeApp([record]);
+  const {tree, navigation} = await renderScreen(app);
+  const shareSpy = jest.spyOn(Share, 'share').mockRejectedValue(new Error('native failure'));
+  const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  await act(async () => action(tree, 'Share Example').props.onPress());
+  expect(alertSpy).toHaveBeenCalledWith(
+    'Could not share record',
+    'Please try sharing this record again.',
+  );
+  expect(navigation.navigate).not.toHaveBeenCalled();
+  expect(app.actions.appendRecord).not.toHaveBeenCalled();
+  if (failure === 'serialization failure') {
+    expect(shareSpy).not.toHaveBeenCalled();
+  }
+  shareSpy.mockRestore();
   alertSpy.mockRestore();
   await act(async () => tree.unmount());
 });

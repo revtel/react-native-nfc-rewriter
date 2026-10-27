@@ -303,6 +303,27 @@ function TagScanResult({tag, discovery, navigation}) {
         >
           {technicalExpanded && (
             <>
+              {presentation.ndefAcquisition && (
+                <View style={styles.technicalField}>
+                  <Text style={styles.fieldLabel}>
+                    {tr('Additional NDEF read')}
+                  </Text>
+                  <Text style={styles.summaryValue}>
+                    {tr(
+                      presentation.ndefAcquisition.source ===
+                        'android-ndef-read'
+                        ? 'Fresh Android NDEF read'
+                        : 'Bounded Type 5 read',
+                    )}
+                  </Text>
+                  <Text style={styles.fieldLabel}>
+                    {tr('Additional read evidence')}
+                  </Text>
+                  <Text selectable style={styles.technicalValue}>
+                    {JSON.stringify(presentation.ndefAcquisition, null, 2)}
+                  </Text>
+                </View>
+              )}
               {presentation.tagFields.map(({name, value}, index) => (
                 <View key={index} style={styles.technicalField}>
                   <Text style={styles.fieldLabel}>{name}</Text>

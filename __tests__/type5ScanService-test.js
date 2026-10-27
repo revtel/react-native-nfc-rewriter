@@ -17,6 +17,7 @@ import NfcManager, {NfcError} from 'react-native-nfc-manager';
 import {runNfcSession} from '../src/services/nfc/session';
 import {
   scanType5Memory,
+  readConnectedType5Memory,
   createType5ScanPlan,
 } from '../src/services/nfc/type5ScanService';
 
@@ -513,4 +514,58 @@ describe('local cancellation at every native boundary', () => {
     expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(3);
     expect(NfcManager.cancelTechnologyRequest).toHaveBeenCalledTimes(1);
   });
+});
+
+describe('connected Home Type5 bounded reads', () => {
+  const tag = Object.freeze({id: '06050403020104E0'});
+  it('does not acquire metadata or own another session', async () => {
+    NfcManager.nfcVHandler.transceive.mockImplementation(async (frame) =>
+      frame[1] === 0x2b ? info(4) : frame[10] === 0
+        ? [0, 0xe1, 0x40, 1, 0] : [0, 0xfe, 0, 0, 0]);
+    const result = await readConnectedType5Memory(tag);
+    expect(result).toMatchObject({status: 'limited', stopReason: 'terminator', ndef: {status: 'absent'}, scope: {readBlocks: 2}});
+    expect(runNfcSession).not.toHaveBeenCalled();
+    expect(NfcManager.getTag).not.toHaveBeenCalled();
+    expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(3);
+  });
+
+  it('unknown geometry permits one block only and retains incomplete evidence', async () => {
+    NfcManager.nfcVHandler.transceive.mockResolvedValueOnce([1, 1]).mockResolvedValueOnce([0, 0xe1, 0x40, 8, 0]);
+    const result = await readConnectedType5Memory(tag);
+    expect(result).toMatchObject({status: 'limited', scope: {kind: 'block-zero-preview', readBlocks: 1}, ndef: {status: 'incomplete'}});
+    expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(2);
+  });
+
+  it('stops at non-Type5 CC and an identity mismatch without scanning unrelated memory', async () => {
+    NfcManager.nfcVHandler.transceive.mockResolvedValueOnce(info(4)).mockResolvedValueOnce([0, 0, 0, 0, 0]);
+    expect(await readConnectedType5Memory(tag)).toMatchObject({stopReason: 'cc-unavailable', cc: {status: 'not-type5'}, scope: {readBlocks: 1}});
+    expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(2);
+    NfcManager.nfcVHandler.transceive.mockClear();
+    const conflict = info(4);
+    conflict[2] += 1;
+    NfcManager.nfcVHandler.transceive.mockResolvedValueOnce(conflict);
+    expect(await readConnectedType5Memory(tag)).toMatchObject({failure: {kind: 'identity-mismatch'}, blocks: []});
+    expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(1);
+  });
+
+  it('retains the prefix on the first block error and sends no later command', async () => {
+    NfcManager.nfcVHandler.transceive.mockResolvedValueOnce(info(4)).mockResolvedValueOnce([0, 0xe1, 0x40, 1, 0]).mockRejectedValueOnce(new Error('lost'));
+    const result = await readConnectedType5Memory(tag);
+    expect(result).toMatchObject({status: 'partial', blocks: [{address: 0, bytes: [0xe1, 0x40, 1, 0]}], failure: {kind: 'transport-error', blockAddress: 1, message: 'lost'}, ndef: {status: 'incomplete'}});
+    expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(3);
+  });
+
+  it('unusable UID sends no raw commands, including absent connected tag', async () => {
+    expect(await readConnectedType5Memory({id: 'invalid'})).toMatchObject({failure: {kind: 'uid-unusable'}});
+    expect(await readConnectedType5Memory(undefined)).toMatchObject({failure: {kind: 'uid-unusable'}});
+    expect(NfcManager.nfcVHandler.transceive).not.toHaveBeenCalled();
+    expect(runNfcSession).not.toHaveBeenCalled();
+  });
+});
+
+test('connected malformed native system-info preserves malformed evidence and block-zero limit', async () => {
+  NfcManager.nfcVHandler.transceive.mockResolvedValueOnce({malformed: true}).mockResolvedValueOnce([0, 0xe1, 0x40, 1, 0]);
+  const result = await readConnectedType5Memory({id: '06050403020104E0'});
+  expect(result).toMatchObject({systemInfo: {status: 'malformed'}, scope: {kind: 'block-zero-preview', readBlocks: 1}, rawResponses: [{command: 0x2b, rawResponse: null}, {command: 0x20, blockAddress: 0}]});
+  expect(NfcManager.nfcVHandler.transceive).toHaveBeenCalledTimes(2);
 });

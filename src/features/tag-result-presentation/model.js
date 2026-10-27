@@ -231,7 +231,10 @@ function buildTagPresentation(tag, discovery) {
   const records = Array.isArray(supplied) ? supplied : [];
   let recordsState = 'unavailable';
   let recordCount = null;
-  if (hasOwn(source, 'ndefMessage') && !Array.isArray(source.ndefMessage)) {
+  const acquired = observation.ndefAcquisition?.status === 'available' &&
+    ['android-ndef-read', 'type5-raw-read'].includes(observation.ndefAcquisition.source) &&
+    Array.isArray(observation.ndefAcquisition.records);
+  if (!acquired && hasOwn(source, 'ndefMessage') && !Array.isArray(source.ndefMessage)) {
     recordsState = 'invalid';
   } else if (observation.ndef?.status === 'available' && Array.isArray(supplied)) {
     recordsState = records.length ? 'provided' : 'not-provided';
@@ -256,6 +259,7 @@ function buildTagPresentation(tag, discovery) {
     recordsState,
     recordCount,
     ndef: {status, capacity},
+    ...(observation.ndefAcquisition ? {ndefAcquisition: observation.ndefAcquisition} : {}),
     tagFields: Object.entries(source)
       .filter(([name]) => name !== 'ndefMessage')
       .map(([name, value]) => ({name, value})),
