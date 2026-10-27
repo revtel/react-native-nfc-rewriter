@@ -5,6 +5,7 @@
 #import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 #import <React/RCTLinkingManager.h>
 #import "NfcManager.h"
+#import "NfcActivity.h"
 
 @interface ReactNativeDelegate : RCTDefaultReactNativeFactoryDelegate
 @end
@@ -45,12 +46,14 @@
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-    [NfcManager application:application
-                         continueUserActivity:userActivity
-                                  restorationHandler:restorationHandler];
-     return [RCTLinkingManager application:application
-                         continueUserActivity:userActivity
-                                             restorationHandler:restorationHandler];
+    if (NfcActivityIsBackgroundTag(userActivity)) {
+        return [NfcManager application:application
+                 continueUserActivity:userActivity
+                   restorationHandler:restorationHandler];
+    }
+    return [RCTLinkingManager application:application
+                    continueUserActivity:userActivity
+                      restorationHandler:restorationHandler];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

@@ -2,7 +2,10 @@ import {useTranslation} from 'react-i18next';
 import {translateText as tr} from './i18n';
 import * as React from 'react';
 import {useColorScheme} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createNativeBottomTabNavigator} from '@react-navigation/bottom-tabs/unstable';
 import LandingScreen from './Screens/Landing';
@@ -24,6 +27,7 @@ import Toast from './Components/Toast';
 import {PRIMARY_TABS} from './features/navigation/primaryTabs';
 import {nativeTabIcon} from './features/navigation/nativeTabIcon';
 import {createNavigationTheme, visualColors} from './visual/theme';
+import {useIncomingIntentNavigation} from './features/home/useIncomingIntentNavigation';
 
 const RootStack = createNativeStackNavigator();
 const HomeTabs = createNativeBottomTabNavigator();
@@ -126,9 +130,16 @@ function Root() {
 
 function AppNavigator() {
   useTranslation();
+  const navigation = useNavigationContainerRef();
+  const updateIncomingReadiness = useIncomingIntentNavigation(navigation);
   const isDark = useColorScheme() === 'dark';
   return (
-    <NavigationContainer theme={createNavigationTheme(isDark)}>
+    <NavigationContainer
+      ref={navigation}
+      theme={createNavigationTheme(isDark)}
+      onReady={updateIncomingReadiness}
+      onStateChange={updateIncomingReadiness}
+    >
       <Root />
       <NfcPromptAndroid />
       <Toast />

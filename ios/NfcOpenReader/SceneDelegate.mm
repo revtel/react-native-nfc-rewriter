@@ -1,6 +1,7 @@
 #import "SceneDelegate.h"
 #import "AppDelegate.h"
 #import "NfcManager.h"
+#import "NfcActivity.h"
 
 @implementation SceneDelegate
 
@@ -14,23 +15,37 @@
 
   AppDelegate *appDelegate = (AppDelegate *)UIApplication.sharedApplication.delegate;
   NSMutableDictionary *launchOptions = [appDelegate.launchOptions mutableCopy];
-  UIOpenURLContext *urlContext = connectionOptions.URLContexts.anyObject;
-  if (urlContext != nil) {
-    launchOptions[UIApplicationLaunchOptionsURLKey] = urlContext.URL;
-  }
-  NSUserActivity *userActivity = connectionOptions.userActivities.anyObject;
-  if (userActivity != nil) {
-    // React Native's getInitialURL still reads the application launch-options keys.
-    launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey] = @{
-      UIApplicationLaunchOptionsUserActivityTypeKey: userActivity.activityType,
-      @"UIApplicationLaunchOptionsUserActivityKey": userActivity,
-    };
-  }
-  // Cache cold-start NFC records before JavaScript requests the background tag.
+  // Scene connection options are the source of truth for this launch.
+  [launchOptions removeObjectForKey:UIApplicationLaunchOptionsURLKey];
+  [launchOptions removeObjectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey];
+  NSUserActivity *backgroundActivity = nil;
+  NSUserActivity *webActivity = nil;
   for (NSUserActivity *activity in connectionOptions.userActivities) {
+    if (NfcActivityIsBackgroundTag(activity)) {
+      backgroundActivity = activity;
+      break;
+    }
+    if ([activity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] &&
+        activity.webpageURL != nil) {
+      webActivity = activity;
+    }
+  }
+  if (backgroundActivity != nil) {
+    // Cache NFC before JS starts, without also manufacturing an initial URL.
     [NfcManager application:UIApplication.sharedApplication
-        continueUserActivity:activity
+        continueUserActivity:backgroundActivity
           restorationHandler:^(NSArray<id<UIUserActivityRestoring>> *objects) {}];
+  } else {
+    UIOpenURLContext *urlContext = connectionOptions.URLContexts.anyObject;
+    if (urlContext != nil) {
+      launchOptions[UIApplicationLaunchOptionsURLKey] = urlContext.URL;
+    } else if (webActivity != nil) {
+      // React Native's getInitialURL reads these application launch-options keys.
+      launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey] = @{
+        UIApplicationLaunchOptionsUserActivityTypeKey: webActivity.activityType,
+        @"UIApplicationLaunchOptionsUserActivityKey": webActivity,
+      };
+    }
   }
 
   self.window = [[UIWindow alloc] initWithWindowScene:(UIWindowScene *)scene];

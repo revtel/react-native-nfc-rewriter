@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "HE7MCCDHL4.com.revteltech.nfcopenrewriter"
+        ],
+        "components": [
+          {"/": "/react-native-nfc-rewriter/"},
+          {"/": "/react-native-nfc-rewriter/index.html"},
+          {"/": "/react-native-nfc-rewriter/zh-Hant/"},
+          {"/": "/react-native-nfc-rewriter/zh-Hant/index.html"},
+          {"/": "/react-native-nfc-rewriter/ja/"},
+          {"/": "/react-native-nfc-rewriter/ja/index.html"}
+        ]
+      }
+    ]
+  }
+}

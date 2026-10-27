@@ -42,6 +42,10 @@ The expected project URL is `https://revtel.github.io/react-native-nfc-rewriter/
 
 GitHub's [publishing-source documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) describes the branch `/docs` option. No custom GitHub Actions workflow is needed for this buildless page.
 
+## iOS Universal Link association
+
+The promotion website's iOS association requires a separate host-root file in the organization website repository. This project's `/docs` publishing source cannot serve `https://revtel.github.io/.well-known/apple-app-site-association`. See the [association deployment candidate and verification checklist](./ios-universal-links/README.md) for the scoped configuration, signed-app checks, and independent physical iPhone acceptance. Preparing these files does not establish a deployed association or a tested store release.
+
 ## Update content and screenshots
 
 Keep the product name, download links, service contact, and capability descriptions consistent between the root README and the page. If changing the public URL, update the README website link and the page's canonical, Open Graph URL, and absolute image URL.

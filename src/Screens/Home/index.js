@@ -8,17 +8,14 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Alert,
   Linking,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import NfcProxy from '../../NfcProxy';
-import NfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import {Button, IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SafeAreaView} from 'react-native-screens/experimental';
-import {parseShareDeepLink} from '../../features/home/deepLink';
 import {useNfcAvailability} from '../../features/home/useNfcAvailability';
 import {useTagExplore} from '../../features/home/useTagExplore';
 import {useTagActions} from '../../features/home/useTagActions';
@@ -49,56 +46,6 @@ function HomeScreen(props) {
     () => makeStyles(colors, spacing, type),
     [colors, spacing, type],
   );
-
-  React.useEffect(() => {
-    async function initNfc() {
-      try {
-        function onBackgroundTag(bgTag) {
-          navigation.navigate('TagDetail', {tag: bgTag});
-        }
-
-        function onDeepLink(url) {
-          try {
-            const target = parseShareDeepLink(url);
-            if (target) {
-              navigation.navigate(target.name, target.params);
-            }
-          } catch (ex) {
-            console.warn('fail to parse deep link', ex);
-          }
-        }
-
-        // get the initial launching tag
-        const bgTag = await NfcManager.getBackgroundTag();
-        if (bgTag) {
-          onBackgroundTag(bgTag);
-        } else {
-          const link = await Linking.getInitialURL();
-          console.warn('DEEP LINK', link);
-          if (link) {
-            onDeepLink(link);
-          }
-        }
-
-        // listen to other background tags after the app launched
-        NfcManager.setEventListener(
-          NfcEvents.DiscoverBackgroundTag,
-          onBackgroundTag,
-        );
-
-        Linking.addEventListener('url', (event) => {
-          if (event.url) {
-            onDeepLink(event.url);
-          }
-        });
-      } catch (ex) {
-        console.warn(ex);
-        Alert.alert(tr('ERROR'), tr('fail to init NFC'), [{text: tr('OK')}]);
-      }
-    }
-
-    initNfc();
-  }, [navigation]);
 
   return (
     <>
